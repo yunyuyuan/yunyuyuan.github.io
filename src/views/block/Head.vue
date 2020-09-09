@@ -1,5 +1,5 @@
 <template>
-  <div class="the-head">
+  <section class="the-head">
     <div class="body">
       <span class="toggle" @click="toggleList">
         <svg-icon :name="'list'"/>
@@ -9,11 +9,13 @@
       </b>
     </div>
     <div :class="['list', {active: active}]">
-      <div v-for="(item, idx) in config.md" :key="idx" @click="clickMd(item.file)" class="md">
-        <b class="name">{{ item.name }}</b>
+      <div class="md">
+        <div v-for="(item, idx) in config.md" :key="idx" @click="clickMd(item.file)">
+          <b class="name">{{ item.name }}</b>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -24,7 +26,7 @@ export default {
   data() {
     return {
       active: false,
-      config: config
+      config: config,
     }
   },
   methods: {
@@ -56,6 +58,7 @@ export default {
     },
     clickMd(file) {
       this.active = false
+      this.$store.commit('changeMd', file)
       document.removeEventListener('click', this.listenClick)
     }
   }
@@ -63,14 +66,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "src/assets/style/public";
 .the-head {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 3rem;
+  height: $head-height;
   background: white;
   border-bottom: 1px solid gray;
+  z-index: $z-index-head;
 
   > .body {
     width: 100%;
@@ -113,10 +118,8 @@ export default {
     transform: translateX(-110%);
     border-radius: 0 0.6rem 0.6rem 0;
     border: 1px solid #dcdcdc;
-    z-index: 10;
+    z-index: $z-index-blog-list;
     background: white;
-    flex-direction: column;
-    overflow-y: auto;
 
     &.active {
       transform: translateX(0);
@@ -125,9 +128,21 @@ export default {
 
     > .md {
       width: 100%;
+      height: 100%;
+      flex-direction: column;
+      overflow-y: auto;
 
-      > .name {
+      > div {
+        width: 100%;
+        height: 3rem;
+        flex-shrink: 0;
+        border-bottom: 1px solid #c4c4c4;
 
+        > .name {
+          padding: 0 0.8rem;
+          font-size: 1rem;
+          word-break: break-all;
+        }
       }
     }
   }
