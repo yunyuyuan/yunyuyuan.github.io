@@ -1,19 +1,19 @@
 <template>
   <div class="index">
-    <blog-list/>
+    <the-head/>
     <the-content/>
     <the-footer/>
   </div>
 </template>
 
 <script>
-import BlogList from "@/views/block/BlogList";
+import TheHead from "@/views/block/Head";
 import TheContent from "@/views/block/Content";
 import TheFooter from "@/views/block/Footer";
 
 export default {
   name: "index",
-  components: {BlogList, TheContent, TheFooter}
+  components: {TheHead, TheContent, TheFooter}
 }
 </script>
 
