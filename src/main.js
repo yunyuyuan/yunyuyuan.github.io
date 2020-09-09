@@ -3,7 +3,7 @@ import App from './App.vue'
 
 Vue.config.productionTip = false
 
-import '@/assets/icons'
+import '@/icons'
 
 new Vue({
   render: h => h(App),

@@ -2,12 +2,21 @@ const path = require('path')
 
 module.exports = {
     lintOnSave: false,
-    configureWebpack: {
-        loader: {
-            test: /\.svg$/, loader: 'svg-sprite-loader', include: [path.resolve('src/assets/icons/svg')],
-            options: {
+    chainWebpack: config => {
+        config.module
+            .rule('svg')
+            .exclude.add(path.resolve('src/icons'))
+            .end()
+
+        config.module
+            .rule('icons')
+            .test(/\.svg$/)
+            .include.add(path.resolve('src/icons'))
+            .end()
+            .use('svg-sprite-loader')
+            .loader('svg-sprite-loader')
+            .options({
                 symbolId: 'icon-[name]'
-            }
-        }
-    }
+            })
+    },
 }
