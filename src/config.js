@@ -1,4 +1,6 @@
 export default {
+    name: 'yunyuyuan',
+    describe: '除了日记外,总想写点什么,放在网络上,仅此',
     md: [
         {name: 'asdfasfasdf', file: '1'},
         {name: 'asfd5445454545', file: '2'}, {name: 'asdfasfasdf', file: '1'},

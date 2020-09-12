@@ -2,7 +2,7 @@
   <div class="index">
     <the-head/>
     <section class="body">
-      <the-content/>
+      <router-view></router-view>
       <the-footer/>
     </section>
   </div>
@@ -10,12 +10,11 @@
 
 <script>
 import TheHead from "@/views/block/Head";
-import TheContent from "@/views/block/Content";
 import TheFooter from "@/views/block/Footer";
 
 export default {
   name: "index",
-  components: {TheHead, TheContent, TheFooter},
+  components: {TheHead, TheFooter},
   methods: {}
 }
 </script>
@@ -24,11 +23,12 @@ export default {
 @import "src/assets/style/public";
 
 .index {
+  height: 100%;
+  width: 100%;
   > .body {
     position: fixed;
-    top: $head-height;
     width: 100%;
-    height: calc(100% - #{$head-height});
+    height: 100%;
     overflow-y: auto;
     z-index: $z-index-body;
     flex-direction: column;

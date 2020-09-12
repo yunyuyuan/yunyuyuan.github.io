@@ -19,6 +19,10 @@ html, body{
   height: 100%;
   font-size: 16px;
 }
+#app{
+  width: 100%;
+  height: 100%;
+}
 *{
   margin: 0;
   padding: 0;
