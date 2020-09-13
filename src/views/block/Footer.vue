@@ -7,7 +7,7 @@
       </a>
     </div>
     <div class="copyright">
-      <span>Copyright @ 2020 {{ config.name }}</span>
+      <span>Copyright @ 2020 <b>{{ config.name }}</b></span>
       <span>All Right Reserve</span>
     </div>
   </footer>
@@ -36,23 +36,23 @@ export default {
 <style scoped lang="scss">
 @import "src/assets/style/public";
 
-footer {
+footer{
   width: 100%;
   background: #2b2b2b;
   display: flex;
   align-items: center;
   margin-top: auto;
   height: $footer-height;
-
-  > img {
+  box-shadow: 0 0 1rem #020202;
+  z-index: $z-index-footer;
+  > img{
     width: 4rem;
     height: 4rem;
     border-radius: 0.5rem;
     margin: 0 2rem;
   }
-
-  > .social-media {
-    > a {
+  > .social-media{
+    > a{
         margin: 0 1rem;
         background: white;
         border-radius: 0.4rem;
@@ -72,9 +72,12 @@ footer {
       flex-direction: column;
       margin: 0 1rem 0 auto;
       > span{
-          color: #bbbbbb;
-          font-size: 0.8rem;
-          margin: 0.5rem 0;
+        color: #bbbbbb;
+        font-size: 0.8rem;
+        margin: 0.5rem 0;
+        > b{
+          color: #ddd;
+        }
       }
   }
 }

@@ -2,15 +2,24 @@
     <div class="list">
         <img :src="RMImage">
         <div class="inner">
-            <div :class="{search: true, active: searchFocus}">
+            <div onclick="this.querySelector('input').focus()" :class="{search: true, active: searchFocus}">
                 <input v-model="search" @focusin="toggleInputFocus(true)" @focusout="toggleInputFocus(false)"/>
-                <span onclick="this.previousElementSibling.click()">
-                    <svg-icon :name="'search'"/>
+                <span>
+                    <svg-icon :fill="searchFocus?'black':'#ddd'" :name="'search'"/>
                 </span>
             </div>
             <div class="blog">
                 <div v-for="item in list" class="item">
-                    <span>{{ item.name }}</span>
+                    <div class="time">
+                        <span>{{ item.time }}</span>
+                    </div>
+                    <div class="mid">
+                        <span class="circle"></span>
+                    </div>
+                    <router-link class="info" :to="{name: 'article.detail', params: {id: item.file}}">
+                        <img :src="`/md/${item.file}/${item.cover}`">
+                        <span>{{ item.name }}</span>
+                    </router-link>
                 </div>
             </div>
         </div>
@@ -18,7 +27,7 @@
 </template>
 
 <script>
-    import RMImage from '@/image/r&m.jpg'
+    import RMImage from '@/image/article.jpg'
     import config from "@/config";
 
     export default {
@@ -81,7 +90,7 @@
                 transition: all .1s linear;
                 &.active{
                     background: rgba(255, 255, 255, 0.4);
-                    box-shadow: 0 0 1rem #d2d2d2;
+                    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
                 }
                 > input{
                     width: 15rem;
@@ -104,7 +113,59 @@
             }
             > .blog{
                 flex-direction: column;
+                width: 50rem;
+                overflow-y: auto;
+                margin-top: 2rem;
                 > .item{
+                    width: 100%;
+                    padding: 1rem 0;
+                    > .time{
+                        > span{
+                            background: rgba(0, 0, 0, 0.4);
+                            color: white;
+                            padding: 0.4rem 0.8rem;
+                            border-radius: 0.4rem;
+                            font-size: 0.9rem;
+                        }
+                    }
+                    > .mid{
+                        justify-content: center;
+                        height: calc(100% + 2rem);
+                        margin: 0 0.6rem;
+                        > .circle{
+                            width: 1.2rem;
+                            height: 1.2rem;
+                            border-radius: 50%;
+                            border: 0.2rem solid black;
+                            background: #00f3ff;
+                        }
+                    }
+                    > .info{
+                        height: 6rem;
+                        width: 100%;
+                        box-shadow: 0 0 1rem #171717;
+                        display: flex;
+                        align-items: center;
+                        text-decoration: none;
+                        color: black;
+                        > img{
+                            height: 100%;
+                            object-fit: contain;
+                            box-shadow: 1rem 0 1rem -1rem #a8a8a8;
+                            z-index: 1;
+                        }
+                        > span{
+                            height: 100%;
+                            width: 100%;
+                            background: white;
+                            border-radius: 0 0.5rem 0.5rem 0;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 1.1rem;
+                            box-shadow: 0 0 0.4rem rgba(128, 128, 128, 0.59) inset;
+                        }
+                    }
                 }
             }
         }

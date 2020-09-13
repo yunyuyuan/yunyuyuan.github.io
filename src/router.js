@@ -11,11 +11,15 @@ const routes = [
     },
     {
         path: '/article',
-        name: 'article',
-        component: () => import('@/views/article/List'),
+        component: () => import('@/views/article/index'),
         children: [
             {
-                path: '/:id',
+                path: '',
+                name: 'article.list',
+                component: () => import('@/views/article/List'),
+            },
+            {
+                path: ':id',
                 name: 'article.detail',
                 component: () => import('@/views/article/Detail'),
             },

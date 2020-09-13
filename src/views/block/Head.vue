@@ -30,17 +30,15 @@ export default {
   left: 0;
   width: 100%;
   height: $head-height;
-  background: transparent;
+  background: linear-gradient(to bottom, #00000099, #00000005);
   z-index: $z-index-head;
-
-  > .body {
+  > .body{
     width: 100%;
     height: 100%;
     position: absolute;
     left: 0;
     top: 0;
-
-    > .txt {
+    > .txt{
       margin: 0 1rem 0 auto;
       color: white;
     }

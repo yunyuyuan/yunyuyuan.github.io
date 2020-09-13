@@ -3,7 +3,7 @@
         <img class="bg" :src="mushishi"/>
         <div class="inner">
             <div class="btns">
-                <router-link :to="{name: 'article'}">
+                <router-link :to="{name: 'article.list'}">
                     <svg-icon :name="'article'"/>
                     <span>文章</span>
                 </router-link>
@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import mushishi from '@/image/mushishi.jpg'
-import selfImage from '@/image/i.png'
+    import mushishi from '@/image/home.jpg'
+    import selfImage from '@/image/i.png'
 import config from "@/config";
 
 export default {
@@ -60,7 +60,6 @@ export default {
         object-fit: cover;
     }
     >.inner{
-        box-shadow: 0 -1rem 1rem -1rem #020202 inset;
         background: #0000001f;
         > .btns{
             flex-direction: column;

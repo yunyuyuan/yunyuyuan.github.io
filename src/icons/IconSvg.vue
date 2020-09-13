@@ -1,17 +1,32 @@
 <template>
   <svg aria-hidden="true">
-    <use :xlink:href="getName"></use>
+    <use :fill="calcFill" :xlink:href="getName"></use>
   </svg>
 </template>
 
 <script>
 export default {
   name: "IconSvg",
-  props: ['name'],
+  props: {
+    name: {
+      type: String,
+      default: ''
+    },
+    fill: {
+      type: String,
+      default: ''
+    }
+  },
   computed: {
-    getName () {
+    getName() {
       return `#icon-${this.name}`
     },
+    calcFill() {
+      if (this.$props.fill) {
+        return this.$props.fill
+      }
+      return false
+    }
   }
 }
 </script>
