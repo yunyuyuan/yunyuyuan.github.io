@@ -3,7 +3,7 @@
         <img class="bg" :src="mushishi"/>
         <div class="inner">
             <div class="btns">
-                <router-link :to="{name: 'article.list'}">
+                <router-link :to="{name: 'article'}">
                     <svg-icon :name="'article'"/>
                     <span>文章</span>
                 </router-link>
@@ -60,11 +60,13 @@ export default {
         object-fit: cover;
     }
     >.inner{
-        >.btns{
+        box-shadow: 0 -1rem 1rem -1rem #020202 inset;
+        background: #0000001f;
+        > .btns{
             flex-direction: column;
             width: 30%;
             justify-content: center;
-            >a{
+            > a{
                 display: flex;
                 align-items: center;
                 background: rgba(0, 0, 0, 0.3);

@@ -53,25 +53,29 @@ footer {
 
   > .social-media {
     > a {
-      margin: 0 1rem;
-      background: white;
-      border-radius: 0.4rem;
-      padding: 0.2rem 0.4rem;
-      > svg {
-        width: 1.6rem;
-        height: 1.6rem;
-      }
+        margin: 0 1rem;
+        background: white;
+        border-radius: 0.4rem;
+        padding: 0.2rem 0.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        > svg{
+            width: 1.6rem;
+            height: 1.6rem;
+        }
     }
   }
   >.copyright{
-    height: 100%;
-    justify-content: space-around;
-    flex-direction: column;
-    margin: 0 1rem 0 auto;
-    >span{
-      color: #bbbbbb;
-      font-size: 0.8rem;
-    }
+      height: 100%;
+      justify-content: center;
+      flex-direction: column;
+      margin: 0 1rem 0 auto;
+      > span{
+          color: #bbbbbb;
+          font-size: 0.8rem;
+          margin: 0.5rem 0;
+      }
   }
 }
 </style>

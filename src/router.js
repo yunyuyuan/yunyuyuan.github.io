@@ -11,17 +11,13 @@ const routes = [
     },
     {
         path: '/article',
-        component: ()=>import('@/views/article/index'),
+        name: 'article',
+        component: () => import('@/views/article/List'),
         children: [
-            {
-                path: '',
-                name: 'article.list',
-                component: ()=>import('@/views/article/List'),
-            },
             {
                 path: '/:id',
                 name: 'article.detail',
-                component: ()=>import('@/views/article/Detail'),
+                component: () => import('@/views/article/Detail'),
             },
         ]
     },
@@ -34,5 +30,5 @@ const routes = [
 
 export default new VueRouter({
     routes,
-    mode: 'history'
+    // mode: 'history'
 })

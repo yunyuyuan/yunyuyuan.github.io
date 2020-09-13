@@ -28,7 +28,10 @@ html, body{
   padding: 0;
 }
 div, section{
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
+}
+input, textarea{
+    outline: none;
 }
 </style>
