@@ -2,7 +2,7 @@
   <footer>
     <img :src="selfImage"/>
     <div class="social-media">
-      <a v-for="(k,v) in socialMedia" :key="v" target="_blank" :href="k" :title="v">
+      <a v-for="(k,v) in config.socialMedia" :key="v" target="_blank" :href="k" :title="v">
         <svg-icon :name="v"/>
       </a>
     </div>
@@ -15,20 +15,17 @@
 
 <script>
 import selfImage from '@/image/i.png'
-import config from "@/config";
+import {mapState} from "vuex";
 
 export default {
   name: "Footer",
   data() {
     return {
       selfImage,
-      config,
-      socialMedia: {
-        github: 'https://github.com/yunyuyuan',
-        bilibili: 'https://space.bilibili.com/204446485',
-        mailbox: '1607439239@qq.com'
-      }
     }
+  },
+  computed: {
+    ...mapState(['config'])
   }
 }
 </script>

@@ -7,10 +7,12 @@ Vue.use(VueRouter);
 const routes = [
     {
         path: '/',
-        component: ()=>import('@/views/block/Home'),
+        name: 'home',
+        component: () => import('@/views/block/Home'),
     },
     {
         path: '/article',
+        name: 'article',
         component: () => import('@/views/article/index'),
         children: [
             {
