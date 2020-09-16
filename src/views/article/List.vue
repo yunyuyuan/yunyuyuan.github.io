@@ -6,11 +6,11 @@
           <svg-icon :fill="searchFocus?'black':'#ddd'" :name="'search'"/>
       </span>
     </div>
-    <div :class="{tags: true, active: !!searchTags.length}">
+    <div class="tags">
       <span @click="removeTag(tag)" v-for="tag in searchTags" :key="tag">{{ tag }}</span>
     </div>
     <div class="blog">
-      <div v-for="item in this.config.md" :key="item.file" class="item" v-show="resultList.indexOf(item)!==-1">
+      <div v-for="item in this.config.md" :key="item.file" :class="{item: true, hidden: resultList.indexOf(item)===-1}">
         <div class="time">
           <span>{{ item.time }}</span>
         </div>
@@ -134,11 +134,7 @@ export default {
   > .tags {
     transition: all .15s linear;
     width: 80%;
-    height: 0;
-
-    &.active {
-      height: 3rem;
-    }
+    height: 3rem;
 
     > span {
       background: #00f3ff;
@@ -168,7 +164,15 @@ export default {
 
     > .item {
       width: 100%;
+      height: 5rem;
       padding: 1rem 0;
+      transition: all .15s linear;
+      overflow: hidden;
+
+      &.hidden {
+        padding: 0;
+        height: 0;
+      }
 
       > .time {
         > span {
