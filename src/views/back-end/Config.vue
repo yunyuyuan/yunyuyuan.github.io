@@ -5,17 +5,29 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: "Config",
+  data() {
+    return {}
+  },
+  computed: {
+    ...mapState(['gitUtil'])
+  },
+  created() {
+    if (!this.gitUtil) {
+      this.$router.push({name: 'backEnd.login'})
+    } else {
+      this.gitUtil.getFile('public/config.json').then(res => {
+        if (res[0]) {
+          decodeURIComponent(escape(atob(res[1].data.content)))
+        }
+      })
+    }
+  },
   methods: {
     submit() {
-      fetch('https://api.github.com/repos/yunyuyuan/yunyuyuan.github.io/git/ref/heads/master', {
-        method: 'GET'
-      }).then(res => {
-        res.json().then(res => {
-          console.log(res)
-        })
-      })
     }
   }
 }

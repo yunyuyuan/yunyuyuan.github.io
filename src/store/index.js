@@ -10,6 +10,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        gitUtil: null,
         mdFile: 0,
         config: {}
     },

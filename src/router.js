@@ -38,6 +38,11 @@ const routes = [
         component: () => import('@/views/back-end/index'),
         children: [
             {
+                path: '',
+                name: 'backEnd.login',
+                component: () => import('@/views/back-end/Login'),
+            },
+            {
                 path: 'config',
                 name: 'backEnd.config',
                 component: () => import('@/views/back-end/Config'),
