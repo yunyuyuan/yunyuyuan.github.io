@@ -9,6 +9,10 @@
         <svg-icon :name="'comments'"/>
         <span>留言板</span>
       </router-link>
+      <router-link :to="{name: 'backEnd.config'}">
+        <svg-icon :name="'backend'"/>
+        <span>后台</span>
+      </router-link>
     </div>
     <div class="info">
       <div class="head">
@@ -40,7 +44,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/style/public";
+@import "../../assets/style/public";
 
 .home {
   width: 100%;

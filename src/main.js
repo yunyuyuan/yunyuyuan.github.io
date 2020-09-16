@@ -6,16 +6,17 @@ Vue.config.productionTip = false;
 import '@/icons'
 import store from '@/store'
 import router from '@/router'
+import {getConfig} from "@/utils";
 
-fetch('/config.json').then(res => {
-  res.text().then(res => {
-    store.commit('initConfig', JSON.parse(res))
-
+getConfig().then(res => {
+  if (res[0]) {
+    store.commit('initConfig', JSON.parse(res[1]))
     new Vue({
       store,
       router,
       render: h => h(App),
     }).$mount('#app');
-
-  })
+  } else {
+    console.log(res[1])
+  }
 })

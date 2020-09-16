@@ -27,6 +27,7 @@ export default {
         articleList: ArticleListImage,
         articleDetail: ArticleDetailImage,
         msgBoard: msgBoardImage,
+        backEnd: msgBoardImage,
       },
       routeNow: 'home'
     }
@@ -45,6 +46,9 @@ export default {
           break
         case 'msgBoard':
           this.routeNow = 'msgBoard'
+          break
+        case 'backEnd':
+          this.routeNow = 'backEnd'
           break
       }
     }
@@ -71,8 +75,11 @@ export default {
 
   > .body {
     position: fixed;
+    left: 0;
+    top: 0;
+    padding-top: $head-height;
     width: 100%;
-    height: 100%;
+    height: calc(100% - #{$head-height});
     overflow-y: auto;
     z-index: $z-index-body;
     flex-direction: column;

@@ -8,7 +8,7 @@ const routes = [
     {
         path: '/',
         name: 'home',
-        component: () => import('@/views/block/Home'),
+        component: () => import('@/views/home/index'),
     },
     {
         path: '/article',
@@ -30,8 +30,25 @@ const routes = [
     {
         path: '/msg-board',
         name: 'msgBoard',
-        component: ()=>import('@/views/msg-board/index')
-    }
+        component: () => import('@/views/msg-board/index')
+    },
+    {
+        path: '/back-end',
+        name: 'backEnd',
+        component: () => import('@/views/back-end/index'),
+        children: [
+            {
+                path: 'config',
+                name: 'backEnd.config',
+                component: () => import('@/views/back-end/Config'),
+            },
+            {
+                path: 'md',
+                name: 'backEnd.md',
+                component: () => import('@/views/back-end/Md'),
+            },
+        ]
+    },
 ];
 
 export default new VueRouter({
