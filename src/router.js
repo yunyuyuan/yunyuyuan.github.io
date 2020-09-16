@@ -33,24 +33,20 @@ const routes = [
         component: () => import('@/views/msg-board/index')
     },
     {
-        path: '/back-end',
-        name: 'backEnd',
-        component: () => import('@/views/back-end/index'),
+        path: '/backend',
+        name: 'backend',
+        redirect: {name: 'backend.config'},
+        component: () => import('@/views/backend/index'),
         children: [
             {
-                path: '',
-                name: 'backEnd.login',
-                component: () => import('@/views/back-end/Login'),
-            },
-            {
                 path: 'config',
-                name: 'backEnd.config',
-                component: () => import('@/views/back-end/Config'),
+                name: 'backend.config',
+                component: () => import('@/views/backend/Config'),
             },
             {
                 path: 'md',
-                name: 'backEnd.md',
-                component: () => import('@/views/back-end/Md'),
+                name: 'backend.md',
+                component: () => import('@/views/backend/Md'),
             },
         ]
     },

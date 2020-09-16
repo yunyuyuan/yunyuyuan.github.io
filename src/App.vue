@@ -31,7 +31,7 @@ div, section{
     display: flex;
     align-items: center;
 }
-input, textarea{
+input, textarea, select, button{
     outline: none;
 }
 </style>

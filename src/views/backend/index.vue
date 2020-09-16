@@ -1,0 +1,116 @@
+<template>
+  <div class="back-end">
+      <div class="menu">
+          <router-link v-for="item in menu" :key="item.name" :to="{name: item.pathName}"
+                       :class="{active: $route.name === item.pathName}">
+        <span class="icon">
+          <svg-icon :name="item.icon"/>
+        </span>
+              <span class="name">{{ item.name }}</span>
+          </router-link>
+          <div class="account" @click="showLogin = true">
+              <svg-icon :name="'account'"/>
+              <span>登录</span>
+          </div>
+      </div>
+      <login v-show="showLogin" @hide="showLogin = false"/>
+      <router-view></router-view>
+  </div>
+</template>
+
+<script>
+    import Login from "./Login";
+
+    export default {
+        name: "index",
+        components: {Login},
+        data() {
+            return {
+                showLogin: false,
+                menu: [
+                    {
+                        name: '配置',
+                        pathName: 'backend.config',
+                        icon: 'config'
+                    },
+                    {
+                        name: '文章',
+                        pathName: 'backend.md',
+                        icon: 'article'
+                    }
+                ]
+            }
+        },
+        methods: {}
+    }
+</script>
+
+<style scoped lang="scss">
+.back-end{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    flex-shrink: 0;
+    > .menu{
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 9rem;
+        background: rgba(43, 43, 48, 0.88);
+        flex-direction: column;
+        box-shadow: 0 0 0.8rem rgba(75, 75, 75, 0.5);
+        > a{
+            font-size: 1rem;
+            color: black;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 0;
+            width: calc(100% - 0.2rem);
+            border-left: 0.2rem solid transparent;
+            &.active{
+                background: rgb(31, 31, 31, 0.87);
+                border-color: #5fff88;
+            }
+            &:not(.active):hover{
+                background: rgba(255, 255, 255, 0.15);
+            }
+            > .icon{
+                width: 2.2rem;
+                height: 2.2rem;
+                display: flex;
+                > svg{
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            > .name{
+                margin-left: 1rem;
+                color: white;
+            }
+        }
+        > .account{
+            background: #ac60ff;
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 0.3rem;
+            margin: auto 0 1rem 0;
+            cursor: pointer;
+            transition: all .1s linear;
+            &:hover{
+                background: #8c8e8d;
+            }
+            > svg{
+                width: 1.6rem;
+                height: 1.6rem;
+            }
+            > span{
+                font-size: 0.9rem;
+                margin-left: 0.6rem;
+            }
+        }
+    }
+}
+</style>

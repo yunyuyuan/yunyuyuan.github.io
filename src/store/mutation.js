@@ -2,7 +2,7 @@ export default {
     changeMd(state, file) {
         state.mdFile = file
     },
-    initGitUtil(state, githubUtils) {
+    updateGitUtil(state, githubUtils) {
         state.gitUtil = githubUtils
     },
     initConfig(state, config) {

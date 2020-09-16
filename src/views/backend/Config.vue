@@ -1,6 +1,5 @@
 <template>
   <div class="config">
-    <button @click="submit">提交</button>
   </div>
 </template>
 
@@ -10,18 +9,22 @@ import {mapState} from "vuex";
 export default {
   name: "Config",
   data() {
-    return {}
+    return {
+      login: false
+    }
   },
   computed: {
     ...mapState(['gitUtil'])
   },
   created() {
     if (!this.gitUtil) {
-      this.$router.push({name: 'backEnd.login'})
+      this.login = false
     } else {
       this.gitUtil.getFile('public/config.json').then(res => {
         if (res[0]) {
           decodeURIComponent(escape(atob(res[1].data.content)))
+        } else {
+          console.log(res[1])
         }
       })
     }

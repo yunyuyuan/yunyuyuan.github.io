@@ -8,11 +8,13 @@
 export default {
   name: "Md",
   data() {
-    return {}
+    return {
+      login: false
+    }
   },
   created() {
     if (!this.gitUtil) {
-      this.$router.push({name: 'backEnd.login'})
+      this.login = false
     } else {
       this.gitUtil.getFile('public/md').then(res => {
         if (res[0]) {

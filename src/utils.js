@@ -15,7 +15,7 @@ export async function getConfig() {
 }
 
 // github
-export class githubUtils {
+export class GithubUtils {
     constructor(token, user, repo, committer) {
         this.token = token
         this.config = {

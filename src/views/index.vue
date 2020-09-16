@@ -1,11 +1,11 @@
 <template>
   <div class="index">
-    <img :src="images[routeNow]"/>
-    <the-head/>
-    <section class="body">
-      <router-view></router-view>
-      <the-footer/>
-    </section>
+      <img :src="images[routeNow]"/>
+      <the-head v-if="showHead"/>
+      <section :class="{body: true, 'show-head': showHead}">
+          <router-view></router-view>
+          <the-footer/>
+      </section>
   </div>
 </template>
 
@@ -22,35 +22,37 @@ export default {
   components: {TheHead, TheFooter},
   data() {
     return {
-      images: {
-        home: HomeImage,
-        articleList: ArticleListImage,
-        articleDetail: ArticleDetailImage,
-        msgBoard: msgBoardImage,
-        backEnd: msgBoardImage,
-      },
-      routeNow: 'home'
+        showHead: true,
+        images: {
+            home: HomeImage,
+            articleList: ArticleListImage,
+            articleDetail: ArticleDetailImage,
+            msgBoard: msgBoardImage,
+            backend: msgBoardImage,
+        },
+        routeNow: 'home'
     }
   },
   watch: {
     $route() {
-      switch (this.$route.name) {
-        case 'home':
-          this.routeNow = 'home'
-          break
-        case 'article.list':
-          this.routeNow = 'articleList'
-          break
-        case 'article.detail':
-          this.routeNow = 'articleDetail'
-          break
-        case 'msgBoard':
-          this.routeNow = 'msgBoard'
-          break
-        case 'backEnd':
-          this.routeNow = 'backEnd'
-          break
-      }
+        switch (this.$route.name.replace(/^(.*?)\..*$/, '$1')) {
+            case 'home':
+                this.routeNow = 'home';
+                this.showHead = true;
+                break;
+            case 'article':
+                this.routeNow = 'articleList';
+                this.showHead = true;
+                break;
+            case 'msgBoard':
+                this.routeNow = 'msgBoard';
+                this.showHead = true;
+                break;
+            case 'backend':
+                this.routeNow = 'backend';
+                this.showHead = false;
+                break;
+        }
     }
   },
   methods: {}
@@ -73,17 +75,20 @@ export default {
     z-index: $z-index-bg;
   }
 
-  > .body {
-    position: fixed;
-    left: 0;
-    top: 0;
-    padding-top: $head-height;
-    width: 100%;
-    height: calc(100% - #{$head-height});
-    overflow-y: auto;
-    z-index: $z-index-body;
-    flex-direction: column;
-    background: rgba(0, 0, 0, 0.1);
+  > .body{
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      z-index: $z-index-body;
+      flex-direction: column;
+      background: rgba(0, 0, 0, 0.1);
+      &.show-head{
+          padding-top: $head-height;
+          height: calc(100% - #{$head-height});
+      }
   }
 }
 </style>
