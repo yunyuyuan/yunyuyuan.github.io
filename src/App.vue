@@ -10,9 +10,6 @@ import TheIndex from '@/views/index'
 export default {
   name: 'App',
   components: {TheIndex},
-  beforeCreate() {
-    this.$store.commit('initConfig')
-  }
 }
 </script>
 

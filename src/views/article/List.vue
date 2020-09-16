@@ -6,8 +6,11 @@
           <svg-icon :fill="searchFocus?'black':'#ddd'" :name="'search'"/>
       </span>
     </div>
+    <div :class="{tags: true, active: !!searchTags.length}">
+      <span @click="removeTag(tag)" v-for="tag in searchTags" :key="tag">{{ tag }}</span>
+    </div>
     <div class="blog">
-      <div v-for="item in this.config.md" :key="item.file" class="item" v-show="searchList.indexOf(item)!==-1">
+      <div v-for="item in this.config.md" :key="item.file" class="item" v-show="resultList.indexOf(item)!==-1">
         <div class="time">
           <span>{{ item.time }}</span>
         </div>
@@ -17,7 +20,12 @@
         </div>
         <router-link class="info" :to="{name: 'article.detail', params: {id: item.file}}">
           <img :src="`/md/${item.file}/${item.cover}`">
-          <span>{{ item.name }}</span>
+          <div>
+            <span>{{ item.name }}</span>
+            <div class="tags">
+              <span v-for="tag in item.tags" @click.prevent.stop="addTag(tag)" :key="tag">{{ tag }}</span>
+            </div>
+          </div>
         </router-link>
       </div>
     </div>
@@ -33,17 +41,27 @@ export default {
   data() {
     return {
       search: '',
-      searchFocus: false
+      searchFocus: false,
+      searchTags: [],
     }
   },
   computed: {
     ...mapState(['config']),
-    searchList() {
-      if (!this.search) return this.config.md;
-      let lis = [];
+    resultList() {
+      if (!this.search && !this.searchTags.length) return this.config.md;
+      let lis = [],
+          vue_ = this;
       this.config.md.forEach(e => {
-        if (e.name.indexOf(this.search) !== -1) {
-          lis.push(e)
+        if (!vue_.search || e.name.indexOf(vue_.search) !== -1) {
+          let tagMatched = true;
+          for (let idx = 0; idx < vue_.searchTags.length; idx++) {
+            if (e.tags.indexOf(vue_.searchTags[idx]) === -1) {
+              tagMatched = false
+            }
+          }
+          if (tagMatched) {
+            lis.push(e)
+          }
         }
       });
       return lis
@@ -52,6 +70,16 @@ export default {
   methods: {
     toggleInputFocus(b) {
       this.searchFocus = b
+    },
+    addTag(tag) {
+      if (this.searchTags.indexOf(tag) === -1) {
+        this.searchTags.push(tag)
+      } else {
+        this.removeTag(tag)
+      }
+    },
+    removeTag(tag) {
+      this.searchTags.splice(this.searchTags.indexOf(tag), 1)
     }
   }
 }
@@ -74,6 +102,7 @@ export default {
     padding: 0.3rem;
     box-shadow: 0 0 0.5rem #d2d2d2;
     transition: all .1s linear;
+    margin-bottom: 1rem;
 
     &.active {
       background: rgba(255, 255, 255, 0.4);
@@ -102,15 +131,44 @@ export default {
     }
   }
 
+  > .tags {
+    transition: all .15s linear;
+    width: 80%;
+    height: 0;
+
+    &.active {
+      height: 3rem;
+    }
+
+    > span {
+      background: #00f3ff;
+      padding: 0.3rem 0.8rem;
+      cursor: pointer;
+      transition: all .1s linear;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      margin: 0 1rem;
+      height: 1.2rem;
+      line-height: 1.8rem;
+      box-shadow: 0 0 0.4rem #000000a1;
+
+      &:hover {
+        background: #ff5757;
+        color: white;
+      }
+    }
+  }
+
   > .blog {
     flex-direction: column;
     width: 50rem;
     overflow-y: auto;
-    margin-top: 2rem;
+    margin-top: 1rem;
 
     > .item {
       width: 100%;
-      padding: 1rem 1rem 1rem 0;
+      padding: 1rem 0;
 
       > .time {
         > span {
@@ -163,7 +221,7 @@ export default {
           z-index: 1;
         }
 
-        > span {
+        > div {
           height: 100%;
           width: 100%;
           background: white;
@@ -171,8 +229,39 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 1.1rem;
+          flex-direction: column;
           box-shadow: 0 0 0.4rem rgba(128, 128, 128, 0.59) inset;
+
+          > span {
+            font-size: 1.1rem;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+          }
+
+          > .tags {
+            width: 100%;
+            height: 2rem;
+            justify-content: flex-end;
+
+            > span {
+              font-size: 0.1rem;
+              line-height: 1rem;
+              background: #00f3ff;
+              border-radius: 0.1rem;
+              padding: 0.2rem 0.6rem;
+              margin-right: 0.5rem;
+              transition: all .15s linear;
+              box-shadow: 0 0 0.2rem #00000078;
+
+              &:hover {
+                background: #444444;
+                color: white;
+              }
+            }
+          }
         }
       }
     }
