@@ -7,7 +7,7 @@
       </a>
     </div>
     <div class="copyright">
-      <span>Copyright @ 2020 <b>{{ config.name }}</b></span>
+      <span>Copyright @ {{ config.copyright }} <b>{{ config.name }}</b></span>
       <span>All Right Reserve</span>
     </div>
   </footer>
