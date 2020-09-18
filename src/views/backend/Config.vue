@@ -58,6 +58,13 @@ export default {
       this.config[payload[0]] = payload[1]
     },
     commitConfig() {
+      if (!this.gitUtil) {
+        this.login = false
+      } else {
+        this.gitUtil.updateFile('public/config.json', unescape(encodeURIComponent(JSON.stringify(this.config))), '更新config').then(res => {
+          console.log(res)
+        })
+      }
     }
   }
 }
