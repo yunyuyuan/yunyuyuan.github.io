@@ -9,8 +9,8 @@
               <float-input v-for="(v,k) in login" :name="k" @input="input" :id="k" :value="v"/>
             </div>
             <div class="btn">
-                <span class="exit" @click="exit">取消</span>
-                <span class="save" @click="save">保存</span>
+              <single-button class="exit" :text="'取消'" @click="exit"/>
+              <single-button class="save" :text="'保存'" @click="save"/>
             </div>
         </div>
     </div>
@@ -19,14 +19,15 @@
 <script>
 import {GithubUtils} from "@/utils";
 import FloatInput from "@/components/FloatInput";
+import SingleButton from "@/components/Button";
 
     export default {
       name: "Login",
-      components: {FloatInput},
+      components: {SingleButton, FloatInput},
       data() {
         return {
           login: {
-            token: 'cd799aa822c0f000443e418924cf9ba82b8d5962',
+            token: '',
             name: 'yunyuyuan',
             repo: 'yunyuyuan.github.io',
             email: '326178275@qq.com'
@@ -68,22 +69,24 @@ import FloatInput from "@/components/FloatInput";
         z-index: $z-index-dialog;
         background: rgba(0, 0, 0, 0.4);
         justify-content: space-around;
-        > .inner{
-            background: #ebebeb;
-            border-radius: 1rem;
-            flex-direction: column;
-            box-shadow: 0 0 1.5rem rgba(255, 255, 255, 0.3);
-            border: 1px solid #4c4c4c;
-            > .head{
-                background: white;
-                padding: 0.6rem 10rem;
-                border-radius: 1rem 1rem 0 0;
-                justify-content: center;
-                border-bottom: 1px solid gray;
-                > svg{
-                    width: 2.4rem;
-                    height: 2.4rem;
-                }
+        > .inner {
+          background: #ebebeb;
+          border-radius: 1rem;
+          flex-direction: column;
+          box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.4);
+          border: 1px solid #939393;
+
+          > .head {
+            background: white;
+            padding: 0.6rem 10rem;
+            border-radius: 1rem 1rem 0 0;
+            justify-content: center;
+            border-bottom: 1px solid gray;
+
+            > svg {
+              width: 2.4rem;
+              height: 2.4rem;
+            }
                 > b{
                     margin-left: 2rem;
                     font-size: 1.08rem;
@@ -99,25 +102,25 @@ import FloatInput from "@/components/FloatInput";
                 margin: 1rem 0;
               }
             }
-            > .btn{
-                margin: 1rem 0;
-                > span{
-                    background: #ff403b;
-                    color: white;
-                    border-radius: 0.2rem;
-                    padding: 0.3rem 0.8rem;
-                    font-size: 0.95rem;
-                    margin: 0 1rem;
-                    box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
-                    cursor: pointer;
-                    transition: all .1s ease-out;
-                    &:hover{
-                        transform: scale(1.05);
-                    }
-                    &.save{
-                        background: #004fff;
-                    }
+            > .btn {
+              margin: 1rem 0;
+
+              ::v-deep > .single-button {
+                background: #ff5d36;
+                margin: 0 1rem;
+
+                &:hover {
+                  background: #dc512f;
                 }
+
+                &.save {
+                  background: #004fff;
+
+                  &:hover {
+                    background: #0042d4;
+                  }
+                }
+              }
             }
         }
     }

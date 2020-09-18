@@ -2,8 +2,8 @@
   <footer>
     <img :src="selfImage"/>
     <div class="social-media">
-      <a v-for="(k,v) in config.socialMedia" :key="v" target="_blank" :href="k" :title="v">
-        <svg-icon :name="v"/>
+      <a v-for="k in links" :key="k" target="_blank" :href="config[k]" :title="k">
+        <svg-icon :name="k"/>
       </a>
     </div>
     <div class="copyright">
@@ -22,6 +22,7 @@ export default {
   data() {
     return {
       selfImage,
+      links: ['github', 'bilibili', 'email']
     }
   },
   computed: {

@@ -8,12 +8,8 @@
       <float-input v-for="k in keys" :name="k" :value="config[k]||''" :id="k" @input="input"/>
     </div>
     <div class="btn">
-      <div class="pull" @click="updateConfig">
-        <span>拉取</span>
-      </div>
-      <div class="push" @click="commitConfig">
-        <span>提交</span>
-      </div>
+      <single-button class="pull" :text="'拉取'" @click="updateConfig"/>
+      <single-button class="push" :text="'提交'" @click="commitConfig"/>
     </div>
   </div>
 </template>
@@ -21,10 +17,11 @@
 <script>
 import {mapState} from "vuex";
 import FloatInput from "@/components/FloatInput";
+import SingleButton from "@/components/Button";
 
 export default {
   name: "Config",
-  components: {FloatInput},
+  components: {SingleButton, FloatInput},
   data() {
     return {
       login: false,
@@ -36,8 +33,8 @@ export default {
     ...mapState(['gitUtil'])
   },
   watch: {
-    '$store.gitUtil': function () {
-      console.log('update')
+    '$store.state.gitUtil': function () {
+      this.updateConfig()
     }
   },
   created() {
@@ -51,7 +48,6 @@ export default {
         this.gitUtil.getFile('public/config.json').then(res => {
           if (res[0]) {
             this.config = JSON.parse(decodeURIComponent(escape(atob(res[1].data.content))))
-            console.log(this.config)
           } else {
             console.log(res[1])
           }
@@ -74,27 +70,33 @@ export default {
   border-radius: 0.6rem;
   margin: auto;
   box-shadow: 0 0 2rem rgba(111, 100, 100, 0.53);
+  width: 40rem;
 
   > .head {
-    padding: 0.6rem 20rem;
+    padding: 0.6rem 0;
+    width: 100%;
     border-radius: 0.6rem 0.6rem 0 0;
     background: linear-gradient(to bottom, #d9fffb, #c0fffa);
     border-bottom: 1px solid #cecece;
+    justify-content: center;
 
     > svg {
-      width: 2.4rem;
-      height: 2.4rem;
+      width: 2.2rem;
+      height: 2.2rem;
     }
 
     > b {
+      margin-left: 1rem;
       font-size: 1.1rem;
     }
   }
 
   > .list {
+    width: 100%;
     flex-direction: column;
 
     > .float-input {
+      width: 60%;
       margin: 1rem 0;
     }
   }
@@ -102,25 +104,20 @@ export default {
   > .btn {
     margin: 1rem 0;
 
-    > div {
-      padding: 0.3rem 0.8rem;
+    ::v-deep > .single-button {
       background: #3591c3;
       margin: 0 1rem;
-      border-radius: 0.2rem;
-      box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
-      cursor: pointer;
+
+      &:hover {
+        background: #45bdff;
+      }
 
       &.push {
         background: #499b54;
-      }
 
-      > svg {
-
-      }
-
-      > span {
-        font-size: 0.9rem;
-        color: white;
+        &:hover {
+          background: #5ece6d;
+        }
       }
     }
   }

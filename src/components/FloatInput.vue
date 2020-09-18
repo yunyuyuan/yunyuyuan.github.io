@@ -16,6 +16,11 @@ export default {
       inputed: false
     }
   },
+  watch: {
+    '$props.value'() {
+      this.text = this.$props.value
+    }
+  },
   methods: {
     input(e) {
       this.text = e.target.value
