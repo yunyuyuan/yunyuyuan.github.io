@@ -48,6 +48,11 @@ const routes = [
                 name: 'backend.md',
                 component: () => import('@/views/backend/Md'),
             },
+            {
+                path: 'md/:id',
+                name: 'backend.md.detail',
+                component: ()=>import('@/views/backend/MdDetail')
+            }
         ]
     },
 ];

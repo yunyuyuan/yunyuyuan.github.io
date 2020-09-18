@@ -11,7 +11,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         gitUtil: null,
-        mdFile: 0,
+        nowMdFile: 0,
         config: {}
     },
     mutations,

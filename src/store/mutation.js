@@ -1,11 +1,11 @@
 export default {
     changeMd(state, file) {
-        state.mdFile = file
+        state.nowMdFile = file
+    },
+    updateConfig(state, config) {
+        state.config = config
     },
     updateGitUtil(state, githubUtils) {
         state.gitUtil = githubUtils
     },
-    initConfig(state, config) {
-        state.config = config
-    }
 }

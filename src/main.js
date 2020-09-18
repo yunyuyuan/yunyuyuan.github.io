@@ -10,7 +10,7 @@ import {getConfig} from "@/utils";
 
 getConfig().then(res => {
   if (res[0]) {
-    store.commit('initConfig', JSON.parse(res[1]))
+    store.commit('updateConfig', JSON.parse(res[1]))
     new Vue({
       store,
       router,

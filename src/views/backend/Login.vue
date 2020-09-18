@@ -64,7 +64,7 @@ import SingleButton from "@/components/Button";
                       email: this.login.email
                     }
                 ));
-              this.$emit('hide')
+              this.$emit('save')
             },
         input(payload) {
           this.login[payload[0]] = payload[1]

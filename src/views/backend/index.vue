@@ -2,18 +2,22 @@
   <div class="back-end">
       <div class="menu">
           <router-link v-for="item in menu" :key="item.name" :to="{name: item.pathName}"
-                       :class="{active: $route.name === item.pathName}">
+                       :class="{active: $route.name.indexOf(item.pathName)===0}">
         <span class="icon">
           <svg-icon :name="item.icon"/>
         </span>
             <span class="name">{{ item.name }}</span>
           </router-link>
-        <div class="account" @click="showLogin = true">
+        <div :class="{loading: updating}" class="btn update" @click="updateConfig">
+          <svg-icon :name="updating?'loading':'update'"/>
+          <span>更新</span>
+        </div>
+        <div class="btn login" @click="showLogin = true">
           <svg-icon :name="'account'"/>
           <span>登录</span>
         </div>
       </div>
-    <login v-show="showLogin" @hide="showLogin = false"/>
+    <login v-show="showLogin" @save="login" @hide="showLogin = false"/>
     <div class="body">
       <keep-alive>
         <router-view @login="showLogin = true"></router-view>
@@ -24,13 +28,15 @@
 
 <script>
     import Login from "./Login";
+    import {getConfig} from "@/utils";
 
     export default {
         name: "index",
         components: {Login},
-        data() {
+      data() {
             return {
                 showLogin: false,
+              updating: false,
                 menu: [
                     {
                         name: '配置',
@@ -45,7 +51,24 @@
                 ]
             }
         },
-        methods: {}
+        methods: {
+          login (){
+            this.showLogin = false;
+            this.updateConfig()
+          },
+          updateConfig() {
+            if (this.updating) return
+            this.updating = true
+            getConfig().then(res=>{
+              if (res[0]){
+                this.$store.commit('updateConfig', JSON.parse(res[1]))
+              }
+              setTimeout(()=>{
+                this.updating = false
+              }, 5000)
+            })
+          },
+        }
     }
 </script>
 
@@ -98,18 +121,28 @@
                 color: white;
             }
         }
-        > .account{
+        > .btn{
             background: #ac60ff;
             color: white;
             padding: 0.2rem 0.8rem;
             border-radius: 0.3rem;
-            margin: auto 0 1rem 0;
+            margin: 0 0 1rem 0;
             cursor: pointer;
             transition: all .1s linear;
+          &.update{
+            background: #4a91ff;
+            margin: auto 0 1rem 0;
+          }
             &:hover{
                 background: #8c8e8d;
             }
 
+          &.loading{
+            cursor: not-allowed;
+            >svg {
+              animation: rotating 2s linear infinite;
+            }
+          }
           > svg {
             width: 1.6rem;
             height: 1.6rem;
