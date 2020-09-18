@@ -7,7 +7,7 @@
             </div>
             <div class="body">
               <div v-for="(v,k) in login" :key="k">
-                <float-input :name="k" @input="input" :id="k" :value="v"/>
+                <float-input :name="k" @input="input" :id="k" :size="1" :value="v"/>
                 <span :class="{err: true, show: !login[k]}" title="请填写此字段">
                   <svg-icon :name="'warning'"/>
                 </span>

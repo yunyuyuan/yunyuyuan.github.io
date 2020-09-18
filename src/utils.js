@@ -1,8 +1,16 @@
 import axios from "axios";
 
-export async function getConfig() {
+const showdown = require('showdown');
+const converter = new showdown.Converter({
+    prefixHeaderId: '__markdown_header_id_',
+    tables: true,
+    tasklists: true,
+    backslashEscapesHTMLTags: true,
+});
+
+export async function getText(path) {
     return new Promise(resolve => {
-        fetch('/config.json').then(res => {
+        fetch(path).then(res => {
             res.text().then(res => {
                 resolve([true, res])
             }).catch(err => {
@@ -12,6 +20,18 @@ export async function getConfig() {
             resolve([false, err])
         })
     })
+}
+
+export async function updateConfig(gitUtil, config) {
+    return new Promise(resolve => {
+        gitUtil.updateFile('public/config.json', unescape(encodeURIComponent(JSON.stringify(config, null, 4))), '更新config').then(res => {
+            resolve(res)
+        })
+    })
+}
+
+export function parseMarkdown(text) {
+    return converter.makeHtml(text)
 }
 
 // github

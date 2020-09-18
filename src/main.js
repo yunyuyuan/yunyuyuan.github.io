@@ -6,9 +6,9 @@ Vue.config.productionTip = false;
 import '@/icons'
 import store from '@/store'
 import router from '@/router'
-import {getConfig} from "@/utils";
+import {getText} from "@/utils";
 
-getConfig().then(res => {
+getText('/config.json').then(res => {
   if (res[0]) {
     store.commit('updateConfig', JSON.parse(res[1]))
     new Vue({

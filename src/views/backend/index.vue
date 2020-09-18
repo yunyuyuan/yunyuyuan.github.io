@@ -28,7 +28,7 @@
 
 <script>
     import Login from "./Login";
-    import {getConfig} from "@/utils";
+    import {getText} from "@/utils";
 
     export default {
         name: "index",
@@ -59,11 +59,11 @@
           updateConfig() {
             if (this.updating) return
             this.updating = true
-            getConfig().then(res=>{
-              if (res[0]){
+            getText('/config.json').then(res => {
+              if (res[0]) {
                 this.$store.commit('updateConfig', JSON.parse(res[1]))
               }
-              setTimeout(()=>{
+              setTimeout(() => {
                 this.updating = false
               }, 5000)
             })
@@ -80,17 +80,16 @@
   flex-shrink: 0;
   $menu-width: 9rem;
 
-  > .menu {
+  > .menu{
     position: absolute;
     left: 0;
     top: 0;
     height: 100%;
     width: $menu-width;
-    background: rgba(43, 43, 48, 0.88);
+    background: rgba(43, 43, 48, 0.92);
     flex-direction: column;
     box-shadow: 0 0 0.8rem rgba(75, 75, 75, 0.5);
-
-    > a {
+    > a{
       font-size: 1rem;
       color: black;
       text-decoration: none;
@@ -139,7 +138,8 @@
 
           &.loading{
             cursor: not-allowed;
-            >svg {
+            background: #8c8e8d;
+            > svg{
               animation: rotating 2s linear infinite;
             }
           }

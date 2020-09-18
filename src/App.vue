@@ -24,8 +24,8 @@ html, body{
   height: 100%;
 }
 *{
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 div, section{
     display: flex;
@@ -33,14 +33,34 @@ div, section{
 }
 input, textarea, select, button{
     outline: none;
+    resize: none;
 }
-
-@keyframes rotating {
-  0% {
-    transform: rotate(0);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+::-webkit-scrollbar{
+    width: 0.66rem;
+    height: 0.66rem;
+}
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar-button{
+    display: none;
+}
+::-webkit-scrollbar-thumb{
+    border-radius: 0.6rem;
+    background: #404040;
+    border: 1px solid #828282;
+}
+::-webkit-scrollbar-thumb:hover{
+    background: #323232
+}
+::-webkit-scrollbar-track{
+    border-radius: 0.6rem;
+    background: transparent;
+}
+@keyframes rotating{
+    0%{
+        transform: rotate(0);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
 }
 </style>

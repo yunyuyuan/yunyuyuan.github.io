@@ -5,7 +5,7 @@
       <b>修改配置信息</b>
     </div>
     <div class="list">
-      <float-input v-for="k in keys" :name="k" :value="config[k]||''" :id="k" @input="input"/>
+      <float-input v-for="k in keys" :name="k" :value="config[k]||''" :id="k" :size="1" @input="input"/>
     </div>
     <div class="btn">
       <single-button :text="'提交'" @click="commitConfig"/>
@@ -17,7 +17,7 @@
 import {mapState} from "vuex";
 import FloatInput from "@/components/FloatInput";
 import SingleButton from "@/components/Button";
-import {getConfig} from "@/utils";
+import {updateConfig} from "@/utils";
 
 export default {
   name: "Config",
@@ -34,15 +34,9 @@ export default {
     input(payload) {
       this.config[payload[0]] = payload[1]
     },
-    commitConfig() {
+    async commitConfig() {
       if (this.gitUtil) {
-        this.gitUtil.updateFile('public/config.json', unescape(encodeURIComponent(JSON.stringify(this.config, null, 4))), '更新config').then(res => {
-          if (res[0]) {
-
-          } else {
-            console.log(res[1])
-          }
-        })
+        let res = await updateConfig(this.gitUtil, this.config)
       }
     }
   }
@@ -50,15 +44,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.config {
+.config{
   flex-direction: column;
   background: #f7f7f7;
   border-radius: 0.6rem;
   margin: 2rem auto 0 auto;
-  box-shadow: 0 0 2rem rgba(111, 100, 100, 0.53);
+  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.6);
   width: 40rem;
-
-  > .head {
+  > .head{
     padding: 0.6rem 0;
     width: 100%;
     border-radius: 0.6rem 0.6rem 0 0;

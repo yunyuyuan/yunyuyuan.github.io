@@ -4,7 +4,7 @@
       <the-head v-if="showHead"/>
       <section :class="{body: true, 'show-head': showHead}">
           <router-view></router-view>
-          <the-footer/>
+          <the-footer v-if="this.routeNow !== 'backend'"/>
       </section>
   </div>
 </template>

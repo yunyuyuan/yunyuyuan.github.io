@@ -70,15 +70,19 @@ export default {
       margin: 0.5rem 0;
       box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
       cursor: pointer;
-      &:hover {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: black;
+      &:hover{
         background: #d4fbff;
       }
-      >img{
+      > img{
         height: 100%;
         width: 10rem;
         object-fit: contain;
       }
-      >.info{
+      > .info{
         flex-direction: column;
         justify-content: center;
         height: 100%;
