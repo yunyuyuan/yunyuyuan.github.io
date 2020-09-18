@@ -16,7 +16,7 @@
     <login v-show="showLogin" @hide="showLogin = false"/>
     <div class="body">
       <keep-alive>
-        <router-view></router-view>
+        <router-view @login="showLogin = true"></router-view>
       </keep-alive>
     </div>
   </div>

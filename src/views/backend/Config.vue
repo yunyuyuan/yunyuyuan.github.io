@@ -1,16 +1,23 @@
 <template>
   <div class="config">
-    <div class="head">
-      <svg-icon :name="'config'"/>
-      <b>修改配置信息</b>
-    </div>
-    <div class="list">
-      <float-input v-for="k in keys" :name="k" :value="config[k]||''" :id="k" @input="input"/>
-    </div>
-    <div class="btn">
-      <single-button class="pull" :text="'拉取'" @click="updateConfig"/>
-      <single-button class="push" :text="'提交'" @click="commitConfig"/>
-    </div>
+    <template v-if="!gitUtil">
+      <div class="to-login">
+        <span>请先<single-button :text="'登录'" @click="$emit('login')"/>后查看或编辑此内容</span>
+      </div>
+    </template>
+    <template v-else>
+      <div class="head">
+        <svg-icon :name="'config'"/>
+        <b>修改配置信息</b>
+      </div>
+      <div class="list">
+        <float-input v-for="k in keys" :name="k" :value="config[k]||''" :id="k" @input="input"/>
+      </div>
+      <div class="btn">
+        <single-button class="pull" :text="'拉取'" @click="updateConfig"/>
+        <single-button class="push" :text="'提交'" @click="commitConfig"/>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -24,13 +31,12 @@ export default {
   components: {SingleButton, FloatInput},
   data() {
     return {
-      login: false,
       config: {},
       keys: ["name", "describe", "copyright", "github", "bilibili", "email"]
     }
   },
   computed: {
-    ...mapState(['gitUtil'])
+    ...mapState(['gitUtil']),
   },
   watch: {
     '$store.state.gitUtil': function () {
@@ -42,9 +48,7 @@ export default {
   },
   methods: {
     updateConfig() {
-      if (!this.gitUtil) {
-        this.login = false
-      } else {
+      if (this.gitUtil) {
         this.gitUtil.getFile('public/config.json').then(res => {
           if (res[0]) {
             this.config = JSON.parse(decodeURIComponent(escape(atob(res[1].data.content))))
@@ -58,11 +62,13 @@ export default {
       this.config[payload[0]] = payload[1]
     },
     commitConfig() {
-      if (!this.gitUtil) {
-        this.login = false
-      } else {
+      if (this.gitUtil) {
         this.gitUtil.updateFile('public/config.json', unescape(encodeURIComponent(JSON.stringify(this.config))), '更新config').then(res => {
-          console.log(res)
+          if (res[0]) {
+
+          } else {
+            console.log(res[1])
+          }
         })
       }
     }
@@ -75,9 +81,26 @@ export default {
   flex-direction: column;
   background: white;
   border-radius: 0.6rem;
-  margin: auto;
+  margin: 2rem auto 0 auto;
   box-shadow: 0 0 2rem rgba(111, 100, 100, 0.53);
   width: 40rem;
+
+  > .to-login {
+    > span {
+      display: flex;
+      align-items: center;
+      font-size: 1rem;
+
+      > .single-button {
+        margin: 0 0.5rem;
+        background: #ff7245;
+
+        &:hover {
+          background: #d05c37
+        }
+      }
+    }
+  }
 
   > .head {
     padding: 0.6rem 0;

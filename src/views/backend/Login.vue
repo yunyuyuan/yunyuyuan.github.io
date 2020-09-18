@@ -6,11 +6,16 @@
                 <b>后台管理账户</b>
             </div>
             <div class="body">
-              <float-input v-for="(v,k) in login" :name="k" @input="input" :id="k" :value="v"/>
+              <div v-for="(v,k) in login" :key="k">
+                <float-input :name="k" @input="input" :id="k" :value="v"/>
+                <span :class="{err: true, show: !login[k]}" title="请填写此字段">
+                  <svg-icon :name="'warning'"/>
+                </span>
+              </div>
             </div>
             <div class="btn">
               <single-button class="exit" :text="'取消'" @click="exit"/>
-              <single-button class="save" :text="'保存'" @click="save"/>
+              <single-button :class="{save: true, disabled: !allInputed}" :text="'保存'" @click="save"/>
             </div>
         </div>
     </div>
@@ -34,15 +39,26 @@ import SingleButton from "@/components/Button";
           }
         }
       },
+      computed: {
+        allInputed() {
+          for (let k in this.login) {
+            if (!this.login[k]) {
+              return false
+            }
+          }
+          return true
+        }
+      },
       methods: {
-            exit() {
-                this.$emit('hide')
-            },
-            save() {
-                this.$store.commit('updateGitUtil', new GithubUtils(
-                    this.login.token,
-                    this.login.name,
-                    this.login.repo,
+        exit() {
+          this.$emit('hide')
+        },
+        save() {
+          if (!this.allInputed) return
+          this.$store.commit('updateGitUtil', new GithubUtils(
+              this.login.token,
+              this.login.name,
+              this.login.repo,
                     {
                       name: this.login.name,
                       email: this.login.email
@@ -97,9 +113,29 @@ import SingleButton from "@/components/Button";
               width: 100%;
               margin: 0.8rem 0;
 
-              > .float-input {
-                width: 60%;
-                margin: 1rem 0;
+              > div {
+                width: 100%;
+                justify-content: center;
+
+                > .float-input {
+                  width: 60%;
+                  margin: 1rem 0;
+                }
+
+                > .err {
+                  margin-left: 1rem;
+                  height: 0;
+                  overflow: hidden;
+
+                  &.show {
+                    height: unset;
+                  }
+
+                  > svg {
+                    width: 1.2rem;
+                    height: 1.2rem;
+                  }
+                }
               }
             }
             > .btn {
@@ -118,6 +154,11 @@ import SingleButton from "@/components/Button";
 
                   &:hover {
                     background: #0042d4;
+                  }
+
+                  &.disabled {
+                    background: #5f5f5f !important;
+                    cursor: not-allowed;
                   }
                 }
               }

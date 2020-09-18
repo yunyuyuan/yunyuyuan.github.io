@@ -7,7 +7,7 @@
       </a>
     </div>
     <div class="copyright">
-      <span>Copyright @ {{ config.copyright }} <b>{{ config.name }}</b></span>
+      <span>Copyright (c) @ {{ config.copyright }} <b>{{ config.name }} | {{ domain }}</b></span>
       <span>All Right Reserve</span>
     </div>
   </footer>
@@ -26,7 +26,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['config'])
+    ...mapState(['config']),
+    domain() {
+      return location.hostname
+    }
   }
 }
 </script>
