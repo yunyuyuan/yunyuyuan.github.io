@@ -24,8 +24,8 @@
                 </label>
             </div>
             <div class="btn">
-                <single-button class="exit" :text="'取消'" @click="$emit('hide')"/>
-                <single-button :class="{save: true, disabled: !allInputed}" :text="'保存'" @click="save"/>
+                <single-button class="exit" :text="'取消'" @click.native="$emit('hide')"/>
+                <single-button :class="{save: true, disabled: !allInputed}" :text="'保存'" @click.native="save"/>
             </div>
         </div>
     </div>

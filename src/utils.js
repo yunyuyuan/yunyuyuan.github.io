@@ -69,12 +69,12 @@ export class GithubUtils {
         this.committer = committer
     }
 
-    async updateConfig(content) {
+    async updateConfig(config) {
         return new Promise(resolve => {
             this.repos.contents('public/config.json').fetch().then(res => {
                 return this.repos.contents('public/config.json').add({
                     message: '更新config.json',
-                    content: content,
+                    content: stringToB64(JSON.stringify(config, null, 4)),
                     sha: res.sha,
                     committer: this.committer
                 }).then(res => {
@@ -108,7 +108,7 @@ export class GithubUtils {
             let treeItems = [];
             for (let item of files) {
                 if (!item.file) continue;
-                let res = await this.repos.git.blobs.create({content: item.content, encoding: 'utf-8'}).catch(err => {
+                let res = await this.repos.git.blobs.create({content: item.content, encoding: 'base64'}).catch(err => {
                     resolve([false, err])
                 });
                 treeItems.push({
@@ -141,14 +141,43 @@ export class GithubUtils {
     };
 
 
-    async removeMd(folder) {
+    async removeMd(folder, dic) {
         return new Promise(async resolve => {
-            for (let i of ['index.md', 'index.html']) {
-                let res = await this.repos.git.blobs(`public/md/${folder}/${i}`).read().catch(err => {
-                    resolve([false, err])
-                });
-                await this.repos.contents(`public/md/${folder}/${i}`).remove({
-                    sha: res.sha,
+            let repo = this.repos;
+            dic.state = '获取commit sha';
+            // 先获取master的commit sha
+            let res = await repo.git.refs('heads/master').fetch().catch(err => {
+                resolve([false, err])
+            });
+            dic.state = '获取tree sha';
+            // 根据commit sha获取tree sha
+            res = await repo.git.commits(res.object.sha).fetch().catch(err => {
+                resolve([false, err])
+            });
+            // 根据tree sha递归获取/public/md/${folder}的sha
+            const mdPath = ['public', 'md', folder];
+            async function getMdSha(treeSha) {
+                if (mdPath.length) {
+                    dic.state = `获取${mdPath[0]} sha`;
+                    res = await repo.git.trees(treeSha).fetch().catch(err => {
+                        resolve([false, err])
+                    });
+                    for (let t of res.tree) {
+                        if (t.type === 'tree' && t.path === mdPath[0]) {
+                            mdPath.splice(0, 1);
+                            return await getMdSha(t.sha)
+                        }
+                    }
+                }else{
+                    // 找到了
+                    return res;
+                }
+            }
+            res = await getMdSha(res.tree.sha);
+            for (let i of res.tree) {
+                dic.state = `删除${i.path}`;
+                await repo.contents(`public/md/${folder}/${i.path}`).remove({
+                    sha: i.sha,
                     message: '删除'
                 }).catch(err => {
                     resolve([false, err])

@@ -35,6 +35,48 @@ input, textarea, select, button{
     outline: none;
     resize: none;
 }
+table{
+  border-collapse: collapse;
+  box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
+  tr{
+    td{
+
+    }
+  }
+  thead{
+    background: #2b2b2b;
+    border-bottom: 2px solid #9f9f9f;
+    td{
+      padding: 0.8rem 0;
+      color: white;
+      font-size: 1.06rem;
+      text-align: center;
+      &:not(:last-of-type){
+        border-right: 1px solid #d2d2d2;
+      }
+    }
+  }
+  tbody{
+    tr{
+      &:not(:last-of-type){
+        border-bottom: 1px solid #d2d2d2;
+      }
+      background: white;
+      &:nth-child(even){
+        background: #f5f5f5;
+      }
+      &:hover{
+        background: #e5fff1;
+      }
+      td{
+        padding: 0.4rem 0;
+        &:not(:last-of-type){
+          border-right: 1px solid #d2d2d2;
+        }
+      }
+    }
+  }
+}
 ::-webkit-scrollbar{
     width: 0.66rem;
     height: 0.66rem;

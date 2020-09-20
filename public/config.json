@@ -9,7 +9,7 @@
     {
       "name": "测试",
       "file": "1",
-      "cover": "cover.jpg",
+      "cover": "",
       "time": "2020.9.13",
       "summary": "测试这个博客的md",
       "tags": [
@@ -20,7 +20,7 @@
     {
       "name": "第一篇blog",
       "file": "2",
-      "cover": "cover.jpg",
+      "cover": "",
       "time": "2020.9.13",
       "summary": "测试这个博客的md",
       "tags": [

@@ -13,10 +13,10 @@
     </div>
     <div class="info">
       <div class="cover">
-        <img :src="coverUrl || selfImage"/>
+        <img :src="info.cover || selfImage"/>
         <label>
           <span>封面链接:</span>
-          <input v-model.lazy="coverUrl"/>
+          <input @focusout="changeCover"/>
         </label>
       </div>
       <div class="tags">
@@ -70,7 +70,6 @@
         tagEditIndex: -1,
         mdText: '',
         saving: false,
-        coverUrl: ''
       }
     },
     computed: {
@@ -116,6 +115,10 @@
         let info = this.info;
         info.summary = payload[1]
       },
+      changeCover (e){
+        let info = this.info;
+        info.cover = e.target.value;
+      },
       clickTrash(idx) {
         let info = this.info;
         info.tags.splice(idx, 1)
@@ -145,14 +148,12 @@
       async save() {
         if (this.saving) return;
         if (this.gitUtil) {
-          if (!this.info.name || !this.info.summary || !this.info.tags.length || !this.coverUrl) {
+          if (!this.info.name || !this.info.summary || !this.info.tags.length || !this.info.cover) {
             return this.$message.warning('标题,简介,标签和封面均不能为空!')
           }
           this.saving = true;
           // 更新config.json
-          let info = this.info;
-          info.cover = this.coverUrl;
-          let res = await this.gitUtil.updateConfig(stringToB64(JSON.stringify(this.config, null, 4)));
+          let res = await this.gitUtil.updateConfig(this.config);
           if (res[0]) {
             // 更新 md 和 html文件
             let res = await this.gitUtil.updateMd({
@@ -183,6 +184,7 @@
   flex-direction: column;
   background: white;
   width: 95%;
+  min-height: 90%;
   margin: 1rem auto;
   border-radius: 0.6rem;
   box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);

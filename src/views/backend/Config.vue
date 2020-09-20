@@ -37,7 +37,7 @@
       if (this.gitUtil) {
         this.updating = true;
         // 更新config.json
-        let res = await this.gitUtil.updateConfig(stringToB64(JSON.stringify(this.config, null, 4)));
+        let res = await this.gitUtil.updateConfig(this.config);
         this.updating = false;
         if (res[0]) {
           this.$message.success('更新成功!')
