@@ -81,7 +81,7 @@ const routes = [
                 meta: {
                     title: '后台-主题'
                 },
-                component: () => import('@/views/article/Theme'),
+                component: () => import('@/views/backend/Theme'),
             },
         ]
     },
