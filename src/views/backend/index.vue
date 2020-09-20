@@ -1,23 +1,26 @@
 <template>
   <div class="back-end">
-      <div class="menu">
+      <div class="menu" :class="{hide: !showMenu}">
+        <span class="toggle-menu" :class="{opened: showMenu}" @click="toggleMenu">
+          <svg viewBox="0 0 100 100">
+            <path class="line line1"
+                  d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058"/>
+            <path class="line line2" d="M 20,50 H 80"/>
+            <path class="line line3"
+                  d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942"/>
+          </svg>
+        </span>
           <router-link v-for="item in menu" :key="item.name" :to="{name: item.pathName}"
                        :class="{active: $route.name.indexOf(item.pathName)===0}">
         <span class="icon">
           <svg-icon :name="item.icon"/>
         </span>
-            <span class="name">{{ item.name }}</span>
+              <span class="name">{{ item.name }}</span>
           </router-link>
-        <div :class="{loading: updating}" class="btn update" @click="updateConfig">
-          <svg-icon :name="updating?'loading':'update'"/>
-          <span>更新</span>
-        </div>
-        <div class="btn login" @click="showLogin = true">
-          <svg-icon :name="'account'"/>
-          <span>登录</span>
-        </div>
+          <loading-button class="update" :loading="updating" :text="'更新'" :icon="'update'" @click="getConfig"/>
+          <loading-button :loading="false" :text="'登录'" :icon="'account'" @click="showLogin = true"/>
       </div>
-    <login v-show="showLogin" @save="login" @hide="showLogin = false"/>
+      <login v-show="showLogin" @save="loginFinish" @hide="showLogin = false"/>
     <div class="body">
       <keep-alive>
         <router-view @login="showLogin = true"></router-view>
@@ -28,15 +31,17 @@
 
 <script>
     import Login from "./Login";
-    import {getText} from "@/utils";
+    import {getText, parseAjaxError} from "@/utils";
+    import LoadingButton from "@/components/LoadingButton";
 
     export default {
         name: "index",
-        components: {Login},
-      data() {
+        components: {LoadingButton, Login},
+        data() {
             return {
+                showMenu: true,
                 showLogin: false,
-              updating: false,
+                updating: false,
                 menu: [
                     {
                         name: '配置',
@@ -52,53 +57,100 @@
             }
         },
         methods: {
-          login (){
-            this.showLogin = false;
-            this.updateConfig()
-          },
-          updateConfig() {
-            if (this.updating) return
-            this.updating = true
-            getText('/config.json').then(res => {
-              if (res[0]) {
-                this.$store.commit('updateConfig', JSON.parse(res[1]))
-              }
-              setTimeout(() => {
+            toggleMenu() {
+                this.showMenu = !this.showMenu
+            },
+            loginFinish(withUpdate) {
+                this.showLogin = false;
+                if (withUpdate) {
+                    this.getConfig()
+                }
+                this.$message.success('保存成功!')
+            },
+            async getConfig() {
+                if (this.updating) return;
+                this.updating = true;
+                let res = await getText('/config.json');
+                if (res[0]) {
+                    this.$store.commit('updateConfig', JSON.parse(res[1]));
+                    this.$message.success('从服务器获取配置成功!')
+                } else {
+                    this.$message.error(parseAjaxError(res[1]))
+                }
                 this.updating = false
-              }, 5000)
-            })
-          },
+            },
         }
     }
 </script>
 
 <style scoped lang="scss">
-.back-end {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  flex-shrink: 0;
-  $menu-width: 9rem;
-
-  > .menu{
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: $menu-width;
-    background: rgba(43, 43, 48, 0.92);
-    flex-direction: column;
-    box-shadow: 0 0 0.8rem rgba(75, 75, 75, 0.5);
-    > a{
-      font-size: 1rem;
-      color: black;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-            padding: 1rem 0;
-            width: calc(100% - 0.2rem);
-            border-left: 0.2rem solid transparent;
+    @import "src/assets/style/public";
+    .back-end{
+        width: 100%;
+        height: 100%;
+        position: relative;
+        flex-shrink: 0;
+        $menu-width: 9rem;
+        > .menu{
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: $menu-width;
+            background: rgba(43, 43, 48, 0.92);
+            flex-direction: column;
+            box-shadow: 0 0 0.8rem rgba(75, 75, 75, 0.5);
+            z-index: $z-index-body+1;
+            transition: all .2s ease-out;
+            &.hide{
+                transform: translateX(-100%);
+                ~ .body{
+                    width: 100%;
+                }
+            }
+            > .toggle-menu{
+                position: absolute;
+                top: 0;
+                left: 100%;
+                > svg{
+                    width: 2.2rem;
+                    height: 2.2rem;
+                    box-shadow: 0 0 0.4rem #00000063;
+                    background: black;
+                    cursor: pointer;
+                    transition: background .1s linear;
+                    &:hover{
+                        background: #1e1e1e;
+                    }
+                    > .line{
+                        fill: none;
+                        stroke: #00ffff;
+                        stroke-width: 6;
+                        transition: stroke-dasharray .4s cubic-bezier(0.4, 0, 0.2, 1), stroke-dashoffset .4s cubic-bezier(0.4, 0, 0.2, 1);
+                        @each $i, $n in (1, 207), (2, 60), (3, 207){
+                            &.line#{$i}{
+                                stroke-dasharray: 60 $n;
+                            }
+                        }
+                    }
+                }
+                @each $i, $n, $s in (1, -134, 90 207), (2, -30, 1 60), (3, -134, 90 207){
+                    &.opened > svg > .line#{$i}{
+                        stroke-dasharray: $s;
+                        stroke-dashoffset: $n;
+                    }
+                }
+            }
+            > a{
+                font-size: 1rem;
+                color: black;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 1rem 0;
+                width: calc(100% - 0.2rem);
+                border-left: 0.2rem solid transparent;
             &.active{
                 background: rgb(31, 31, 31, 0.87);
                 border-color: #5fff88;
@@ -115,54 +167,36 @@
                     height: 100%;
                 }
             }
-            > .name{
-                margin-left: 1rem;
-                color: white;
+                > .name{
+                    margin-left: 1rem;
+                    color: white;
+                }
             }
-        }
-        > .btn{
-            background: #ac60ff;
-            color: white;
-            padding: 0.2rem 0.8rem;
-            border-radius: 0.3rem;
-            margin: 0 0 1rem 0;
-            cursor: pointer;
-            transition: all .1s linear;
-          &.update{
-            background: #4a91ff;
-            margin: auto 0 1rem 0;
-          }
-            &:hover{
-                background: #8c8e8d;
+            ::v-deep .loading-button{
+                background: #ac60ff;
+                margin-bottom: 1rem;
+                &:not(.loading):hover{
+                    background: #8c8e8d;
+                }
+                &.update{
+                    background: #4a91ff;
+                    margin: auto 0 1rem 0;
+                }
+                &.loading{
+                    background: #8c8e8d;
+                }
             }
-
-          &.loading{
-            cursor: not-allowed;
-            background: #8c8e8d;
-            > svg{
-              animation: rotating 2s linear infinite;
-            }
-          }
-          > svg {
-            width: 1.6rem;
-            height: 1.6rem;
-          }
-
-          > span {
-            font-size: 0.9rem;
-            margin-left: 0.6rem;
-          }
-        }
   }
 
-  > .body {
-    position: absolute;
-    width: calc(100% - #{$menu-width});
-    height: 100%;
-    overflow-y: auto;
-    left: $menu-width;
-    top: 0;
-    align-items: flex-start;
+  > .body{
+      position: absolute;
+      width: calc(100% - #{$menu-width});
+      height: 100%;
+      overflow-y: auto;
+      right: 0;
+      top: 0;
+      align-items: flex-start;
+      transition: all .2s ease-out;
   }
 }
 </style>

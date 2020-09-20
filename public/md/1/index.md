@@ -1,6 +1,8 @@
 - [x] This task is done
 - [ ] This is still pending
- \<span>fasdf\</span>
+
+#[百度](baidu.com)
+![sticker](aru/12)
 __Advertisement :)__哈哈
 
 - __[pica](https://nodeca.github.io/pica/demo/)__ - high quality and fast image

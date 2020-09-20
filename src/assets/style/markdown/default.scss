@@ -5,6 +5,49 @@
       font-size: 1/$size * 1rem + 0.6rem;
     }
   }
+  p{
+    font-size: 0.95rem;
+    line-height: 1.2rem;
+  }
+  a[href]{
+  }
+  img{
+    &[alt=sticker]{
+    }
+  }
+  input[type=checkbox]{
+    margin: 0 0.5rem !important;
+    width: 1.2rem;
+    height: 1.2rem;
+    background: transparent !important;
+    border: 1px solid #434343;
+    appearance: none;
+    line-height: inherit;
+    &:checked{
+      background: #86ffe4 !important;
+    }
+  }
   strong{
+  }
+  blockquote{
+  }
+  table{
+    tr{
+      td{
+      }
+    }
+    thead{
+    }
+    tbody{
+    }
+  }
+  ul{
+  }
+  ol{
+  }
+  ul, ol{
+    list-style: none;
+  }
+  li{
   }
 }

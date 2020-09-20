@@ -55,12 +55,4 @@ input, textarea, select, button{
     border-radius: 0.6rem;
     background: transparent;
 }
-@keyframes rotating{
-    0%{
-        transform: rotate(0);
-    }
-    100%{
-        transform: rotate(360deg);
-    }
-}
 </style>

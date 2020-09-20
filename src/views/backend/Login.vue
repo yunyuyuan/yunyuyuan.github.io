@@ -6,16 +6,26 @@
                 <b>后台管理账户</b>
             </div>
             <div class="body">
-              <div v-for="(v,k) in login" :key="k">
-                <float-input :name="k" @input="input" :id="k" :size="1" :value="v"/>
-                <span :class="{err: true, show: !login[k]}" title="请填写此字段">
+                <div v-for="(v,k) in login" :key="k">
+                    <float-input :name="k" @input="input" :id="k" :size="1" :value="v"/>
+                    <span :class="{err: true, show: !login[k]}" title="请填写此字段">
                   <svg-icon :name="'warning'"/>
                 </span>
-              </div>
+                </div>
+            </div>
+            <div class="option">
+                <label @click="remember = !remember">
+                    <a :class="{active: remember}"></a>
+                    <span>在本机上记住我</span>
+                </label>
+                <label @click="withUpdate = !withUpdate">
+                    <a :class="{active: withUpdate}"></a>
+                    <span>保存后立即更新配置</span>
+                </label>
             </div>
             <div class="btn">
-              <single-button class="exit" :text="'取消'" @click="exit"/>
-              <single-button :class="{save: true, disabled: !allInputed}" :text="'保存'" @click="save"/>
+                <single-button class="exit" :text="'取消'" @click="$emit('hide')"/>
+                <single-button :class="{save: true, disabled: !allInputed}" :text="'保存'" @click="save"/>
             </div>
         </div>
     </div>
@@ -27,52 +37,78 @@ import FloatInput from "@/components/FloatInput";
 import SingleButton from "@/components/Button";
 
     export default {
-      name: "Login",
-      components: {SingleButton, FloatInput},
-      data() {
-        return {
-          login: {
-            token: '',
-            name: 'yunyuyuan',
-            repo: 'yunyuyuan.github.io',
-            email: '326178275@qq.com'
-          }
-        }
-      },
-      computed: {
-        allInputed() {
-          for (let k in this.login) {
-            if (!this.login[k]) {
-              return false
+        name: "Login",
+        components: {SingleButton, FloatInput},
+        data() {
+            return {
+                login: {
+                    token: '',
+                    name: '',
+                    repo: '',
+                    email: '',
+                },
+                remember: false,
+                withUpdate: false
             }
-          }
-          return true
-        }
-      },
-      methods: {
-        exit() {
-          this.$emit('hide')
         },
-        save() {
-          if (!this.allInputed) return
-          this.$store.commit('updateGitUtil', new GithubUtils(
-              this.login.token,
-              this.login.name,
-              this.login.repo,
+        created() {
+            // 获取localStorage中配置
+            this.login.token = localStorage.getItem('login-token') || '';
+            this.login.name = localStorage.getItem('login-name') || '';
+            this.login.repo = localStorage.getItem('login-repo') || '';
+            this.login.email = localStorage.getItem('login-email') || '';
+            if (this.login.token) {
+                this.remember = true;
+                this.commitUpdateGitutil();
+            }
+        },
+        computed: {
+            allInputed() {
+                for (let k in this.login) {
+                    if (!this.login[k]) {
+                        return false
+                    }
+                }
+                return true
+            }
+        },
+        methods: {
+            save() {
+                if (!this.allInputed) return;
+                if (this.remember) {
+                    //存储到localStorage
+                    localStorage.setItem('login-token', this.login.token);
+                    localStorage.setItem('login-name', this.login.name);
+                    localStorage.setItem('login-repo', this.login.repo);
+                    localStorage.setItem('login-email', this.login.email);
+                } else {
+                    // 删除localStorage
+                    localStorage.removeItem('login-token');
+                    localStorage.removeItem('login-name');
+                    localStorage.removeItem('login-repo');
+                    localStorage.removeItem('login-email');
+                }
+                this.commitUpdateGitutil();
+                this.$emit('save', this.withUpdate)
+            },
+            commitUpdateGitutil() {
+                this.$store.commit('updateGitUtil', new GithubUtils(
+                    this.login.token,
+                    this.login.name,
+                    this.login.repo,
                     {
-                      name: this.login.name,
-                      email: this.login.email
+                        name: this.login.name,
+                        email: this.login.email
                     }
                 ));
-              this.$emit('save')
             },
-        input(payload) {
-          this.login[payload[0]] = payload[1]
-          if (payload[0] === 'name') {
-            this.login['repo'] = `${this.login['name']}.github.io`
-          }
+            input(payload) {
+                this.login[payload[0]] = payload[1];
+                if (payload[0] === 'name') {
+                    this.login['repo'] = `${this.login['name']}.github.io`
+                }
+            }
         }
-      }
     }
 </script>
 
@@ -128,31 +164,66 @@ import SingleButton from "@/components/Button";
                   overflow: hidden;
 
                   &.show {
-                    height: unset;
+                      height: unset;
                   }
-
-                  > svg {
-                    width: 1.2rem;
-                    height: 1.2rem;
-                  }
+                    > svg{
+                        width: 1.2rem;
+                        height: 1.2rem;
+                    }
                 }
               }
             }
-            > .btn {
-              margin: 1rem 0;
-
-              ::v-deep > .single-button {
-                background: #ff5d36;
-                margin: 0 1rem;
-
-                &:hover {
-                  background: #dc512f;
+            > .option{
+                width: 80%;
+                flex-direction: column;
+                align-items: flex-start;
+                > label{
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    margin: 0.5rem 0;
+                    &:hover{
+                        > a{
+                            border-color: red;
+                        }
+                    }
+                    > a{
+                        width: 1rem;
+                        height: 1rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 50%;
+                        border: 2px solid #252525;
+                        &:before{
+                            width: 100%;
+                            height: 100%;
+                            border-radius: inherit;
+                            content: '';
+                        }
+                        &.active{
+                            &:before{
+                                background: #ffca2e;
+                            }
+                        }
+                    }
+                    > span{
+                        font-size: 0.85rem;
+                        margin-left: 1rem;
+                    }
                 }
-
-                &.save {
-                  background: #004fff;
-
-                  &:hover {
+            }
+            > .btn{
+                margin: 1rem 0;
+                ::v-deep > .single-button{
+                    background: #808080;
+                    margin: 0 1rem;
+                    &:hover{
+                        background: #646464;
+                    }
+                    &.save{
+                        background: #004fff;
+                        &:hover{
                     background: #0042d4;
                   }
 

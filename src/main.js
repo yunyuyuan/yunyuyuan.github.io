@@ -10,13 +10,14 @@ import {getText} from "@/utils";
 
 getText('/config.json').then(res => {
   if (res[0]) {
-    store.commit('updateConfig', JSON.parse(res[1]))
-    new Vue({
-      store,
-      router,
-      render: h => h(App),
-    }).$mount('#app');
+      // 首次获取config
+      store.commit('updateConfig', JSON.parse(res[1]));
+      new Vue({
+          store,
+          router,
+          render: h => h(App),
+      }).$mount('#app');
   } else {
-    console.log(res[1])
+      alert('获取网站配置失败!请检查网络并刷新网页')
   }
-})
+});

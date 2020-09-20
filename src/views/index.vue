@@ -6,30 +6,34 @@
           <router-view></router-view>
           <the-footer v-if="this.routeNow !== 'backend'"/>
       </section>
+      <message ref="message"/>
   </div>
 </template>
 
 <script>
-import TheHead from "@/views/block/Head";
-import TheFooter from "@/views/block/Footer";
-import HomeImage from '@/image/home.jpg';
-import ArticleListImage from '@/image/articleList.jpg';
-import ArticleDetailImage from '@/image/articleDetail.jpg';
-import msgBoardImage from '@/image/msgBoard.jpg';
+    import TheHead from "@/views/block/Head";
+    import TheFooter from "@/views/block/Footer";
+    import HomeImage from '@/image/home.jpg';
+    import ArticleListImage from '@/image/articleList.jpg';
+    import ArticleDetailImage from '@/image/articleDetail.jpg';
+    import msgBoardImage from '@/image/msgBoard.jpg';
+    import Message from "./block/Message";
 
-export default {
-  name: "index",
-  components: {TheHead, TheFooter},
-  data() {
-    return {
-        showHead: true,
-        images: {
-            home: HomeImage,
-            articleList: ArticleListImage,
-            articleDetail: ArticleDetailImage,
-            msgBoard: msgBoardImage,
-            backend: msgBoardImage,
-        },
+    import Vue from 'vue';
+
+    export default {
+        name: "index",
+        components: {Message, TheHead, TheFooter},
+        data() {
+            return {
+                showHead: true,
+                images: {
+                    home: HomeImage,
+                    articleList: ArticleListImage,
+                    articleDetail: ArticleDetailImage,
+                    msgBoard: msgBoardImage,
+                    backend: msgBoardImage,
+                },
         routeNow: 'home'
     }
   },
@@ -55,8 +59,11 @@ export default {
         }
     }
   },
-  methods: {}
-}
+        mounted() {
+            Vue.prototype.$message = this.$refs.message
+        },
+        methods: {}
+    }
 </script>
 
 <style scoped lang="scss">

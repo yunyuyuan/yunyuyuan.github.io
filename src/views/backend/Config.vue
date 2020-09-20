@@ -7,36 +7,46 @@
     <div class="list">
       <float-input v-for="k in keys" :name="k" :value="config[k]||''" :id="k" :size="1" @input="input"/>
     </div>
-    <div class="btn">
-      <single-button :text="'提交'" @click="commitConfig"/>
-    </div>
+    <loading-button :loading="updating" :text="'上传'" :icon="'save'" @click="commitConfig"/>
   </div>
 </template>
 
 <script>
-import {mapState} from "vuex";
-import FloatInput from "@/components/FloatInput";
-import SingleButton from "@/components/Button";
-import {updateConfig} from "@/utils";
+  import {mapState} from "vuex";
+  import FloatInput from "@/components/FloatInput";
+  import {stringToB64, parseAjaxError} from "@/utils";
+  import LoadingButton from "@/components/LoadingButton";
 
-export default {
-  name: "Config",
-  components: {SingleButton, FloatInput},
-  data() {
-    return {
-      keys: ["name", "describe", "copyright", "github", "bilibili", "email"]
-    }
-  },
-  computed: {
-    ...mapState(['config', 'gitUtil'])
-  },
-  methods: {
+  export default {
+    name: "Config",
+    components: {LoadingButton, FloatInput},
+    data() {
+      return {
+        updating: false,
+        keys: ["name", "describe", "copyright", "github", "bilibili", "email"]
+      }
+    },
+    computed: {
+      ...mapState(['config', 'gitUtil'])
+    },
+    methods: {
     input(payload) {
       this.config[payload[0]] = payload[1]
     },
     async commitConfig() {
       if (this.gitUtil) {
-        let res = await updateConfig(this.gitUtil, this.config)
+        this.updating = true;
+        // 更新config.json
+        let res = await this.gitUtil.updateConfig(stringToB64(JSON.stringify(this.config, null, 4)));
+        this.updating = false;
+        if (res[0]) {
+          this.$message.success('更新成功!')
+        } else {
+          this.$message.error(parseAjaxError(res[1]))
+        }
+      } else {
+        this.$message.warning('请先登录!');
+        this.$emit('login')
       }
     }
   }
@@ -80,17 +90,17 @@ export default {
       margin: 1rem 0;
     }
   }
-
-  > .btn {
+  ::v-deep > .loading-button{
     margin: 1rem 0;
-
-    ::v-deep > .single-button {
-      margin: 0 1rem;
-      background: #499b54;
-
-      &:hover {
-        background: #5ece6d;
-      }
+    padding: 0.3rem 0.8rem;
+    background: #54b361;
+    box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
+    &:not(.loading):hover{
+      background: #61d671;
+    }
+    &.loading{
+      background: gray;
+      color: white;
     }
   }
 }
