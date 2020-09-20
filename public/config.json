@@ -1,32 +1,9 @@
 {
-  "name": "yunyuyuan",
-  "describe": "总想写点什么,放在网络上,仅此",
-  "copyright": "2019-2020",
-  "github": "https://github.com/yunyuyuan",
-  "bilibili": "https://space.bilibili.com/204446485",
-  "email": "1607439239@qq.com",
-  "md": [
-    {
-      "name": "测试",
-      "file": "1",
-      "cover": "",
-      "time": "2020.9.13",
-      "summary": "测试这个博客的md",
-      "tags": [
-        "文章",
-        "js"
-      ]
-    },
-    {
-      "name": "第一篇blog",
-      "file": "2",
-      "cover": "",
-      "time": "2020.9.13",
-      "summary": "测试这个博客的md",
-      "tags": [
-        "vue",
-        "js"
-      ]
-    }
-  ]
+    "name": "yunyuyuan",
+    "describe": "总想写点什么,放在网络上,仅此",
+    "copyright": "2019-2020",
+    "github": "https://github.com/yunyuyuan",
+    "bilibili": "https://space.bilibili.com/204446485",
+    "email": "1607439239@qq.com",
+    "md": []
 }
