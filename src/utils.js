@@ -16,7 +16,7 @@ const converter = new showdown.Converter({
 // 直接从站点上获取文件text
 export async function getText(path) {
     return new Promise(resolve => {
-        fetch(path).then(res => {
+        fetch(path+'?ran='+new Date().getTime()).then(res => {
             res.text().then(res => {
                 resolve([true, res])
             }).catch(err => {
