@@ -8,12 +8,12 @@
       <loading-button :loading="saving" :text="'上传'" :icon="'save'" @click="save"/>
     </div>
     <div class="head">
-      <float-input @input="inputTitle" :name="'标题'" :size="1.3" :value="info.name"/>
-      <float-input class="summary" @input="inputSummary" :name="'简介'" :size="1" :value="info.summary"/>
+      <float-input @input="inputTitle" :name="'标题'" :size="1.3" :value="getInfo().name"/>
+      <float-input class="summary" @input="inputSummary" :name="'简介'" :size="1" :value="getInfo().summary"/>
     </div>
     <div class="info">
       <div class="cover">
-        <img :src="info.cover || selfImage"/>
+        <img :src="getInfo().cover || selfImage"/>
         <label>
           <span>封面链接:</span>
           <input @focusout="changeCover"/>
@@ -23,7 +23,7 @@
         <span class="tag-icon">
           <svg-icon :name="'tag'"/>
         </span>
-        <div v-for="(tag, idx) in info.tags" :class="{editing: tagEditIndex===idx}" :key="tag">
+        <div v-for="(tag, idx) in getInfo().tags" :class="{editing: tagEditIndex===idx}" :key="tag">
           <input :disabled="tagEditIndex!==idx" @focusout="editTag" :data-old="tag" :data-idx="idx" :value="tag"/>
           <div>
             <span @click="clickTrash(idx)">
@@ -66,61 +66,78 @@
     data() {
       return {
         selfImage,
-        id: 0,
         tagEditIndex: -1,
         mdText: '',
         saving: false,
+        newInfo: {
+          name: "编辑标题",
+          file: "",
+          cover: "",
+          time: "",
+          summary: "编辑简介",
+          tags: []
+        }
       }
     },
     computed: {
       ...mapState(['gitUtil', 'config']),
+      id (){
+        return this.$route.params.id
+      },
       info() {
         for (let i of this.config.md) {
           if (i.file === this.id) {
             return i
           }
         }
-        return {}
       },
       htmlText() {
         return parseMarkdown(this.mdText)
       }
     },
-    created() {
-      this.getMdText()
+    async created() {
+        await this.init()
     },
     watch: {
-      $route() {
-        if (this.$route.name === 'backend.md.detail') {
-          this.getMdText()
-        }
+      async $route() {
+        await this.init()
       }
     },
     methods: {
-      getMdText() {
-        this.id = this.$route.params.id;
-        getText(`/md/${this.id}/index.md`).then(res => {
-          if (res[0]) {
-            this.mdText = res[1];
-          } else {
-            console.log(res[1])
+      async init (){
+        this.mdText = '';
+        if (this.$route.name === 'backend.md.detail') {
+          if (this.$route.params.id !== 'new') {
+            await this.getMdText()
           }
-        })
+        }
       },
+      async getMdText() {
+        let res = await getText(`/md/${this.id}/index.md`);
+        if (res[0]) {
+          this.mdText = res[1];
+        } else {
+          this.$message.error(parseAjaxError(res[1]))
+        }
+      },
+      getInfo (){
+        return this.id === 'new'?this.newInfo:this.info;
+      },
+
       inputTitle(payload) {
-        let info = this.info;
+        let info = this.getInfo();
         info.name = payload[1]
       },
       inputSummary(payload) {
-        let info = this.info;
+        let info = this.getInfo();
         info.summary = payload[1]
       },
       changeCover (e){
-        let info = this.info;
+        let info = this.getInfo();
         info.cover = e.target.value;
       },
       clickTrash(idx) {
-        let info = this.info;
+        let info = this.getInfo();
         info.tags.splice(idx, 1)
       },
       clickEdit(e) {
@@ -131,8 +148,8 @@
         })
       },
       editTag(e) {
-        let info = this.info,
-                input = e.target;
+        let info = this.getInfo(),
+            input = e.target;
         this.tagEditIndex = -1;
         for (let i of info.tags) {
           if (i !== input.getAttribute('data-old') && i === input.value) {
@@ -142,27 +159,42 @@
         info.tags.splice(parseInt(input.getAttribute('data-idx')), 1, input.value);
       },
       addTag() {
-        let info = this.info;
+        let info = this.getInfo();
         info.tags.push('输入标签' + info.tags.length)
       },
       async save() {
         if (this.saving) return;
         if (this.gitUtil) {
-          if (!this.info.name || !this.info.summary || !this.info.tags.length || !this.info.cover) {
+          let info = this.getInfo();
+          if (!info.name || !info.summary || !info.tags.length || !info.cover) {
             return this.$message.warning('标题,简介,标签和封面均不能为空!')
           }
           this.saving = true;
+          let folderId = new Date().getTime();
+          if (this.id !== 'new') {
+            // 更新
+            folderId = this.id;
+          }else{
+            // 添加
+            // config md +1
+            let mdList = this.config.md;
+            mdList.push(this.newInfo);
+            info.file = folderId.toString();
+          }
+          info.time = folderId;
+          // 执行更新
           // 更新config.json
           let res = await this.gitUtil.updateConfig(this.config);
           if (res[0]) {
             // 更新 md 和 html文件
             let res = await this.gitUtil.updateMd({
-              folder: this.id,
+              folder: folderId,
               md: stringToB64(this.mdText),
               html: stringToB64(this.htmlText)
             });
             if (res[0]) {
-              this.$message.success('保存成功!');
+              this.$message.success('上传成功!');
+              this.$router.push({name: 'backend.md'})
             } else {
               this.$message.error(parseAjaxError(res[1]))
             }

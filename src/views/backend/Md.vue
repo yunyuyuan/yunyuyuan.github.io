@@ -20,7 +20,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in mdList" :key="item.file">
+          <tr v-for="item in reverseList" :key="item.file">
             <router-link tag="td" class="cover" :to="{name: 'backend.md.detail', params: {id: item.file}}">
               <img :src="item.cover || selfImage"/>
             </router-link>
@@ -71,6 +71,9 @@ export default {
       //     "summary": "测试这个博客的md",
       //     "tags": ["文章","js"]
       return this.config.md
+    },
+    reverseList (){
+      return this.mdList.reverse()
     }
   },
   methods: {
