@@ -19,7 +19,7 @@
           <span class="circle"></span>
         </div>
         <router-link class="info" :to="{name: 'article.detail', params: {id: item.file}}">
-          <img :src="`/md/${item.file}/${item.cover}`">
+          <img :src="item.cover || defaultCover">
           <div>
             <span>{{ item.name }}</span>
             <div class="tags">
@@ -33,13 +33,14 @@
 </template>
 
 <script>
-
 import {mapState} from "vuex";
+import defaultCover from '@/image/default-cover.png';
 
 export default {
   name: "List",
   data() {
     return {
+      defaultCover,
       search: '',
       searchFocus: false,
       searchTags: [],

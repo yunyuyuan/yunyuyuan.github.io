@@ -1,6 +1,8 @@
 <template>
   <footer>
-    <img :src="selfImage"/>
+    <router-link class="favicon" :to="{name: 'home'}">
+      <img :src="selfImage"/>
+    </router-link>
     <div class="social-media">
       <a v-for="k in links" :key="k" target="_blank" :href="config[k]" :title="k">
         <svg-icon :name="k"/>
@@ -46,11 +48,14 @@ footer{
   height: $footer-height;
   box-shadow: 0 0 1rem #020202;
   z-index: $z-index-footer;
-  > img{
-    width: 4rem;
-    height: 4rem;
-    border-radius: 0.5rem;
+  >.favicon{
     margin: 0 2rem;
+    height: 4rem;
+    > img{
+      height: 100%;
+      object-fit: contain;
+      border-radius: 0.5rem;
+    }
   }
   > .social-media{
     > a{

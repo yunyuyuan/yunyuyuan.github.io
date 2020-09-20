@@ -1,5 +1,8 @@
-import axios from "axios";
 import Octokat from 'octokat';
+import {staticFolder} from "@/main";
+
+export const dynamicFolder = 'dynamic';
+export const configPath = `${dynamicFolder}/config.json`;
 
 const showdown = require('showdown');
 const converter = new showdown.Converter({
@@ -30,7 +33,7 @@ export function parseMarkdown(text) {
         // target=_blank
         .replace(/#\[(.*?)]\((.*?)\)/g, '<a target="_blank" href="$2">$1</a>')
         // sticker
-        .replace(/!\[sticker]\((aru|yellow-face)\/(\d+)\)/, '<img alt="sticker" src="/sticker/$1/$2.png"/>');
+        .replace(/!\[sticker]\((aru|yellow-face)\/(\d+)\)/, `<img alt="sticker" src="${staticFolder}/sticker/$1/$2.png"/>`);
     return converter.makeHtml(text)
 }
 
@@ -71,8 +74,8 @@ export class GithubUtils {
 
     async updateConfig(config) {
         return new Promise(resolve => {
-            this.repos.contents('public/config.json').fetch().then(res => {
-                return this.repos.contents('public/config.json').add({
+            this.repos.contents(configPath).fetch().then(res => {
+                return this.repos.contents(configPath).add({
                     message: '更新config.json',
                     content: stringToB64(JSON.stringify(config, null, 4)),
                     sha: res.sha,
@@ -112,7 +115,7 @@ export class GithubUtils {
                     resolve([false, err])
                 });
                 treeItems.push({
-                    path: `public/md/${payload.folder}/${item.file}`,
+                    path: `${dynamicFolder}/md/${payload.folder}/${item.file}`,
                     sha: res.sha,
                     mode: "100644",
                     type: "blob"
@@ -154,8 +157,8 @@ export class GithubUtils {
             res = await repo.git.commits(res.object.sha).fetch().catch(err => {
                 resolve([false, err])
             });
-            // 根据tree sha递归获取/public/md/${folder}的sha
-            const mdPath = ['public', 'md', folder];
+            // 根据tree sha递归获取sha
+            const mdPath = [dynamicFolder, 'md', folder];
             async function getMdSha(treeSha) {
                 if (mdPath.length) {
                     dic.state = `获取 ${mdPath[0]} sha`;
@@ -178,7 +181,7 @@ export class GithubUtils {
             res = await getMdSha(res.tree.sha);
             for (let i of res.tree) {
                 dic.state = `删除 ${i.path}`;
-                await repo.contents(`public/md/${folder}/${i.path}`).remove({
+                await repo.contents(`${dynamicFolder}/md/${folder}/${i.path}`).remove({
                     sha: i.sha,
                     message: '删除'
                 }).catch(err => {

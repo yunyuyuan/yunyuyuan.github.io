@@ -1,12 +1,14 @@
-const path = require('path')
+const path = require('path');
+const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
     lintOnSave: false,
+    indexPath: '../index.html',
     chainWebpack: config => {
         config.module
             .rule('svg')
             .exclude.add(path.resolve('src/icons'))
-            .end()
+            .end();
 
         config.module
             .rule('icons')
@@ -17,6 +19,15 @@ module.exports = {
             .loader('svg-sprite-loader')
             .options({
                 symbolId: 'icon-[name]'
-            })
+            });
+        // 开发模式 server静态目录
+        if (isDev) {
+            config
+                .plugin('copy')
+                .tap(([pathConfigs]) => {
+                    pathConfigs[0].from = path.resolve('./dynamic');
+                    return [pathConfigs]
+                })
+        }
     },
-}
+};

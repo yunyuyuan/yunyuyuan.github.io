@@ -8,12 +8,12 @@
       <loading-button :loading="saving" :text="'上传'" :icon="'save'" @click="save"/>
     </div>
     <div class="head">
-      <float-input @input="inputTitle" :name="'标题'" :size="1.3" :value="getInfo().name"/>
-      <float-input class="summary" @input="inputSummary" :name="'简介'" :size="1" :value="getInfo().summary"/>
+      <float-input @input="inputTitle" :name="'标题'" :size="1.3" :value="getInfo()?getInfo().name:''"/>
+      <float-input class="summary" @input="inputSummary" :name="'简介'" :size="1" :value="getInfo()?getInfo().summary:''"/>
     </div>
     <div class="info">
       <div class="cover">
-        <img :src="getInfo().cover || selfImage"/>
+        <img :src="getInfo()?getInfo().cover: defaultCover"/>
         <label>
           <span>封面链接:</span>
           <input @focusout="changeCover"/>
@@ -23,7 +23,7 @@
         <span class="tag-icon">
           <svg-icon :name="'tag'"/>
         </span>
-        <div v-for="(tag, idx) in getInfo().tags" :class="{editing: tagEditIndex===idx}" :key="tag">
+        <div v-for="(tag, idx) in getInfo()?getInfo().tags:[]" :class="{editing: tagEditIndex===idx}" :key="tag">
           <input :disabled="tagEditIndex!==idx" @focusout="editTag" :data-old="tag" :data-idx="idx" :value="tag"/>
           <div>
             <span @click="clickTrash(idx)">
@@ -51,21 +51,23 @@
 </template>
 
 <script>
+  import {staticFolder} from "@/main";
   import {getText, parseMarkdown, stringToB64, parseAjaxError} from "@/utils";
   import {mapState} from 'vuex'
   import FloatInput from "@/components/FloatInput";
 
   import '@/assets/style/markdown/default.scss'
+
   import LoadingButton from "@/components/LoadingButton";
 
-  import selfImage from '@/image/i.png'
+  import defaultCover from '@/image/default-cover.png'
 
   export default {
     name: "MdDetail",
     components: {LoadingButton, FloatInput},
     data() {
       return {
-        selfImage,
+        defaultCover,
         tagEditIndex: -1,
         mdText: '',
         saving: false,
@@ -96,7 +98,7 @@
       }
     },
     async created() {
-        await this.init()
+      await this.init()
     },
     watch: {
       async $route() {
@@ -107,13 +109,15 @@
       async init (){
         this.mdText = '';
         if (this.$route.name === 'backend.md.detail') {
+          // 标题增加详情
+          document.title += this.id;
           if (this.$route.params.id !== 'new') {
             await this.getMdText()
           }
         }
       },
       async getMdText() {
-        let res = await getText(`/md/${this.id}/index.md`);
+        let res = await getText(`${staticFolder}/md/${this.id}/index.md`);
         if (res[0]) {
           this.mdText = res[1];
         } else {
@@ -178,7 +182,7 @@
             // 添加
             // config md +1
             let mdList = this.config.md;
-            mdList.push(this.newInfo);
+            mdList.push(JSON.parse(JSON.stringify(this.newInfo)));
             info.file = folderId.toString();
           }
           info.time = folderId;
