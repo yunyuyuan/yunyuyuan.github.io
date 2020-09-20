@@ -5,38 +5,5 @@
     "github": "https://github.com/yunyuyuan",
     "bilibili": "https://space.bilibili.com/204446485",
     "email": "1607439239@qq.com",
-    "md": [
-        {
-            "name": "测试",
-            "file": "1",
-            "cover": "",
-            "time": "2020.9.13",
-            "summary": "测试这个博客的md",
-            "tags": [
-                "文章",
-                "js"
-            ]
-        },
-        {
-            "name": "第一篇blog",
-            "file": "2",
-            "cover": "",
-            "time": "2020.9.13",
-            "summary": "测试这个博客的md",
-            "tags": [
-                "vue",
-                "js"
-            ]
-        },
-        {
-            "name": "编辑标题",
-            "file": 1600599255903,
-            "cover": "asdfasfasdf",
-            "time": 1600599255903,
-            "summary": "编辑简介",
-            "tags": [
-                "hshs"
-            ]
-        }
-    ]
+    "md": []
 }
