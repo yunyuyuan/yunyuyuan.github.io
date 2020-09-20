@@ -87,7 +87,7 @@ export default {
             state: '更新配置'
           };
           // 更新config
-          let fakeMdList = this.mdList.splice();
+          let fakeMdList = this.mdList.slice();
           for (let i=0;i<fakeMdList.length;i++){
             if (fakeMdList[i].file === file){
               fakeMdList.splice(i, 1);

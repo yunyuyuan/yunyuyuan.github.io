@@ -144,12 +144,12 @@ export class GithubUtils {
     async removeMd(folder, dic) {
         return new Promise(async resolve => {
             let repo = this.repos;
-            dic.state = '获取commit sha';
+            dic.state = '获取 commit sha';
             // 先获取master的commit sha
             let res = await repo.git.refs('heads/master').fetch().catch(err => {
                 resolve([false, err])
             });
-            dic.state = '获取tree sha';
+            dic.state = '获取 tree sha';
             // 根据commit sha获取tree sha
             res = await repo.git.commits(res.object.sha).fetch().catch(err => {
                 resolve([false, err])
@@ -158,7 +158,7 @@ export class GithubUtils {
             const mdPath = ['public', 'md', folder];
             async function getMdSha(treeSha) {
                 if (mdPath.length) {
-                    dic.state = `获取${mdPath[0]} sha`;
+                    dic.state = `获取 ${mdPath[0]} sha`;
                     res = await repo.git.trees(treeSha).fetch().catch(err => {
                         resolve([false, err])
                     });
@@ -177,7 +177,7 @@ export class GithubUtils {
             }
             res = await getMdSha(res.tree.sha);
             for (let i of res.tree) {
-                dic.state = `删除${i.path}`;
+                dic.state = `删除 ${i.path}`;
                 await repo.contents(`public/md/${folder}/${i.path}`).remove({
                     sha: i.sha,
                     message: '删除'
