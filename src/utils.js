@@ -170,7 +170,9 @@ export class GithubUtils {
                     }
                 }else{
                     // 找到了
-                    return res;
+                    return await repo.git.trees(treeSha).fetch().catch(err => {
+                        resolve([false, err])
+                    });
                 }
             }
             res = await getMdSha(res.tree.sha);
