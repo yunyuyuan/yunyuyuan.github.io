@@ -78,7 +78,8 @@ export default {
       this.$router.push({name: 'backend.md.detail', params: {id: 'new'}})
     },
     async removeMd (file){
-      if (!this.deleting.bool && this.gitUtil) {
+      if (this.deleting.bool) return;
+      if (this.gitUtil) {
         if (confirm('确认删除?')) {
           let err = null;
           this.deleting = {
