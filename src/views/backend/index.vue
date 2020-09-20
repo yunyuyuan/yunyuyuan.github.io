@@ -52,6 +52,11 @@
                         name: '文章',
                         pathName: 'backend.md',
                         icon: 'article'
+                    },
+                    {
+                        name: '主题',
+                        pathName: 'backend.theme',
+                        icon: 'brash'
                     }
                 ]
             }

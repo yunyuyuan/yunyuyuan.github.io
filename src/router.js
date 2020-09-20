@@ -34,6 +34,7 @@ const routes = [
                 },
                 component: () => import('@/views/article/Detail'),
             },
+
         ]
     },
     {
@@ -73,7 +74,15 @@ const routes = [
                     title: '后台-文章-'
                 },
                 component: () => import('@/views/backend/MdDetail')
-            }
+            },
+            {
+                path: 'theme',
+                name: 'backend.theme',
+                meta: {
+                    title: '后台-主题'
+                },
+                component: () => import('@/views/article/Theme'),
+            },
         ]
     },
 ];
