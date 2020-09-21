@@ -5,28 +5,5 @@
     "github": "https://github.com/yunyuyuan",
     "bilibili": "https://space.bilibili.com/204446485",
     "email": "1607439239@qq.com",
-    "md": [
-        {
-            "name": "谈谈这个网站的建设吧",
-            "file": "",
-            "cover": "http://qg50f0f7s.hb-bkt.clouddn.com/11.jpg",
-            "time": "",
-            "summary": "没啥简介",
-            "tags": [
-                "github",
-                "前端"
-            ]
-        },
-        {
-            "name": "编辑标题",
-            "file": "1600599836889",
-            "cover": "asdfsadf",
-            "time": 1600599836889,
-            "summary": "编辑简介",
-            "tags": [
-                "fssfsf",
-                "输入标签1"
-            ]
-        }
-    ]
+    "md": []
 }

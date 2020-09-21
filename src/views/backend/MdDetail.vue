@@ -176,17 +176,17 @@ export default {
         }
         this.saving = true;
         let folderId = new Date().getTime();
+        info.time = folderId;
         if (this.id !== 'new') {
           // 更新
           folderId = this.id;
         } else {
           // 添加
           // config md +1
-          let mdList = this.config.md;
-          mdList.push(JSON.parse(JSON.stringify(this.newInfo)));
           info.file = folderId.toString();
+          let mdList = this.config.md;
+          mdList.push(JSON.parse(JSON.stringify(info)));
         }
-        info.time = folderId;
         // 执行更新
         // 更新config.json
         let res = await this.gitUtil.updateConfig(this.config);

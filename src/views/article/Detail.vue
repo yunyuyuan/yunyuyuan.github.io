@@ -1,6 +1,6 @@
 <template>
   <div class="detail">
-
+    <span class="--markdown"></span>
   </div>
 </template>
 
