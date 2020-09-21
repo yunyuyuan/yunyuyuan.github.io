@@ -1,14 +1,14 @@
 <template>
-  <footer>
+  <footer flex>
     <router-link class="favicon" :to="{name: 'home'}">
       <img :src="selfImage"/>
     </router-link>
-    <div class="social-media">
-      <a v-for="k in links" :key="k" target="_blank" :href="config[k]" :title="k">
+    <div class="social-media" flex>
+      <a v-for="k in links" :key="k" target="_blank" :href="config[k]" :title="k" flex>
         <svg-icon :name="k"/>
       </a>
     </div>
-    <div class="copyright">
+    <div class="copyright" flex>
       <span>Copyright (c) @ {{ config.copyright }} <b>{{ config.name }} | {{ domain }}</b></span>
       <span>All Right Reserve</span>
     </div>
@@ -42,8 +42,6 @@ export default {
 footer{
   width: 100%;
   background: #2b2b2b;
-  display: flex;
-  align-items: center;
   margin-top: auto;
   height: $footer-height;
   box-shadow: 0 0 1rem #020202;
@@ -63,8 +61,6 @@ footer{
         background: white;
         border-radius: 0.4rem;
         padding: 0.2rem 0.4rem;
-        display: flex;
-        align-items: center;
         justify-content: center;
         > svg{
             width: 1.6rem;

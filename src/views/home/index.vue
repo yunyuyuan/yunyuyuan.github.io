@@ -1,20 +1,20 @@
 <template>
-  <div class="home">
-    <div class="btns">
-      <router-link :to="{name: 'article.list'}">
+  <div class="home" flex>
+    <div class="btns" flex>
+      <router-link :to="{name: 'article.list'}" flex>
         <svg-icon :name="'article'"/>
         <span>文章</span>
       </router-link>
-      <router-link :to="{name: 'msgBoard'}">
+      <router-link :to="{name: 'msgBoard'}" flex>
         <svg-icon :name="'comments'"/>
         <span>留言板</span>
       </router-link>
-      <router-link :to="{name: 'backend.config'}">
-          <svg-icon :name="'backend'"/>
-          <span>后台</span>
+      <router-link :to="{name: 'backend.config'}" flex>
+        <svg-icon :name="'backend'"/>
+        <span>后台</span>
       </router-link>
     </div>
-    <div class="info">
+    <div class="info" flex>
       <div class="head">
         <img :src="selfImage"/>
         <span>{{ config.name }}</span>
@@ -57,8 +57,6 @@ export default {
     justify-content: center;
 
     > a {
-      display: flex;
-      align-items: center;
       background: rgba(0, 0, 0, 0.3);
       border-radius: 0.8rem;
       padding: 1rem 1.5rem;

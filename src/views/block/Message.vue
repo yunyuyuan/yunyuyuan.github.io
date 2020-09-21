@@ -1,9 +1,9 @@
 <template>
-    <div class="message">
-        <div v-for="(item,idx) in list" :class="item.type" @click="removeItem(idx)" v-if="item.display">
-            <svg-icon :name="item.type"/>
-            <span>{{ item.text }}</span>
-        </div>
+    <div class="message" flex>
+      <div v-for="(item,idx) in list" :class="item.type" @click="removeItem(idx)" v-if="item.display">
+        <svg-icon :name="item.type"/>
+        <span>{{ item.text }}</span>
+      </div>
     </div>
 </template>
 

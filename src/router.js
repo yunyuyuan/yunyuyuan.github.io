@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import {staticFolder} from "@/main";
 
 
 Vue.use(VueRouter);
@@ -92,8 +93,15 @@ let router = new VueRouter({
     // mode: 'history'
 });
 
-router.beforeEach((to, from, next)=>{
+router.beforeEach((to, from, next)=> {
     document.title = to.meta.title || '未知页面';
+    // 是否加载 markdown css
+    let mdStyle = document.head.querySelector('#markdown-stylesheet');
+    if (['article.detail', 'backend.md.detail'].indexOf(to.name) !== -1) {
+        mdStyle.href = `${staticFolder}/markdown.css?ran=${new Date().getTime()}`;
+    } else {
+        mdStyle.href = ''
+    }
     next()
 });
 

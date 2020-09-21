@@ -2,9 +2,9 @@
   <div class="index">
       <img :src="images[routeNow]"/>
       <the-head v-if="showHead"/>
-      <section :class="{body: true, 'show-head': showHead}">
-          <router-view></router-view>
-          <the-footer v-if="this.routeNow !== 'backend'"/>
+      <section :class="{body: true, 'show-head': showHead}" flex>
+        <router-view></router-view>
+        <the-footer v-if="this.routeNow !== 'backend'"/>
       </section>
       <message ref="message"/>
   </div>

@@ -23,17 +23,19 @@ html, body{
   width: 100%;
   height: 100%;
 }
-*{
-    margin: 0;
-    padding: 0;
+* {
+  margin: 0;
+  padding: 0;
 }
-div, section{
-    display: flex;
-    align-items: center;
+
+*[flex] {
+  display: flex;
+  align-items: center;
 }
-input, textarea, select, button{
-    outline: none;
-    resize: none;
+
+input, textarea, select, button {
+  outline: none;
+  resize: none;
 }
 table{
   border-collapse: collapse;

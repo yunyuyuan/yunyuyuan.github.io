@@ -1,9 +1,10 @@
 {
-    "name": "yunyuyuan",
-    "describe": "总想写点什么,放在网络上,仅此.",
-    "copyright": "2019-2020",
-    "github": "https://github.com/yunyuyuan",
-    "bilibili": "https://space.bilibili.com/204446485",
-    "email": "1607439239@qq.com",
-    "md": []
+  "name": "yunyuyuan",
+  "describe": "总想写点什么,放在网络上,仅此.",
+  "copyright": "2019-2020",
+  "github": "https://github.com/yunyuyuan",
+  "bilibili": "https://space.bilibili.com/204446485",
+  "email": "1607439239@qq.com",
+  "theme": "auto",
+  "md": []
 }

@@ -1,19 +1,27 @@
-// 别删除 .--markdown，修改它包裹的内容
-.--markdown{
-  @each $size in 1, 2, 3, 4, 5, 6{
-    h#{$size}{
+// 别删除 .--markdown，修改它包裹的内容// 别删除 .--markdown，修改它包裹的内容// 别删除 .--markdown，修改它包裹的内容
+.--markdown {
+  width: 100%;
+  @each $size in 1, 2, 3, 4, 5, 6 {
+    h#{$size} {
       color: #4251ff;
       font-size: 1/$size * 1rem + 0.6rem;
     }
   }
-  p{
+
+  p {
     font-size: 0.95rem;
-    line-height: 1.2rem;
+    line-height: 1rem;
   }
   a[href]{
   }
-  img{
-    &[alt=sticker]{
+  img {
+    width: 80%;
+    object-fit: contain;
+
+    &[alt=sticker] {
+      width: 1.8rem;
+      height: 1.8rem;
+      margin-bottom: -0.2rem;
     }
   }
   input[type=checkbox]{

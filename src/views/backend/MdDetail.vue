@@ -1,18 +1,18 @@
 <template>
-  <div class="md-detail">
-    <div class="operate">
+  <div class="md-detail" flex>
+    <div class="operate" flex>
       <div class="back" @click="$router.push({name: 'backend.md'})">
         <svg-icon :name="'back'"/>
         <span>返回</span>
       </div>
       <loading-button :loading="saving" :text="'上传'" :icon="'save'" @click.native="save"/>
     </div>
-    <div class="head">
+    <div class="head" flex>
       <float-input @input="inputTitle" :name="'标题'" :size="1.3" :value="getInfo()?getInfo().name:''"/>
       <float-input class="summary" @input="inputSummary" :name="'简介'" :size="1"
                    :value="getInfo()?getInfo().summary:''"/>
     </div>
-    <div class="info">
+    <div class="info" flex>
       <div class="cover">
         <img :src="getInfo()?getInfo().cover: defaultCover"/>
         <label>
@@ -20,7 +20,7 @@
           <input @focusout="changeCover"/>
         </label>
       </div>
-      <div class="tags">
+      <div class="tags" flex>
         <span class="tag-icon">
           <svg-icon :name="'tag'"/>
         </span>
@@ -40,11 +40,11 @@
         </span>
       </div>
     </div>
-    <div class="text">
-      <div class="markdown">
+    <div class="text" flex>
+      <div class="markdown" flex>
         <textarea v-model="mdText"/>
       </div>
-      <div class="html">
+      <div class="html" flex>
         <span class="--markdown" v-html="htmlText"></span>
       </div>
     </div>

@@ -1,32 +1,32 @@
 <template>
-    <div class="login" @click.self="$emit('hide')">
-        <div class="inner">
-            <div class="head">
-                <svg-icon :name="'backend'"/>
-                <b>后台管理账户</b>
-            </div>
-            <div class="body">
-                <div v-for="(v,k) in login" :key="k">
-                    <float-input :name="k" @input="input" :id="k" :size="1" :value="v"/>
-                    <span :class="{err: true, show: !login[k]}" title="请填写此字段">
+  <div class="login" @click.self="$emit('hide')" flex>
+    <div class="inner" flex>
+      <div class="head" flex>
+        <svg-icon :name="'backend'"/>
+        <b>后台管理账户</b>
+      </div>
+      <div class="body" flex>
+        <div v-for="(v,k) in login" :key="k" flex>
+          <float-input :name="k" @input="input" :id="k" :size="1" :value="v"/>
+          <span :class="{err: true, show: !login[k]}" title="请填写此字段">
                   <svg-icon :name="'warning'"/>
                 </span>
-                </div>
-            </div>
-            <div class="option">
-                <label @click="remember = !remember">
-                    <a :class="{active: remember}"></a>
-                    <span>在本机上记住我</span>
+        </div>
+      </div>
+      <div class="option">
+        <label @click="remember = !remember">
+          <a :class="{active: remember}"></a>
+          <span>在本机上记住我</span>
                 </label>
                 <label @click="withUpdate = !withUpdate">
                     <a :class="{active: withUpdate}"></a>
                     <span>保存后立即更新配置</span>
                 </label>
             </div>
-            <div class="btn">
-                <single-button class="exit" :text="'取消'" @click.native="$emit('hide')"/>
-                <single-button :class="{save: true, disabled: !allInputed}" :text="'保存'" @click.native="save"/>
-            </div>
+      <div class="btn" flex>
+        <single-button class="exit" :text="'取消'" @click.native="$emit('hide')"/>
+        <single-button :class="{save: true, disabled: !allInputted}" :text="'保存'" @click.native="save"/>
+      </div>
         </div>
     </div>
 </template>
@@ -63,28 +63,28 @@ import SingleButton from "@/components/Button";
             }
         },
         computed: {
-            allInputed() {
-                for (let k in this.login) {
-                    if (!this.login[k]) {
-                        return false
-                    }
-                }
-                return true
+          allInputted() {
+            for (let k in this.login) {
+              if (!this.login[k]) {
+                return false
+              }
             }
+            return true
+          }
         },
         methods: {
             save() {
-                if (!this.allInputed) return;
-                if (this.remember) {
-                    //存储到localStorage
-                    localStorage.setItem('login-token', this.login.token);
-                    localStorage.setItem('login-name', this.login.name);
-                    localStorage.setItem('login-repo', this.login.repo);
-                    localStorage.setItem('login-email', this.login.email);
-                } else {
-                    // 删除localStorage
-                    localStorage.removeItem('login-token');
-                    localStorage.removeItem('login-name');
+              if (!this.allInputted) return;
+              if (this.remember) {
+                //存储到localStorage
+                localStorage.setItem('login-token', this.login.token);
+                localStorage.setItem('login-name', this.login.name);
+                localStorage.setItem('login-repo', this.login.repo);
+                localStorage.setItem('login-email', this.login.email);
+              } else {
+                // 删除localStorage
+                localStorage.removeItem('login-token');
+                localStorage.removeItem('login-name');
                     localStorage.removeItem('login-repo');
                     localStorage.removeItem('login-email');
                 }

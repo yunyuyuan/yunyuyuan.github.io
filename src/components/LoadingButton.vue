@@ -1,7 +1,7 @@
 <template>
-    <div class="loading-button" :class="{loading: loading}">
-        <svg-icon :name="loading?'loading':icon"/>
-        <span>{{ text }}</span>
+    <div class="loading-button" :class="{loading: loading}" flex>
+      <svg-icon :name="loading?'loading':icon"/>
+      <span>{{ text }}</span>
     </div>
 </template>
 

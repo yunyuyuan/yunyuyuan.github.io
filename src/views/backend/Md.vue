@@ -1,23 +1,23 @@
 <template>
-  <div class="md">
-    <div class="head">
+  <div class="md" flex>
+    <div class="head" flex>
       <div class="delete-state" v-if="deleting.bool">
         <svg-icon :name="'loading'"/>
         <span>{{ deleting.state }}</span>
       </div>
       <loading-button :text="'新建'" :icon="'add'" class="new" @click.native="newArticle"/>
     </div>
-    <div class="list">
+    <div class="list" flex>
       <table>
         <thead>
-          <tr>
-            <td class="cover">封面</td>
-            <td class="title">标题</td>
-            <td class="summary">简介</td>
-            <td class="time">修改时间</td>
-            <td class="tags">标签</td>
-            <td class="operate">操作</td>
-          </tr>
+        <tr>
+          <td class="cover">封面</td>
+          <td class="title">标题</td>
+          <td class="summary">简介</td>
+          <td class="time">修改时间</td>
+          <td class="tags">标签</td>
+          <td class="operate">操作</td>
+        </tr>
         </thead>
         <tbody>
           <tr v-for="item in reverseList" :key="item.file">

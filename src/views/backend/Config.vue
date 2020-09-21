@@ -1,10 +1,10 @@
 <template>
-  <div class="config">
-    <div class="head">
+  <div class="config" flex>
+    <div class="head" flex>
       <svg-icon :name="'config'"/>
       <b>修改配置信息</b>
     </div>
-    <div class="list">
+    <div class="list" flex>
       <float-input v-for="k in keys" :name="k" :value="config[k]||''" :id="k" :size="1" @input="input"/>
     </div>
     <loading-button :loading="updating" :text="'上传'" :icon="'save'" @click.native="commitConfig"/>

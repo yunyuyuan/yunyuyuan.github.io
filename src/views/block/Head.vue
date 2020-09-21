@@ -1,6 +1,6 @@
 <template>
   <section class="the-head">
-    <div class="body">
+    <div class="body" flex>
       <router-link class="favicon" :to="{name: 'home'}">
         <img :src="selfImage"/>
       </router-link>

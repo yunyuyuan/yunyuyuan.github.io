@@ -17,11 +17,6 @@ getText(staticFolder+'/config.json').then(res => {
   if (res[0]) {
       // 首次获取config
       store.commit('updateConfig', JSON.parse(res[1]));
-      // 自定义markdown
-      let style = document.createElement('link');
-      style.rel = 'stylesheet';
-      style.href = `${staticFolder}/markdown.css?ran=${new Date().getTime()}`;
-      document.head.appendChild(style);
 
       new Vue({
           store,

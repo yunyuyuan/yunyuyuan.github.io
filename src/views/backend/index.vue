@@ -1,6 +1,6 @@
 <template>
   <div class="back-end">
-    <div class="menu" :class="{hide: !showMenu}">
+    <div class="menu" :class="{hide: !showMenu}" flex>
         <span class="toggle-menu" :class="{opened: showMenu}" @click="toggleMenu">
           <svg viewBox="0 0 100 100">
             <path class="line line1"
@@ -11,7 +11,7 @@
           </svg>
         </span>
       <router-link v-for="item in menu" :key="item.name" :to="{name: item.pathName}"
-                   :class="{active: $route.name.indexOf(item.pathName)===0}">
+                   :class="{active: $route.name.indexOf(item.pathName)===0}" flex>
         <span class="icon">
           <svg-icon :name="item.icon"/>
         </span>
@@ -161,8 +161,6 @@ export default {
       font-size: 1rem;
       color: black;
       text-decoration: none;
-      display: flex;
-      align-items: center;
       justify-content: center;
       padding: 1rem 0;
       width: calc(100% - 0.2rem);
