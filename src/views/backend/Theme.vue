@@ -4,17 +4,16 @@
       <loading-button :loading="saving" :icon="'save'" :text="'保存'" @click.native="save"/>
     </div>
     <div class="body" flex>
-      <div class="edit" flex>
-        <div class="left">
+      <div class="edit" flex ref="text">
+        <div class="left" :style="{width: mdWidth}" flex>
           <span class="icon" flex>
             <svg-icon :name="'edit'"/>
             <span>编辑scss</span>
           </span>
-          <div>
-            <div class="textarea" ref="textarea"></div>
-          </div>
+          <div class="textarea" ref="textarea"></div>
         </div>
-        <div class="right">
+        <span class="resize" :resizing="resizing" @mousedown="startResize"></span>
+        <div class="right" flex>
           <span class="icon" flex>
             <svg-icon :name="'brash'"/>
             <span>效果</span>
@@ -53,7 +52,9 @@ export default {
       saving: false,
       scss: '',
       html: parseMarkdown(testText),
-      codeMirror: null
+      codeMirror: null,
+      mdWidth: '40%',
+      resizing: false,
     }
   },
   computed: {
@@ -68,11 +69,12 @@ export default {
       tabSize: 2,
       theme: 'idea',
       lineNumbers: true,
-      line: true
+      line: true,
+      mode: 'sass',
     });
     this.codeMirror.on('change', () => {
       this.scss = this.codeMirror.getValue()
-    })
+    });
     this.codeMirror.setValue(this.scss)
   },
   watch: {
@@ -91,7 +93,7 @@ export default {
       let style = document.head.querySelector('#fake-markdown-style');
       if (!style) {
         style = document.createElement('style');
-        style.id = 'fake-markdown-style'
+        style.id = 'fake-markdown-style';
         document.head.appendChild(style);
       }
       await Sass.compile(this.scss, (res) => {
@@ -111,6 +113,31 @@ export default {
       } else {
         this.$message.error('获取markdown.scss失败!请检查网络')
       }
+    },
+    startResize (){
+      let vue_ = this;
+      let parentLeft = this.$refs.text.getBoundingClientRect().x,
+          parentWidth = this.$refs.text.clientWidth;
+      document.body.setAttribute('unselectable', '');
+      function resize(e) {
+        if (e.clientX >= document.body.clientWidth || e.clientY >= document.body.clientHeight ){
+          return release()
+        }
+        let w = e.clientX - parentLeft;
+        if (w >= parentWidth/5 && w <= parentWidth*4/5){
+          console.log('yes')
+          vue_.mdWidth = w+'px'
+        }
+      }
+      function release() {
+        document.removeEventListener('mousemove', resize);
+        document.removeEventListener('mouseup', release);
+        document.body.removeAttribute('unselectable');
+        vue_.resizing = false;
+      }
+      this.resizing = true;
+      document.addEventListener('mousemove', resize);
+      document.addEventListener('mouseup', release)
     },
     async save() {
       if (this.gitUtil) {
@@ -134,15 +161,16 @@ export default {
 <style scoped lang="scss">
 .theme {
   width: 95%;
-  min-height: 90%;
+  height: 100%;
   background: white;
   border-radius: 0.6rem;
-  margin: 1rem auto;
+  margin: auto;
   box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.4);
   flex-direction: column;
 
   > .head {
     width: 100%;
+    height: 3rem;
     justify-content: space-between;
 
     > .loading-button {
@@ -152,15 +180,18 @@ export default {
 
   > .body {
     width: 100%;
+    height: calc(100% - 3rem);
+    flex-grow: 0;
 
     > .edit {
-      width: calc(100% - 1rem);
+      width: calc(100% - 0.5rem);
       align-items: stretch;
-      margin: 1rem 0.5rem;
-      padding-bottom: 3rem;
+      margin: 1rem 0.25rem 0.2rem 0.25rem;
+      height: calc(100% - 1.2rem);
 
       > .left, > .right {
-        width: 50%;
+        height: 100%;
+        flex-direction: column;
 
         > .icon {
           width: 100%;
@@ -179,42 +210,43 @@ export default {
             color: white;
           }
         }
-
-        > div {
-          border: 1px solid gray;
-          height: 100%;
-          align-items: stretch;
-        }
       }
 
       > .left {
-        align-items: stretch;
+        flex-shrink: 0;
+        > .textarea {
+          font-size: 0.8rem;
+          width: 100%;
+          height: 100%;
+          overflow-y: auto;
 
-        > div {
-          border-right: 1px dashed black;
-
-          > .textarea {
-            font-size: 0.8rem;
-            width: 100%;
+          > ::v-deep .CodeMirror {
             height: 100%;
-
-            > ::v-deep .CodeMirror {
-              height: 100%;
-              line-height: 1.2rem;
-            }
+            line-height: 1.2rem;
           }
         }
       }
-
+      >.resize{
+        background: #828282;
+        width: 0.3rem;
+        cursor: e-resize;
+        flex-shrink: 0;
+        &[resizing]{
+          background: #505050;
+        }
+      }
       > .right {
+        flex-grow: 1;
         > .icon {
           border-left: 1px solid white;
         }
 
         > div {
           border-left: none;
+          overflow-y: auto;
 
           > span {
+            display: block;
             padding: 0.4rem;
           }
         }

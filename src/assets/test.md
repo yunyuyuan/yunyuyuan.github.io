@@ -7,38 +7,42 @@
 
   
 ---
-分割线
+hr 分割线
 ---
 
 **strong 粗体**  
-__em 强调__  
-*i 斜体*  
-_i 斜体_  
+__strong 强调__  
+*em 斜体*  
+_em 斜体_  
 
 > blockquote
 > > 嵌套
 
-一段文字`some code`, [指向github](https://github.com)，表情![sticker](aru/1)呵呵
+一段文字`code`, [指向github的a标签](https://github.com)，表情img[alt=sticker]![sticker](aru/1)呵呵
 
+ul
 * 呵呵
 * 哈哈
 * 嘻嘻
     * 次级1
     * 次级2
 
+ol
 1. 第一项
 2. 第二项
 3. 第三项
     1. 次级1
     2. 次级2
-    
+
+table
 | id | name | age |
 |--- | ---- | --- |
 | 1  | 小明  |  18 |
 | 2  | 小张  |  21 |
 
-图片
+图片 img
 ![img](https://s2.ax1x.com/2020/01/22/1AD3zn.jpg)
+
 
 - [x] 已完成
 - [ ] 未完成

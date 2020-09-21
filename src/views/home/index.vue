@@ -15,11 +15,11 @@
       </router-link>
     </div>
     <div class="info" flex>
-      <div class="head">
+      <div class="head" flex>
         <img :src="selfImage"/>
         <span>{{ config.name }}</span>
       </div>
-      <div class="body">
+      <div class="body" flex>
         <span>{{ config.describe }}</span>
       </div>
     </div>

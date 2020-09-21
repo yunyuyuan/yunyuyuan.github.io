@@ -40,10 +40,11 @@
         </span>
       </div>
     </div>
-    <div class="text" flex>
-      <div class="markdown" flex>
-        <textarea v-model="mdText"/>
+    <div class="text" flex ref="text">
+      <div class="markdown" :style="{width: mdWidth}" flex>
+        <div ref="textarea" class="textarea"></div>
       </div>
+      <span class="resize" :resizing="resizing" @mousedown="startResize"></span>
       <div class="html" flex>
         <span class="--markdown" v-html="htmlText"></span>
       </div>
@@ -63,6 +64,15 @@ import defaultCover from '@/image/default-cover.png';
 
 import "@/assets/style/hljs.css";
 
+
+import CodeMirror from 'codemirror';
+import 'codemirror/mode/markdown/markdown';
+
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/idea.css';
+import 'codemirror/theme/darcula.css';
+
+
 export default {
   name: "MdDetail",
   components: {LoadingButton, FloatInput},
@@ -71,6 +81,9 @@ export default {
       defaultCover,
       tagEditIndex: -1,
       mdText: '',
+      codeMirror: null,
+      mdWidth: '40%',
+      resizing: false,
       saving: false,
       newInfo: {
         name: "编辑标题",
@@ -100,6 +113,20 @@ export default {
   },
   async created() {
     await this.init()
+  },
+  mounted() {
+    this.codeMirror = new CodeMirror(this.$refs.textarea, {
+      indentUnit: 2,
+      tabSize: 2,
+      theme: 'idea',
+      lineNumbers: true,
+      line: true,
+      mode: 'markdown',
+    });
+    this.codeMirror.on('change', () => {
+      this.mdText = this.codeMirror.getValue()
+    });
+    this.codeMirror.setValue(this.mdText)
   },
   watch: {
     async $route() {
@@ -167,6 +194,30 @@ export default {
       let info = this.getInfo();
       info.tags.push('输入标签' + info.tags.length)
     },
+    startResize (){
+      let vue_ = this;
+      let parentLeft = this.$refs.text.getBoundingClientRect().x,
+          parentWidth = this.$refs.text.scrollWidth;
+      document.body.setAttribute('unselectable', '');
+      function resize(e) {
+        if (e.clientX >= document.body.clientWidth || e.clientY >= document.body.clientHeight ){
+          return release()
+        }
+        let w = e.clientX - parentLeft;
+        if (w >= parentWidth/5 && w <= parentWidth*4/5){
+          vue_.mdWidth = w+'px'
+        }
+      }
+      function release() {
+        document.removeEventListener('mousemove', resize);
+        document.removeEventListener('mouseup', release);
+        document.body.removeAttribute('unselectable');
+        vue_.resizing = false;
+      }
+      this.resizing = true;
+      document.addEventListener('mousemove', resize);
+      document.addEventListener('mouseup', release)
+    },
     async save() {
       if (this.saving) return;
       if (this.gitUtil) {
@@ -221,8 +272,7 @@ export default {
   flex-direction: column;
   background: white;
   width: 95%;
-  min-height: 90%;
-  margin: 1rem auto;
+  margin: auto;
   border-radius: 0.6rem;
   box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
   position: relative;
@@ -434,33 +484,37 @@ export default {
   }
 
   > .text {
-    margin: 2rem 0;
+    margin: 1rem 0 0.4rem 0;
     width: 99%;
-    max-height: 100rem;
+    max-height: 50rem;
     align-items: stretch;
-    border: 1px solid #ffc947;
-
-    > .markdown, > .html {
-      width: 50%;
-    }
+    border: 1px solid #656565;
 
     > .markdown {
       align-items: stretch;
+      flex-shrink: 0;
 
-      > textarea {
-        flex-grow: 1;
-        font-size: 0.95rem;
-        line-height: 1.3rem;
-        font-family: Consolas;
-        border: none;
-        border-right: 1px dashed #464646;
-        padding: 0.4rem 0.25rem;
+      > .textarea {
+        width: 100%;
+        >.CodeMirror{
+          height: 100%;
+        }
+      }
+    }
+    >.resize{
+      background: #828282;
+      width: 0.3rem;
+      cursor: e-resize;
+      flex-shrink: 0;
+      &[resizing]{
+        background: #505050;
       }
     }
 
     > .html {
       overflow-y: auto;
       display: block;
+      flex-grow: 1;
 
       > span {
         display: block;
