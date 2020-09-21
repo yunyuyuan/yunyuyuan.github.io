@@ -4,7 +4,7 @@ const isDev = process.env.NODE_ENV === 'development';
 module.exports = {
     lintOnSave: false,
     indexPath: '../index.html',
-    publicPath: '/dist',
+    publicPath: isDev?'':'/dist',
     chainWebpack: config => {
         config.module
             .rule('svg')

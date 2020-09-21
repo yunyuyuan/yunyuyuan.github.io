@@ -7,14 +7,14 @@
     <div class="list">
       <float-input v-for="k in keys" :name="k" :value="config[k]||''" :id="k" :size="1" @input="input"/>
     </div>
-    <loading-button :loading="updating" :text="'上传'" :icon="'save'" @click="commitConfig"/>
+    <loading-button :loading="updating" :text="'上传'" :icon="'save'" @click.native="commitConfig"/>
   </div>
 </template>
 
 <script>
   import {mapState} from "vuex";
   import FloatInput from "@/components/FloatInput";
-  import {stringToB64, parseAjaxError} from "@/utils";
+  import {parseAjaxError} from "@/utils";
   import LoadingButton from "@/components/LoadingButton";
 
   export default {

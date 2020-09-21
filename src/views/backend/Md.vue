@@ -5,7 +5,7 @@
         <svg-icon :name="'loading'"/>
         <span>{{ deleting.state }}</span>
       </div>
-      <loading-button :text="'新建'" :icon="'add'" class="new" @click="newArticle"/>
+      <loading-button :text="'新建'" :icon="'add'" class="new" @click.native="newArticle"/>
     </div>
     <div class="list">
       <table>
@@ -47,7 +47,7 @@ import SingleButton from "@/components/Button";
 import {mapState} from "vuex";
 import selfImage from '@/image/i.png'
 import LoadingButton from "@/components/LoadingButton";
-import {parseAjaxError} from "../../utils";
+import {parseAjaxError} from "@/utils";
 
 export default {
   name: "Md",

@@ -1,5 +1,5 @@
 <template>
-    <div class="loading-button" :class="{loading: loading}" @click="$emit('click')">
+    <div class="loading-button" :class="{loading: loading}">
         <svg-icon :name="loading?'loading':icon"/>
         <span>{{ text }}</span>
     </div>

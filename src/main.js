@@ -9,16 +9,18 @@ import store from '@/store'
 import router from '@/router'
 import {getText} from "@/utils";
 
-document.head.querySelector('link[rel="icon"]').href = `${staticFolder}/favicon.ico`;
+import selfImage from '@/image/i.png';
+
+document.head.querySelector('link[rel="icon"]').href = selfImage;
 
 getText(staticFolder+'/config.json').then(res => {
   if (res[0]) {
       // 首次获取config
       store.commit('updateConfig', JSON.parse(res[1]));
-      // 自定义hljs
+      // 自定义markdown
       let style = document.createElement('link');
       style.rel = 'stylesheet';
-      style.href = `${staticFolder}/hljs.css`;
+      style.href = `${staticFolder}/markdown.css?ran=${new Date().getTime()}`;
       document.head.appendChild(style);
 
       new Vue({

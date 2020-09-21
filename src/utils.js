@@ -92,30 +92,46 @@ export class GithubUtils {
     }
 
     async updateMd(payload) {
+        return await this.createCommit([
+            {
+                folder: `${dynamicFolder}/md/${payload.folder}/index.md`,
+                content: payload.md
+            },
+            {
+                folder: `${dynamicFolder}/md/${payload.folder}/index.html`,
+                content: payload.html
+            }
+        ], `更新 md-${payload.folder}`)
+    };
+
+    async updateTheme (scss){
+        return await this.createCommit([
+            {
+                folder: `${dynamicFolder}/markdown.scss`,
+                content: scss
+            },
+            {
+                folder: `${dynamicFolder}/markdown.css`,
+                content: scss
+            }
+        ], `更新 theme`)
+    }
+
+    // create commit
+    async createCommit (files, message){
         return new Promise(async resolve => {
             let main = await this.repos.git.refs('heads/master').fetch().catch(err => {
                 resolve([false, err])
             });
 
             // 创建tree
-            const files = [
-                {
-                    file: 'index.md',
-                    content: payload.md
-                },
-                {
-                    file: 'index.html',
-                    content: payload.html
-                }
-            ];
             let treeItems = [];
             for (let item of files) {
-                if (!item.file) continue;
-                let res = await this.repos.git.blobs.create({content: item.content, encoding: 'base64'}).catch(err => {
+                let res = await this.repos.git.blobs.create({content: stringToB64(item.content), encoding: 'base64'}).catch(err => {
                     resolve([false, err])
                 });
                 treeItems.push({
-                    path: `${dynamicFolder}/md/${payload.folder}/${item.file}`,
+                    path: item.folder,
                     sha: res.sha,
                     mode: "100644",
                     type: "blob"
@@ -130,7 +146,7 @@ export class GithubUtils {
 
             // commit
             let commit = await this.repos.git.commits.create({
-                message: `更新 md-${payload.folder}`,
+                message: message,
                 tree: tree.sha,
                 parents: [main.object.sha]
             }).catch(err => {
@@ -141,8 +157,7 @@ export class GithubUtils {
             });
             resolve([tree])
         })
-    };
-
+    }
 
     async removeMd(folder, dic) {
         return new Promise(async resolve => {
