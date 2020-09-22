@@ -9,6 +9,9 @@
           <span class="icon" flex>
             <svg-icon :name="'edit'"/>
             <span>编辑scss</span>
+            <a target="_blank" href="https://sass-lang.com/" flex>
+              <svg-icon :name="'info'"/>
+            </a>
           </span>
           <div class="textarea" ref="textarea"></div>
         </div>
@@ -214,6 +217,17 @@ export default {
 
       > .left {
         flex-shrink: 0;
+
+        > .icon > a {
+          margin-left: 1rem;
+
+          > svg {
+            width: 1.2rem;
+            height: 1.2rem;
+            fill: #91ffbd;
+          }
+        }
+
         > .textarea {
           font-size: 0.8rem;
           width: 100%;

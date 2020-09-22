@@ -1,6 +1,6 @@
 <template>
     <div class="message" flex>
-      <div v-for="(item,idx) in list" :class="item.type" @click="removeItem(idx)" v-if="item.display">
+      <div v-for="(item,idx) in list" :class="item.type" @click="removeItem(idx)" v-if="item.display" flex>
         <svg-icon :name="item.type"/>
         <span>{{ item.text }}</span>
       </div>

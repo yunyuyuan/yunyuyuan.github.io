@@ -1,6 +1,6 @@
 <template>
-  <div class="login" @click.self="$emit('hide')" flex>
-    <div class="inner" flex>
+  <div class="login" @click.self="$emit('hide')" is-dialog>
+    <div class="inner">
       <div class="head" flex>
         <svg-icon :name="'backend'"/>
         <b>后台管理账户</b>
@@ -115,19 +115,7 @@ import SingleButton from "@/components/Button";
 <style scoped lang="scss">
     @import "src/assets/style/public";
     .login{
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        z-index: $z-index-dialog;
-        background: rgba(0, 0, 0, 0.4);
-        justify-content: space-around;
         > .inner {
-          background: #ebebeb;
-          border-radius: 1rem;
-          flex-direction: column;
-          box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.4);
-          border: 1px solid #939393;
-
           > .head {
             background: white;
             padding: 0.6rem 10rem;

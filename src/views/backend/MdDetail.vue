@@ -1,10 +1,14 @@
 <template>
   <div class="md-detail" flex>
     <div class="operate" flex>
-      <div class="back" @click="$router.push({name: 'backend.md'})">
+      <div class="back" @click="$router.push({name: 'backend.md'})" flex="">
         <svg-icon :name="'back'"/>
         <span>返回</span>
       </div>
+      <a @click="showGuide = true" flex>
+        <svg-icon :name="'info'"/>
+        markdown语法指南
+      </a>
       <loading-button :loading="saving" :text="'上传'" :icon="'save'" @click.native="save"/>
     </div>
     <div class="head" flex>
@@ -26,7 +30,7 @@
         </span>
         <div v-for="(tag, idx) in getInfo()?getInfo().tags:[]" :class="{editing: tagEditIndex===idx}" :key="tag">
           <input :disabled="tagEditIndex!==idx" @focusout="editTag" :data-old="tag" :data-idx="idx" :value="tag"/>
-          <div>
+          <div flex="">
             <span @click="clickTrash(idx)">
               <svg-icon :name="'trash'"/>
             </span>
@@ -49,6 +53,22 @@
         <span class="--markdown" v-html="htmlText"></span>
       </div>
     </div>
+    <div class="markdown-guide" v-show="showGuide" @click.self="showGuide=false" is-dialog>
+      <div class="inner">
+        <p>文章markdown语法说明</p>
+        <ul>
+          <li>
+            <a href="https://guides.github.com/features/mastering-markdown/#syntax" target="_blank">
+              markdown基础语法+GFM
+            </a>
+          </li>
+          <li v-for="item in guide">
+            <b>{{ item[0] }}:</b>
+            <span>{{ item[1] }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -61,8 +81,6 @@ import FloatInput from "@/components/FloatInput";
 import LoadingButton from "@/components/LoadingButton";
 
 import defaultCover from '@/image/default-cover.png';
-
-import "@/assets/style/hljs.css";
 
 
 import CodeMirror from 'codemirror';
@@ -79,6 +97,7 @@ export default {
   data() {
     return {
       defaultCover,
+      showGuide: false,
       tagEditIndex: -1,
       mdText: '',
       codeMirror: null,
@@ -92,7 +111,12 @@ export default {
         time: "",
         summary: "编辑简介",
         tags: []
-      }
+      },
+      guide: [
+        ['![sticker](aru/10)', 'aru表情包第10个表情'],
+        ['#[google](https://google.com)', 'target=_blank的链接'],
+        ['![width x height](url)', '链接为url,width和height为指定值的图片(null代表未指定,可用%)'],
+      ]
     }
   },
   computed: {
@@ -137,8 +161,8 @@ export default {
     async init() {
       this.mdText = '';
       if (this.$route.name === 'backend.md.detail') {
-        // 标题增加详情
-        document.title += this.id;
+        // 标题
+        document.title = '后台-文章-' + this.id;
         if (this.$route.params.id !== 'new') {
           await this.getMdText()
         }
@@ -273,7 +297,7 @@ export default {
   flex-direction: column;
   background: white;
   width: 95%;
-  margin: auto;
+  margin: 0.8rem auto 0 auto;
   border-radius: 0.6rem;
   box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
   position: relative;
@@ -305,6 +329,26 @@ export default {
       > span {
         font-size: 0.9rem;
         margin-left: 0.5rem;
+      }
+    }
+
+    > a {
+      font-size: 0.9rem;
+      cursor: pointer;
+
+      &:hover {
+        color: #ff3c00;
+        text-decoration: underline;
+
+        > svg {
+          fill: #ff3c00;
+        }
+      }
+
+      > svg {
+        width: 1.2rem;
+        height: 1.2rem;
+        margin-right: 0.8rem;
       }
     }
 
@@ -524,6 +568,36 @@ export default {
         word-break: break-all;
         white-space: pre-line;
         width: 100%;
+      }
+    }
+  }
+
+  > .markdown-guide {
+    > .inner {
+      padding: 1rem 3rem;
+
+      > p {
+        font-size: 1.1rem;
+        font-weight: bold;
+      }
+
+      > ul {
+        > li {
+          margin: 1.5rem 0;
+
+          > a, > b {
+            font-size: 1rem;
+            color: #0003ff;
+          }
+
+          > b {
+            margin-right: 1rem;
+          }
+
+          > span {
+            font-size: 0.9rem;
+          }
+        }
       }
     }
   }

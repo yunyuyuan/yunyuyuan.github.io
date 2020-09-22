@@ -72,7 +72,7 @@ const routes = [
                 path: 'md/:id',
                 name: 'backend.md.detail',
                 meta: {
-                    title: '后台-文章-'
+                    title: '后台-文章'
                 },
                 component: () => import('@/views/backend/MdDetail')
             },
