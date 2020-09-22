@@ -1,6 +1,7 @@
 <template>
   <div class="theme" flex>
     <div class="head" flex>
+      <loading-button :loading="false" :icon="'reset'" :text="'重置为默认'" @click.native="reset"/>
       <loading-button :loading="saving" :icon="'save'" :text="'保存'" @click.native="save"/>
     </div>
     <div class="body" flex>
@@ -8,8 +9,8 @@
         <div class="left" :style="{width: mdWidth}" flex>
           <span class="icon" flex>
             <svg-icon :name="'edit'"/>
-            <span>编辑scss</span>
-            <a target="_blank" href="https://sass-lang.com/" flex>
+            <span>编辑sass</span>
+            <a target="_blank" href="https://sass-lang.com/" title="sass是什么?" flex>
               <svg-icon :name="'info'"/>
             </a>
           </span>
@@ -45,6 +46,8 @@ import 'codemirror/mode/sass/sass.js';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/idea.css';
 import 'codemirror/theme/darcula.css';
+
+import defaultMarkdownStyle from '!!text-loader!@/assets/style/markdown-default.scss'
 
 
 export default {
@@ -142,6 +145,10 @@ export default {
       document.addEventListener('mousemove', resize);
       document.addEventListener('mouseup', release)
     },
+    reset (){
+      if (!this.codeMirror) return;
+      this.codeMirror.setValue(defaultMarkdownStyle);
+    },
     async save() {
       if (this.gitUtil) {
         this.saving = true;
@@ -177,7 +184,13 @@ export default {
     justify-content: space-between;
 
     > .loading-button {
-      margin: 0.2rem 0.2rem 0.2rem auto;
+      margin: 0.2rem;
+      &:first-of-type{
+        background: #ff7e7e;
+        &:hover{
+          background: #e77272;
+        }
+      }
     }
   }
 
@@ -189,8 +202,9 @@ export default {
     > .edit {
       width: calc(100% - 0.5rem);
       align-items: stretch;
-      margin: 1rem 0.25rem 0.2rem 0.25rem;
-      height: calc(100% - 1.2rem);
+      margin: 0.5rem 0.25rem 0.5rem 0.25rem;
+      height: calc(100% - 1rem);
+      border: 1px solid;
 
       > .left, > .right {
         height: 100%;

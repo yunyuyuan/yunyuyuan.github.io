@@ -21,7 +21,7 @@
         <img :src="getInfo()?getInfo().cover: defaultCover"/>
         <label>
           <span>封面链接:</span>
-          <input @focusout="changeCover"/>
+          <input :value="getInfo()?getInfo().cover: ''" @focusout="changeCover"/>
         </label>
       </div>
       <div class="tags" flex>

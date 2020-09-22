@@ -116,6 +116,7 @@ import SingleButton from "@/components/Button";
     @import "src/assets/style/public";
     .login{
         > .inner {
+        background: #efefef;
           > .head {
             background: white;
             padding: 0.6rem 10rem;

@@ -1,5 +1,6 @@
 import Octokat from 'octokat';
 import {staticFolder} from "@/main";
+import dayjs from 'dayjs';
 
 export const dynamicFolder = 'dynamic';
 export const configPath = `${dynamicFolder}/config.json`;
@@ -26,6 +27,10 @@ export async function getText(path) {
             resolve([false, err])
         })
     })
+}
+
+export function parseTime(time, detail) {
+    return new dayjs(time).format(`YYYY-MM-DD${detail?' HH:mm:ss':''}`)
 }
 
 export function parseMarkdown(text) {

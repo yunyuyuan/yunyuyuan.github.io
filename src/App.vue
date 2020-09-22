@@ -56,7 +56,7 @@ html, body{
   }
 
   > .inner {
-    background: #ebebeb;
+    background: white;
     border-radius: 1rem;
     flex-direction: column;
     box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.4);
@@ -99,7 +99,7 @@ table{
         background: #f5f5f5;
       }
       &:hover{
-        background: #e5fff1;
+        background: #ebfffc;
       }
       td{
         padding: 0.4rem 0;

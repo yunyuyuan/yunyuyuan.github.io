@@ -24,11 +24,11 @@
             <router-link tag="td" class="cover" :to="{name: 'backend.md.detail', params: {id: item.file}}">
               <img :src="item.cover || selfImage"/>
             </router-link>
-            <td class="title">{{ item.name }}</td>
-            <td class="summary">{{ item.summary }}</td>
-            <td class="time">{{ item.time }}</td>
+            <td class="title"><span>{{ item.name }}</span></td>
+            <td class="summary"><span>{{ item.summary }}</span></td>
+            <td class="time">{{ parseTime(item.time) }}</td>
             <td class="tags">
-              <div>
+              <div flex="">
                 <span v-for="tag in item.tags">{{ tag }}</span>
               </div>
             </td>
@@ -47,7 +47,7 @@ import SingleButton from "@/components/Button";
 import {mapState} from "vuex";
 import selfImage from '@/image/i.png'
 import LoadingButton from "@/components/LoadingButton";
-import {parseAjaxError} from "@/utils";
+import {parseAjaxError, parseTime} from "@/utils";
 
 export default {
   name: "Md",
@@ -79,6 +79,9 @@ export default {
   methods: {
     newArticle (){
       this.$router.push({name: 'backend.md.detail', params: {id: 'new'}})
+    },
+    parseTime (time){
+      return parseTime(time, true)
     },
     async removeMd (file){
       if (this.deleting.bool) return;
@@ -131,6 +134,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "src/assets/style/public";
+
 .md {
   width: 95%;
   min-height: 90%;
@@ -191,39 +196,56 @@ export default {
           height: 8rem;
           td{
             text-align: center;
+            &.title, &.summary{
+              > span{
+                @include text-overflow(4);
+              }
+            }
             &.cover{
               cursor: pointer;
+              width: 15%;
               img{
                 height: 96%;
                 object-fit: contain;
               }
             }
             &.title{
+              width: 25%;
               font-size: 1.04rem;
               word-break: break-all;
               white-space: pre-line;
             }
             &.summary{
+              width: 26%;
               font-size: 0.85rem;
               color: #545454;
             }
             &.time{
+              width: 12%;
               font-weight: 500;
-              font-size: 1.05rem;
+              font-size: 0.95rem;
+              color: #0003ff;
+              max-width: 10rem;
             }
             &.tags{
+              width: 20%;
               >div{
+                flex-wrap: wrap;
                 >span{
                   margin: 0.4rem 0.2rem;
+                  padding: 0.3rem 0.8rem;
+                  font-size: 0.8rem;
+                  border-radius: 0.2rem;
+                  background: #00f3ff;
                 }
               }
             }
             &.operate{
-              width: 8rem;
+              width: 8%;
               ::v-deep .single-button{
                 border-radius: 0.2rem;
                 background: #ff344f;
-                width: 3rem;
+                width: 2.4rem;
                 margin: auto;
                 &[deleting]{
                   background: #727272;
