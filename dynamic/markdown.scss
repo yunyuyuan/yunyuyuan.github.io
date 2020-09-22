@@ -15,15 +15,16 @@
   a[href]{
   }
   img {
-  	display: block;
+    display: block;
     width: 80%;
-  	margin: 0 auto;
+    margin: 0 auto;
     object-fit: contain;
 
     &[alt=sticker] {
-      width: 1.8rem;
-      height: 1.8rem;
-      margin-bottom: -0.2rem;
+      display: inline-block;
+      width: 1.6rem;
+      height: 1.6rem;
+      margin: 0 0.3rem -0.2rem 0.3rem;
     }
   }
   input[type=checkbox]{
@@ -42,16 +43,19 @@
   }
   blockquote{
   }
-  table{
- 		width: 90%;
-  	margin: 1rem auto;
-    tr{
-      td{
+  table {
+    width: 90%;
+    margin: 1rem auto;
+
+    tr {
+      td {
       }
     }
-    thead{
+
+    thead {
     }
-    tbody{
+
+    tbody {
     }
   }
   ul{

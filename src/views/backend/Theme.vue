@@ -257,11 +257,11 @@ export default {
           border-left: none;
           overflow-y: auto;
           width: 100%;
+          overflow-x: auto;
 
           > span {
             display: block;
             padding: 0.4rem;
-            overflow-x: auto;
             width: calc(100% - 0.8rem) !important;
           }
         }

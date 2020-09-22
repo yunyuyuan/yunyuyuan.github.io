@@ -42,17 +42,18 @@ html, body{
 
 *[is-dialog] {
   position: fixed;
-
-  &, > .inner {
-    display: flex;
-    align-items: center;
-  }
-
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: $z-index-dialog;
   background: rgba(0, 0, 0, 0.4);
   justify-content: space-around;
+
+  &, > .inner {
+    display: flex;
+    align-items: center;
+  }
 
   > .inner {
     background: #ebebeb;

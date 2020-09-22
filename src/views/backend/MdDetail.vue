@@ -397,10 +397,10 @@ export default {
       margin: 0 2rem;
       border-radius: 0.8rem;
       padding: 0.5rem;
-      border: 1px dotted black;
       justify-content: space-around;
       flex-direction: column;
-      box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.3);
+      border: 1px solid gray;
+      box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.15);
 
       > img {
         width: 20rem;
