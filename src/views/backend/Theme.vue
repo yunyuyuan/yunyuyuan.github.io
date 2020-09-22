@@ -66,20 +66,6 @@ export default {
   async created() {
     await this.init()
   },
-  mounted() {
-    this.codeMirror = new CodeMirror(this.$refs.textarea, {
-      indentUnit: 2,
-      tabSize: 2,
-      theme: 'idea',
-      lineNumbers: true,
-      line: true,
-      mode: 'sass',
-    });
-    this.codeMirror.on('change', () => {
-      this.scss = this.codeMirror.getValue()
-    });
-    this.codeMirror.setValue(this.scss)
-  },
   watch: {
     async $route() {
       if (this.$route.name === 'backend.theme') {
@@ -115,6 +101,20 @@ export default {
         }
       } else {
         this.$message.error('获取markdown.scss失败!请检查网络')
+      }
+      if (!this.codeMirror) {
+        this.codeMirror = new CodeMirror(this.$refs.textarea, {
+          indentUnit: 2,
+          tabSize: 2,
+          theme: 'idea',
+          lineNumbers: true,
+          line: true,
+          mode: 'sass',
+        });
+        this.codeMirror.on('change', () => {
+          this.scss = this.codeMirror.getValue()
+        });
+        this.codeMirror.setValue(this.scss);
       }
     },
     startResize (){

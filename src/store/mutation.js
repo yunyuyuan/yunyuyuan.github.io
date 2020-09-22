@@ -1,4 +1,7 @@
 export default {
+    toggleLoading(state, b) {
+        state.loading = b
+    },
     changeMd(state, file) {
         state.nowMdFile = file
     },

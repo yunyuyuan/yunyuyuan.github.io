@@ -12,24 +12,24 @@
 </template>
 
 <script>
-  import {mapState} from "vuex";
-  import FloatInput from "@/components/FloatInput";
-  import {parseAjaxError} from "@/utils";
-  import LoadingButton from "@/components/LoadingButton";
+import {mapState} from "vuex";
+import FloatInput from "@/components/FloatInput";
+import {parseAjaxError} from "@/utils";
+import LoadingButton from "@/components/LoadingButton";
 
-  export default {
-    name: "Config",
-    components: {LoadingButton, FloatInput},
-    data() {
-      return {
-        updating: false,
-        keys: ["name", "describe", "copyright", "github", "bilibili", "email"]
-      }
-    },
-    computed: {
-      ...mapState(['config', 'gitUtil'])
-    },
-    methods: {
+export default {
+  name: "Config",
+  components: {LoadingButton, FloatInput},
+  data() {
+    return {
+      updating: false,
+      keys: ["name", "describe", "copyright", "github", "bilibili", "email"]
+    }
+  },
+  computed: {
+    ...mapState(['config', 'gitUtil'])
+  },
+  methods: {
     input(payload) {
       this.config[payload[0]] = payload[1]
     },

@@ -13,17 +13,20 @@ import selfImage from '@/image/i.png';
 
 document.head.querySelector('link[rel="icon"]').href = selfImage;
 
-getText(staticFolder+'/config.json').then(res => {
-  if (res[0]) {
-      // 首次获取config
-      store.commit('updateConfig', JSON.parse(res[1]));
-
-      new Vue({
-          store,
-          router,
-          render: h => h(App),
-      }).$mount('#app');
-  } else {
-      alert('获取网站配置失败!请检查网络并刷新网页')
-  }
+new Vue({
+    el: '#app',
+    store,
+    router,
+    async mounted() {
+        this.$store.commit('toggleLoading', true)
+        let res = await getText(staticFolder + '/config.json');
+        if (res[0]) {
+            // 首次获取config
+            this.$store.commit('updateConfig', JSON.parse(res[1]));
+        } else {
+            alert('获取网站配置失败!请检查网络并刷新网页')
+        }
+        this.$store.commit('toggleLoading', false)
+    },
+    render: h => h(App),
 });

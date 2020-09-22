@@ -7,6 +7,7 @@
         <the-footer v-if="this.routeNow !== 'backend'"/>
       </section>
       <message ref="message"/>
+      <loading/>
   </div>
 </template>
 
@@ -20,20 +21,21 @@
     import Message from "./block/Message";
 
     import Vue from 'vue';
+    import Loading from "@/views/block/Loading";
 
     export default {
-        name: "index",
-        components: {Message, TheHead, TheFooter},
-        data() {
-            return {
-                showHead: true,
-                images: {
-                    home: HomeImage,
-                    articleList: ArticleListImage,
-                    articleDetail: ArticleDetailImage,
-                    msgBoard: msgBoardImage,
-                    backend: msgBoardImage,
-                },
+      name: "index",
+      components: {Loading, Message, TheHead, TheFooter},
+      data() {
+        return {
+          showHead: true,
+          images: {
+            home: HomeImage,
+            articleList: ArticleListImage,
+            articleDetail: ArticleDetailImage,
+            msgBoard: msgBoardImage,
+            backend: msgBoardImage,
+          },
         routeNow: 'home'
     }
   },
@@ -59,9 +61,9 @@
         }
     }
   },
-        mounted() {
-            Vue.prototype.$message = this.$refs.message
-        },
+      created() {
+        Vue.prototype.$message = this.$refs.message
+      },
         methods: {}
     }
 </script>

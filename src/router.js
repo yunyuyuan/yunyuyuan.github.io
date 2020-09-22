@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import {staticFolder} from "@/main";
+import store from '@/store/index'
 
 
 Vue.use(VueRouter);
@@ -94,6 +95,7 @@ let router = new VueRouter({
 });
 
 router.beforeEach((to, from, next)=> {
+    store.commit('toggleLoading', true)
     document.title = to.meta.title || '未知页面';
     // 是否加载 markdown css
     let mdStyle = document.head.querySelector('#markdown-stylesheet');
@@ -104,5 +106,8 @@ router.beforeEach((to, from, next)=> {
     }
     next()
 });
+router.afterEach(() => {
+    store.commit('toggleLoading', false)
+})
 
 export default router

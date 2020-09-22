@@ -12,7 +12,8 @@ export default new Vuex.Store({
     state: {
         gitUtil: null,
         nowMdFile: 0,
-        config: {}
+        config: {},
+        loading: true
     },
     mutations,
     actions,
