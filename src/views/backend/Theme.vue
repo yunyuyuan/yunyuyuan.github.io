@@ -135,17 +135,19 @@ export default {
           window.dispatchEvent(new Event('resize'))
         }
       }
+
       function release() {
         document.removeEventListener('mousemove', resize);
         document.removeEventListener('mouseup', release);
         document.body.removeAttribute('unselectable');
         vue_.resizing = false;
       }
+
       this.resizing = true;
       document.addEventListener('mousemove', resize);
       document.addEventListener('mouseup', release)
     },
-    reset (){
+    reset() {
       if (!this.codeMirror) return;
       this.codeMirror.setValue(defaultMarkdownStyle);
     },
@@ -183,7 +185,7 @@ export default {
     height: 3rem;
     justify-content: space-between;
 
-    > .loading-button {
+    > .loading-button{
       margin: 0.2rem;
       &:first-of-type{
         background: #ff7e7e;
@@ -199,18 +201,16 @@ export default {
     height: calc(100% - 3rem);
     flex-grow: 0;
 
-    > .edit {
+    > .edit{
       width: calc(100% - 0.5rem);
       align-items: stretch;
       margin: 0.5rem 0.25rem 0.5rem 0.25rem;
       height: calc(100% - 1rem);
       border: 1px solid;
-
-      > .left, > .right {
+      > .left, > .right{
         height: 100%;
         flex-direction: column;
-
-        > .icon {
+        > .icon{
           width: 100%;
           justify-content: center;
           padding: 0.4rem 0;

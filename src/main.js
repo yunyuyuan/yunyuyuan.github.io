@@ -14,7 +14,7 @@ import selfImage from '@/image/i.png';
 document.head.querySelector('link[rel="icon"]').href = selfImage;
 
 
-getText(staticFolder + '/config.json').then(res=>{
+getText(staticFolder + '/config.json').then(res => {
     if (res[0]) {
         // 首次获取config
         store.commit('updateConfig', JSON.parse(res[1]));

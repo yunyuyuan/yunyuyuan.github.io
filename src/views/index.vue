@@ -62,7 +62,7 @@
     }
   },
       mounted() {
-        Vue.prototype.$message = this.$refs.message
+          Vue.prototype.$message = this.$refs.message
       },
         methods: {}
     }

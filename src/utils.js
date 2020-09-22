@@ -30,7 +30,7 @@ export async function getText(path) {
 }
 
 export function parseTime(time, detail) {
-    return new dayjs(time).format(`YYYY-MM-DD${detail?' HH:mm:ss':''}`)
+    return new dayjs(time).format(`YYYY-MM-DD${detail ? ' HH:mm:ss' : ''}`)
 }
 
 export function parseMarkdown(text) {

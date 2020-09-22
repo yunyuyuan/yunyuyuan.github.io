@@ -116,17 +116,16 @@ import SingleButton from "@/components/Button";
     @import "src/assets/style/public";
     .login{
         > .inner {
-        background: #efefef;
-          > .head {
-            background: white;
-            padding: 0.6rem 10rem;
-            border-radius: 1rem 1rem 0 0;
-            justify-content: center;
-            border-bottom: 1px solid gray;
-
-            > svg {
-              width: 2.4rem;
-              height: 2.4rem;
+            background: #efefef;
+            > .head{
+                background: white;
+                padding: 0.6rem 10rem;
+                border-radius: 1rem 1rem 0 0;
+                justify-content: center;
+                border-bottom: 1px solid gray;
+                > svg{
+                    width: 2.4rem;
+                    height: 2.4rem;
             }
                 > b{
                     margin-left: 2rem;

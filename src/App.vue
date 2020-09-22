@@ -56,11 +56,11 @@ html, body{
   }
 
   > .inner {
-    background: white;
-    border-radius: 1rem;
-    flex-direction: column;
-    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.4);
-    border: 1px solid #939393;
+      background: white;
+      border-radius: 1rem;
+      flex-direction: column;
+      box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.4);
+      border: 1px solid #939393;
   }
 }
 
@@ -99,7 +99,7 @@ table{
         background: #f5f5f5;
       }
       &:hover{
-        background: #ebfffc;
+          background: #ebfffc;
       }
       td{
         padding: 0.4rem 0;

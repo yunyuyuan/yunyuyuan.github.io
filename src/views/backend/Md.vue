@@ -77,13 +77,13 @@ export default {
     }
   },
   methods: {
-    newArticle (){
+    newArticle() {
       this.$router.push({name: 'backend.md.detail', params: {id: 'new'}})
     },
-    parseTime (time){
+    parseTime(time) {
       return parseTime(time, true)
     },
-    async removeMd (file){
+    async removeMd(file) {
       if (this.deleting.bool) return;
       if (this.gitUtil) {
         if (confirm('确认删除?')) {
@@ -134,17 +134,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/assets/style/public";
-
-.md {
-  width: 95%;
-  min-height: 90%;
-  margin: 2rem auto 1rem auto;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 0.7rem;
-  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
-  flex-direction: column;
-  transition: all .1s linear;
+  @import "src/assets/style/public";
+  .md{
+    width: 95%;
+    min-height: 90%;
+    margin: 2rem auto 1rem auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 0.7rem;
+    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
+    flex-direction: column;
+    transition: all .1s linear;
 
   &:hover {
     background: white;
@@ -229,9 +228,9 @@ export default {
             }
             &.tags{
               width: 20%;
-              >div{
+              > div{
                 flex-wrap: wrap;
-                >span{
+                > span{
                   margin: 0.4rem 0.2rem;
                   padding: 0.3rem 0.8rem;
                   font-size: 0.8rem;
