@@ -18,7 +18,7 @@
             <svg-icon :name="'brash'"/>
             <span>效果</span>
           </span>
-          <div ref="markdown" flex>
+          <div ref="markdown">
             <span class="--markdown" v-html="html"></span>
           </div>
         </div>
@@ -125,8 +125,8 @@ export default {
         }
         let w = e.clientX - parentLeft;
         if (w >= parentWidth/5 && w <= parentWidth*4/5){
-          console.log('yes')
-          vue_.mdWidth = w+'px'
+          vue_.mdWidth = w+'px';
+          window.dispatchEvent(new Event('resize'))
         }
       }
       function release() {
@@ -237,17 +237,18 @@ export default {
       }
       > .right {
         flex-grow: 1;
-        > .icon {
-          border-left: 1px solid white;
-        }
+        width: 0;
 
         > div {
           border-left: none;
           overflow-y: auto;
+          width: 100%;
 
           > span {
             display: block;
             padding: 0.4rem;
+            overflow-x: auto;
+            width: calc(100% - 0.8rem) !important;
           }
         }
       }

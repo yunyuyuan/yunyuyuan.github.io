@@ -205,7 +205,8 @@ export default {
         }
         let w = e.clientX - parentLeft;
         if (w >= parentWidth/5 && w <= parentWidth*4/5){
-          vue_.mdWidth = w+'px'
+          vue_.mdWidth = w+'px';
+          window.dispatchEvent(new Event('resize'))
         }
       }
       function release() {
@@ -487,6 +488,7 @@ export default {
     margin: 1rem 0 0.4rem 0;
     width: 99%;
     max-height: 50rem;
+    min-height: 10rem;
     align-items: stretch;
     border: 1px solid #656565;
 
@@ -496,8 +498,9 @@ export default {
 
       > .textarea {
         width: 100%;
-        >.CodeMirror{
+        > ::v-deep .CodeMirror{
           height: 100%;
+          font-size: 0.9rem;
         }
       }
     }
