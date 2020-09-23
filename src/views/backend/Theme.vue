@@ -92,7 +92,7 @@ export default {
           style.id = 'fake-markdown-style';
           document.head.appendChild(style);
         }
-        await Sass.compile(this.scss, (res) => {
+        Sass.compile(this.scss, (res) => {
           if (res)
             style.innerHTML = res.text
         });

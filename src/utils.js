@@ -1,6 +1,7 @@
 import Octokat from 'octokat';
 import {staticFolder} from "@/main";
 import dayjs from 'dayjs';
+import Sass from 'sass.js'
 
 export const dynamicFolder = 'dynamic';
 export const configPath = `${dynamicFolder}/config.json`;
@@ -137,17 +138,22 @@ export class GithubUtils {
         ], `更新 md-${payload.folder}`)
     };
 
-    async updateTheme (scss){
-        return await this.createCommit([
-            {
-                folder: `${dynamicFolder}/markdown.scss`,
-                content: scss
-            },
-            {
-                folder: `${dynamicFolder}/markdown.css`,
-                content: parseMarkdown(scss)
-            }
-        ], `更新 theme`)
+    async updateTheme (scss) {
+        return new Promise(resolve => {
+            Sass.compile(scss, async res => {
+                resolve(await this.createCommit([
+                    {
+                        folder: `${dynamicFolder}/markdown.scss`,
+                        content: scss
+                    },
+                    {
+                        folder: `${dynamicFolder}/markdown.css`,
+                        content: res.text
+                    }
+                ], `更新 theme`))
+
+            });
+        })
     }
 
     // create commit

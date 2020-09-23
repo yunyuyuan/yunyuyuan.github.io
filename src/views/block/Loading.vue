@@ -30,20 +30,17 @@ export default {
   width: 100%;
   height: 100%;
   z-index: $z-index-loading;
-  background: rgba(255, 255, 255, 0.9);
+  background: transparent;
   justify-content: center;
-  transition: opacity .5s;
-  opacity: 1;
-
-  &.fade-enter-to, &.fade-leave {
-    opacity: 1;
+  transition: box-shadow 1s;
+  box-shadow: 0 0 25vh 50vw rgba(255, 255, 255, 0.9) inset;
+  &.fade-enter, &.fade-enter-to, &.fade-leave{
+    box-shadow: 0 0 25vh 50vw rgba(255, 255, 255, 0.9) inset;
   }
-
-  &.fade-enter, &.fade-leave-to {
-    opacity: 0;
+  &.fade-leave-to{
+    box-shadow: 0 0 25vh -10vh rgba(255, 255, 255, 0.9) inset;
   }
-
-  > svg {
+  > svg{
     width: 4rem;
     height: 4rem;
   }

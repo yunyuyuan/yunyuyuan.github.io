@@ -1,5 +1,7 @@
 .--markdown {
-  width: 100%; }
+  display: block;
+  width: 100%;
+}
   .--markdown h1 {
     color: #4251ff;
     font-size: 1.6rem; }
