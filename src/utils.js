@@ -121,7 +121,7 @@ export class GithubUtils {
             },
             {
                 folder: `${dynamicFolder}/markdown.css`,
-                content: scss
+                content: parseMarkdown(scss)
             }
         ], `更新 theme`)
     }

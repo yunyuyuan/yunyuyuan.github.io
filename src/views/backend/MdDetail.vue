@@ -108,7 +108,8 @@ export default {
         name: "编辑标题",
         file: "",
         cover: "",
-        time: "",
+        createTime: "",
+        modifyTime: "",
         summary: "编辑简介",
         tags: []
       },
@@ -252,7 +253,7 @@ export default {
         }
         this.saving = true;
         let folderId = new Date().getTime();
-        info.time = folderId;
+        info.modifyTime = folderId;
         if (this.id !== 'new') {
           // 更新
           folderId = this.id;
@@ -260,6 +261,7 @@ export default {
           // 添加
           // config md +1
           info.file = folderId.toString();
+          info.createTime = folderId;
           let mdList = this.config.md;
           mdList.push(JSON.parse(JSON.stringify(info)));
         }

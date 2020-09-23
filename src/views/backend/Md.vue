@@ -14,28 +14,37 @@
           <td class="cover">封面</td>
           <td class="title">标题</td>
           <td class="summary">简介</td>
-          <td class="time">修改时间</td>
+          <td class="time">时间</td>
           <td class="tags">标签</td>
           <td class="operate">操作</td>
         </tr>
         </thead>
         <tbody>
-          <tr v-for="item in reverseList" :key="item.file">
-            <router-link tag="td" class="cover" :to="{name: 'backend.md.detail', params: {id: item.file}}">
-              <img :src="item.cover || selfImage"/>
-            </router-link>
-            <td class="title"><span>{{ item.name }}</span></td>
-            <td class="summary"><span>{{ item.summary }}</span></td>
-            <td class="time">{{ parseTime(item.time) }}</td>
-            <td class="tags">
-              <div flex="">
-                <span v-for="tag in item.tags">{{ tag }}</span>
-              </div>
-            </td>
-            <td class="operate">
-              <single-button :text="'删除'" @click.native="removeMd(item.file)" :deleting="deleting.bool"/>
-            </td>
-          </tr>
+        <tr v-for="item in reverseList" :key="item.file">
+          <router-link tag="td" class="cover" :to="{name: 'backend.md.detail', params: {id: item.file}}">
+            <img :src="item.cover || selfImage"/>
+          </router-link>
+          <td class="title"><span>{{ item.name }}</span></td>
+          <td class="summary"><span>{{ item.summary }}</span></td>
+          <td class="time">
+            <div>
+              <span>创建:</span>
+              <a>{{ parseTime(item.createTime) }}</a>
+            </div>
+            <div>
+              <span>修改:</span>
+              <a>{{ parseTime(item.modifyTime) }}</a>
+            </div>
+          </td>
+          <td class="tags">
+            <div flex="">
+              <span v-for="tag in item.tags">{{ tag }}</span>
+            </div>
+          </td>
+          <td class="operate">
+            <single-button :text="'删除'" @click.native="removeMd(item.file)" :deleting="deleting.bool"/>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>
@@ -219,12 +228,22 @@ export default {
               font-size: 0.85rem;
               color: #545454;
             }
-            &.time{
+            &.time {
               width: 12%;
               font-weight: 500;
-              font-size: 0.95rem;
-              color: #0003ff;
               max-width: 10rem;
+
+              > div {
+                > span {
+                  font-size: 0.88rem;
+                  margin-right: 0.4rem;
+                }
+
+                > a {
+                  font-size: 0.95rem;
+                  color: #0003ff;
+                }
+              }
             }
             &.tags{
               width: 20%;

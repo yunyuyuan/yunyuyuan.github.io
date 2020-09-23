@@ -81,17 +81,20 @@ export default {
         }
       }
     },
-    async scss() {
-      let style = document.head.querySelector('#fake-markdown-style');
-      if (!style) {
-        style = document.createElement('style');
-        style.id = 'fake-markdown-style';
-        document.head.appendChild(style);
+    scss: {
+      immediate: true,
+      handler: async function () {
+        let style = document.head.querySelector('#fake-markdown-style');
+        if (!style) {
+          style = document.createElement('style');
+          style.id = 'fake-markdown-style';
+          document.head.appendChild(style);
+        }
+        await Sass.compile(this.scss, (res) => {
+          if (res)
+            style.innerHTML = res.text
+        });
       }
-      await Sass.compile(this.scss, (res) => {
-        if (res)
-          style.innerHTML = res.text
-      });
     }
   },
   methods: {
@@ -154,7 +157,7 @@ export default {
     async save() {
       if (this.gitUtil) {
         this.saving = true;
-        let res = await this.gitUtil.updateTheme(this.scss, this.scss);
+        let res = await this.gitUtil.updateTheme(this.scss);
         if (res[0]) {
           this.$message.success('保存成功!');
         } else {
@@ -187,10 +190,11 @@ export default {
 
     > .loading-button{
       margin: 0.2rem;
-      &:first-of-type{
-        background: #ff7e7e;
-        &:hover{
-          background: #e77272;
+      &:first-of-type {
+        background: #ff4343;
+
+        &:hover {
+          background: #ff2e2e;
         }
       }
     }

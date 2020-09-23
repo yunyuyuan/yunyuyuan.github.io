@@ -12,7 +12,7 @@
     <div class="blog">
       <div v-for="item in this.config.md" :key="item.file" :class="{item: true, hidden: resultList.indexOf(item)===-1}">
         <div class="time">
-          <span>{{ item.time }}</span>
+          <span>{{ item.createTime }}</span>
         </div>
         <div class="mid">
           <span class="line"></span>
