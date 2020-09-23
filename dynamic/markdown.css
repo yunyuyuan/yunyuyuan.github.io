@@ -1,21 +1,31 @@
-// 别删除 .--markdown，修改它包裹的内容
-.--markdown{
-  @each $size in 1, 2, 3, 4, 5, 6{
-    h#{$size}{
+<p>// 别删除 .--markdown，修改它包裹的内容
+.--markdown {
+  width: 100%;
+  @each $size in 1, 2, 3, 4, 5, 6 {
+    h#{$size} {
       color: #4251ff;
       font-size: 1/$size * 1rem + 0.6rem;
     }
-  }
-  p{
+  }</p>
+<p>p {
     font-size: 0.95rem;
-    line-height: 1.2rem;
+    line-height: 1rem;
   }
   a[href]{
   }
-  img{
-    &[alt=sticker]{
-    }
-  }
+  img {
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    object-fit: contain;</p>
+<pre><code>&amp;[alt=sticker] {
+  display: inline-block;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin: 0 0.3rem -0.2rem 0.3rem;
+}
+</code></pre>
+<p>}
   input[type=checkbox]{
     margin: 0 0.5rem !important;
     width: 1.2rem;
@@ -24,7 +34,7 @@
     border: 1px solid #434343;
     appearance: none;
     line-height: inherit;
-    &:checked{
+    &amp;:checked{
       background: #86ffe4 !important;
     }
   }
@@ -32,16 +42,21 @@
   }
   blockquote{
   }
-  table{
-    tr{
-      td{
-      }
-    }
-    thead{
-    }
-    tbody{
-    }
+  table {
+    width: 90%;
+    margin: 1rem auto;</p>
+<pre><code>tr {
+  td {
   }
+}
+
+thead {
+}
+
+tbody {
+}
+</code></pre>
+<p>}
   ul{
   }
   ol{
@@ -51,4 +66,4 @@
   }
   li{
   }
-}
+}</p>
