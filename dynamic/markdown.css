@@ -1,69 +1,48 @@
-<p>// 别删除 .--markdown，修改它包裹的内容
 .--markdown {
-  width: 100%;
-  @each $size in 1, 2, 3, 4, 5, 6 {
-    h#{$size} {
-      color: #4251ff;
-      font-size: 1/$size * 1rem + 0.6rem;
-    }
-  }</p>
-<p>p {
+  width: 100%; }
+  .--markdown h1 {
+    color: #4251ff;
+    font-size: 1.6rem; }
+  .--markdown h2 {
+    color: #4251ff;
+    font-size: 1.1rem; }
+  .--markdown h3 {
+    color: #4251ff;
+    font-size: 0.9333333333rem; }
+  .--markdown h4 {
+    color: #4251ff;
+    font-size: 0.85rem; }
+  .--markdown h5 {
+    color: #4251ff;
+    font-size: 0.8rem; }
+  .--markdown h6 {
+    color: #4251ff;
+    font-size: 0.7666666667rem; }
+  .--markdown p {
     font-size: 0.95rem;
-    line-height: 1rem;
-  }
-  a[href]{
-  }
-  img {
+    line-height: 1rem; }
+  .--markdown img {
     display: block;
     width: 80%;
     margin: 0 auto;
-    object-fit: contain;</p>
-<pre><code>&amp;[alt=sticker] {
-  display: inline-block;
-  width: 1.6rem;
-  height: 1.6rem;
-  margin: 0 0.3rem -0.2rem 0.3rem;
-}
-</code></pre>
-<p>}
-  input[type=checkbox]{
+    object-fit: contain; }
+    .--markdown img[alt=sticker] {
+      display: inline-block;
+      width: 1.6rem;
+      height: 1.6rem;
+      margin: 0 0.3rem -0.2rem 0.3rem; }
+  .--markdown input[type=checkbox] {
     margin: 0 0.5rem !important;
     width: 1.2rem;
     height: 1.2rem;
     background: transparent !important;
     border: 1px solid #434343;
     appearance: none;
-    line-height: inherit;
-    &amp;:checked{
-      background: #86ffe4 !important;
-    }
-  }
-  strong{
-  }
-  blockquote{
-  }
-  table {
+    line-height: inherit; }
+    .--markdown input[type=checkbox]:checked {
+      background: #86ffe4 !important; }
+  .--markdown table {
     width: 90%;
-    margin: 1rem auto;</p>
-<pre><code>tr {
-  td {
-  }
-}
-
-thead {
-}
-
-tbody {
-}
-</code></pre>
-<p>}
-  ul{
-  }
-  ol{
-  }
-  ul, ol{
-    list-style: none;
-  }
-  li{
-  }
-}</p>
+    margin: 1rem auto; }
+  .--markdown ul, .--markdown ol {
+    list-style: none; }
