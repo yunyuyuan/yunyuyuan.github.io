@@ -48,6 +48,9 @@ export default {
   &.headroom--unpinned{
     background: rgba(0, 0, 0, 0.6);
   }
+  &:hover{
+    background: rgba(0, 0, 0, 0.3);
+  }
   > .body{
     width: 100%;
     height: 100%;
@@ -55,7 +58,7 @@ export default {
     left: 0;
     top: 0;
     justify-content: space-between;
-    >.favicon{
+    > .favicon{
       margin-left: 1rem;
       height: 88%;
       border-radius: 0.4rem;
