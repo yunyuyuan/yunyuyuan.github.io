@@ -17,7 +17,7 @@ export default {
 <style scoped lang="scss">
 .article {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   position: relative;
   flex-shrink: 0;
 }

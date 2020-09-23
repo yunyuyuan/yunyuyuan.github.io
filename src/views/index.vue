@@ -41,6 +41,7 @@
   },
   watch: {
     $route() {
+        if (!this.$route.name) return;
         switch (this.$route.name.replace(/^(.*?)\..*$/, '$1')) {
             case 'home':
                 this.routeNow = 'home';

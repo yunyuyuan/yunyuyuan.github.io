@@ -38,7 +38,7 @@
           </td>
           <td class="tags">
             <div flex="">
-              <span :style="{background: ranColor()}" v-for="tag in item.tags">{{ tag }}</span>
+              <span :style="{background: colorList[tag]}" v-for="tag in item.tags">{{ tag }}</span>
             </div>
           </td>
           <td class="operate">
@@ -56,7 +56,7 @@ import SingleButton from "@/components/Button";
 import {mapState} from "vuex";
 import selfImage from '@/image/i.png'
 import LoadingButton from "@/components/LoadingButton";
-import {parseAjaxError, parseTime, randomTagColor} from "@/utils";
+import {parseAjaxError, parseTime, randomTagColor, randomTagColorList} from "@/utils";
 
 export default {
   name: "Md",
@@ -72,7 +72,7 @@ export default {
   },
   computed: {
     ...mapState(['config', 'gitUtil']),
-    mdList (){
+    mdList() {
       //     "name": "测试",
       //     "file": "1",
       //     "cover": "cover.jpg",
@@ -81,7 +81,10 @@ export default {
       //     "tags": ["文章","js"]
       return this.config.md
     },
-    reverseList (){
+    colorList() {
+      return randomTagColorList(this.mdList)
+    },
+    reverseList() {
       return this.mdList.reverse()
     }
   },

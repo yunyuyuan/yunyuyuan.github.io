@@ -1,29 +1,37 @@
 <template>
-  <div class="list">
-    <div onclick="this.querySelector('input').focus()" :class="{search: true, active: searchFocus}">
+  <div class="list" flex>
+    <div onclick="this.querySelector('input').focus()" :class="{search: true, active: searchFocus}" flex>
       <input v-model="search" @focusin="toggleInputFocus(true)" @focusout="toggleInputFocus(false)"/>
-      <span>
+      <span flex>
           <svg-icon :fill="searchFocus?'black':'#ddd'" :name="'search'"/>
       </span>
     </div>
-    <div class="tags">
-      <span @click="removeTag(tag)" v-for="tag in searchTags" :key="tag">{{ tag }}</span>
+    <div class="tags" flex>
+      <span @click="removeTag(tag)" v-for="tag in searchTags" :key="tag" :style="{background: colorList[tag]}" flex>
+        {{ tag }}
+        <span title="取消过滤">
+          <svg-icon :name="'trash'"/>
+        </span>
+      </span>
     </div>
     <div class="blog">
-      <div v-for="item in this.config.md" :key="item.file" :class="{item: true, hidden: resultList.indexOf(item)===-1}">
+      <div v-for="item in this.config.md" :key="item.file" :class="{item: true, hidden: resultList.indexOf(item)===-1}"
+           flex>
         <div class="time">
-          <span>{{ item.createTime }}</span>
+          <span>{{ parseTime(item.createTime) }}</span>
         </div>
-        <div class="mid">
+        <div class="mid" flex>
           <span class="line"></span>
           <span class="circle"></span>
         </div>
-        <router-link class="info" :to="{name: 'article.detail', params: {id: item.file}}">
+        <router-link class="info" :to="{name: 'article.detail', params: {id: item.file}}" flex>
           <img :src="item.cover || defaultCover">
-          <div>
-            <span>{{ item.name }}</span>
-            <div class="tags">
-              <span v-for="tag in item.tags" @click.prevent.stop="addTag(tag)" :key="tag">{{ tag }}</span>
+          <div flex>
+            <b>{{ item.name }}</b>
+            <span>{{ item.summary }}</span>
+            <div class="tags" flex>
+              <span v-for="tag in item.tags" @click.prevent.stop="addTag(tag)" :style="{background: colorList[tag]}"
+                    :title="`搜索-${tag}`">{{ tag }}</span>
             </div>
           </div>
         </router-link>
@@ -35,6 +43,7 @@
 <script>
 import {mapState} from "vuex";
 import defaultCover from '@/image/default-cover.png';
+import {parseTime, randomTagColor, randomTagColorList} from "@/utils";
 
 export default {
   name: "List",
@@ -66,9 +75,18 @@ export default {
         }
       });
       return lis
-    }
+    },
+    colorList() {
+      return randomTagColorList(this.config.md)
+    },
   },
   methods: {
+    parseTime(t) {
+      return parseTime(t)
+    },
+    randColor() {
+      return randomTagColor()
+    },
     toggleInputFocus(b) {
       this.searchFocus = b
     },
@@ -94,6 +112,7 @@ export default {
   height: 100%;
   flex-shrink: 0;
   flex-direction: column;
+  overflow-y: auto;
 
   > .search {
     border-radius: 1rem;
@@ -120,8 +139,6 @@ export default {
     }
 
     > span {
-      display: flex;
-      align-items: center;
       justify-content: center;
 
       > svg {
@@ -138,37 +155,55 @@ export default {
     height: 3rem;
 
     > span {
-      background: #00f3ff;
-      padding: 0.3rem 0.8rem;
+      padding: 0.5rem 1.3rem;
       cursor: pointer;
       transition: all .1s linear;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
+      font-size: 0.96rem;
       margin: 0 1rem;
       height: 1.2rem;
       line-height: 1.8rem;
       box-shadow: 0 0 0.4rem #000000a1;
+      color: white;
+      position: relative;
+
+      > span {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+
+        > svg {
+          width: 1.4rem;
+        }
+      }
 
       &:hover {
-        background: #ff5757;
-        color: white;
+        > span {
+          display: flex;
+        }
       }
     }
   }
 
   > .blog {
-    flex-direction: column;
-    width: 50rem;
-    overflow-y: auto;
+    width: 100%;
     margin-top: 1rem;
+    flex-grow: 1;
+    overflow-x: auto;
 
     > .item {
-      width: 100%;
-      height: 5rem;
+      width: 60rem;
+      height: 10rem;
       padding: 1rem 0;
       transition: all .15s linear;
       overflow: hidden;
+      margin: 0 auto;
 
       &.hidden {
         padding: 0;
@@ -182,6 +217,8 @@ export default {
           padding: 0.4rem 0.8rem;
           border-radius: 0.4rem;
           font-size: 0.9rem;
+          word-break: keep-all;
+          white-space: nowrap;
         }
       }
 
@@ -210,17 +247,16 @@ export default {
       }
 
       > .info {
-        height: 6rem;
+        height: 100%;
         width: 100%;
         box-shadow: 0 0 0.5rem #171717;
-        display: flex;
-        align-items: center;
         text-decoration: none;
         color: black;
         border-radius: 0 0.5rem 0.5rem 0;
 
         > img {
           height: 100%;
+          width: 12rem;
           object-fit: contain;
           box-shadow: 1rem 0 1rem -1rem #a8a8a8;
           z-index: 1;
@@ -231,35 +267,40 @@ export default {
           width: 100%;
           background: white;
           border-radius: 0 0.5rem 0.5rem 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
           flex-direction: column;
           box-shadow: 0 0 0.4rem rgba(128, 128, 128, 0.59) inset;
 
+          > b {
+            font-size: 1.2rem;
+            @include text-overflow(2);
+            margin: 0.5rem 0;
+            line-height: 1.5rem;
+            text-align: center;
+          }
+
           > span {
-            font-size: 1.1rem;
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
+            font-size: 0.88rem;
+            color: #686868;
+            line-height: 1.2rem;
+            @include text-overflow(3);
+            text-align: center;
           }
 
           > .tags {
             width: 100%;
             height: 2rem;
             justify-content: flex-end;
+            margin-top: auto;
 
             > span {
               font-size: 0.1rem;
               line-height: 1rem;
-              background: #00f3ff;
               border-radius: 0.1rem;
               padding: 0.2rem 0.6rem;
               margin-right: 0.5rem;
               transition: all .15s linear;
               box-shadow: 0 0 0.2rem #00000078;
+              color: white;
 
               &:hover {
                 background: #444444;

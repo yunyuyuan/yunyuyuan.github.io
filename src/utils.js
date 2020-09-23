@@ -78,7 +78,19 @@ const colorList = [
     '#bf8600', '#7000ff',
 ]
 
-export function randomTagColor() {
+export function randomTagColorList(mdList) {
+    let list = {};
+    mdList.forEach(e => {
+        e.tags.forEach(t => {
+            if (Object.keys(list).indexOf(t) === -1) {
+                list[t] = randomColor();
+            }
+        })
+    })
+    return list;
+}
+
+export function randomColor() {
     return colorList[Math.ceil(Math.random() * 10) - 1]
 }
 
