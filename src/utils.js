@@ -70,6 +70,18 @@ export function stringToB64(s) {
     return btoa(unescape(encodeURIComponent(s)))
 }
 
+const colorList = [
+    '#ff1616', '#ac00d7',
+    '#ff16aa', '#3934ff',
+    '#1d94ec', '#00bf83',
+    '#27ce00', '#82a500',
+    '#bf8600', '#7000ff',
+]
+
+export function randomTagColor() {
+    return colorList[Math.ceil(Math.random() * 10) - 1]
+}
+
 // github
 export class GithubUtils {
     constructor(token, user, repo, committer) {

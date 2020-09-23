@@ -84,6 +84,7 @@ export default {
   > .list {
     width: 100%;
     flex-direction: column;
+    margin-top: 1rem;
 
     > .float-input {
       width: 60%;

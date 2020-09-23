@@ -1,7 +1,7 @@
 <template>
   <div class="theme" flex>
     <div class="head" flex>
-      <loading-button :loading="false" :icon="'reset'" :text="'重置为默认'" @click.native="reset"/>
+      <loading-button :loading="false" :icon="'reset'" :text="'还原默认'" @click.native="reset"/>
       <loading-button :loading="saving" :icon="'save'" :text="'保存'" @click.native="save"/>
     </div>
     <div class="body" flex>
@@ -44,8 +44,10 @@ import CodeMirror from 'codemirror';
 import 'codemirror/mode/sass/sass.js';
 
 import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/idea.css';
-import 'codemirror/theme/darcula.css';
+import '@/assets/style/code-mirror/codeMirror.scss';
+
+import '@/assets/style/code-mirror/light-code.scss';
+import '@/assets/style/code-mirror/dracula-code.scss';
 
 import defaultMarkdownStyle from '!!text-loader!@/assets/style/markdown-default.scss'
 
@@ -112,7 +114,7 @@ export default {
         this.codeMirror = new CodeMirror(this.$refs.textarea, {
           indentUnit: 2,
           tabSize: 2,
-          theme: 'idea',
+          theme: 'light',
           lineNumbers: true,
           line: true,
           mode: 'sass',
@@ -205,16 +207,18 @@ export default {
     height: calc(100% - 3rem);
     flex-grow: 0;
 
-    > .edit{
+    > .edit {
       width: calc(100% - 0.5rem);
       align-items: stretch;
       margin: 0.5rem 0.25rem 0.5rem 0.25rem;
-      height: calc(100% - 1rem);
+      height: calc(100% - 1rem - 2px);
       border: 1px solid;
-      > .left, > .right{
+
+      > .left, > .right {
         height: 100%;
         flex-direction: column;
-        > .icon{
+
+        > .icon {
           width: 100%;
           justify-content: center;
           padding: 0.4rem 0;
@@ -243,6 +247,12 @@ export default {
             width: 1.2rem;
             height: 1.2rem;
             fill: #91ffbd;
+          }
+
+          &:hover {
+            > svg {
+              fill: #ff925f;
+            }
           }
         }
 

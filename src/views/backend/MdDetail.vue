@@ -24,24 +24,30 @@
           <input :value="getInfo()?getInfo().cover: ''" @focusout="changeCover"/>
         </label>
       </div>
-      <div class="tags" flex>
-        <span class="tag-icon">
-          <svg-icon :name="'tag'"/>
-        </span>
-        <div v-for="(tag, idx) in getInfo()?getInfo().tags:[]" :class="{editing: tagEditIndex===idx}" :key="tag">
-          <input :disabled="tagEditIndex!==idx" @focusout="editTag" :data-old="tag" :data-idx="idx" :value="tag"/>
-          <div flex="">
-            <span @click="clickTrash(idx)">
-              <svg-icon :name="'trash'"/>
-            </span>
-            <span @click="clickEdit" :data-idx="idx">
-              <svg-icon :name="'edit'"/>
-            </span>
+      <div class="tags-time" flex>
+        <div class="tags" flex>
+          <span class="tag-icon">
+            <svg-icon :name="'tag'"/>
+          </span>
+          <div v-for="(tag, idx) in getInfo()?getInfo().tags:[]" :class="{editing: tagEditIndex===idx}" :key="tag">
+            <input :disabled="tagEditIndex!==idx" @focusout="editTag" :data-old="tag" :data-idx="idx" :value="tag"/>
+            <div flex="">
+              <span @click="clickTrash(idx)" title="删除">
+                <svg-icon :name="'trash'"/>
+              </span>
+              <span @click="clickEdit" :data-idx="idx" title="编辑">
+                <svg-icon :name="'edit'"/>
+              </span>
+            </div>
           </div>
+          <span class="add" @click="addTag" title="添加标签">
+            <svg-icon :name="'add'"/>
+          </span>
         </div>
-        <span class="add" @click="addTag">
-          <svg-icon :name="'add'"/>
-        </span>
+        <div class="time" flex>
+          <span><span>创建:</span>{{ parseTime(getInfo() ? getInfo().createTime : 0) }}</span>
+          <span><span>修改:</span>{{ parseTime(getInfo() ? getInfo().modifyTime : 0) }}</span>
+        </div>
       </div>
     </div>
     <div class="text" flex ref="text">
@@ -74,7 +80,7 @@
 
 <script>
 import {staticFolder} from "@/main";
-import {getText, parseAjaxError, parseMarkdown} from "@/utils";
+import {getText, parseAjaxError, parseMarkdown, parseTime} from "@/utils";
 import {mapState} from 'vuex'
 import FloatInput from "@/components/FloatInput";
 
@@ -87,8 +93,10 @@ import CodeMirror from 'codemirror';
 import 'codemirror/mode/markdown/markdown';
 
 import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/idea.css';
-import 'codemirror/theme/darcula.css';
+import '@/assets/style/code-mirror/codeMirror.scss';
+
+import '@/assets/style/code-mirror/light-markdown.scss';
+import '@/assets/style/code-mirror/dracula-markdown.scss';
 
 
 export default {
@@ -158,7 +166,7 @@ export default {
         this.codeMirror = new CodeMirror(this.$refs.textarea, {
           indentUnit: 2,
           tabSize: 2,
-          theme: 'idea',
+          theme: 'dracula',
           lineNumbers: true,
           line: true,
           mode: 'markdown',
@@ -179,6 +187,9 @@ export default {
     },
     getInfo() {
       return this.id === 'new' ? this.newInfo : this.info;
+    },
+    parseTime(t) {
+      return parseTime(t, true)
     },
 
     inputTitle(payload) {
@@ -219,27 +230,30 @@ export default {
       let info = this.getInfo();
       info.tags.push('输入标签' + info.tags.length)
     },
-    startResize (){
+    startResize() {
       let vue_ = this;
       let parentLeft = this.$refs.text.getBoundingClientRect().x,
           parentWidth = this.$refs.text.scrollWidth;
       document.body.setAttribute('unselectable', '');
+
       function resize(e) {
-        if (e.clientX >= document.body.clientWidth || e.clientY >= document.body.clientHeight ){
+        if (e.clientX >= document.body.clientWidth || e.clientY >= document.body.clientHeight) {
           return release()
         }
         let w = e.clientX - parentLeft;
-        if (w >= parentWidth/5 && w <= parentWidth*4/5){
-          vue_.mdWidth = w+'px';
+        if (w >= parentWidth / 5 && w <= parentWidth * 4 / 5) {
+          vue_.mdWidth = w + 'px';
           window.dispatchEvent(new Event('resize'))
         }
       }
+
       function release() {
         document.removeEventListener('mousemove', resize);
         document.removeEventListener('mouseup', release);
         document.body.removeAttribute('unselectable');
         vue_.resizing = false;
       }
+
       this.resizing = true;
       document.addEventListener('mousemove', resize);
       document.addEventListener('mouseup', release)
@@ -429,102 +443,124 @@ export default {
       }
     }
 
-    > .tags {
+    > .tags-time {
+      flex-direction: column;
       flex-grow: 1;
-      align-content: start;
-      flex-wrap: wrap;
 
-      > .tag-icon {
-        margin-right: 2rem;
-        display: flex;
-        align-items: center;
+      > .tags {
+        align-content: start;
+        flex-wrap: wrap;
 
-        > svg {
-          width: 2.6rem;
-          height: 2.6rem;
-        }
-      }
+        > .tag-icon {
+          margin-right: 2rem;
+          display: flex;
+          align-items: center;
 
-      > div {
-        margin: 1rem 0.8rem;
-        border-radius: 0.2rem;
-        justify-content: center;
-        position: relative;
-        height: 2.5rem;
-        box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.26);
-
-        > input {
-          font-size: 0.96rem;
-          width: 12rem;
-          height: 100%;
-          border-radius: inherit;
-          text-align: center;
-          background: white;
-          color: black;
-          border: 1px solid gray;
-          transition: all .2s linear;
-
-          &:disabled {
-            color: white;
-            width: 6rem;
-            background: #3e41ff;
-            border-color: transparent;
+          > svg {
+            width: 2.6rem;
+            height: 2.6rem;
           }
         }
 
         > div {
-          display: none;
-          position: absolute;
-          border-radius: inherit;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          justify-content: space-around;
-          background: rgba(0, 0, 0, 0.4);
+          margin: 1rem 0.8rem;
+          border-radius: 0.2rem;
+          justify-content: center;
+          position: relative;
+          height: 2.5rem;
+          box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.26);
 
-          > span {
-            cursor: pointer;
-            padding: 0.15rem 0.4rem;
-            border-radius: 0.2rem;
+          > input {
+            font-size: 0.96rem;
+            width: 12rem;
+            height: 100%;
+            border-radius: inherit;
+            text-align: center;
+            background: white;
+            color: black;
+            border: 1px solid gray;
+            transition: all .2s linear;
 
-            &:hover {
-              background: rgba(255, 255, 255, 0.31);
+            &:disabled {
+              color: white;
+              width: 6rem;
+              background: #3e41ff;
+              border-color: transparent;
             }
+          }
 
-            > svg {
-              width: 1.4rem;
-              height: 1.4rem;
+          > div {
+            display: none;
+            position: absolute;
+            border-radius: inherit;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.4);
+
+            > span {
+              cursor: pointer;
+              padding: 0.15rem 0.4rem;
+              border-radius: 0.2rem;
+
+              &:hover {
+                background: rgba(255, 255, 255, 0.31);
+              }
+
+              > svg {
+                width: 1.4rem;
+                height: 1.4rem;
+              }
+            }
+          }
+
+          &:not(.editing):hover {
+            > div {
+              display: flex;
             }
           }
         }
 
-        &:not(.editing):hover {
-          > div {
-            display: flex;
+        > .add {
+          cursor: pointer;
+          padding: 0.5rem;
+          border-radius: 50%;
+          background: #ffc722;
+          justify-content: center;
+          display: flex;
+          align-items: center;
+          margin-left: 1rem;
+          box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
+
+          &:hover {
+            background: #eab61f;
+          }
+
+          > svg {
+            width: 1.2rem;
+            height: 1.2rem;
+            fill: white;
           }
         }
       }
 
-      > .add {
-        cursor: pointer;
-        padding: 0.5rem;
-        border-radius: 50%;
-        background: #ffc722;
-        justify-content: center;
-        display: flex;
-        align-items: center;
-        margin-left: 1rem;
-        box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
+      > .time {
+        width: 100%;
+        height: 3rem;
+        justify-content: space-around;
+        margin-top: auto;
 
-        &:hover {
-          background: #eab61f;
-        }
+        > span {
+          color: #0003ff;
+          font-size: 0.9rem;
 
-        > svg {
-          width: 1.2rem;
-          height: 1.2rem;
-          fill: white;
+          > span {
+            font-size: 0.9em;
+            color: black;
+            margin-right: 0.5rem;
+          }
         }
       }
     }
@@ -544,18 +580,21 @@ export default {
 
       > .textarea {
         width: 100%;
-        > ::v-deep .CodeMirror{
+
+        > ::v-deep .CodeMirror {
           height: 100%;
           font-size: 0.9rem;
         }
       }
     }
-    >.resize{
+
+    > .resize {
       background: #828282;
       width: 0.3rem;
       cursor: e-resize;
       flex-shrink: 0;
-      &[resizing]{
+
+      &[resizing] {
         background: #505050;
       }
     }

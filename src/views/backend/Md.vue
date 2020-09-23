@@ -27,18 +27,18 @@
           <td class="title"><span>{{ item.name }}</span></td>
           <td class="summary"><span>{{ item.summary }}</span></td>
           <td class="time">
-            <div>
+            <div flex>
               <span>创建:</span>
               <a>{{ parseTime(item.createTime) }}</a>
             </div>
-            <div>
+            <div flex>
               <span>修改:</span>
               <a>{{ parseTime(item.modifyTime) }}</a>
             </div>
           </td>
           <td class="tags">
             <div flex="">
-              <span v-for="tag in item.tags">{{ tag }}</span>
+              <span :style="{background: ranColor()}" v-for="tag in item.tags">{{ tag }}</span>
             </div>
           </td>
           <td class="operate">
@@ -56,7 +56,7 @@ import SingleButton from "@/components/Button";
 import {mapState} from "vuex";
 import selfImage from '@/image/i.png'
 import LoadingButton from "@/components/LoadingButton";
-import {parseAjaxError, parseTime} from "@/utils";
+import {parseAjaxError, parseTime, randomTagColor} from "@/utils";
 
 export default {
   name: "Md",
@@ -91,6 +91,9 @@ export default {
     },
     parseTime(time) {
       return parseTime(time, true)
+    },
+    ranColor() {
+      return randomTagColor();
     },
     async removeMd(file) {
       if (this.deleting.bool) return;
@@ -234,42 +237,53 @@ export default {
               max-width: 10rem;
 
               > div {
+                flex-direction: column;
+
+                span, a {
+                  word-break: keep-all;
+                  white-space: nowrap;
+                }
+
                 > span {
-                  font-size: 0.88rem;
+                  font-size: 0.8rem;
                   margin-right: 0.4rem;
                 }
 
                 > a {
-                  font-size: 0.95rem;
+                  font-size: 0.88rem;
                   color: #0003ff;
                 }
               }
             }
-            &.tags{
-              width: 20%;
-              > div{
+            &.tags {
+              width: 15%;
+
+              > div {
                 flex-wrap: wrap;
-                > span{
+
+                > span {
                   margin: 0.4rem 0.2rem;
                   padding: 0.3rem 0.8rem;
                   font-size: 0.8rem;
                   border-radius: 0.2rem;
-                  background: #00f3ff;
+                  color: white;
                 }
               }
             }
             &.operate{
               width: 8%;
-              ::v-deep .single-button{
+              ::v-deep .single-button {
                 border-radius: 0.2rem;
                 background: #ff344f;
                 width: 2.4rem;
-                margin: auto;
-                &[deleting]{
+                margin: 0 0.5rem;
+
+                &[deleting] {
                   background: #727272;
                   cursor: not-allowed;
                 }
-                &:not([deleting]):hover{
+
+                &:not([deleting]):hover {
                   background: #f1314a;
                 }
               }

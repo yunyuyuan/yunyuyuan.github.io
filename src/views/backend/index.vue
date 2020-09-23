@@ -1,6 +1,7 @@
 <template>
   <div class="back-end">
     <div class="menu" :class="{hide: !showMenu}" flex>
+      <div class="pendant" flex="">
         <span class="toggle-menu" :class="{opened: showMenu}" @click="toggleMenu">
           <svg viewBox="0 0 100 100">
             <path class="line line1"
@@ -10,8 +11,12 @@
                   d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942"/>
           </svg>
         </span>
+        <router-link class="home" :to="{name: 'home'}" flex="">
+          <img :src="selfImage"/>
+        </router-link>
+      </div>
       <router-link v-for="item in menu" :key="item.name" :to="{name: item.pathName}"
-                   :class="{active: $route.name.indexOf(item.pathName)===0}" flex>
+                   :class="{active: $route.name.indexOf(item.pathName)===0}" class="item" flex>
         <span class="icon">
           <svg-icon :name="item.icon"/>
         </span>
@@ -34,12 +39,14 @@ import Login from "./Login";
 import {getText, parseAjaxError} from "@/utils";
 import LoadingButton from "@/components/LoadingButton";
 import {staticFolder} from "@/main";
+import selfImage from '@/image/i.png'
 
 export default {
   name: "index",
   components: {LoadingButton, Login},
   data() {
     return {
+      selfImage,
       showMenu: true,
       showLogin: false,
       updating: false,
@@ -119,45 +126,58 @@ export default {
       }
     }
 
-    > .toggle-menu {
+    > .pendant {
       position: absolute;
       top: 0;
       left: 100%;
+      flex-direction: column;
+      background: black;
 
-      > svg {
+      > .toggle-menu, > .home {
         width: 2.2rem;
         height: 2.2rem;
-        box-shadow: 0 0 0.4rem #00000063;
-        background: black;
-        cursor: pointer;
-        transition: background .1s linear;
+      }
 
-        &:hover {
-          background: #1e1e1e;
+      > .toggle-menu {
+        > svg {
+          box-shadow: 0 0 0.4rem #00000063;
+          cursor: pointer;
+          transition: background .1s linear;
+
+          &:hover {
+            background: #1e1e1e;
+          }
+
+          > .line {
+            fill: none;
+            stroke: #00ffff;
+            stroke-width: 6;
+            transition: stroke-dasharray .4s cubic-bezier(0.4, 0, 0.2, 1), stroke-dashoffset .4s cubic-bezier(0.4, 0, 0.2, 1);
+            @each $i, $n in (1, 207), (2, 60), (3, 207) {
+              &.line#{$i} {
+                stroke-dasharray: 60 $n;
+              }
+            }
+          }
         }
 
-        > .line {
-          fill: none;
-          stroke: #00ffff;
-          stroke-width: 6;
-          transition: stroke-dasharray .4s cubic-bezier(0.4, 0, 0.2, 1), stroke-dashoffset .4s cubic-bezier(0.4, 0, 0.2, 1);
-          @each $i, $n in (1, 207), (2, 60), (3, 207) {
-            &.line#{$i} {
-              stroke-dasharray: 60 $n;
-            }
+        @each $i, $n, $s in (1, -134, 90 207), (2, -30, 1 60), (3, -134, 90 207) {
+          &.opened > svg > .line#{$i} {
+            stroke-dasharray: $s;
+            stroke-dashoffset: $n;
           }
         }
       }
 
-      @each $i, $n, $s in (1, -134, 90 207), (2, -30, 1 60), (3, -134, 90 207) {
-        &.opened > svg > .line#{$i} {
-          stroke-dasharray: $s;
-          stroke-dashoffset: $n;
+      > .home {
+        > img {
+          width: 100%;
+          height: 100%;
         }
       }
     }
 
-    > a {
+    > .item {
       font-size: 1rem;
       color: black;
       text-decoration: none;
