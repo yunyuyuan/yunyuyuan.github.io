@@ -48,29 +48,7 @@ export default {
     },
     body() {
       return document.querySelector('section.body')
-    }
-  },
-  watch: {
-    $route() {
-      let anchor = this.$route.query.anchor,
-          body = this.body;
-      if (!anchor) return;
-      let header = document.getElementById(anchor);
-      if (header) {
-        let count = 30,
-            scrollNow = body.scrollTop,
-            step = (header.offsetTop + parseInt(window.getComputedStyle(this.$refs.markdown, null).getPropertyValue('padding-top')) - scrollNow - header.scrollHeight) / count;
-        if (this.animationHandle) clearInterval(this.animationHandle);
-        this.animationHandle = setInterval(() => {
-          scrollNow += step;
-          count--;
-          body.scrollTo(0, scrollNow);
-          if (count < 0) {
-            if (this.animationHandle) clearInterval(this.animationHandle);
-          }
-        }, 15)
-      }
-    }
+    },
   },
   async created() {
     this.id = this.$route.params.id;
@@ -103,16 +81,28 @@ export default {
       this.asideTop = this.body.scrollTop
     },
     toAnchor(id) {
-      let query = this.$route.query;
-      if (query.anchor === id) return;
-      let newQuery = {
-        anchor: id
+      let markdown = this.$refs.markdown;
+      let header = document.getElementById(id);
+      if (header) {
+        let fps = 60,
+            duration = 500,
+            count = fps * duration / 1000,
+            body = this.body;
+        let interval = header.getBoundingClientRect().top - markdown.getBoundingClientRect().top + 16,
+            scrollNow = body.scrollTop,
+            step = (interval - scrollNow) / count;
+        if (this.animationHandle) clearInterval(this.animationHandle);
+        this.animationHandle = setInterval(() => {
+          scrollNow += step;
+          count--;
+          this.body.scrollTo(0, scrollNow);
+          if (count === 0) {
+            this.body.scrollTo(0, interval)
+            clearInterval(this.animationHandle);
+          }
+        })
       }
-      Object.keys(query).forEach(k => {
-        if (k !== 'anchor') newQuery[k] = query[k]
-      })
-      this.$router.replace({query: newQuery})
-    }
+    },
   }
 }
 </script>
