@@ -4,12 +4,14 @@
       <aside class="info" :style="{transform: `translateY(${asideTop}px)`}" flex>
         <div :class="{'active': asideActive}">
           <div class="anchors" flex>
-            <span class="anchor" v-for="item in anchors">{{ item }}</span>
+            <span class="anchor" v-for="item in anchors" @click="toAnchor(item.id)">{{ item.text }}</span>
           </div>
           <div class="share"></div>
         </div>
-        <span class="toggle-aside" @click="asideActive = !asideActive">
-          {{ asideActive ? '关' : '开' }}
+        <span class="toggle-aside" :class="{active: asideActive}" @click="asideActive = !asideActive" flex
+              :title="`${asideActive?'关闭':'展开'}侧栏`">
+          <span class="top"></span>
+          <span class="bottom"></span>
         </span>
       </aside>
       <span :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html"></span>
@@ -31,6 +33,7 @@ export default {
       anchors: [],
       asideActive: true,
       asideTop: 0,
+      animationHandle: undefined
     }
   },
   computed: {
@@ -45,6 +48,28 @@ export default {
     },
     body() {
       return document.querySelector('section.body')
+    }
+  },
+  watch: {
+    $route() {
+      let anchor = this.$route.query.anchor,
+          body = this.body;
+      if (!anchor) return;
+      let header = document.getElementById(anchor);
+      if (header) {
+        let count = 30,
+            scrollNow = body.scrollTop,
+            step = (header.offsetTop + parseInt(window.getComputedStyle(this.$refs.markdown, null).getPropertyValue('padding-top')) - scrollNow - header.scrollHeight) / count;
+        if (this.animationHandle) clearInterval(this.animationHandle);
+        this.animationHandle = setInterval(() => {
+          scrollNow += step;
+          count--;
+          body.scrollTo(0, scrollNow);
+          if (count < 0) {
+            if (this.animationHandle) clearInterval(this.animationHandle);
+          }
+        }, 15)
+      }
     }
   },
   async created() {
@@ -64,7 +89,10 @@ export default {
         this.$nextTick(() => {
           this.anchors = [];
           this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').forEach(e => {
-            this.anchors.push(e.innerText);
+            this.anchors.push({
+              id: e.id,
+              text: e.innerText
+            });
           })
         })
       } else {
@@ -73,6 +101,17 @@ export default {
     },
     moveAside() {
       this.asideTop = this.body.scrollTop
+    },
+    toAnchor(id) {
+      let query = this.$route.query;
+      if (query.anchor === id) return;
+      let newQuery = {
+        anchor: id
+      }
+      Object.keys(query).forEach(k => {
+        if (k !== 'anchor') newQuery[k] = query[k]
+      })
+      this.$router.replace({query: newQuery})
     }
   }
 }
@@ -122,9 +161,44 @@ export default {
         > .share{
         }
       }
-      > .toggle-aside{
+      > .toggle-aside {
         background: white;
-        padding: 1rem;
+        border-radius: 50%;
+        width: 3rem;
+        height: 3rem;
+        position: relative;
+
+        > span {
+          transition: all .2s ease-out;
+          position: absolute;
+          width: 50%;
+          height: 0.25rem;
+          background: black;
+          border-radius: 0.15rem;
+          margin: 0 25%;
+
+          &.top {
+            transform: rotate(45deg);
+            top: 30%;
+          }
+
+          &.bottom {
+            transform: rotate(-45deg);
+            bottom: 30%;
+          }
+        }
+
+        &.active {
+          > span {
+            &.top {
+              top: 45%;
+            }
+
+            &.bottom {
+              bottom: 45%;
+            }
+          }
+        }
       }
     }
     > .--markdown{

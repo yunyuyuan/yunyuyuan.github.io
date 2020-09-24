@@ -34,6 +34,7 @@ const routes = [
                 meta: {
                     title: '文章详情'
                 },
+                query: {anchor: true},
                 component: () => import('@/views/article/Detail'),
             },
 

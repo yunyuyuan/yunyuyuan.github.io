@@ -32,15 +32,18 @@ export default {
   z-index: $z-index-loading;
   background: transparent;
   justify-content: center;
-  transition: box-shadow 1s;
+  transition: box-shadow .5s;
   box-shadow: 0 0 25vh 50vw rgba(255, 255, 255, 0.9) inset;
-  &.fade-enter, &.fade-enter-to, &.fade-leave{
+
+  &.fade-enter, &.fade-enter-to, &.fade-leave {
     box-shadow: 0 0 25vh 50vw rgba(255, 255, 255, 0.9) inset;
   }
-  &.fade-leave-to{
+
+  &.fade-leave-to {
     box-shadow: 0 0 25vh -10vh rgba(255, 255, 255, 0.9) inset;
   }
-  > svg{
+
+  > svg {
     width: 4rem;
     height: 4rem;
   }
