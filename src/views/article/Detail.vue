@@ -16,6 +16,7 @@
       </aside>
       <span :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html"></span>
     </div>
+    <a href="https://github.com/login/oauth/authorize?client_id=81ee614d8099242a1bce">登录</a>
   </div>
 </template>
 
