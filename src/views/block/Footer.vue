@@ -9,7 +9,7 @@
       </a>
     </div>
     <div class="copyright" flex>
-      <span>Copyright (c) @ {{ config.copyright }} <b>{{ config.name }} | {{ domain }}</b></span>
+      <span>Copyright (c) © {{ config.copyright }} <b>{{ config.name }} | {{ domain }}</b></span>
       <span>All Right Reserve</span>
     </div>
   </footer>
