@@ -1,7 +1,7 @@
 <template>
   <div class="detail">
     <div class="content" flex>
-      <aside class="info" :style="{transform: `translateY(${asideTop}px)`}" flex>
+      <aside class="info" :style="{transform: `translateY(${asideTop}px)`}" ref="aside" flex>
         <div :class="{'active': asideActive}">
           <div class="anchors" flex>
             <span class="anchor" v-for="item in anchors" @click="toAnchor(item.id)">{{ item.text }}</span>
@@ -16,7 +16,7 @@
       </aside>
       <span :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html"></span>
     </div>
-    <a href="https://github.com/login/oauth/authorize?client_id=81ee614d8099242a1bce">登录</a>
+    <div class="valine"></div>
   </div>
 </template>
 
@@ -24,6 +24,9 @@
 import {getText} from "@/utils";
 import {staticFolder} from "@/main";
 import {mapState} from "vuex";
+
+import Valine from 'valine';
+import {comment, getContent, getNumber} from "@/views/comment/utils";
 
 export default {
   name: "Detail",
@@ -50,12 +53,22 @@ export default {
     body() {
       return document.querySelector('section.body')
     },
+    url() {
+      return encodeURI(location.hash.replace(/^#/, ''))
+    }
   },
   async created() {
     this.id = this.$route.params.id;
     await this.getHtml();
     document.title = '文章-' + this.info.name;
     this.body.addEventListener('scroll', this.moveAside)
+  },
+  mounted() {
+    // new Valine({
+    //   el: this.$el.querySelector('.valine') ,
+    //   appId: 'lxqgNPckQJMDFguQ6CjVskrg-gzGzoHsz',
+    //   appKey: '8WT5Fa6VLrXjkBQP68scqpCf'
+    // });
   },
   destroyed() {
     this.body.removeEventListener('scroll', this.moveAside)
@@ -79,7 +92,9 @@ export default {
       }
     },
     moveAside() {
-      this.asideTop = this.body.scrollTop
+      if (this.$refs.markdown.scrollHeight - this.body.scrollTop > this.$refs.aside.scrollHeight) {
+        this.asideTop = this.body.scrollTop
+      }
     },
     toAnchor(id) {
       let markdown = this.$refs.markdown;
@@ -104,6 +119,24 @@ export default {
         })
       }
     },
+    async comment() {
+      let res = await comment({
+        nick: 'haha',
+        site: 'baidu.com',
+        comment: '',
+        ismsg: false,
+        parentid: undefined,
+        referid: undefined,
+        createtime: ''
+      });
+      console.log(res[1])
+    },
+    async getCommentNum() {
+      let res = await getNumber();
+    },
+    async getComment() {
+      res = await getContent(1, 15);
+    }
   }
 }
 </script>
@@ -155,9 +188,10 @@ export default {
       > .toggle-aside {
         background: white;
         border-radius: 50%;
-        width: 3rem;
-        height: 3rem;
+        width: 2rem;
+        height: 2rem;
         position: relative;
+        cursor: pointer;
 
         > span {
           transition: all .2s ease-out;
@@ -192,15 +226,16 @@ export default {
         }
       }
     }
-    > .--markdown{
+    > .--markdown {
       border-radius: 0.6rem;
       box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.4);
       background: white;
       padding: 2rem 1.5rem;
-      width: calc(100% - 6rem);
+      width: calc(100% - 5rem);
       transition: all .15s ease-out;
-      &.show-aside{
-        width: calc(100% - 18rem);
+
+      &.show-aside {
+        width: calc(100% - 17rem);
       }
     }
   }
