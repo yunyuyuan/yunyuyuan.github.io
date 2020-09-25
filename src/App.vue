@@ -130,4 +130,7 @@ table{
     border-radius: 0.6rem;
     background: transparent;
 }
+.CodeMirror-scrollbar-filler{
+  background: transparent !important;
+}
 </style>

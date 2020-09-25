@@ -16,7 +16,7 @@
           </span>
           <div class="textarea" ref="textarea"></div>
         </div>
-        <span class="resize" :resizing="resizing" @mousedown="startResize"></span>
+        <resizer :orient="'h'" @start="startResize" @resize="doResize"/>
         <div class="right" flex>
           <span class="icon" flex>
             <svg-icon :name="'brash'"/>
@@ -50,11 +50,11 @@ import '@/assets/style/code-mirror/light-code.scss';
 import '@/assets/style/code-mirror/dracula-code.scss';
 
 import defaultMarkdownStyle from '!!text-loader!@/assets/style/markdown-default.scss'
-
+import Resizer from "@/components/Resizer";
 
 export default {
   name: "Theme",
-  components: {LoadingButton},
+  components: {Resizer, LoadingButton},
   data() {
     return {
       saving: false,
@@ -62,7 +62,10 @@ export default {
       html: parseMarkdown(testText),
       codeMirror: null,
       mdWidth: '40%',
-      resizing: false,
+      resizeStart: {
+        pos: false,
+        size: false
+      }
     }
   },
   computed: {
@@ -125,32 +128,18 @@ export default {
         this.codeMirror.setValue(this.scss);
       }
     },
-    startResize (){
-      let vue_ = this;
-      let parentLeft = this.$refs.text.getBoundingClientRect().x,
-          parentWidth = this.$refs.text.clientWidth;
-      document.body.setAttribute('unselectable', '');
-      function resize(e) {
-        if (e.clientX >= document.body.clientWidth || e.clientY >= document.body.clientHeight ){
-          return release()
-        }
-        let w = e.clientX - parentLeft;
-        if (w >= parentWidth/5 && w <= parentWidth*4/5){
-          vue_.mdWidth = w+'px';
-          window.dispatchEvent(new Event('resize'))
-        }
+    startResize (startPos){
+      this.resizeStart = {
+        pos: startPos,
+        size: this.$refs.text.querySelector('.left').scrollWidth
+      };
+    },
+    doResize (delta){
+      let parentWidth = this.$refs.text.scrollWidth;
+      let newSize = this.resizeStart.size + (delta-this.resizeStart.pos);
+      if (newSize > parentWidth/5 && newSize < parentWidth*4/5){
+        this.mdWidth = `${newSize}px`;
       }
-
-      function release() {
-        document.removeEventListener('mousemove', resize);
-        document.removeEventListener('mouseup', release);
-        document.body.removeAttribute('unselectable');
-        vue_.resizing = false;
-      }
-
-      this.resizing = true;
-      document.addEventListener('mousemove', resize);
-      document.addEventListener('mouseup', release)
     },
     reset() {
       if (!this.codeMirror) return;
@@ -268,10 +257,9 @@ export default {
           }
         }
       }
-      >.resize{
+      > ::v-deep .resizer{
         background: #828282;
         width: 0.3rem;
-        cursor: e-resize;
         flex-shrink: 0;
         &[resizing]{
           background: #505050;

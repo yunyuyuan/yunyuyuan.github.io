@@ -16,6 +16,7 @@
       </aside>
       <span :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html"></span>
     </div>
+    <the-comment/>
     <div class="valine"></div>
   </div>
 </template>
@@ -27,9 +28,11 @@ import {mapState} from "vuex";
 
 import Valine from 'valine';
 import {comment, getContent, getNumber} from "@/views/comment/utils";
+import TheComment from "@/views/comment/index";
 
 export default {
   name: "Detail",
+  components: {TheComment},
   data() {
     return {
       id: '',
@@ -64,11 +67,11 @@ export default {
     this.body.addEventListener('scroll', this.moveAside)
   },
   mounted() {
-    new Valine({
-      el: this.$el.querySelector('.valine'),
-      appId: 'lxqgNPckQJMDFguQ6CjVskrg-gzGzoHsz',
-      appKey: '8WT5Fa6VLrXjkBQP68scqpCf'
-    });
+    // new Valine({
+    //   el: this.$el.querySelector('.valine'),
+    //   appId: 'lxqgNPckQJMDFguQ6CjVskrg-gzGzoHsz',
+    //   appKey: '8WT5Fa6VLrXjkBQP68scqpCf'
+    // });
   },
   destroyed() {
     this.body.removeEventListener('scroll', this.moveAside)
@@ -237,6 +240,12 @@ export default {
         width: calc(100% - 17rem);
       }
     }
+  }
+  > ::v-deep .comment{
+    width: 90%;
+    margin: 2rem auto;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+    padding: 2.5rem 0;
   }
 }
 </style>

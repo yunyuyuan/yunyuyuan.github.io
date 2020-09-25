@@ -54,27 +54,12 @@
       <div class="markdown" :style="{width: mdWidth}" flex>
         <div ref="textarea" class="textarea"></div>
       </div>
-      <span class="resize" :resizing="resizing" @mousedown="startResize"></span>
+      <resizer :orient="'h'" @start="startResize" @resize="doResize"/>
       <div class="html" flex>
         <span class="--markdown" v-html="htmlText"></span>
       </div>
     </div>
-    <div class="markdown-guide" v-show="showGuide" @click.self="showGuide=false" is-dialog>
-      <div class="inner">
-        <p>文章markdown语法说明</p>
-        <ul>
-          <li>
-            <a href="https://guides.github.com/features/mastering-markdown/#syntax" target="_blank">
-              markdown基础语法+GFM
-            </a>
-          </li>
-          <li v-for="item in guide">
-            <b>{{ item[0] }}:</b>
-            <span>{{ item[1] }}</span>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <markdown-help v-show="showGuide" @click.native.self="showGuide=false"/>
   </div>
 </template>
 
@@ -97,11 +82,12 @@ import '@/assets/style/code-mirror/codeMirror.scss';
 
 import '@/assets/style/code-mirror/light-markdown.scss';
 import '@/assets/style/code-mirror/dracula-markdown.scss';
-
+import Resizer from "@/components/Resizer";
+import MarkdownHelp from "@/views/block/MarkdownHelp";
 
 export default {
   name: "MdDetail",
-  components: {LoadingButton, FloatInput},
+  components: {MarkdownHelp, Resizer, LoadingButton, FloatInput},
   data() {
     return {
       defaultCover,
@@ -110,7 +96,10 @@ export default {
       mdText: '',
       codeMirror: null,
       mdWidth: '40%',
-      resizing: false,
+      resizeStart: {
+        pos: false,
+        size: false
+      },
       saving: false,
       newInfo: {
         name: "编辑标题",
@@ -121,11 +110,6 @@ export default {
         summary: "编辑简介",
         tags: []
       },
-      guide: [
-        ['![sticker](aru/10)', 'aru表情包第10个表情'],
-        ['#[google](https://google.com)', 'target=_blank的链接'],
-        ['![width x height](url)', '链接为url,width和height为指定值的图片(null代表未指定,可用%)'],
-      ]
     }
   },
   computed: {
@@ -230,33 +214,18 @@ export default {
       let info = this.getInfo();
       info.tags.push('输入标签' + info.tags.length)
     },
-    startResize() {
-      let vue_ = this;
-      let parentLeft = this.$refs.text.getBoundingClientRect().x,
-          parentWidth = this.$refs.text.scrollWidth;
-      document.body.setAttribute('unselectable', '');
-
-      function resize(e) {
-        if (e.clientX >= document.body.clientWidth || e.clientY >= document.body.clientHeight) {
-          return release()
-        }
-        let w = e.clientX - parentLeft;
-        if (w >= parentWidth / 5 && w <= parentWidth * 4 / 5) {
-          vue_.mdWidth = w + 'px';
-          window.dispatchEvent(new Event('resize'))
-        }
+    startResize (startPos){
+      this.resizeStart = {
+        pos: startPos,
+        size: this.$refs.text.querySelector('.markdown').scrollWidth
+      };
+    },
+    doResize (delta){
+      let parentWidth = this.$refs.text.scrollWidth;
+      let newSize = this.resizeStart.size + (delta-this.resizeStart.pos);
+      if (newSize > parentWidth/5 && newSize < parentWidth*4/5){
+        this.mdWidth = `${newSize}px`;
       }
-
-      function release() {
-        document.removeEventListener('mousemove', resize);
-        document.removeEventListener('mouseup', release);
-        document.body.removeAttribute('unselectable');
-        vue_.resizing = false;
-      }
-
-      this.resizing = true;
-      document.addEventListener('mousemove', resize);
-      document.addEventListener('mouseup', release)
     },
     async save() {
       if (this.saving) return;
@@ -587,18 +556,14 @@ export default {
         }
       }
     }
-
-    > .resize {
+    > ::v-deep .resizer{
       background: #828282;
       width: 0.3rem;
-      cursor: e-resize;
       flex-shrink: 0;
-
-      &[resizing] {
+      &[resizing]{
         background: #505050;
       }
     }
-
     > .html {
       overflow-y: auto;
       display: block;
@@ -613,34 +578,5 @@ export default {
     }
   }
 
-  > .markdown-guide {
-    > .inner {
-      padding: 1rem 3rem;
-
-      > p {
-        font-size: 1.1rem;
-        font-weight: bold;
-      }
-
-      > ul {
-        > li {
-          margin: 1.5rem 0;
-
-          > a, > b {
-            font-size: 1rem;
-            color: #0003ff;
-          }
-
-          > b {
-            margin-right: 1rem;
-          }
-
-          > span {
-            font-size: 0.9rem;
-          }
-        }
-      }
-    }
-  }
 }
 </style>

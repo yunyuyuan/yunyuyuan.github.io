@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="list">
   </div>
 </template>
 
@@ -10,5 +10,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.list{
 
+}
 </style>
