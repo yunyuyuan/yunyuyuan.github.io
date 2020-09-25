@@ -47,25 +47,27 @@ footer{
   box-shadow: 0 0 1rem #020202;
   z-index: $z-index-footer;
   >.favicon{
-    margin: 0 2rem;
-    height: 4rem;
-    > img{
+    margin: 0 1.6rem;
+    height: 3.5rem;
+
+    > img {
       height: 100%;
       object-fit: contain;
       border-radius: 0.5rem;
     }
   }
   > .social-media{
-    > a{
-        margin: 0 1rem;
-        background: white;
-        border-radius: 0.4rem;
-        padding: 0.2rem 0.4rem;
-        justify-content: center;
-        > svg{
-            width: 1.6rem;
-            height: 1.6rem;
-        }
+    > a {
+      margin: 0 0.8rem;
+      background: white;
+      border-radius: 0.25rem;
+      padding: 0.2rem 0.4rem;
+      justify-content: center;
+
+      > svg {
+        width: 1.4rem;
+        height: 1.4rem;
+      }
     }
   }
   >.copyright{
