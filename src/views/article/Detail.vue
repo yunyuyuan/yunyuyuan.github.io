@@ -64,11 +64,11 @@ export default {
     this.body.addEventListener('scroll', this.moveAside)
   },
   mounted() {
-    // new Valine({
-    //   el: this.$el.querySelector('.valine') ,
-    //   appId: 'lxqgNPckQJMDFguQ6CjVskrg-gzGzoHsz',
-    //   appKey: '8WT5Fa6VLrXjkBQP68scqpCf'
-    // });
+    new Valine({
+      el: this.$el.querySelector('.valine'),
+      appId: 'lxqgNPckQJMDFguQ6CjVskrg-gzGzoHsz',
+      appKey: '8WT5Fa6VLrXjkBQP68scqpCf'
+    });
   },
   destroyed() {
     this.body.removeEventListener('scroll', this.moveAside)
@@ -129,13 +129,12 @@ export default {
         referid: undefined,
         createtime: ''
       });
-      console.log(res[1])
     },
     async getCommentNum() {
       let res = await getNumber();
     },
     async getComment() {
-      res = await getContent(1, 15);
+      let res = await getContent(1, 15);
     }
   }
 }

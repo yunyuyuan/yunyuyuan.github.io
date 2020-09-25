@@ -2,7 +2,17 @@
   <div class="write">
     <div class="inner">
       <div class="textarea" ref="textarea"></div>
-      <div class="utils"></div>
+      <div class="utils">
+        <span title="表情">
+          <svg-icon :name="'cmt-sticker'"/>
+        </span>
+        <span title="图片">
+          <svg-icon :name="'cmt-image'"/>
+        </span>
+        <span title="预览">
+          <svg-icon :name="'cmt-preview'"/>
+        </span>
+      </div>
       <div class="submit">
         <float-input @input="inputNick" :name="'昵称'" :value="nick"/>
         <float-input @input="inputSite" :name="'网址'" :value="site"/>
