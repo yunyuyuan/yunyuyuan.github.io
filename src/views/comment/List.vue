@@ -5,7 +5,8 @@
 
 <script>
 export default {
-  name: "ListComment"
+  name: "ListComment",
+  methods: {}
 }
 </script>
 

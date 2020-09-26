@@ -1,6 +1,7 @@
 <template>
     <div class="message" flex>
-      <div v-for="(item,idx) in list" :class="item.type" @click="removeItem(idx)" v-if="item.display" flex>
+      <div v-for="(item,idx) in list" :class="item.type" @click="removeItem(idx)" v-if="item.display" flex
+           :key="item.id">
         <svg-icon :name="item.type"/>
         <span>{{ item.text }}</span>
       </div>
@@ -29,20 +30,23 @@
             putMessage(type, text) {
                 // 清除之前的元素
                 if (this.list.length > 4) {
-                    this.list.splice(0, 4)
+                  this.list = [];
                 }
                 let obj = {
-                    type: type,
-                    text: text,
-                    display: true
+                  type: type,
+                  text: text,
+                  display: true,
+                  id: this.msgId
                 };
-                this.list.push(obj);
+              this.msgId += 1;
+              this.list.push(obj);
                 setTimeout(() => {
                     obj.display = false
                 }, 5000)
             },
             removeItem(idx) {
-                this.list.splice(idx, 1)
+              this.list[idx].display = false;
+              this.list.splice(idx, 1)
             }
         }
     }

@@ -4,7 +4,7 @@
       <aside class="info" :style="{transform: `translateY(${asideTop}px)`}" ref="aside" flex>
         <div :class="{'active': asideActive}">
           <div class="anchors" flex>
-            <span class="anchor" v-for="item in anchors" @click="toAnchor(item.id)">{{ item.text }}</span>
+            <span class="anchor" v-for="item in anchors" @click="toAnchor(item.el)">{{ item.text }}</span>
           </div>
           <div class="share"></div>
         </div>
@@ -16,8 +16,7 @@
       </aside>
       <span :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html"></span>
     </div>
-    <the-comment/>
-    <div class="valine"></div>
+    <the-comment :info="{title: this.info.file}"/>
   </div>
 </template>
 
@@ -26,8 +25,6 @@ import {getText} from "@/utils";
 import {staticFolder} from "@/main";
 import {mapState} from "vuex";
 
-import Valine from 'valine';
-import {comment, getContent, getNumber} from "@/views/comment/utils";
 import TheComment from "@/views/comment/index";
 
 export default {
@@ -85,7 +82,7 @@ export default {
           this.anchors = [];
           this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').forEach(e => {
             this.anchors.push({
-              id: e.id,
+              el: e,
               text: e.innerText
             });
           })
@@ -99,15 +96,14 @@ export default {
         this.asideTop = this.body.scrollTop
       }
     },
-    toAnchor(id) {
+    toAnchor(el) {
       let markdown = this.$refs.markdown;
-      let header = document.getElementById(id);
-      if (header) {
+      if (el) {
         let fps = 60,
-            duration = 500,
+            duration = 1000,
             count = fps * duration / 1000,
             body = this.body;
-        let interval = header.getBoundingClientRect().top - markdown.getBoundingClientRect().top + 16,
+        let interval = el.getBoundingClientRect().top - markdown.getBoundingClientRect().top + 16,
             scrollNow = body.scrollTop,
             step = (interval - scrollNow) / count;
         if (this.animationHandle) clearInterval(this.animationHandle);
@@ -122,23 +118,6 @@ export default {
         })
       }
     },
-    async comment() {
-      let res = await comment({
-        nick: 'haha',
-        site: 'baidu.com',
-        comment: '',
-        ismsg: false,
-        parentid: undefined,
-        referid: undefined,
-        createtime: ''
-      });
-    },
-    async getCommentNum() {
-      let res = await getNumber();
-    },
-    async getComment() {
-      let res = await getContent(1, 15);
-    }
   }
 }
 </script>

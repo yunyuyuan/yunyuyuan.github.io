@@ -5,7 +5,7 @@
       <div class="utils" flex>
         <div class="sticker" ref="sticker" :class="{active: showSticker}" flex>
           <div class="content">
-            <div class="inner" :style="{width: `${config.sticker.length}00%`, left: `${stickerNow*-100}%`}" flex>
+            <div class="inner" :style="{width: `${config.sticker.length}00%`, left: `${stickerSlideNow*-100}%`}" flex>
               <div v-for="item in config.sticker" :style="{width: `${100/config.sticker.length}%`}" flex>
                 <span v-for="idx in item.count" @click="addSticker(item.folder, idx)" flex>
                   <img :src="`${staticFolder}/sticker/${item.folder}/${idx}.png`"/>
@@ -14,7 +14,8 @@
             </div>
           </div>
           <div class="switch" flex>
-            <span v-for="(item, idx) in config.sticker" @click="stickerNow = idx" :class="{active: stickerNow===idx}" flex>{{ item.name }}</span>
+            <span v-for="(item, idx) in config.sticker" @click="stickerSlideNow = idx"
+                  :class="{active: stickerSlideNow===idx}" flex>{{ item.name }}</span>
           </div>
         </div>
         <a class="md" @click="showGuide = true" title="关于markdown" flex>
@@ -23,10 +24,10 @@
         <span @click="enableSticker" title="表情" :class="{active: showSticker}" flex>
           <svg-icon :name="'cmt-sticker'"/>
         </span>
-        <span title="图片" flex>
+        <span @click="enableUploadImg" title="图片" :class="{active: showUploadImg}" flex>
           <svg-icon :name="'cmt-image'"/>
         </span>
-        <span title="预览" flex>
+        <span @click="enablePreview" title="预览" :class="{active: showPreview}" flex>
           <svg-icon :name="'cmt-preview'"/>
         </span>
       </div>
@@ -34,11 +35,14 @@
       <div class="submit" flex>
         <float-input class="nick" @input="inputNick" :size="0.8" :name="'昵称'" :value="nick"/>
         <float-input class="site" @input="inputSite" :size="0.8" :name="'网址'" :value="site"/>
-        <loading-button :loading="submitting" :icon="'save'" :text="'提交'"/>
+        <loading-button @click.native="submitComment" :loading="loading" :icon="'save'" :text="'提交'"/>
       </div>
     </div>
-    <div class="preview">
-      <span v-html="html"></span>
+    <div class="preview" v-show="showPreview">
+      <span class="--markdown" v-html="html"></span>
+    </div>
+    <div class="upload-img" v-show="showUploadImg">
+
     </div>
     <markdown-help v-show="showGuide" @click.native.self="showGuide=false"/>
   </div>
@@ -65,17 +69,20 @@ import MarkdownHelp from "@/views/block/MarkdownHelp";
 export default {
   name: "WriteComment",
   components: {MarkdownHelp, Resizer, LoadingButton, FloatInput},
+  props: ['loading'],
   data() {
     return {
       staticFolder,
       comment: '',
-      showSticker: false,
-      stickerNow: 0,
       showGuide: false,
+      showSticker: false,
+      showUploadImg: false,
+      showPreview: false,
+      stickerSlideNow: 0,
       nick: '',
       site: '',
-      submitting: false,
       codeMirror: null,
+      focusAt: 0,
       textareaHeight: '10rem',
       resizeStart: {
         pos: false,
@@ -91,56 +98,71 @@ export default {
   },
   mounted() {
     this.codeMirror = new CodeMirror(this.$refs.textarea, {
-          indentUnit: 2,
-          tabSize: 2,
-          theme: 'light',
-          line: true,
-          mode: 'markdown',
+      indentUnit: 2,
+      tabSize: 2,
+      theme: 'light',
+      line: true,
+      mode: 'markdown',
     });
     this.codeMirror.on('change', () => {
       this.comment = this.codeMirror.getValue()
     });
+    this.codeMirror.on('blur', () => {
+      this.focusAt = this.codeMirror.getCursor();
+    })
   },
   methods: {
-    enableSticker (e){
-      if (this.showSticker){
-        document.removeEventListener('click', handle);
+    enableSticker(e) {
+      if (this.showSticker) {
+        document.removeEventListener('click', this.handleStickerDiv)
         this.showSticker = false;
         return
       }
       this.showSticker = true;
+      e.stopPropagation();
+      document.addEventListener('click', this.handleStickerDiv)
+    },
+    handleStickerDiv(e) {
       let vue_ = this,
           stickerDiv = this.$refs.sticker;
-      e.stopPropagation();
-      function handle (e){
-        let target = e.target;
-        while (true) {
-          if (target !== stickerDiv) {
-            target = target.parentElement;
-            if (!target){
-              document.removeEventListener('click', handle);
-              vue_.showSticker = false;
-              break;
-            }
-          }else {
-            break
+      let target = e.target;
+      while (true) {
+        if (target !== stickerDiv) {
+          target = target.parentElement;
+          if (!target) {
+            document.removeEventListener('click', this.handleStickerDiv);
+            vue_.showSticker = false;
+            break;
           }
+        } else {
+          break
         }
       }
-      document.addEventListener('click', handle)
     },
-    addSticker (folder, idx){
-      console.log(folder, idx)
+    addSticker(folder, idx) {
+      if (!this.focusAt) {
+        this.$message.warning('请先点击输入框!');
+        return
+      }
+      this.codeMirror.replaceRange(`![sticker](${folder}/${idx})`, this.focusAt);
+      document.removeEventListener('click', this.handleStickerDiv);
+      this.showSticker = false;
     },
-    startResize (startPos){
+    enableUploadImg() {
+
+    },
+    enablePreview() {
+      this.showPreview = !this.showPreview;
+    },
+    startResize(startPos) {
       this.resizeStart = {
         pos: startPos,
         size: this.$refs.textarea.scrollHeight
       };
     },
-    doResize (delta){
-      let newSize = this.resizeStart.size + (delta-this.resizeStart.pos);
-      if (newSize > 100 && newSize < 1000){
+    doResize(delta) {
+      let newSize = this.resizeStart.size + (delta - this.resizeStart.pos);
+      if (newSize > 100 && newSize < 1000) {
         this.textareaHeight = `${newSize}px`;
       }
     },
@@ -150,6 +172,13 @@ export default {
     inputSite(r) {
       this.site = r[1]
     },
+    async submitComment() {
+      this.$emit('submit', {
+        nick: this.nick,
+        site: this.site,
+        text: this.comment
+      })
+    }
   },
 }
 </script>
@@ -307,14 +336,23 @@ export default {
         margin: 0 10%;
         width: 60%;
       }
-      >.loading-button{
+      > .loading-button{
         margin-right: 1rem;
         flex-shrink: 0;
       }
     }
   }
-  >.preview{
-    display: none;
+  > .preview{
+    width: 100%;
+    max-height: 50rem;
+    overflow-y: auto;
+    border-bottom: 1px solid #cc00ff;
+    > span{
+      padding: 0.5rem 0.2rem;
+      width: calc(100% - 1rem);
+    }
+  }
+  > .upload-img{
   }
 }
 </style>
