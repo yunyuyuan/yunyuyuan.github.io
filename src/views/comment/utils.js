@@ -4,7 +4,7 @@ import siteConfig from '@/site-config';
 const owner = siteConfig.owner,
     repo = `${owner}.github.io`,
     headers = {
-        Authorization: 'token 51ebb721308ba5828657d424e2eb198bd179cd0b'
+        Authorization: 'token d4de14d0c8436957198b251965a70d0b8caeaeba'
     },
     http = function (payload) {
         return new Promise(resolve => {

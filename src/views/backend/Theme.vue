@@ -1,7 +1,7 @@
 <template>
   <div class="theme" flex>
     <div class="head" flex>
-      <loading-button :loading="false" :icon="'reset'" :text="'还原默认'" @click.native="reset"/>
+      <loading-button :icon="'reset'" :text="'还原默认'" @click.native="reset"/>
       <loading-button :loading="saving" :icon="'save'" :text="'保存'" @click.native="save"/>
     </div>
     <div class="body" flex>

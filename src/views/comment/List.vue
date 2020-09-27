@@ -6,30 +6,38 @@
           <a class="avatar" target="_blank" :href="item.site">
             <img :src="item.avatar"/>
           </a>
-          <div class="body" flex>
-            <div class="head">
-              <b>{{ item.nick }}</b>
-              <span>{{ item.time }}</span>
+          <div flex>
+            <div class="body" flex>
+              <div class="head" flex>
+                <a :href="item.site" target="_blank">{{ item.nick }}</a>
+                <span>{{ item.time }}</span>
+              </div>
+              <div class="content">
+                <span>{{ item.content }}</span>
+              </div>
+              <div class="foot">
+                <span @click="replayId = item.id">回复</span>
+                <write-comment v-if="replayId === item.id" :cancel="true" :init-height="'100px'" :loading="submitting"
+                               @cancel="replayId = -1" @submit="replayComment"/>
+              </div>
             </div>
-            <div class="content">
-              <span>{{ item.content }}</span>
-            </div>
-            <div class="foot">
-              <span>回复</span>
-            </div>
-          </div>
-        </div>
-        <div class="children" v-if="item.children.length">
-          <div v-for="child in item.children">
-            <div class="content">
-              <a class="avatar" target="_blank" :href="child.site">
-                <img :src="child.avatar"/>
-              </a>
-              <b>{{ child.nick }}</b>
-              <span>{{ child.content }}</span>
-            </div>
-            <div class="foot">
-              <span>回复</span>
+            <div v-if="item.children.length" class="children">
+              <div v-for="child in item.children">
+                <div class="content" flex>
+                  <a :href="child.site" class="avatar" target="_blank">
+                    <img :src="child.avatar"/>
+                  </a>
+                  <div>
+                    <a :href="child.site" target="_blank">{{ child.nick }}</a>
+                    <span>{{ child.content }}</span>
+                  </div>
+                </div>
+                <div class="foot">
+                  <span @click="replayId = child.id">回复</span>
+                  <write-comment v-if="replayId === child.id" :cancel="true" :init-height="'100px'"
+                                 :loading="submitting" @cancel="replayId = -1" @submit="replayComment"/>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -43,15 +51,19 @@
 
 <script>
 import {getCommentChildren, getPageComment} from "@/views/comment/utils";
+import WriteComment from "@/views/comment/Write";
 
 export default {
   name: "ListComment",
+  components: {WriteComment},
   data() {
     return {
       count: 0,
       pageNow: 1,
       onePageItemsCount: 10,
       items: [],
+      replayId: -1,
+      submitting: false,
     }
   },
   computed: {
@@ -102,6 +114,9 @@ export default {
           }
         }
       }
+    },
+    replayComment(payload) {
+
     }
   }
 }
@@ -116,72 +131,136 @@ export default {
     flex-direction: column;
 
     > .item {
-      border-bottom: 1px solid gray;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       width: 100%;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
 
       > .master {
+        align-items: flex-start;
+
         > .avatar {
+          margin: 0.3rem 1rem 0 0;
+
           > img {
-            width: 2rem;
-            height: 2rem;
+            width: 2.4rem;
+            height: 2.4rem;
             border-radius: 50%;
-            border: 1px solid gray;
+            object-fit: cover;
           }
         }
 
-        > .body {
-          flex-grow: 1;
-          flex-direction: column;
-
-          > .head {
-            width: 100%;
-
-            > b {
-
-            }
-
-            > span {
-
-            }
-          }
-
-          > .content {
-            width: 100%;
-            flex-grow: 1;
-
-            > span {
-
-            }
-          }
-
-          > .foot {
-            width: 100%;
-          }
-        }
-      }
-
-      > .children {
         > div {
-          > .content {
-            > a {
-              > img {
-                width: 1.6rem;
-                height: 1.6rem;
-                border-radius: 50%;
+          flex-direction: column;
+          flex-grow: 1;
+
+          > .body {
+            width: 100%;
+            flex-direction: column;
+
+            > .head {
+              width: 100%;
+              justify-content: space-between;
+              padding: 0.4rem 0;
+
+              > a {
+                font-size: 0.98rem;
+                color: black;
+                text-decoration: none;
+              }
+
+              > span {
+                font-size: 0.7rem;
+                margin-right: 0.6rem;
               }
             }
 
-            > b {
+            > .content {
+              width: 100%;
+              flex-grow: 1;
+              padding: 0.8rem 0;
 
+              > span {
+                font-size: 0.9rem;
+              }
             }
 
-            > span {
+            > .foot {
+              width: 100%;
 
+              > span {
+                cursor: pointer;
+                font-size: 0.85rem;
+
+                &:hover {
+                  color: #ff1616;
+                }
+              }
+
+              > .write {
+                width: 100%;
+              }
             }
           }
 
-          > .foot {
+          > .children {
+            width: 100%;
+            margin-top: 0.6rem;
+            border-top: 1px dotted rgba(0, 0, 0, 0.1);
 
+            > div {
+              padding: 0.3rem 0;
+              margin: 0.3rem 0;
+
+              > .content {
+                align-items: flex-start;
+
+                > a {
+                  margin-right: 0.8rem;
+
+                  > img {
+                    width: 1.6rem;
+                    height: 1.6rem;
+                    border-radius: 50%;
+                    object-fit: cover;
+                  }
+                }
+
+                > div {
+                  line-height: 1.5rem;
+                  flex-grow: 1;
+
+                  > a {
+                    margin-right: 0.8rem;
+                    font-size: 0.94rem;
+                    text-decoration: none;
+                    color: #0066ff;
+                  }
+
+                  > span {
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                  }
+                }
+              }
+
+              > .foot {
+                margin-top: 0.5rem;
+
+                > span {
+                  cursor: pointer;
+                  font-size: 0.85rem;
+
+                  &:hover {
+                    color: #ff1616;
+                  }
+                }
+
+                > .write {
+                  width: 100%;
+                }
+              }
+            }
           }
         }
       }

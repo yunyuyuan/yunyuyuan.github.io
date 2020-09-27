@@ -23,7 +23,7 @@
         <span class="name">{{ item.name }}</span>
       </router-link>
       <loading-button class="update" :loading="updating" :text="'更新'" :icon="'update'" @click.native="getConfig"/>
-      <loading-button :loading="false" :text="'登录'" :icon="'account'" @click.native="showLogin = true"/>
+      <loading-button :icon="'account'" :text="'登录'" @click.native="showLogin = true"/>
     </div>
     <login v-show="showLogin" @save="loginFinish" @hide="showLogin = false"/>
     <div class="body">

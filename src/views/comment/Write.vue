@@ -33,9 +33,8 @@
       </div>
       <resizer :orient="'v'" @start="startResize" @resize="doResize"/>
       <div class="submit" flex>
-        <float-input class="nick" @input="inputNick" :size="0.8" :name="'昵称'" :value="nick"/>
-        <float-input class="site" @input="inputSite" :size="0.8" :name="'网址'" :value="site"/>
-        <loading-button @click.native="submitComment" :loading="loading" :icon="'save'" :text="'提交'"/>
+        <single-button v-if="cancel" :size="0.8" :text="'取消'" @click.native="$emit('cancel')"/>
+        <loading-button :icon="'save'" :loading="loading" :size="0.8" :text="'提交'" @click.native="submitComment"/>
       </div>
     </div>
     <div class="preview" v-show="showPreview">
@@ -65,11 +64,25 @@ import '@/assets/style/code-mirror/dracula-markdown.scss';
 import {mapState} from "vuex";
 import {staticFolder} from "@/main";
 import MarkdownHelp from "@/views/block/MarkdownHelp";
+import SingleButton from "@/components/Button";
 
 export default {
   name: "WriteComment",
-  components: {MarkdownHelp, Resizer, LoadingButton, FloatInput},
-  props: ['loading'],
+  components: {SingleButton, MarkdownHelp, Resizer, LoadingButton, FloatInput},
+  props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    cancel: {
+      type: Boolean,
+      default: false
+    },
+    initHeight: {
+      type: String,
+      default: '10rem'
+    }
+  },
   data() {
     return {
       staticFolder,
@@ -83,7 +96,7 @@ export default {
       site: '',
       codeMirror: null,
       focusAt: 0,
-      textareaHeight: '10rem',
+      textareaHeight: '0',
       resizeStart: {
         pos: false,
         size: false
@@ -92,9 +105,12 @@ export default {
   },
   computed: {
     ...mapState(['config']),
-    html (){
+    html() {
       return parseMarkdown(this.comment)
     }
+  },
+  created() {
+    this.textareaHeight = this.$props.initHeight;
   },
   mounted() {
     this.codeMirror = new CodeMirror(this.$refs.textarea, {
@@ -206,12 +222,13 @@ export default {
         font-size: 0.9rem;
       }
     }
-    >.utils{
+    >.utils {
       justify-content: flex-end;
-      padding: 0.2rem;
+      padding: 0.1rem;
       border-top: 1px dashed gray;
       position: relative;
-      >.sticker{
+
+      > .sticker {
         width: 90%;
         position: absolute;
         left: 5%;
@@ -325,20 +342,21 @@ export default {
         background: #505050;
       }
     }
-    >.submit{
-      padding: 0.8rem 0;
+    >.submit {
+      padding: 0.2rem 0;
       justify-content: flex-end;
-      >.nick{
-        margin: 0 10%;
-        width: 30%;
-      }
-      >.site{
-        margin: 0 10%;
-        width: 60%;
-      }
-      > .loading-button{
+
+      > .loading-button, > .single-button {
         margin-right: 1rem;
         flex-shrink: 0;
+      }
+
+      > .single-button {
+        background: #ff5858;
+
+        &:hover {
+          background: gray;
+        }
       }
     }
   }
