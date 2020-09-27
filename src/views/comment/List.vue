@@ -143,18 +143,14 @@ export default {
       return t.format(`YYYY-MM-DD HH:mm`)
     },
     calcMdToHtml(text, isReply) {
-      let hasReply = '';
+      text = text.replaceAll('<', '&lt;').replace(/(?<!^|\n)>/g, '&gt;')
       if (isReply) {
         let matcher = text.match(/^@(\S+)([\s\S]*)/);
         if (matcher) {
-          hasReply = `<a class="reply" target="_blank" href="https://gtihub.com/${matcher[1]}">回复@ ${matcher[1]}</a>`;
-          text = matcher[2];
+          text = `<a class="reply" target="_blank" href="https://gtihub.com/${matcher[1]}">回复@ ${matcher[1]}</a>` + matcher[2];
         }
       }
-      return hasReply + parseMarkdown(
-          // <>转义
-          text.replaceAll('<', '&lt;').replace(/(?<!^|\n)>/g, '&gt;')
-      )
+      return parseMarkdown(text)
     },
     async replayComment(payload) {
       let res = await createReplyComment({
