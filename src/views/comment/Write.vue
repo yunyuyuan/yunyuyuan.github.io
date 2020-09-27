@@ -203,7 +203,7 @@ export default {
         width: 100%;
         height: 100%;
         border-radius: inherit;
-        font-size: 0.95rem;
+        font-size: 0.9rem;
       }
     }
     >.utils{

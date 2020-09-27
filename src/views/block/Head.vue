@@ -16,7 +16,7 @@ import Headroom from "headroom.js";
 import selfImage from '@/image/i.png'
 
 export default {
-  name: "BlogList",
+  name: "TheHead",
   data() {
     return {
       selfImage,

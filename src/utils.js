@@ -55,6 +55,8 @@ export function parseAjaxError(err) {
                 return "错误: 未授权,请检查token是否正确";
             case 404:
                 return "错误: 不存在那个文件";
+            case 403:
+                return "错误: 访问受限";
             default:
                 return `错误码: ${status}`
         }
