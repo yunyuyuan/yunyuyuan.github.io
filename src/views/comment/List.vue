@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import {getCommentChildren, getPageComment} from "@/views/comment/utils";
+import {getCommentChildren, getReactions, getPageComment} from "@/views/comment/utils";
 import WriteComment from "@/views/comment/Write";
 
 export default {
@@ -84,6 +84,7 @@ export default {
         this.items = [];
         for (const e of data.items) {
           let children = [];
+          let reactions = {};
           this.items.push({
             id: e.id,
             avatar: e.user.avatar_url,
@@ -93,12 +94,19 @@ export default {
             content: e.body,
             identity: e.author_association,
             children: children,
+            reactions: reactions
           });
+          console.log(e.number, e.id)
+          getReactions('', e.number).then(res => {
+            if (res[0]) {
+            }
+          })
           // 获取子评论
           if (e.comments > 0) {
             getCommentChildren(e.comments_url).then(res => {
               if (res[0]) {
                 for (const e of res[1].data) {
+                  let reactions = {};
                   children.push({
                     id: e.id,
                     avatar: e.user.avatar_url,
@@ -107,6 +115,12 @@ export default {
                     time: e.updated_at,
                     content: e.body,
                     identity: e.author_association,
+                    reactions: reactions
+                  });
+                  console.log(e.number, e.id)
+                  getReactions('/comments', e.id).then(res => {
+                    if (res[0]) {
+                    }
                   })
                 }
               }

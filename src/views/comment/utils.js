@@ -4,13 +4,16 @@ import siteConfig from '@/site-config';
 const owner = siteConfig.owner,
     repo = `${owner}.github.io`,
     headers = {
-        Authorization: 'token d4de14d0c8436957198b251965a70d0b8caeaeba'
+        Authorization: 'token 2f7b4059aa68bffa8df9d5c5624c9fe9fb1a0f0c'
     },
     http = function (payload) {
         return new Promise(resolve => {
             axios({
                 ...payload,
-                headers: headers
+                headers: {
+                    ...(payload.headers || {}),
+                    ...headers
+                }
             }).then(res => {
                 resolve([true, res])
             }).catch(err => {
@@ -33,6 +36,16 @@ export async function getCommentChildren(url) {
         url: url,
         method: 'get',
     });
+}
+
+export async function getReactions(type, number) {
+    return await http({
+        url: `https://api.github.com/repos/${owner}/${repo}/issues${type}/${number}/reactions`,
+        method: 'get',
+        headers: {
+            Accept: "application/vnd.github.squirrel-girl-preview"
+        }
+    })
 }
 
 export async function createComment(payload) {
