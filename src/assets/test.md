@@ -10,10 +10,10 @@
 hr 分割线
 ---
 
-**strong 粗体**  
-__strong 强调__  
-*em 斜体*  
-_em 斜体_  
+**strong 粗体**
+__strong 强调__
+*em 斜体*
+_em 斜体_
 
 > blockquote
 > > 嵌套

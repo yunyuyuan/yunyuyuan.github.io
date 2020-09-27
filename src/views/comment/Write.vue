@@ -92,8 +92,6 @@ export default {
       showUploadImg: false,
       showPreview: false,
       stickerSlideNow: 0,
-      nick: '',
-      site: '',
       codeMirror: null,
       focusAt: 0,
       textareaHeight: '0',
@@ -157,7 +155,7 @@ export default {
     },
     addSticker(folder, idx) {
       if (!this.focusAt) {
-        this.$message.warning('请先点击输入框!');
+        this.$message.warning('请先点选择输入框!');
         return
       }
       this.codeMirror.replaceRange(`![sticker](${folder}/${idx})`, this.focusAt);
@@ -182,16 +180,8 @@ export default {
         this.textareaHeight = `${newSize}px`;
       }
     },
-    inputNick(r) {
-      this.nick = r[1]
-    },
-    inputSite(r) {
-      this.site = r[1]
-    },
     async submitComment() {
       this.$emit('submit', {
-        nick: this.nick,
-        site: this.site,
         text: this.comment
       })
     }

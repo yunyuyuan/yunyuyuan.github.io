@@ -4,7 +4,7 @@
 
     </div>
     <write-comment @submit="submit" :loading="submitting"/>
-    <list-comment/>
+    <list-comment :id="this.info.id"/>
   </div>
 </template>
 
@@ -17,7 +17,12 @@ import {parseAjaxError, parseMarkdown} from "@/utils";
 export default {
   name: "TheComment",
   components: {ListComment, WriteComment},
-  props: ['info'],
+  props: {
+    info: {
+      type: Object,
+      default: {}
+    }
+  },
   data() {
     return {
       submitting: false
@@ -28,8 +33,8 @@ export default {
       if (this.submitting) return;
       this.submitting = true;
       let res = await createComment({
-        title: this.info.title,
-        body: `[${encodeURIComponent(payload.nick)},${encodeURIComponent(payload.site)}]${parseMarkdown(payload.text)}`,
+        title: this.info.id,
+        body: payload.text
       });
       if (res[0]) {
         this.$message.success('评论成功!')

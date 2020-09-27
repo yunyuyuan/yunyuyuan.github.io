@@ -16,7 +16,7 @@
       </aside>
       <span :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html"></span>
     </div>
-    <the-comment :info="{title: this.info.file}"/>
+    <the-comment :info="{id: this.info.file}"/>
   </div>
 </template>
 

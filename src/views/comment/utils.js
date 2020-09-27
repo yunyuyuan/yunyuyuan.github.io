@@ -4,7 +4,7 @@ import siteConfig from '@/site-config';
 const owner = siteConfig.owner,
     repo = `${owner}.github.io`,
     headers = {
-        Authorization: 'token 2f7b4059aa68bffa8df9d5c5624c9fe9fb1a0f0c'
+        Authorization: 'token f5c05b40309dd20328e96ba000d44cfe1c10d37c'
     },
     http = function (payload) {
         return new Promise(resolve => {
@@ -52,6 +52,14 @@ export async function createComment(payload) {
     return await http({
         url: `https://api.github.com/repos/${owner}/${repo}/issues`,
         data: payload,
-        method: 'get',
+        method: 'post',
+    });
+}
+
+export async function createReplyComment(payload) {
+    return await http({
+        url: `https://api.github.com/repos/${owner}/${repo}/issues/${payload.number}/comments`,
+        data: payload,
+        method: 'post',
     });
 }

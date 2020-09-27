@@ -21,8 +21,11 @@
     color: #4251ff;
     font-size: 0.7666666667rem; }
   .--markdown p {
-    font-size: 0.95rem;
-    line-height: 1rem; }
+      font-size: 0.95rem;
+      white-space: pre-line;
+
+      line-height: 1.5rem;
+  }
   .--markdown img {
     display: block;
     width: 80%;
