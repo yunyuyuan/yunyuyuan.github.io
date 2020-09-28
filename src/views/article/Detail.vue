@@ -224,7 +224,7 @@ export default {
     width: 90%;
     margin: 2rem auto;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
-    padding: 2.5rem 0;
+    padding: 1rem 0;
   }
 }
 </style>

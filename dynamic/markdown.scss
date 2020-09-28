@@ -2,19 +2,23 @@
 .--markdown {
   width: 100%;
   display: block;
-  @each $size in 1, 2, 3, 4, 5, 6{
-    h#{$size}{
+  word-break: break-word;
+  @each $size in 1, 2, 3, 4, 5, 6 {
+    h#{$size} {
       color: #4251ff;
       font-size: 1/$size * 1rem + 0.6rem;
     }
   }
-  p{
+
+  p {
     font-size: 0.95rem;
-    line-height: 1.5rem;
+    line-height: 1.2rem;
     white-space: pre-line;
   }
-  a[href]{
+
+  a[href] {
   }
+
   img {
     display: block;
     width: 80%;

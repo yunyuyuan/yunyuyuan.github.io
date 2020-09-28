@@ -231,7 +231,7 @@ export default {
         overflow: hidden;
         transition: height .1s linear;
         &.active{
-          height: 40vh;
+          height: 30vh;
           border: 1px solid #ababab;
           box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.4);
         }
@@ -244,24 +244,28 @@ export default {
             height: 100%;
             transition: all .1s linear;
             position: relative;
-            >div{
+            >div {
               height: 100%;
               overflow-y: auto;
               flex-wrap: wrap;
-              >span{
-                width: 4rem;
-                height: 4rem;
+
+              > span {
+                width: 3rem;
+                height: 3rem;
                 border: 1px solid #d8d8d8;
                 cursor: pointer;
                 background: white;
                 justify-content: center;
-                &:hover{
+
+                &:hover {
                   background: #e6e6e6;
-                  >img{
+
+                  > img {
                     transform: scale(1.1);
                   }
                 }
-                >img{
+
+                > img {
                   transition: transform .1s ease-out;
                   width: 70%;
                   height: 70%;
@@ -271,22 +275,26 @@ export default {
             }
           }
         }
-        >.switch{
+
+        > .switch {
           width: 100%;
-          height: 2rem;
+          height: 1.5rem;
           border-top: 1px solid #676767;
           background: #ececec;
-          >span{
+
+          > span {
             height: 100%;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             justify-content: center;
             width: 4rem;
             border-right: 1px solid #b5b5b5;
             cursor: pointer;
-            &:not(.active):hover{
+
+            &:not(.active):hover {
               background: #bababa;
             }
-            &.active{
+
+            &.active {
               background: #333333;
               color: white;
             }

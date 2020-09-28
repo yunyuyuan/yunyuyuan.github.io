@@ -15,8 +15,8 @@
             </div>
             <div class="foot">
               <span class="time">{{ calcTime(item.time) }}</span>
-              <span class="reply" @click="replayNumber = item.number;replayChild = null">回复</span>
-              <write-comment v-if="replayNumber === item.number && replayChild === null" :cancel="true"
+              <span class="reply" @click="clickReply(item.number, null)">回复</span>
+              <write-comment v-if="replayNumber === item.number && replyChild === null" :cancel="true"
                              :init-height="'100px'" :loading="submitting"
                              @cancel="replayNumber = -1" @submit="replayComment"/>
             </div>
@@ -34,8 +34,8 @@
               </div>
               <div class="foot">
                 <span class="time">{{ calcTime(child.time) }}</span>
-                <span class="reply" @click="replayNumber = item.number;replayChild = child">回复</span>
-                <write-comment v-if="replayNumber === item.number && replayChild === child" :cancel="true"
+                <span class="reply" @click="clickReply(item.number, child)">回复</span>
+                <write-comment v-if="replayNumber === item.number && replyChild === child" :cancel="true"
                                :init-height="'100px'"
                                :loading="submitting" @cancel="replayNumber = -1" @submit="replayComment"/>
               </div>
@@ -44,8 +44,11 @@
         </div>
       </div>
     </div>
-    <div class="pagination">
-
+    <div class="pagination" flex>
+      <span v-for="p in pages" :class="{active: p === pageNow,disabled: p===''}" @click="toPage(p)">
+        {{ p }}
+        <svg-icon v-if="p===''" :name="'ellipsis'"/>
+      </span>
     </div>
   </div>
 </template>
@@ -55,6 +58,8 @@ import {getCommentChildren, getReactions, getPageComment, createReplyComment} fr
 import WriteComment from "@/views/comment/Write";
 import dayjs from 'dayjs';
 import {parseAjaxError, parseMarkdown} from "@/utils";
+
+const pagerCount = 8;
 
 export default {
   name: "ListComment",
@@ -72,13 +77,40 @@ export default {
       onePageItemsCount: 10,
       items: [],
       replayNumber: -1,
-      replayChild: null,
+      replyChild: null,
       submitting: false,
     }
   },
   computed: {
     pages() {
-
+      let i = 1,
+          list = [this.pageNow],
+          pageCount = Math.ceil(this.count / this.onePageItemsCount);
+      while (true) {
+        if (list.length < pagerCount && list.length < pageCount) {
+          let next = this.pageNow + i;
+          if (next > 0 && next <= pageCount) {
+            list.push(next)
+          }
+        } else {
+          break
+        }
+        let newI = i * -1;
+        if (i < 0) {
+          newI++;
+        }
+        i = newI;
+      }
+      list = list.sort((a, b) => {
+        return a > b ? 1 : -1
+      })
+      if (list[1] !== 2) {
+        list.splice(0, 1, 1, '')
+      }
+      if (list[list.length - 2] !== pageCount - 1) {
+        list.splice(list.length - 1, 1, '', pageCount)
+      }
+      return list
     }
   },
   async created() {
@@ -147,15 +179,26 @@ export default {
       if (isReply) {
         let matcher = text.match(/^@(\S+)([\s\S]*)/);
         if (matcher) {
-          text = `<a class="reply" target="_blank" href="https://gtihub.com/${matcher[1]}">回复@ ${matcher[1]}</a>` + matcher[2];
+          text = `<span class="reply">回复<a target="_blank" href="https://gtihub.com/${matcher[1]}">@${matcher[1]}<a/></span>` + matcher[2];
         }
       }
       return parseMarkdown(text)
     },
+    async toPage(p) {
+      if (p !== '') {
+        this.pageNow = p;
+        await this.updatePage();
+      }
+    },
+
+    clickReply(o, t) {
+      this.replayNumber = o;
+      this.replyChild = t;
+    },
     async replayComment(payload) {
       let res = await createReplyComment({
         number: this.replayNumber,
-        body: `@${this.replayChild.nick} payload.text`
+        body: (this.replyChild ? `@${this.replyChild.nick} ` : '') + payload.text
       });
       if (res[0]) {
         this.$message.success('评论成功!');
@@ -177,33 +220,41 @@ export default {
   > .items{
     width: 90%;
     flex-direction: column;
-    > .item{
+
+    > .item {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       width: 100%;
       margin-bottom: 0.5rem;
       padding-bottom: 0.5rem;
       align-items: flex-start;
-      > .avatar{
+      overflow: hidden;
+
+      > .avatar {
         margin: 0.3rem 1rem 0 0;
-        > img{
+
+        > img {
           width: 2.4rem;
           height: 2.4rem;
           border-radius: 50%;
           object-fit: cover;
         }
       }
-      > div{
+
+      > div {
+        width: calc(100% - 3.4rem);
         flex-direction: column;
-        flex-grow: 1;
-        > .body{
+
+        > .body {
           width: 100%;
           flex-direction: column;
-          > .head{
+
+          > .head {
             width: 100%;
             justify-content: space-between;
             padding: 0.4rem 0;
-            > a{
-              font-size: 0.8rem;
+
+            > a {
+              font-size: 0.84rem;
               color: black;
               text-decoration: none;
             }
@@ -236,17 +287,30 @@ export default {
                   object-fit: cover;
                 }
               }
-              > div{
+              > div {
                 line-height: 1.5rem;
-                flex-grow: 1;
-                > a{
+
+                > a {
                   margin-right: 0.8rem;
-                  font-size: 0.8rem;
+                  font-size: 0.84rem;
                   text-decoration: none;
-                  color: #0066ff;
+                  color: #000000;
                 }
-                > span{
+
+                > span {
+                  width: 100%;
                   font-size: 0.95rem;
+
+                  ::v-deep span.reply {
+                    margin-right: 0.6rem;
+                    font-size: 0.84rem;
+
+                    > a {
+                      text-decoration: none;
+                      color: #007bff;
+                      margin-left: 0.3rem;
+                    }
+                  }
                 }
               }
             }
@@ -264,17 +328,52 @@ export default {
         > .reply{
           cursor: pointer;
           font-size: 0.65rem;
-          &:hover{
+
+          &:hover {
             color: #ff1616;
           }
         }
-        > .write{
+
+        > .write {
           width: 100%;
         }
       }
     }
   }
-  > .pagination{
+
+  > .pagination {
+    margin-top: 1rem;
+    width: 100%;
+    justify-content: center;
+
+    > span:not(.disabled) {
+      cursor: pointer;
+      background: #69f6ff;
+      border-radius: 0.2rem;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.9rem;
+      margin: 0 0.5rem;
+      transition: all .1s linear;
+      color: black;
+
+      &:hover {
+        color: white;
+        background: #005eff;
+      }
+
+      &.active {
+        color: white;
+        background: #424242;
+      }
+    }
+
+    > span.disabled {
+      > svg {
+        width: 2.4rem;
+        height: 2.4rem;
+        margin: 0 0.8rem;
+      }
+    }
   }
 }
 </style>

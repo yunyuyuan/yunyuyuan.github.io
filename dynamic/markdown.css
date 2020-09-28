@@ -1,6 +1,7 @@
 .--markdown {
   display: block;
   width: 100%;
+  word-break: break-all;
 }
   .--markdown h1 {
     color: #4251ff;
@@ -21,10 +22,10 @@
     color: #4251ff;
     font-size: 0.7666666667rem; }
   .--markdown p {
-      font-size: 0.95rem;
-      white-space: pre-line;
+    font-size: 0.95rem;
+    white-space: pre-line;
 
-      line-height: 1.5rem;
+    line-height: 1.2rem;
   }
   .--markdown img {
     display: block;

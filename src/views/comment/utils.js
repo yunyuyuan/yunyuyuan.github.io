@@ -3,8 +3,10 @@ import siteConfig from '@/site-config';
 
 const owner = siteConfig.owner,
     repo = `${owner}.github.io`,
+// const owner = 'vuejs',
+//     repo = `vue`,
     headers = {
-        Authorization: 'token f5c05b40309dd20328e96ba000d44cfe1c10d37c'
+        Authorization: ''
     },
     http = function (payload) {
         return new Promise(resolve => {
@@ -24,9 +26,22 @@ const owner = siteConfig.owner,
 
 // ======================== methods ============================
 
+export async function getLoginInfo(token) {
+    headers.Authorization = `token ${token}`
+    return await http({
+        url: `https://api.github.com/user`,
+        method: 'get',
+    });
+}
+
+export function removeToken() {
+    headers.Authorization = ''
+}
+
 export async function getPageComment(page, count, title) {
     return await http({
-        url: `https://api.github.com/search/issues?q=${title}+in:title+repo:${owner}/${repo}&page=${page}&per_page=${count}`,
+        // url: `https://api.github.com/search/issues?q=repo:${owner}/${repo}+is:open&page=${page}&per_page=${count}`,
+        url: `https://api.github.com/search/issues?q=${title}+in:title+repo:${owner}/${repo}+is:open&page=${page}&per_page=${count}`,
         method: 'get',
     });
 }

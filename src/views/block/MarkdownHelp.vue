@@ -34,6 +34,8 @@ export default {
 
 <style scoped lang="scss">
 .markdown-guide {
+  color: black;
+
   > .inner {
     padding: 1rem 3rem;
 
@@ -48,7 +50,7 @@ export default {
 
         > a, > b {
           font-size: 1rem;
-          color: #0003ff;
+          color: #0066d8;
         }
 
         > b {
