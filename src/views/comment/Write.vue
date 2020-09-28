@@ -40,8 +40,25 @@
     <div class="preview" v-show="showPreview">
       <span class="--markdown" v-html="html"></span>
     </div>
-    <div class="upload-img" v-show="showUploadImg">
-
+    <div v-show="showUploadImg" class="upload-img" is-dialog @click.self="showUploadImg = false">
+      <div class="inner" flex>
+        <div class="help">
+          <p>关于上传图片</p>
+          <b>本站不存储图片，如果你想发送图片，建议使用以下方式</b>
+          <div flex>
+            <a href="https://imgchr.com/" target="_blank">路过图床</a>
+            <img src="https://s1.ax1x.com/2020/09/28/0VPxBQ.png"/>
+          </div>
+          <div flex>
+            <a href="https://sm.ms/" target="_blank">sm.ms</a>
+            <img src="https://s1.ax1x.com/2020/09/28/0VPvng.png"/>
+          </div>
+        </div>
+        <div class="submit" flex>
+          <float-input :name="'url'" :size="0.9" :value="imageUrl" @input="inputImgUrl"/>
+          <single-button :disabled="!imageUrl" :size="0.9" :text="'确定'" @click.native="insertImg"/>
+        </div>
+      </div>
     </div>
     <markdown-help v-show="showGuide" @click.native.self="showGuide=false"/>
   </div>
@@ -90,6 +107,7 @@ export default {
       showGuide: false,
       showSticker: false,
       showUploadImg: false,
+      imageUrl: '',
       showPreview: false,
       stickerSlideNow: 0,
       codeMirror: null,
@@ -163,7 +181,19 @@ export default {
       this.showSticker = false;
     },
     enableUploadImg() {
-
+      this.imageUrl = '';
+      this.showUploadImg = true
+    },
+    inputImgUrl(payload) {
+      this.imageUrl = payload[1]
+    },
+    insertImg() {
+      if (!this.focusAt) {
+        this.$message.warning('请先点选择输入框!');
+        return
+      }
+      this.codeMirror.replaceRange(`![common](${this.imageUrl})`, this.focusAt);
+      this.showUploadImg = false;
     },
     enablePreview() {
       this.showPreview = !this.showPreview;
@@ -368,7 +398,68 @@ export default {
       width: calc(100% - 1rem);
     }
   }
-  > .upload-img{
+  > .upload-img {
+    flex-direction: column;
+
+    > .inner {
+      width: 80%;
+      height: 80%;
+      flex-direction: column;
+
+      > .help {
+        width: 100%;
+        overflow-y: auto;
+
+        > p {
+          width: 100%;
+          text-align: center;
+          font-size: 1.2rem;
+          margin: 0.6rem 0;
+          color: black;
+        }
+
+        > b {
+          font-size: 0.9rem;
+          color: red;
+        }
+
+        > div {
+          width: 95%;
+          border: 1px solid;
+          margin: 0.5rem auto;
+          flex-direction: column;
+
+          > a {
+            font-size: 1.1rem;
+            color: #ff6600;
+            font-weight: bold;
+          }
+
+          > img {
+            width: 90%;
+            margin: 0.8rem auto;
+            object-fit: contain;
+            box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+          }
+        }
+      }
+
+      > .submit {
+        padding: 1rem 0 0.5rem 0;
+        width: 100%;
+        justify-content: center;
+        border-top: 1px solid gray;
+
+        > .float-input {
+          width: 40%;
+          margin-right: 1rem;
+        }
+
+        > .single-button {
+          background: #0073ff;
+        }
+      }
+    }
   }
 }
 </style>

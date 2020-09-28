@@ -104,11 +104,13 @@ export default {
       list = list.sort((a, b) => {
         return a > b ? 1 : -1
       })
-      if (list[1] !== 2) {
-        list.splice(0, 1, 1, '')
-      }
-      if (list[list.length - 2] !== pageCount - 1) {
-        list.splice(list.length - 1, 1, '', pageCount)
+      if (list.length > pagerCount) {
+        if (list[1] !== 2) {
+          list.splice(0, 1, 1, '')
+        }
+        if (list[list.length - 2] !== pageCount - 1) {
+          list.splice(list.length - 1, 1, '', pageCount)
+        }
       }
       return list
     }
@@ -202,6 +204,7 @@ export default {
       });
       if (res[0]) {
         this.$message.success('评论成功!');
+        await this.updatePage();
       } else {
         this.$message.error(`评论失败 ${parseAjaxError(res[1])}`)
       }
@@ -227,7 +230,6 @@ export default {
       margin-bottom: 0.5rem;
       padding-bottom: 0.5rem;
       align-items: flex-start;
-      overflow: hidden;
 
       > .avatar {
         margin: 0.3rem 1rem 0 0;

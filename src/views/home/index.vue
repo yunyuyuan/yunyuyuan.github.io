@@ -3,21 +3,24 @@
     <div class="btns" flex>
       <router-link :to="{name: 'article.list'}" flex>
         <svg-icon :name="'article'"/>
-        <span>文章</span>
+        <span class="name">文章</span>
+        <span class="tip">一些"技术"文章</span>
+      </router-link>
+      <router-link :to="{name: 'record'}" flex>
+        <svg-icon :name="'record'"/>
+        <span class="name">记录</span>
+        <span class="tip">生活中记录</span>
       </router-link>
       <router-link :to="{name: 'msgBoard'}" flex>
         <svg-icon :name="'comments'"/>
-        <span>留言板</span>
-      </router-link>
-      <router-link :to="{name: 'backend.config'}" flex>
-        <svg-icon :name="'backend'"/>
-        <span>后台</span>
+        <span class="name">留言板</span>
+        <span class="tip">小伙伴们留言</span>
       </router-link>
     </div>
     <div class="info" flex>
       <div class="head" flex>
         <img :src="selfImage"/>
-        <span>{{ config.name }}</span>
+        <span class="name">{{ config.name }}</span>
       </div>
       <div class="body" flex>
         <span>{{ config.describe }}</span>
@@ -61,13 +64,17 @@ export default {
       border-radius: 0.8rem;
       padding: 1rem 1.5rem;
       margin: 1rem 0;
-      width: 8rem;
       text-decoration: none;
-      transition: all .15s linear;
+      transition: all .15s ease-out;
       box-shadow: 0 0 0.8rem rgba(255, 255, 255, 0.6);
 
       &:hover {
         background: rgba(0, 0, 0, 0.5);
+
+        > .tip {
+          width: 6rem;
+          opacity: 1;
+        }
       }
 
       > svg {
@@ -75,11 +82,21 @@ export default {
         height: 2.4rem;
       }
 
-      > span {
+      > .name {
         color: white;
         font-size: 1.2rem;
         text-align: center;
-        flex-grow: 1;
+        width: 5rem;
+      }
+
+      > .tip {
+        width: 0;
+        transition: all .15s ease-out;
+        opacity: 0;
+        font-size: 0.85rem;
+        color: white;
+        word-break: keep-all;
+        white-space: nowrap;
       }
     }
   }

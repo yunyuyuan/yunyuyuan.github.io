@@ -10,7 +10,24 @@
 <script>
 export default {
   name: "FloatInput",
-  props: ['name', 'id', 'value', 'size'],
+  props: {
+    name: {
+      type: String,
+      default: ''
+    },
+    id: {
+      type: String,
+      default: ''
+    },
+    value: {
+      type: String,
+      default: ''
+    },
+    size: {
+      type: Number,
+      default: 1
+    },
+  },
   data() {
     return {
       text: this.$props.value,

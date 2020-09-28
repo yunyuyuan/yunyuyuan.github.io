@@ -1,6 +1,6 @@
 <template>
   <footer flex>
-    <router-link class="favicon" :to="{name: 'home'}">
+    <router-link :to="{name: 'backend'}" class="favicon" title="后台管理">
       <img :src="selfImage"/>
     </router-link>
     <div class="social-media" flex>

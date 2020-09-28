@@ -49,6 +49,14 @@ const routes = [
         component: () => import('@/views/msg-board/index')
     },
     {
+        path: '/record',
+        name: 'record',
+        meta: {
+            title: '记录'
+        },
+        component: () => import('@/views/record/index')
+    },
+    {
         path: '/backend',
         name: 'backend',
         redirect: {name: 'backend.config'},
