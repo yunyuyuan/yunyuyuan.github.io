@@ -23,7 +23,7 @@
 <script>
 import WriteComment from "@/views/comment/Write";
 import ListComment from "@/views/comment/List";
-import {createComment, getLoginInfo, removeToken} from "@/views/comment/utils";
+import {createComment, getLoginInfo, getRepoId, removeToken} from "@/views/comment/utils";
 import {parseAjaxError} from "@/utils";
 import FloatInput from "@/components/FloatInput";
 import SingleButton from "@/components/Button";
@@ -56,10 +56,11 @@ export default {
       return this.config.name
     }
   },
-  created() {
+  async created() {
     this.token = localStorage.getItem(tokenKey);
     if (this.token) {
-      this.doLogin(false);
+      await this.doLogin(false);
+      await getRepoId();
     }
   },
   methods: {
@@ -79,9 +80,9 @@ export default {
           this.$message.success('登录成功!');
         }
         this.logined = true;
-        let data = res[1].data;
+        let data = res[1].data.data.viewer;
         this.loginInfo = {
-          avatar: data.avatar_url,
+          avatar: data.avatarUrl,
           url: data.url,
           nick: data.login,
         }

@@ -15,11 +15,12 @@
             </div>
             <div class="foot">
               <a class="time">{{ calcTime(item.time) }}</a>
-              <span class="reply" @click="clickReply(item.number, null)">回复</span>
-              <span v-if="login===item.nick||login===siteConfig.owner" class="delete">删除</span>
-              <write-comment v-if="replayNumber === item.number && replyChild === null" :cancel="true"
+              <span class="reply" @click="clickReply(item.id, null)">回复</span>
+              <span v-if="login===item.nick||login===siteConfig.owner" class="delete"
+                    @click="deleteComment(item.number)">删除</span>
+              <write-comment v-if="replayId === item.id && replyChild === null" :cancel="true"
                              :init-height="'100px'" :loading="submitting"
-                             @cancel="replayNumber = -1" @submit="replayComment"/>
+                             @cancel="replayId = -1" @submit="replayComment"/>
             </div>
           </div>
           <div v-if="item.children.length" class="children">
@@ -35,11 +36,12 @@
               </div>
               <div class="foot">
                 <span class="time">{{ calcTime(child.time) }}</span>
-                <span class="reply" @click="clickReply(item.number, child)">回复</span>
-                <span v-if="login===child.nick||login===siteConfig.owner" class="delete">删除</span>
-                <write-comment v-if="replayNumber === item.number && replyChild === child" :cancel="true"
+                <span class="reply" @click="clickReply(item.id, child)">回复</span>
+                <span v-if="login===child.nick||login===siteConfig.owner" class="delete"
+                      @click="deleteReply(item.number, child.id)">删除</span>
+                <write-comment v-if="replayId === item.id && replyChild === child" :cancel="true"
                                :init-height="'100px'"
-                               :loading="submitting" @cancel="replayNumber = -1" @submit="replayComment"/>
+                               :loading="submitting" @cancel="replayId = -1" @submit="replayComment"/>
               </div>
             </div>
           </div>
@@ -56,7 +58,13 @@
 </template>
 
 <script>
-import {getCommentChildren, getReactions, getPageComment, createReplyComment} from "@/views/comment/utils";
+import {
+  getCommentChildren,
+  getReactions,
+  getPageComment,
+  createReplyComment,
+  deleteComment
+} from "@/views/comment/utils";
 import WriteComment from "@/views/comment/Write";
 import dayjs from 'dayjs';
 import {parseAjaxError, parseMarkdown} from "@/utils";
@@ -84,8 +92,10 @@ export default {
       count: 0,
       pageNow: 1,
       onePageItemsCount: 10,
+      commentStartCursor: null,
+      replyStartCursor: null,
       items: [],
-      replayNumber: -1,
+      replayId: -1,
       replyChild: null,
       submitting: false,
     }
@@ -129,58 +139,48 @@ export default {
   },
   methods: {
     async updatePage() {
-      let res = await getPageComment(this.pageNow - 1, this.onePageItemsCount, this.id);
+      let res = await getPageComment({
+        count: this.onePageItemsCount,
+        title: this.id,
+        start: this.commentStartCursor,
+      });
       if (res[0]) {
-        let data = res[1].data;
-        this.count = data.total_count;
-        if (!this.count) return;
+        let data = res[1].data.data.search;
+        this.count = data.issueCount;
+        this.commentStartCursor = data.pageInfo.endCursor;
         this.items = [];
-        for (const e of data.items) {
+        for (const e of data.nodes) {
+          // 子评论
           let children = [];
-          let reactions = {};
+          e.comments.nodes.forEach(c => {
+            children.push({
+              id: c.id,
+              avatar: c.author.avatarUrl,
+              nick: c.author.login,
+              site: c.author.url,
+              time: c.createdAt,
+              content: c.body,
+              identity: c.authorAssociation,
+            })
+          })
+          // 主体
           this.items.push({
             id: e.id,
             number: e.number,
-            avatar: e.user.avatar_url,
-            nick: e.user.login,
-            site: e.user.html_url,
-            time: e.created_at,
+            avatar: e.author.avatarUrl,
+            nick: e.author.login,
+            site: e.author.url,
+            time: e.createdAt,
             content: e.body,
-            identity: e.author_association,
+            identity: e.authorAssociation,
             children: children,
-            reactions: reactions
           });
-          getReactions('', e.number).then(res => {
-            if (res[0]) {
-            }
-          })
-          // 获取子评论
-          if (e.comments > 0) {
-            let res = await getCommentChildren(e.comments_url);
-            if (res[0]) {
-              for (const e of res[1].data) {
-                let reactions = {};
-                children.push({
-                  id: e.id,
-                  avatar: e.user.avatar_url,
-                  nick: e.user.login,
-                  site: e.user.html_url,
-                  time: e.created_at,
-                  content: e.body,
-                  identity: e.author_association,
-                  reactions: reactions
-                });
-                getReactions('/comments', e.id).then(res => {
-                  if (res[0]) {
-                  }
-                })
-              }
-            }
-          }
         }
-        this.$refs.list.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
-          el.innerText = el.innerText.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
-          hljs.highlightBlock(el);
+        this.$nextTick(() => {
+          this.$refs.list.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
+            el.innerText = el.innerText.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
+            hljs.highlightBlock(el);
+          })
         })
       }
     },
@@ -206,12 +206,12 @@ export default {
     },
 
     clickReply(o, t) {
-      this.replayNumber = o;
+      this.replayId = o;
       this.replyChild = t;
     },
     async replayComment(payload) {
       let res = await createReplyComment({
-        number: this.replayNumber,
+        id: this.replayId,
         body: (this.replyChild ? `@${this.replyChild.nick} ` : '') + payload.text
       });
       if (res[0]) {
@@ -221,7 +221,10 @@ export default {
         this.$message.error(`评论失败 ${parseAjaxError(res[1])}`)
       }
     },
-    async deleteComment() {
+    async deleteComment(number) {
+      let res = await deleteComment({});
+    },
+    async deleteReply(number, id) {
 
     }
   }
