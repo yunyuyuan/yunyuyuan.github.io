@@ -76,11 +76,17 @@ export default {
         this.$nextTick(() => {
           // 取出anchor
           this.anchors = [];
-          this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').forEach(e => {
+          this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id]').forEach(el => {
             this.anchors.push({
-              el: e,
-              text: e.innerText
+              el: el,
+              text: el.innerText
             });
+            el.onclick = () => {
+              this.toAnchor(el)
+            };
+            let before = document.createElement('img');
+            before.src = `${staticFolder}/halberd.svg`;
+            el.appendChild(before);
           })
           // hljs
           this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
@@ -207,16 +213,32 @@ export default {
         }
       }
     }
-    > .--markdown {
+    > .--markdown{
       border-radius: 0.6rem;
       box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.4);
       background: white;
-      padding: 2rem 1.5rem;
-      width: calc(100% - 5rem);
+      padding: 2rem 1rem 2rem 2.8rem;
+      width: calc(100% - 5.8rem);
       transition: all .15s ease-out;
-
-      &.show-aside {
-        width: calc(100% - 17rem);
+      &.show-aside{
+        width: calc(100% - 17.8rem);
+      }
+      @each $size in 1, 2, 3{
+        ::v-deep h#{$size}{
+          position: relative;
+          cursor: pointer;
+          height: 2.4rem;
+          display: flex;
+          align-items: center;
+          img{
+            position: absolute;
+            left: -2.5rem;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            object-fit: contain;
+          }
+        }
       }
     }
   }

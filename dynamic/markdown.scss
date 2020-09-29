@@ -5,7 +5,7 @@
   word-break: break-word;
   @each $size in 1, 2, 3, 4, 5, 6{
     h#{$size}{
-      color: rgb(255, 64, 64);
+      color: rgb(255, 82, 24);
       font-size: 1/$size * 1rem + 0.6rem;
     }
   }
@@ -81,7 +81,7 @@
   }
 
   ul{
-    > li:before{
+    > li:not(.task-list-item):before{
       content: '';
       width: 0.4rem;
       height: 0.4rem;

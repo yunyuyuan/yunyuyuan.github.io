@@ -4,42 +4,38 @@
   word-break: break-word;
 }
 .--markdown h1 {
-  color: #ff4040;
+  color: #ff5218;
   font-size: 1.6rem;
 }
 .--markdown h2 {
-  color: #ff4040;
+  color: #ff5218;
   font-size: 1.1rem;
 }
 .--markdown h3 {
-  color: #ff4040;
+  color: #ff5218;
   font-size: 0.9333333333rem;
 }
 .--markdown h4 {
-  color: #ff4040;
+  color: #ff5218;
   font-size: 0.85rem;
 }
 .--markdown h5 {
-  color: #ff4040;
+  color: #ff5218;
   font-size: 0.8rem;
 }
-
 .--markdown h6 {
-  color: #ff4040;
+  color: #ff5218;
   font-size: 0.7666666667rem;
 }
-
 .--markdown hr {
   width: 100%;
   background: black;
 }
-
 .--markdown p {
   font-size: 0.95rem;
-  line-height: 1.2rem;
+  line-height: 1.4rem;
   white-space: pre-line;
 }
-
 .--markdown a[href] {
   display: inline-block;
   color: #0008ff;
@@ -48,7 +44,6 @@
   word-break: break-all;
   text-decoration: none;
 }
-
 .--markdown img {
   display: block;
   width: 80%;
@@ -70,15 +65,12 @@
   appearance: none;
   line-height: inherit;
 }
-
 .--markdown input[type=checkbox]:checked {
   background: #86ffe4 !important;
 }
-
 .--markdown strong {
   margin: 0 0.3rem;
 }
-
 .--markdown blockquote {
   line-height: 1.8rem;
   position: relative;
@@ -94,7 +86,7 @@
   margin: 1rem auto;
 }
 
-.--markdown ul > li:before {
+.--markdown ul > li:not(.task-list-item):before {
   content: "";
   width: 0.4rem;
   height: 0.4rem;
@@ -107,7 +99,6 @@
 .--markdown ol {
   counter-reset: xx 0;
 }
-
 .--markdown ol > li:before {
   content: counter(xx) ".";
   counter-increment: xx;
@@ -116,21 +107,17 @@
   color: black;
   font-weight: bold;
 }
-
 .--markdown ul, .--markdown ol {
   list-style: none;
   padding: 0 0 0 2rem;
 }
-
 .--markdown ul > li:before, .--markdown ol > li:before {
   position: absolute;
   left: -2rem;
 }
-
 .--markdown li {
   position: relative;
 }
-
 .--markdown pre > code.hljs {
   display: block;
   overflow-x: auto;
@@ -139,7 +126,9 @@
   background: rgba(43, 43, 43, 0.95);
   font-family: Consolas, serif;
   max-height: 100vh;
-  min-height: 10rem;
+  min-height: 5rem;
+  font-size: 0.88rem;
+  line-height: 1.4rem;
 }
 .--markdown pre > code.hljs, .--markdown pre > code.hljs .hljs-subst {
   color: #dedede;
