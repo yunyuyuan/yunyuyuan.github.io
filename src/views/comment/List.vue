@@ -35,7 +35,7 @@
                 </div>
               </div>
               <div class="foot">
-                <span class="time">{{ calcTime(child.time) }}</span>
+                <a class="time">{{ calcTime(child.time) }}</a>
                 <span class="reply" @click="clickReply(item.id, child)">回复</span>
                 <span v-if="login===child.nick||login===siteConfig.owner" class="delete"
                       @click="deleteReply(child.id)">删除</span>
@@ -59,6 +59,7 @@
 
 <script>
 import {
+  logError,
   getPageComment,
   createReply,
   close_deleteComment, deleteReply
@@ -193,7 +194,7 @@ export default {
       if (isReply) {
         let matcher = text.match(/^@(\S+)([\s\S]*)/);
         if (matcher) {
-          text = `<span class="reply">回复<a target="_blank" href="https://gtihub.com/${matcher[1]}">@${matcher[1]}<a/></span>` + matcher[2];
+          text = `<span class="reply">回复<a target="_blank" href="https://gtihub.com/${matcher[1]}">@${matcher[1]}</a></span>` + matcher[2];
         }
       }
       return parseMarkdown(text)
@@ -214,27 +215,20 @@ export default {
         id: this.replayId,
         body: (this.replyChild ? `@${this.replyChild.nick} ` : '') + payload.text
       });
-      if (res[0]) {
-        this.$message.success('评论成功!');
-        await this.updatePage();
-      } else {
-        this.$message.error(`评论失败 ${parseAjaxError(res[1])}`)
+      if (logError.call(this, res, '回复成功!', '回复失败')) {
+
       }
     },
     async closeComment(id) {
       let res = await close_deleteComment('close', id);
-      if (res[0]) {
-        this.$message.success('删除成功!');
-      } else {
-        this.$message.error(`评论失败 ${parseAjaxError(res[1])}`)
+      if (logError.call(this, res, '删除成功!', '删除失败')) {
+
       }
     },
     async deleteReply(id) {
       let res = await deleteReply(id);
-      if (res[0]) {
-        this.$message.success('删除成功!');
-      } else {
-        this.$message.error(`评论失败 ${parseAjaxError(res[1])}`)
+      if (logError.call(this, res, '删除成功!', '删除失败')) {
+
       }
     }
   }
@@ -332,7 +326,6 @@ export default {
                   font-size: 0.95rem;
 
                   ::v-deep span.reply {
-                    margin-right: 0.6rem;
                     font-size: 0.84rem;
 
                     > a {
@@ -351,8 +344,7 @@ export default {
         width: 100%;
         color: gray;
         margin-top: 0.6rem;
-
-        > a.time {
+        > .time{
           font-size: 0.7rem;
           margin-right: 0.6rem;
         }

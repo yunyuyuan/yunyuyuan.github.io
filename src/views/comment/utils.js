@@ -5,14 +5,17 @@ import {
     GraphQLSchema,
     GraphQLObjectType,
 } from 'graphql';
+import {parseAjaxError} from "@/utils";
 
 let owner = siteConfig.owner,
+    //  owner = 'vuejs',
+    //  repo = `vue`,
     repo = `${owner}.github.io`,
     repoId = '',
-// const owner = 'vuejs',
-//     repo = `vue`,
+    // this token just can read public information
+    publicToken = 'token ' + (['5', '742fff2313f3a2a159c3f41394b7502d0a8664b'].join('')),
     headers = {
-        Authorization: 'token ' + (['5', '742fff2313f3a2a159c3f41394b7502d0a8664b'].join(''))
+        Authorization: publicToken
     },
     http = function (payload) {
         return new Promise(resolve => {
@@ -30,7 +33,22 @@ let owner = siteConfig.owner,
                 resolve([false, err])
             })
         })
+    };
+
+export const logError = function (res, suc, err) {
+    if (res[0]) {
+        if (res[1].data.errors) {
+            this.$message.error(`${err} ${res[1].data.errors[0].message}`)
+            return false
+        } else {
+            this.$message.success(suc);
+            return true
+        }
+    } else {
+        this.$message.error(`${err} ${parseAjaxError(res[1])}`)
+        return false
     }
+}
 
 // ======================== methods ============================
 
@@ -53,7 +71,7 @@ export async function getRepoId() {
 
 export async function getLoginInfo(token) {
     headers.Authorization = `token ${token}`;
-    return await http({
+    let res = await http({
         data: {
             query:
                 `query {
@@ -65,6 +83,10 @@ export async function getLoginInfo(token) {
 }`
         }
     })
+    if (res[0]) {
+        headers.Authorization = publicToken;
+    }
+    return res;
 }
 
 export function removeToken() {
@@ -75,8 +97,8 @@ export async function getPageComment(payload) {
     return await http({
         data: {
             query:
-`{
-  search(query: "${payload.title}+in:title repo:${owner}/${repo} is:open", type: ISSUE, first: ${payload.count}${payload.start ? `, after: ${payload.start}` : ''}) {
+                `{
+  search(query: "${payload.title}+in:title repo:${owner}/${repo} is:open", type: ISSUE, first: ${payload.count}${payload.start ? `, after: "${payload.start}"` : ''}) {
     issueCount
     nodes {
       ... on Issue {
@@ -105,12 +127,14 @@ export async function getPageComment(payload) {
           }
           pageInfo {
             endCursor
+            startCursor
           }
         }
       }
     }
     pageInfo {
       endCursor
+      startCursor
     }
   }
 }`

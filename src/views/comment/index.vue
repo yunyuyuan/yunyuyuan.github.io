@@ -23,7 +23,7 @@
 <script>
 import WriteComment from "@/views/comment/Write";
 import ListComment from "@/views/comment/List";
-import {createComment, getLoginInfo, getRepoId, removeToken} from "@/views/comment/utils";
+import {createComment, getLoginInfo, getRepoId, logError, removeToken} from "@/views/comment/utils";
 import {parseAjaxError} from "@/utils";
 import FloatInput from "@/components/FloatInput";
 import SingleButton from "@/components/Button";
@@ -108,10 +108,8 @@ export default {
         title: this.info.id,
         body: payload.text
       });
-      if (res[0]) {
-        this.$message.success('评论成功!')
-      } else {
-        this.$message.error(parseAjaxError(res[1]))
+      if (logError.call(this, res, '评论成功!', '评论失败')) {
+
       }
       this.submitting = false;
     },

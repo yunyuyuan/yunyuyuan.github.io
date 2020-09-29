@@ -80,7 +80,7 @@ table{
     background: #2b2b2b;
     border-bottom: 2px solid #9f9f9f;
     td, th{
-      padding: 0.8rem 0;
+      padding: 0.5rem 0;
       color: white;
       font-size: 1.06rem;
       text-align: center;
