@@ -17,7 +17,7 @@
               <a class="time">{{ calcTime(item.time) }}</a>
               <span class="reply" @click="clickReply(item.id, null)">回复</span>
               <span v-if="login===item.nick||login===siteConfig.owner" class="delete"
-                    @click="deleteComment(item.number)">删除</span>
+                    @click="closeComment(item.id)">删除</span>
               <write-comment v-if="replayId === item.id && replyChild === null" :cancel="true"
                              :init-height="'100px'" :loading="submitting"
                              @cancel="replayId = -1" @submit="replayComment"/>
@@ -38,7 +38,7 @@
                 <span class="time">{{ calcTime(child.time) }}</span>
                 <span class="reply" @click="clickReply(item.id, child)">回复</span>
                 <span v-if="login===child.nick||login===siteConfig.owner" class="delete"
-                      @click="deleteReply(item.number, child.id)">删除</span>
+                      @click="deleteReply(child.id)">删除</span>
                 <write-comment v-if="replayId === item.id && replyChild === child" :cancel="true"
                                :init-height="'100px'"
                                :loading="submitting" @cancel="replayId = -1" @submit="replayComment"/>
@@ -59,11 +59,9 @@
 
 <script>
 import {
-  getCommentChildren,
-  getReactions,
   getPageComment,
-  createReplyComment,
-  deleteComment
+  createReply,
+  close_deleteComment, deleteReply
 } from "@/views/comment/utils";
 import WriteComment from "@/views/comment/Write";
 import dayjs from 'dayjs';
@@ -93,6 +91,7 @@ export default {
       pageNow: 1,
       onePageItemsCount: 10,
       commentStartCursor: null,
+      commentStartCursorOld: null,
       replyStartCursor: null,
       items: [],
       replayId: -1,
@@ -147,6 +146,7 @@ export default {
       if (res[0]) {
         let data = res[1].data.data.search;
         this.count = data.issueCount;
+        this.commentStartCursorOld = this.commentStartCursor;
         this.commentStartCursor = data.pageInfo.endCursor;
         this.items = [];
         for (const e of data.nodes) {
@@ -210,7 +210,7 @@ export default {
       this.replyChild = t;
     },
     async replayComment(payload) {
-      let res = await createReplyComment({
+      let res = await createReply({
         id: this.replayId,
         body: (this.replyChild ? `@${this.replyChild.nick} ` : '') + payload.text
       });
@@ -221,11 +221,21 @@ export default {
         this.$message.error(`评论失败 ${parseAjaxError(res[1])}`)
       }
     },
-    async deleteComment(number) {
-      let res = await deleteComment({});
+    async closeComment(id) {
+      let res = await close_deleteComment('close', id);
+      if (res[0]) {
+        this.$message.success('删除成功!');
+      } else {
+        this.$message.error(`评论失败 ${parseAjaxError(res[1])}`)
+      }
     },
-    async deleteReply(number, id) {
-
+    async deleteReply(id) {
+      let res = await deleteReply(id);
+      if (res[0]) {
+        this.$message.success('删除成功!');
+      } else {
+        this.$message.error(`评论失败 ${parseAjaxError(res[1])}`)
+      }
     }
   }
 }

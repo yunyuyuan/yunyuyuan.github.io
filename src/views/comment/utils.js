@@ -75,8 +75,8 @@ export async function getPageComment(payload) {
     return await http({
         data: {
             query:
-                `{
-  search(query: "${payload.title}+in:title&repo:${owner}/${repo}+is:open", type: ISSUE, first: ${payload.count}${payload.start ? `, after: ${payload.start}` : ''}) {
+`{
+  search(query: "${payload.title}+in:title repo:${owner}/${repo} is:open", type: ISSUE, first: ${payload.count}${payload.start ? `, after: ${payload.start}` : ''}) {
     issueCount
     nodes {
       ... on Issue {
@@ -163,42 +163,40 @@ export async function createComment(payload) {
     })
 }
 
-export async function closeComment(payload) {
+export async function close_deleteComment(type, id) {
     return await http({
         data: {
             query:
-                `query {
-                    viewer {
-                        login,
-                        avatarUrl,
-                        url
-                    }
-                }`
+                `mutation {
+  ${type}Issue(input: {issueId: "${id}"}) {
+    clientMutationId
+  }
+}
+`
         }
     })
 }
 
-export async function deleteComment(payload) {
-    return await http({
-        data: {
-            query:
-                `query {
-                    viewer {
-                        login,
-                        avatarUrl,
-                        url
-                    }
-                }`
-        }
-    })
-}
-
-export async function createReplyComment(payload) {
+export async function createReply(payload) {
     return await http({
         data: {
             query:
                 `mutation {
   addComment(input: {body: "${payload.body}", subjectId: "${payload.id}"}) {
+    clientMutationId
+  }
+}
+`
+        }
+    })
+}
+
+export async function deleteReply(id) {
+    return await http({
+        data: {
+            query:
+                `mutation {
+  deleteIssueComment(input: {id: "${id}"}) {
     clientMutationId
   }
 }
