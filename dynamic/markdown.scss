@@ -63,13 +63,32 @@
     tbody {
     }
   }
-  ul{
+
+  ul {
   }
-  ol{
+
+  ol {
   }
-  ul, ol{
+
+  ul, ol {
     list-style: none;
   }
-  li{
+
+  li {
+  }
+
+  pre {
+    border: 1px solid gray;
+    border-radius: 0.4rem;
+
+    > .CodeMirror {
+      border-radius: inherit;
+      max-height: 90vh;
+      min-height: 10rem;
+
+      .CodeMirror-cursors {
+        display: none;
+      }
+    }
   }
 }

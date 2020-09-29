@@ -44,11 +44,32 @@
     background: transparent !important;
     border: 1px solid #434343;
     appearance: none;
-    line-height: inherit; }
-    .--markdown input[type=checkbox]:checked {
-      background: #86ffe4 !important; }
-  .--markdown table {
-    width: 90%;
-    margin: 1rem auto; }
-  .--markdown ul, .--markdown ol {
-    list-style: none; }
+    line-height: inherit;
+  }
+
+.--markdown input[type=checkbox]:checked {
+  background: #86ffe4 !important;
+}
+
+.--markdown table {
+  width: 90%;
+  margin: 1rem auto;
+}
+
+.--markdown ul, .--markdown ol {
+  list-style: none;
+}
+
+.--markdown pre {
+  border: 1px solid gray;
+  border-radius: 0.4rem;
+}
+
+.--markdown pre .CodeMirror {
+  max-height: 90vh;
+  min-height: 10rem;
+}
+
+.--markdown pre .CodeMirror-cursors {
+  display: none;
+}

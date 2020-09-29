@@ -67,8 +67,13 @@
 <script>
 import FloatInput from "@/components/FloatInput";
 import LoadingButton from "@/components/LoadingButton";
-import {parseMarkdown} from "@/utils";
+import MarkdownHelp from "@/views/block/MarkdownHelp";
+import SingleButton from "@/components/Button";
 import Resizer from "@/components/Resizer";
+
+import {mapState} from "vuex";
+import {staticFolder} from "@/main";
+import {parseMarkdown} from "@/utils";
 
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/markdown/markdown'
@@ -78,10 +83,6 @@ import '@/assets/style/code-mirror/codeMirror.scss';
 
 import '@/assets/style/code-mirror/light-markdown.scss';
 import '@/assets/style/code-mirror/dracula-markdown.scss';
-import {mapState} from "vuex";
-import {staticFolder} from "@/main";
-import MarkdownHelp from "@/views/block/MarkdownHelp";
-import SingleButton from "@/components/Button";
 
 export default {
   name: "WriteComment",

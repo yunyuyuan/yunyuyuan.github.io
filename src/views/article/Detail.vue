@@ -27,6 +27,14 @@ import {mapState} from "vuex";
 
 import TheComment from "@/views/comment/index";
 
+import CodeMirror from 'codemirror';
+
+import 'codemirror/lib/codemirror.css';
+import '@/assets/style/code-mirror/codeMirror.scss';
+
+import '@/assets/style/code-mirror/light-code.scss'
+import '@/assets/style/code-mirror/dracula-code.scss'
+
 export default {
   name: "Detail",
   components: {TheComment},
@@ -35,7 +43,7 @@ export default {
       id: '',
       html: '',
       anchors: [],
-      asideActive: true,
+      asideActive: false,
       asideTop: 0,
       animationHandle: undefined
     }
@@ -63,13 +71,6 @@ export default {
     document.title = '文章-' + this.info.name;
     this.body.addEventListener('scroll', this.moveAside)
   },
-  mounted() {
-    // new Valine({
-    //   el: this.$el.querySelector('.valine'),
-    //   appId: 'lxqgNPckQJMDFguQ6CjVskrg-gzGzoHsz',
-    //   appKey: '8WT5Fa6VLrXjkBQP68scqpCf'
-    // });
-  },
   destroyed() {
     this.body.removeEventListener('scroll', this.moveAside)
   },
@@ -79,12 +80,28 @@ export default {
       if (res[0]) {
         this.html = res[1];
         this.$nextTick(() => {
+          // 取出anchor
           this.anchors = [];
           this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').forEach(e => {
             this.anchors.push({
               el: e,
               text: e.innerText
             });
+          })
+          // 初始化pre
+          this.$refs.markdown.querySelectorAll('pre').forEach(el => {
+            let code = el.firstElementChild,
+                cls = code.className.replace(/^.* language-(.*)$/, '$1');
+            new CodeMirror(el, {
+              indentUnit: 2,
+              tabSize: 2,
+              theme: 'light',
+              line: true,
+              lineNumbers: true,
+              readOnly: true,
+              mode: cls,
+            }).setValue(code.innerHTML);
+            code.remove();
           })
         })
       } else {
