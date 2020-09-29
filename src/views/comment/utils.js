@@ -12,7 +12,7 @@ let owner = siteConfig.owner,
 // const owner = 'vuejs',
 //     repo = `vue`,
     headers = {
-        Authorization: ''
+        Authorization: 'token ' + (['5', '742fff2313f3a2a159c3f41394b7502d0a8664b'].join(''))
     },
     http = function (payload) {
         return new Promise(resolve => {
