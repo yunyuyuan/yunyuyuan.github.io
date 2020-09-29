@@ -78,17 +78,70 @@
   }
 
   pre {
-    border: 1px solid gray;
-    border-radius: 0.4rem;
-
-    > .CodeMirror {
-      border-radius: inherit;
-      max-height: 90vh;
+    > code.hljs {
+      display: block;
+      overflow-x: auto;
+      padding: 0.4rem 0.8rem;
+      border-radius: 0.3rem;
+      background: rgba(43, 43, 43, 0.95);
+      font-family: Consolas, serif;
+      max-height: 100vh;
       min-height: 10rem;
 
-      .CodeMirror-cursors {
-        display: none;
+      &, .hljs-subst {
+        color: rgb(222, 222, 222)
       }
+
+      .hljs-comment {
+        color: rgb(136, 136, 136)
+      }
+
+      .hljs-keyword, .hljs-attribute, .hljs-selector-tag, .hljs-meta-keyword, .hljs-doctag, .hljs-name {
+        font-weight: bold;
+        color: rgb(255, 123, 60);
+      }
+
+      .hljs-type, .hljs-string, .hljs-selector-id, .hljs-selector-class, .hljs-quote, .hljs-template-tag, .hljs-deletion {
+        color: rgb(126, 197, 85)
+      }
+
+      .hljs-number {
+        color: rgb(90, 161, 255);
+      }
+
+      .hljs-title, .hljs-section {
+        color: rgb(255, 198, 109);
+        font-weight: bold
+      }
+
+      .hljs-regexp, .hljs-symbol, .hljs-variable, .hljs-template-variable, .hljs-link, .hljs-selector-attr, .hljs-selector-pseudo {
+        color: rgb(255, 225, 62);
+      }
+
+      .hljs-literal {
+        color: rgb(120, 169, 96)
+      }
+
+      .hljs-built_in, .hljs-bullet, .hljs-code, .hljs-addition {
+        color: rgb(231, 134, 255);
+      }
+
+      .hljs-meta {
+        color: rgb(241, 235, 51)
+      }
+
+      .hljs-meta-string {
+        color: rgb(77, 153, 191)
+      }
+
+      .hljs-emphasis {
+        font-style: italic
+      }
+
+      .hljs-strong {
+        font-weight: bold
+      }
+
     }
   }
 }

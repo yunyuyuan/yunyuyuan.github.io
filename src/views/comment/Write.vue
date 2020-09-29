@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="preview" v-show="showPreview">
-      <span class="--markdown" v-html="html"></span>
+      <span ref="markdown" class="--markdown" v-html="html"></span>
     </div>
     <div v-show="showUploadImg" class="upload-img" is-dialog @click.self="showUploadImg = false">
       <div class="inner" flex>
@@ -75,7 +75,9 @@ import {mapState} from "vuex";
 import {staticFolder} from "@/main";
 import {parseMarkdown} from "@/utils";
 
+import hljs from "highlight.js";
 import CodeMirror from 'codemirror';
+
 import 'codemirror/mode/markdown/markdown'
 
 import 'codemirror/lib/codemirror.css';
@@ -123,7 +125,13 @@ export default {
   computed: {
     ...mapState(['config']),
     html() {
-      return parseMarkdown(this.comment)
+      // hljs
+      this.$nextTick(() => {
+        this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
+          hljs.highlightBlock(el);
+        })
+      })
+      return parseMarkdown(this.comment);
     }
   },
   created() {

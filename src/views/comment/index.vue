@@ -16,7 +16,7 @@
       </div>
     </div>
     <write-comment @submit="submit" :loading="submitting"/>
-    <list-comment :id="this.info.id"/>
+    <list-comment :id="this.info.id" :login="loginInfo.nick"/>
   </div>
 </template>
 

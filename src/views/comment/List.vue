@@ -1,6 +1,6 @@
 <template>
   <div class="list" flex>
-    <div class="items" flex>
+    <div ref="list" class="items" flex>
       <div class="item" v-for="item in items" :key="item.id" flex>
         <a class="avatar" target="_blank" :href="item.site">
           <img :src="item.avatar"/>
@@ -14,8 +14,9 @@
               <span class="--markdown" v-html="calcMdToHtml(item.content, false)"></span>
             </div>
             <div class="foot">
-              <span class="time">{{ calcTime(item.time) }}</span>
+              <a class="time">{{ calcTime(item.time) }}</a>
               <span class="reply" @click="clickReply(item.number, null)">回复</span>
+              <span v-if="login===item.nick||login===siteConfig.owner" class="delete">删除</span>
               <write-comment v-if="replayNumber === item.number && replyChild === null" :cancel="true"
                              :init-height="'100px'" :loading="submitting"
                              @cancel="replayNumber = -1" @submit="replayComment"/>
@@ -35,6 +36,7 @@
               <div class="foot">
                 <span class="time">{{ calcTime(child.time) }}</span>
                 <span class="reply" @click="clickReply(item.number, child)">回复</span>
+                <span v-if="login===child.nick||login===siteConfig.owner" class="delete">删除</span>
                 <write-comment v-if="replayNumber === item.number && replyChild === child" :cancel="true"
                                :init-height="'100px'"
                                :loading="submitting" @cancel="replayNumber = -1" @submit="replayComment"/>
@@ -58,6 +60,8 @@ import {getCommentChildren, getReactions, getPageComment, createReplyComment} fr
 import WriteComment from "@/views/comment/Write";
 import dayjs from 'dayjs';
 import {parseAjaxError, parseMarkdown} from "@/utils";
+import hljs from "highlight.js";
+import siteConfig from '@/site-config'
 
 const pagerCount = 8;
 
@@ -68,10 +72,15 @@ export default {
     id: {
       type: String,
       default: 0
+    },
+    login: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
+      siteConfig,
       count: 0,
       pageNow: 1,
       onePageItemsCount: 10,
@@ -147,29 +156,32 @@ export default {
           })
           // 获取子评论
           if (e.comments > 0) {
-            getCommentChildren(e.comments_url).then(res => {
-              if (res[0]) {
-                for (const e of res[1].data) {
-                  let reactions = {};
-                  children.push({
-                    id: e.id,
-                    avatar: e.user.avatar_url,
-                    nick: e.user.login,
-                    site: e.user.html_url,
-                    time: e.created_at,
-                    content: e.body,
-                    identity: e.author_association,
-                    reactions: reactions
-                  });
-                  getReactions('/comments', e.id).then(res => {
-                    if (res[0]) {
-                    }
-                  })
-                }
+            let res = await getCommentChildren(e.comments_url);
+            if (res[0]) {
+              for (const e of res[1].data) {
+                let reactions = {};
+                children.push({
+                  id: e.id,
+                  avatar: e.user.avatar_url,
+                  nick: e.user.login,
+                  site: e.user.html_url,
+                  time: e.created_at,
+                  content: e.body,
+                  identity: e.author_association,
+                  reactions: reactions
+                });
+                getReactions('/comments', e.id).then(res => {
+                  if (res[0]) {
+                  }
+                })
               }
-            });
+            }
           }
         }
+        this.$refs.list.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
+          el.innerText = el.innerText.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
+          hljs.highlightBlock(el);
+        })
       }
     },
     calcTime(time) {
@@ -208,6 +220,9 @@ export default {
       } else {
         this.$message.error(`评论失败 ${parseAjaxError(res[1])}`)
       }
+    },
+    async deleteComment() {
+
     }
   }
 }
@@ -323,16 +338,26 @@ export default {
         width: 100%;
         color: gray;
         margin-top: 0.6rem;
-        > .time{
+
+        > a.time {
           font-size: 0.7rem;
           margin-right: 0.6rem;
         }
-        > .reply{
+
+        > span {
           cursor: pointer;
           font-size: 0.65rem;
 
           &:hover {
             color: #ff1616;
+          }
+
+          &.close {
+            margin-left: 0.5rem;
+          }
+
+          &.delete {
+            margin-left: 0.5rem;
           }
         }
 

@@ -27,13 +27,7 @@ import {mapState} from "vuex";
 
 import TheComment from "@/views/comment/index";
 
-import CodeMirror from 'codemirror';
-
-import 'codemirror/lib/codemirror.css';
-import '@/assets/style/code-mirror/codeMirror.scss';
-
-import '@/assets/style/code-mirror/light-code.scss'
-import '@/assets/style/code-mirror/dracula-code.scss'
+import hljs from 'highlight.js'
 
 export default {
   name: "Detail",
@@ -88,20 +82,9 @@ export default {
               text: e.innerText
             });
           })
-          // 初始化pre
-          this.$refs.markdown.querySelectorAll('pre').forEach(el => {
-            let code = el.firstElementChild,
-                cls = code.className.replace(/^.* language-(.*)$/, '$1');
-            new CodeMirror(el, {
-              indentUnit: 2,
-              tabSize: 2,
-              theme: 'light',
-              line: true,
-              lineNumbers: true,
-              readOnly: true,
-              mode: cls,
-            }).setValue(code.innerHTML);
-            code.remove();
+          // hljs
+          this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
+            hljs.highlightBlock(el);
           })
         })
       } else {
