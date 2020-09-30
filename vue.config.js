@@ -1,5 +1,6 @@
 const path = require('path');
 const isDev = process.env.NODE_ENV === 'development';
+const siteConfig = require('./src/site-config')
 
 module.exports = {
     lintOnSave: false,
@@ -21,6 +22,14 @@ module.exports = {
             .options({
                 symbolId: 'icon-[name]'
             });
+                // cdn
+        config
+            .plugin('html')
+            .tap(args => {
+                args[0].isDev = isDev
+                args[0].owner = siteConfig.owner
+                return args
+            })
         // 开发模式 server静态目录
         if (isDev) {
             config
