@@ -111,34 +111,41 @@
   ul, ol{
     list-style: none;
     padding: 0 0 0 2rem;
-    > li:before{
+
+    > li:before {
       position: absolute;
       left: -2rem;
     }
   }
 
-  li{
+  li {
     position: relative;
   }
 
+  code {
+    font-family: "Source Code Pro", serif;
+  }
+
   pre {
-    > code.hljs{
+    > code.hljs {
       display: block;
       overflow-x: auto;
       padding: 0.4rem 0.8rem;
       border-radius: 0.3rem;
       background: rgba(43, 43, 43, 0.95);
-      font-family: Consolas, serif;
       max-height: 100vh;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       line-height: 1.4rem;
-      &, .hljs-subst{
+
+      &, .hljs-subst {
         color: rgb(222, 222, 222)
       }
-      .hljs-comment{
+
+      .hljs-comment {
         color: rgb(136, 136, 136)
       }
-      .hljs-keyword, .hljs-attribute, .hljs-selector-tag, .hljs-meta-keyword, .hljs-doctag, .hljs-name{
+
+      .hljs-keyword, .hljs-attribute, .hljs-selector-tag, .hljs-meta-keyword, .hljs-doctag, .hljs-name {
         font-weight: bold;
         color: rgb(255, 123, 60);
       }

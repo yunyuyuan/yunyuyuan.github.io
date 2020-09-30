@@ -145,18 +145,22 @@
   left: -2rem;
 }
 .--markdown li {
-  position: relative;
+    position: relative;
 }
+
+.--markdown code {
+    font-family: "Source Code Pro", serif;
+}
+
 .--markdown pre > code.hljs {
-  display: block;
-  overflow-x: auto;
-  padding: 0.4rem 0.8rem;
-  border-radius: 0.3rem;
-  background: rgba(43, 43, 43, 0.95);
-  font-family: Consolas, serif;
-  max-height: 100vh;
-  font-size: 0.88rem;
-  line-height: 1.4rem;
+    display: block;
+    overflow-x: auto;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.3rem;
+    background: rgba(43, 43, 43, 0.95);
+    max-height: 100vh;
+    font-size: 0.85rem;
+    line-height: 1.4rem;
 }
 .--markdown pre > code.hljs, .--markdown pre > code.hljs .hljs-subst {
   color: #dedede;

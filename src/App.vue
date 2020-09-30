@@ -5,7 +5,8 @@
 </template>
 
 <script>
-import TheIndex from '@/views/index'
+import TheIndex from '@/views/index';
+import '@/assets/style/source-code-pro.css'
 
 export default {
   name: 'App',
@@ -129,8 +130,5 @@ table{
 ::-webkit-scrollbar-track{
     border-radius: 0.6rem;
     background: transparent;
-}
-.CodeMirror-scrollbar-filler{
-  background: transparent !important;
 }
 </style>
