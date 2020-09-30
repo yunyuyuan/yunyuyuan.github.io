@@ -76,7 +76,7 @@ export default {
         this.$nextTick(() => {
           // 取出anchor
           this.anchors = [];
-          this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id]').forEach(el => {
+          this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').forEach(el => {
             this.anchors.push({
               el: el,
               text: el.innerText
@@ -223,19 +223,21 @@ export default {
       &.show-aside{
         width: calc(100% - 17.8rem);
       }
-      @each $size in 1, 2, 3{
-        ::v-deep h#{$size}{
+
+      @each $size in 1, 2, 3, 4, 5, 6 {
+        ::v-deep h#{$size} {
           position: relative;
           cursor: pointer;
-          height: 2.4rem;
+          height: 1.5+1.2rem*1/$size;
           display: flex;
           align-items: center;
-          img{
+
+          img {
             position: absolute;
-            left: -2.5rem;
-            top: 0;
-            width: 2rem;
-            height: 2rem;
+            left: 0;
+            transform: translateX(calc(-100% - 0.5rem));
+            width: 1+1.2rem/$size;
+            height: 1+1.2rem/$size;
             object-fit: contain;
           }
         }

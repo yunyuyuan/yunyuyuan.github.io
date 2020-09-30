@@ -15,16 +15,16 @@
             </div>
             <div class="foot">
               <a class="time">{{ calcTime(item.time) }}</a>
-              <span class="reply" @click="clickReply(item.id, null)">回复</span>
+              <span class="reply" @click="clickReply(item, null)">回复</span>
               <span v-if="login===item.nick||login===siteConfig.owner" class="delete"
                     @click="closeComment(item.id)">删除</span>
-              <write-comment v-if="replayId === item.id && replyChild === null" :cancel="true"
+              <write-comment v-if="replayItem === item && replyChild === null" :cancel="true"
                              :init-height="'100px'" :loading="submitting"
-                             @cancel="replayId = -1" @submit="replayComment"/>
+                             @cancel="replayItem = null" @submit="replayComment"/>
             </div>
           </div>
           <div v-if="item.children.length" class="children">
-            <div v-for="child in item.children">
+            <div v-for="child in item.children" class="child">
               <div class="content" flex>
                 <a :href="child.site" class="avatar" target="_blank">
                   <img :src="child.avatar"/>
@@ -36,13 +36,21 @@
               </div>
               <div class="foot">
                 <a class="time">{{ calcTime(child.time) }}</a>
-                <span class="reply" @click="clickReply(item.id, child)">回复</span>
+                <span class="reply" @click="clickReply(item, child)">回复</span>
                 <span v-if="login===child.nick||login===siteConfig.owner" class="delete"
                       @click="deleteReply(child.id)">删除</span>
-                <write-comment v-if="replayId === item.id && replyChild === child" :cancel="true"
+                <write-comment v-if="replayItem === item && replyChild === child" :cancel="true"
                                :init-height="'100px'"
-                               :loading="submitting" @cancel="replayId = -1" @submit="replayComment"/>
+                               :loading="submitting" @cancel="replayItem = null" @submit="replayComment"/>
               </div>
+            </div>
+            <div class="page" flex>
+              <span :disabled="!item.page.hasPreviousPage" class="left" flex
+                    @click='toReply(!item.page.hasPreviousPage, item, `,before: "${item.page.startCursor}"`)'><svg-icon
+                  :name="'right'"/></span>
+              <span :disabled="!item.page.hasNextPage" class="right" flex
+                    @click='toReply(!item.page.hasNextPage, item, `,after: "${item.page.endCursor}"`)'><svg-icon
+                  :name="'right'"/></span>
             </div>
           </div>
         </div>
@@ -62,21 +70,21 @@ import {
   logError,
   getPageComment,
   createReply,
-  close_deleteComment, deleteReply
+  close_deleteComment, deleteReply, getCommentChildren
 } from "@/views/comment/utils";
 import WriteComment from "@/views/comment/Write";
 import dayjs from 'dayjs';
-import {parseAjaxError, parseMarkdown} from "@/utils";
+import {parseMarkdown} from "@/utils";
 import hljs from "highlight.js";
 import siteConfig from '@/site-config'
 
-const pagerCount = 8;
+const pagerCount = 3;
 
 export default {
   name: "ListComment",
   components: {WriteComment},
   props: {
-    id: {
+    articleId: {
       type: String,
       default: 0
     },
@@ -90,12 +98,11 @@ export default {
       siteConfig,
       count: 0,
       pageNow: 1,
-      onePageItemsCount: 10,
-      commentStartCursor: null,
-      commentStartCursorOld: null,
-      replyStartCursor: null,
+      onePageItemsCount: 2,
+      pageInfo: {},
+      oldCursor: '',
       items: [],
-      replayId: -1,
+      replayItem: null,
       replyChild: null,
       submitting: false,
     }
@@ -138,17 +145,17 @@ export default {
     await this.updatePage();
   },
   methods: {
-    async updatePage() {
+    async updatePage(cursor) {
       let res = await getPageComment({
         count: this.onePageItemsCount,
-        title: this.id,
-        start: this.commentStartCursor,
+        title: this.articleId,
+        cursor: cursor
       });
       if (res[0]) {
         let data = res[1].data.data.search;
         this.count = data.issueCount;
-        this.commentStartCursorOld = this.commentStartCursor;
-        this.commentStartCursor = data.pageInfo.endCursor;
+        this.oldCursor = cursor || '';
+        this.pageInfo = data.pageInfo;
         this.items = [];
         for (const e of data.nodes) {
           // 子评论
@@ -162,6 +169,7 @@ export default {
               time: c.createdAt,
               content: c.body,
               identity: c.authorAssociation,
+              thumbup: c.reactions.totalCount,
             })
           })
           // 主体
@@ -175,6 +183,8 @@ export default {
             content: e.body,
             identity: e.authorAssociation,
             children: children,
+            thumbup: e.reactions.totalCount,
+            page: e.comments.pageInfo
           });
         }
         this.$nextTick(() => {
@@ -184,6 +194,9 @@ export default {
           })
         })
       }
+    },
+    async updateReply(cursor) {
+
     },
     calcTime(time) {
       let t = new dayjs(time);
@@ -201,28 +214,65 @@ export default {
     },
     async toPage(p) {
       if (p !== '') {
+        let cursor = {}
+        switch (this.pageNow - p) {
+          case -1:
+            cursor = `,after: "${this.pageInfo.endCursor}"`
+            break
+          case 0:
+            cursor = this.oldCursor
+            break
+          case 1:
+            cursor = `,before: "${this.pageInfo.startCursor}"`
+            break
+        }
+        await this.updatePage(cursor);
         this.pageNow = p;
-        await this.updatePage();
+      }
+    },
+    async toReply(cant, item, cursor) {
+      if (cant) return
+      let res = await getCommentChildren(item.id, this.onePageItemsCount, cursor);
+      if (res[0]) {
+        let data = res[1].data.data.node.comments;
+        item.page = data.pageInfo;
+        item.children = [];
+        data.nodes.forEach(c => {
+          item.children.push({
+            id: c.id,
+            avatar: c.author.avatarUrl,
+            nick: c.author.login,
+            site: c.author.url,
+            time: c.createdAt,
+            content: c.body,
+            identity: c.authorAssociation,
+            thumbup: c.reactions.totalCount,
+          })
+        })
       }
     },
 
     clickReply(o, t) {
-      this.replayId = o;
+      this.replayItem = o;
       this.replyChild = t;
     },
     async replayComment(payload) {
       let res = await createReply({
-        id: this.replayId,
+        id: this.replayItem.id,
         body: (this.replyChild ? `@${this.replyChild.nick} ` : '') + payload.text
       });
       if (logError.call(this, res, '回复成功!', '回复失败')) {
-
+        await this.toReply(false, this.replayItem)
+        this.replayItem = null;
+        this.replyChild = null;
       }
     },
     async closeComment(id) {
       let res = await close_deleteComment('close', id);
       if (logError.call(this, res, '删除成功!', '删除失败')) {
-
+        setTimeout(async () => {
+          await this.updatePage()
+        }, 1000)
       }
     },
     async deleteReply(id) {
@@ -297,14 +347,18 @@ export default {
           width: 100%;
           margin-top: 0.6rem;
           border-top: 1px dotted rgba(0, 0, 0, 0.1);
-          > div{
+
+          > .child {
             padding-top: 0.3rem;
             margin-top: 0.3rem;
-            > .content{
+
+            > .content {
               align-items: flex-start;
-              > a{
+
+              > a {
                 margin-right: 0.8rem;
-                > img{
+
+                > img {
                   width: 1.6rem;
                   height: 1.6rem;
                   border-radius: 50%;
@@ -335,6 +389,41 @@ export default {
                     }
                   }
                 }
+              }
+            }
+          }
+
+          > .page {
+            margin-top: 0.5rem;
+
+            > span {
+              margin: 0 0.5rem;
+              padding: 0.15rem;
+              border-radius: 0.15rem;
+              justify-content: center;
+              cursor: not-allowed;
+
+              &:not([disabled]) {
+                cursor: pointer;
+
+                &:hover {
+                  background: rgba(0, 0, 0, 0.15);
+                }
+              }
+
+              &[disabled] {
+                > svg {
+                  fill: gray
+                }
+              }
+
+              > svg {
+                width: 1rem;
+                height: 1rem;
+              }
+
+              &.left {
+                transform: rotate(180deg);
               }
             }
           }

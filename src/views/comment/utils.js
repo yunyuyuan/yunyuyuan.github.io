@@ -83,7 +83,7 @@ export async function getLoginInfo(token) {
 }`
         }
     })
-    if (res[0]) {
+    if (!res[0]) {
         headers.Authorization = publicToken;
     }
     return res;
@@ -98,7 +98,7 @@ export async function getPageComment(payload) {
         data: {
             query:
                 `{
-  search(query: "${payload.title}+in:title repo:${owner}/${repo} is:open", type: ISSUE, first: ${payload.count}${payload.start ? `, after: "${payload.start}"` : ''}) {
+  search(query: "${payload.title}+in:title repo:${owner}/${repo} is:open", type: ISSUE, ${(payload.cursor && payload.cursor.indexOf(',after') === 0) || !payload.cursor ? 'first' : 'last'}: ${payload.count}${payload.cursor || ''}) {
     issueCount
     nodes {
       ... on Issue {
@@ -112,7 +112,10 @@ export async function getPageComment(payload) {
         createdAt
         id
         authorAssociation
-        comments(first: 100) {
+        reactions(first: 0, content: THUMBS_UP) {
+          totalCount
+        }
+        comments(first: ${payload.count}) {
           totalCount
           nodes {
             author {
@@ -124,17 +127,24 @@ export async function getPageComment(payload) {
             body
             createdAt
             id
+            reactions(first: 0, content: THUMBS_UP) {
+              totalCount
+            }
           }
           pageInfo {
+            hasNextPage
             endCursor
+            hasPreviousPage
             startCursor
           }
         }
       }
     }
     pageInfo {
-      endCursor
-      startCursor
+            hasNextPage
+            endCursor
+            hasPreviousPage
+            startCursor
     }
   }
 }`
@@ -142,32 +152,40 @@ export async function getPageComment(payload) {
     })
 }
 
-export async function getCommentChildren(url) {
+export async function getCommentChildren(id, count, cursor) {
     return await http({
         data: {
             query:
                 `query {
-                    viewer {
-                        login,
-                        avatarUrl,
-                        url
-                    }
-                }`
+  node(id: "${id}") {
+    ... on Issue {
+        comments(${(cursor && cursor.indexOf(',after') === 0) || !cursor ? 'first' : 'last'}: ${count}${cursor || ''}) {
+          totalCount
+          nodes {
+            author {
+              avatarUrl
+              login
+              url
+            }
+            authorAssociation
+            body
+            createdAt
+            id
+            reactions(first: 0, content: THUMBS_UP) {
+              totalCount
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+            hasPreviousPage
+            startCursor
+          }
         }
-    })
+    }
+  }
 }
-
-export async function getReactions(type, number) {
-    return await http({
-        data: {
-            query:
-                `query {
-                    viewer {
-                        login,
-                        avatarUrl,
-                        url
-                    }
-                }`
+`
         }
     })
 }

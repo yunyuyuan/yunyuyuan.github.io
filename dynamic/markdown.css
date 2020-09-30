@@ -3,38 +3,70 @@
   display: block;
   word-break: break-word;
 }
+
 .--markdown h1 {
-  color: #ff5218;
-  font-size: 1.6rem;
+    color: #ff5218;
+    font-size: 1.6rem;
 }
+
+.--markdown h1:hover {
+    text-decoration: underline;
+}
+
 .--markdown h2 {
-  color: #ff5218;
-  font-size: 1.1rem;
+    color: #ff5218;
+    font-size: 1.2rem;
 }
+
+.--markdown h2:hover {
+    text-decoration: underline;
+}
+
 .--markdown h3 {
-  color: #ff5218;
-  font-size: 0.9333333333rem;
+    color: #ff5218;
+    font-size: 1.0666666667rem;
 }
+
+.--markdown h3:hover {
+    text-decoration: underline;
+}
+
 .--markdown h4 {
-  color: #ff5218;
-  font-size: 0.85rem;
+    color: #ff5218;
+    font-size: 1rem;
 }
+
+.--markdown h4:hover {
+    text-decoration: underline;
+}
+
 .--markdown h5 {
-  color: #ff5218;
-  font-size: 0.8rem;
+    color: #ff5218;
+    font-size: 0.96rem;
 }
+
+.--markdown h5:hover {
+    text-decoration: underline;
+}
+
 .--markdown h6 {
-  color: #ff5218;
-  font-size: 0.7666666667rem;
+    color: #ff5218;
+    font-size: 0.9333333333rem;
 }
+
+.--markdown h6:hover {
+    text-decoration: underline;
+}
+
 .--markdown hr {
-  width: 100%;
-  background: black;
+    width: 100%;
+    background: black;
 }
+
 .--markdown p {
-  font-size: 0.95rem;
-  line-height: 1.4rem;
-  white-space: pre-line;
+    font-size: 0.95rem;
+    line-height: 1.4rem;
+    white-space: pre-line;
 }
 .--markdown a[href] {
   display: inline-block;
@@ -80,12 +112,10 @@
   background: #e2e2e2;
   border-radius: 0 0.7rem 0.7rem 0;
 }
-
 .--markdown table {
   width: 90%;
   margin: 1rem auto;
 }
-
 .--markdown ul > li:not(.task-list-item):before {
   content: "";
   width: 0.4rem;
@@ -95,7 +125,6 @@
   background: black;
   border: 0.2rem solid;
 }
-
 .--markdown ol {
   counter-reset: xx 0;
 }
@@ -126,7 +155,6 @@
   background: rgba(43, 43, 43, 0.95);
   font-family: Consolas, serif;
   max-height: 100vh;
-  min-height: 5rem;
   font-size: 0.88rem;
   line-height: 1.4rem;
 }

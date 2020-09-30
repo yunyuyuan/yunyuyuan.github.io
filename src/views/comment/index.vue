@@ -16,7 +16,7 @@
       </div>
     </div>
     <write-comment @submit="submit" :loading="submitting"/>
-    <list-comment :id="this.info.id" :login="loginInfo.nick"/>
+    <list-comment ref="list" :articleId="this.info.id" :login="loginInfo.nick"/>
   </div>
 </template>
 
@@ -87,7 +87,6 @@ export default {
           nick: data.login,
         }
       } else {
-        localStorage.removeItem(tokenKey);
         removeToken();
         if (remind) {
           this.$message.error(parseAjaxError(res[1]));
@@ -109,7 +108,9 @@ export default {
         body: payload.text
       });
       if (logError.call(this, res, '评论成功!', '评论失败')) {
-
+        setTimeout(async () => {
+          await this.$refs.list.updatePage()
+        }, 1000)
       }
       this.submitting = false;
     },
