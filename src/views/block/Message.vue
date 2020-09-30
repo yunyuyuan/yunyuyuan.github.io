@@ -1,9 +1,11 @@
 <template>
     <div class="message" flex>
-      <div v-for="(item,idx) in list" :class="item.type" @click="removeItem(idx)" v-if="item.display" flex
+      <div v-for="(item,idx) in list" v-if="item.display" :class="[item.type, 'item']" flex
            :key="item.id">
-        <svg-icon :name="item.type"/>
-        <span>{{ item.text }}</span>
+        <svg-icon :name="item.type" class="type"/>
+        <svg-icon :name="'trash'" class="close" @click.native="removeItem(idx)"/>
+        <span class="text">{{ item.text }}</span>
+        <span class="line"></span>
       </div>
     </div>
 </template>
@@ -40,11 +42,18 @@
               };
               this.msgId += 1;
               this.list.push(obj);
-              setTimeout(() => {
-                obj.display = false
-              }, 5000)
+              this.$nextTick(() => {
+                this.$el.querySelectorAll('.item').forEach(el => {
+                  if (el.hasAttribute('listened')) return;
+                  el.setAttribute('listened', '');
+                  el.onanimationend = () => {
+                    obj.display = false
+                  }
+                })
+              })
             },
             removeItem(idx) {
+              console.log(idx)
               this.list[idx].display = false;
               this.list.splice(idx, 1)
             }
@@ -74,6 +83,17 @@
       }
     }
 
+    @keyframes msg-line-out {
+      5% {
+        transform: translateX(0);
+        background: #ff0000;
+      }
+      95%, 100% {
+        transform: translateX(-100%);
+        background: blue;
+      }
+    }
+
     .message {
       position: fixed;
       z-index: $z-index-message;
@@ -90,10 +110,23 @@
         box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
         padding: 0.6rem 1rem;
         margin: 1rem 0;
-        cursor: pointer;
         position: relative;
         animation: msg-fade-out 5s linear forwards;
         justify-content: center;
+        overflow: hidden;
+        flex-shrink: 0;
+
+        &:hover {
+          animation-play-state: paused;
+
+          > .close {
+            display: unset;
+          }
+
+          > .line {
+            animation-play-state: paused;
+          }
+        }
 
         &.success {
           background: #e0fffc;
@@ -107,16 +140,35 @@
           background: #fff9d9;
         }
 
-        > svg {
+        > .type {
           width: 2rem;
           height: 2rem;
           flex-shrink: 0;
         }
 
-        > span {
+        > .close {
+          width: 1.4rem;
+          height: 1.4rem;
+          cursor: pointer;
+          display: none;
+          position: absolute;
+          top: 0.2rem;
+          right: 0.1rem;
+        }
+
+        > .text {
           font-size: 0.9rem;
           margin-left: 1rem;
           word-break: break-all;
+        }
+
+        > .line {
+          height: 0.2rem;
+          width: 100%;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          animation: msg-line-out 5s linear forwards;
         }
       }
     }

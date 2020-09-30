@@ -220,9 +220,13 @@ export default {
       }
     },
     async submitComment() {
-      this.$emit('submit', {
-        text: this.comment
-      })
+      if (this.comment) {
+        this.$emit('submit', {
+          text: this.comment
+        })
+      } else {
+        this.$message.warning('请输入一些内容!')
+      }
     }
   },
 }
