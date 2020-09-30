@@ -69,10 +69,9 @@ export default {
     commitUpdateGitutil() {
       this.$store.commit('updateGitUtil', new GithubUtils(
           this.token,
-          siteConfig.owner,
-          `${siteConfig.owner}.github.io`,
           {
             name: siteConfig.owner,
+            email: siteConfig.email,
           }
       ));
     },
