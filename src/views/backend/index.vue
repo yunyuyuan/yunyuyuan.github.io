@@ -38,7 +38,7 @@
 import Login from "./Login";
 import {getText, parseAjaxError} from "@/utils";
 import LoadingButton from "@/components/LoadingButton";
-import {staticFolder} from "@/main";
+import {originPrefix, staticFolder} from "@/main";
 import selfImage from '@/image/i.png'
 
 export default {
@@ -83,7 +83,7 @@ export default {
     async getConfig() {
       if (this.updating) return;
       this.updating = true;
-      let res = await getText(`${staticFolder}/config.json`);
+      let res = await getText(`${originPrefix}/config.json`);
       if (res[0]) {
         this.$store.commit('updateConfig', JSON.parse(res[1]));
         this.$message.success('从服务器获取配置成功!')

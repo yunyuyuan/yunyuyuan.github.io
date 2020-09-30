@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import {staticFolder} from "@/main";
+import {originPrefix, staticFolder} from "@/main";
 import store from '@/store/index'
 
 
@@ -109,7 +109,7 @@ router.beforeEach((to, from, next)=> {
     // 是否加载 markdown(include hljs) css
     let mdStyle = document.head.querySelector('#markdown-stylesheet');
     if (['article.detail', 'backend.md.detail', 'msgBoard'].indexOf(to.name) !== -1) {
-        mdStyle.href = `${staticFolder}/markdown.css?ran=${new Date().getTime()}`;
+        mdStyle.href = `${originPrefix}/markdown.css?ran=${new Date().getTime()}`;
     } else {
         mdStyle.href = ''
     }

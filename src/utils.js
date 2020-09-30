@@ -1,5 +1,5 @@
 import Octokat from 'octokat';
-import {staticFolder} from "@/main";
+import {originPrefix, staticFolder} from "@/main";
 import dayjs from 'dayjs';
 import Sass from 'sass.js'
 

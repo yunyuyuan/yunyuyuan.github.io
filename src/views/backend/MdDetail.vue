@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import {staticFolder} from "@/main";
+import {originPrefix, staticFolder} from "@/main";
 import {getText, parseAjaxError, parseMarkdown, parseTime} from "@/utils";
 import {mapState} from 'vuex'
 import FloatInput from "@/components/FloatInput";
@@ -162,7 +162,7 @@ export default {
       }
     },
     async getMdText() {
-      let res = await getText(`${staticFolder}/md/${this.id}/index.md`);
+      let res = await getText(`${originPrefix}/md/${this.id}/index.md`);
       if (res[0]) {
         this.mdText = res[1];
       } else {

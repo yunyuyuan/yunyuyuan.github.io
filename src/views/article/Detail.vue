@@ -22,7 +22,7 @@
 
 <script>
 import {getText} from "@/utils";
-import {staticFolder} from "@/main";
+import {originPrefix, staticFolder} from "@/main";
 import {mapState} from "vuex";
 
 import TheComment from "@/views/comment/index";
@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     async getHtml() {
-      let res = await getText(`${staticFolder}/md/${this.id}/index.html`);
+      let res = await getText(`${originPrefix}/md/${this.id}/index.html`);
       if (res[0]) {
         this.html = res[1];
         this.$nextTick(() => {
@@ -85,7 +85,7 @@ export default {
               this.toAnchor(el)
             };
             let before = document.createElement('img');
-            before.src = `${staticFolder}/halberd.svg`;
+            before.src = `${originPrefix}/halberd.svg`;
             el.appendChild(before);
           })
           // hljs

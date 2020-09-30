@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     async init() {
-      let res = await getText(`${staticFolder}/markdown.scss`);
+      let res = await getText(`${originPrefix}/markdown.scss`);
       if (res[0]) {
         this.scss = res[1];
         if (this.codeMirror) {

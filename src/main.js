@@ -2,7 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 
 Vue.config.productionTip = false;
-export const staticFolder = process.env.NODE_ENV === 'development'?'':'/dynamic';
+export const staticFolder = process.env.NODE_ENV === 'development'?'':'dynamic',
+    originPrefix = `${location.origin}/${staticFolder}`
 
 import '@/icons'
 import store from '@/store'
@@ -14,7 +15,7 @@ import selfImage from '@/image/i.png';
 document.head.querySelector('link[rel="icon"]').href = selfImage;
 
 
-getText(staticFolder + '/config.json').then(res => {
+getText(originPrefix + '/config.json').then(res => {
     if (res[0]) {
         // 首次获取config
         store.commit('updateConfig', JSON.parse(res[1]));
