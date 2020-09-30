@@ -1,7 +1,7 @@
 <template>
   <footer flex>
-    <router-link :to="{name: 'backend'}" class="favicon" title="后台管理">
-      <img :src="selfImage"/>
+    <router-link :to="{name: 'backend'}" class="favicon" flex title="后台管理">
+      <svg-icon :name="'halberd'"/>
     </router-link>
     <div class="social-media" flex>
       <a v-for="k in links" :key="k" target="_blank" :href="config[k]" :title="k" flex>
@@ -10,7 +10,7 @@
     </div>
     <div class="copyright" flex>
       <span>Copyright (c) {{ config.copyright }} <b>{{ config.name }} | {{ domain }}</b></span>
-      <span>All right reserved<router-link :to="{name: 'backend'}" target="_blank">后台管理</router-link></span>
+      <span>All right reserved</span>
     </div>
   </footer>
 </template>
@@ -46,14 +46,18 @@ footer{
   height: $footer-height;
   box-shadow: 0 0 1rem #020202;
   z-index: $z-index-footer;
-  >.favicon{
+  >.favicon {
     margin: 0 1.6rem;
     height: 3.5rem;
+    width: 3.5rem;
+    background: #cdcdcd;
+    border-radius: 0.5rem;
+    justify-content: center;
+    box-shadow: 0 0 0.5rem rgba(255, 255, 255, 0.4);
 
-    > img {
-      height: 100%;
-      object-fit: contain;
-      border-radius: 0.5rem;
+    > svg {
+      height: 90%;
+      width: 90%;
     }
   }
   > .social-media{
@@ -82,13 +86,6 @@ footer{
 
         > b {
           color: #ddd;
-        }
-
-        > a {
-          margin-left: 0.5rem;
-          color: white;
-          padding-left: 0.5rem;
-          border-left: 1px solid;
         }
       }
   }
