@@ -1,5 +1,6 @@
+import axios from 'axios';
 import siteConfig from '@/site-config';
-import {http, parseAjaxError} from "@/utils";
+import {parseAjaxError} from "@/utils";
 
 let owner = siteConfig.owner,
     //  owner = 'vuejs',
@@ -10,6 +11,23 @@ let owner = siteConfig.owner,
     publicToken = 'token ' + (['5', '742fff2313f3a2a159c3f41394b7502d0a8664b'].join('')),
     headers = {
         Authorization: publicToken
+    },
+    http = function (payload) {
+        return new Promise(resolve => {
+            axios({
+                url: 'https://api.github.com/graphql',
+                method: 'post',
+                ...payload,
+                headers: {
+                    ...(payload.headers || {}),
+                    ...headers
+                }
+            }).then(res => {
+                resolve([true, res])
+            }).catch(err => {
+                resolve([false, err])
+            })
+        })
     };
 
 export const logError = function (res, suc, err) {
@@ -40,7 +58,7 @@ export async function getRepoId() {
 }
 `
         }
-    }, headers);
+    });
     if (res[0]) {
         repoId = res[1].data.data.repository.id;
     }
@@ -59,7 +77,7 @@ export async function getLoginInfo(token) {
     }
 }`
         }
-    }, headers)
+    })
     if (!res[0]) {
         headers.Authorization = publicToken;
     }
@@ -126,7 +144,7 @@ export async function getPageComment(payload) {
   }
 }`
         }
-    }, headers)
+    })
 }
 
 export async function getCommentChildren(id, count, cursor) {
@@ -164,7 +182,7 @@ export async function getCommentChildren(id, count, cursor) {
 }
 `
         }
-    }, headers)
+    })
 }
 
 export async function createComment(payload) {
@@ -179,7 +197,7 @@ export async function createComment(payload) {
   }
 }`
         }
-    }, headers)
+    })
 }
 
 export async function close_deleteComment(type, id) {
@@ -193,7 +211,7 @@ export async function close_deleteComment(type, id) {
 }
 `
         }
-    }, headers)
+    })
 }
 
 export async function createReply(payload) {
@@ -207,7 +225,7 @@ export async function createReply(payload) {
 }
 `
         }
-    }, headers)
+    })
 }
 
 export async function deleteReply(id) {
@@ -221,5 +239,5 @@ export async function deleteReply(id) {
 }
 `
         }
-    }, headers)
+    })
 }

@@ -1,7 +1,7 @@
+import Octokat from 'octokat';
 import {staticFolder} from "@/main";
 import dayjs from 'dayjs';
 import Sass from 'sass.js'
-import axios from "axios";
 
 export const dynamicFolder = 'dynamic';
 export const configPath = `${dynamicFolder}/config.json`;
@@ -24,23 +24,6 @@ export async function getText(path) {
             }).catch(err => {
                 resolve([false, err])
             })
-        }).catch(err => {
-            resolve([false, err])
-        })
-    })
-}
-export function http (payload, headers) {
-    return new Promise(resolve => {
-        axios({
-            url: 'https://api.github.com/graphql',
-            method: 'post',
-            ...payload,
-            headers: {
-                ...(payload.headers || {}),
-                ...headers
-            }
-        }).then(res => {
-            resolve([true, res])
         }).catch(err => {
             resolve([false, err])
         })
@@ -116,10 +99,12 @@ export function randomColor() {
 
 // github
 export class GithubUtils {
-    constructor(token, committer) {
-        this.headers = {
-            Authorization: `token ${token}`
-        };
+    constructor(token, user, repo, committer) {
+        this.octo = new Octokat({
+            token: token,
+            username: user,
+        });
+        this.repos = this.octo.repos(user, repo);
         this.committer = committer
     }
 
