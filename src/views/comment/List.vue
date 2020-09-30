@@ -84,7 +84,7 @@ export default {
   name: "ListComment",
   components: {WriteComment},
   props: {
-    articleId: {
+    title: {
       type: String,
       default: 0
     },
@@ -148,7 +148,7 @@ export default {
     async updatePage(cursor) {
       let res = await getPageComment({
         count: this.onePageItemsCount,
-        title: this.articleId,
+        title: this.title,
         cursor: cursor
       });
       if (res[0]) {
@@ -257,6 +257,7 @@ export default {
       this.replyChild = t;
     },
     async replayComment(payload) {
+      this.submitting = true;
       let res = await createReply({
         id: this.replayItem.id,
         body: (this.replyChild ? `@${this.replyChild.nick} ` : '') + payload.text
@@ -266,6 +267,7 @@ export default {
         this.replayItem = null;
         this.replyChild = null;
       }
+      this.submitting = false;
     },
     async closeComment(id) {
       let res = await close_deleteComment('close', id);

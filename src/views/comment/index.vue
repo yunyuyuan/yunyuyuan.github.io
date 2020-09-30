@@ -16,7 +16,7 @@
       </div>
     </div>
     <write-comment @submit="submit" :loading="submitting"/>
-    <list-comment ref="list" :articleId="this.info.id" :login="loginInfo.nick"/>
+    <list-comment ref="list" :title="this.title" :login="loginInfo.nick"/>
   </div>
 </template>
 
@@ -36,10 +36,11 @@ export default {
   name: "TheComment",
   components: {LoadingButton, SingleButton, FloatInput, ListComment, WriteComment},
   props: {
-    info: {
-      type: Object,
-      default: {}
-    }
+    title: {
+      type: String,
+      default: ''
+    },
+
   },
   data() {
     return {
@@ -101,10 +102,9 @@ export default {
       removeToken()
     },
     async submit(payload) {
-      if (this.submitting) return;
       this.submitting = true;
       let res = await createComment({
-        title: this.info.id,
+        title: this.title,
         body: payload.text
       });
       if (logError.call(this, res, '评论成功!', '评论失败')) {

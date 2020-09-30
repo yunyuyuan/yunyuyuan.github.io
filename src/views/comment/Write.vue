@@ -220,6 +220,7 @@ export default {
       }
     },
     async submitComment() {
+      if (this.loading) return;
       if (this.comment) {
         this.$emit('submit', {
           text: this.comment

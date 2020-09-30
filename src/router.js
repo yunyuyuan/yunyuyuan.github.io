@@ -108,7 +108,7 @@ router.beforeEach((to, from, next)=> {
     document.title = to.meta.title || '未知页面';
     // 是否加载 markdown(include hljs) css
     let mdStyle = document.head.querySelector('#markdown-stylesheet');
-    if (['article.detail', 'backend.md.detail'].indexOf(to.name) !== -1) {
+    if (['article.detail', 'backend.md.detail', 'msgBoard'].indexOf(to.name) !== -1) {
         mdStyle.href = `${staticFolder}/markdown.css?ran=${new Date().getTime()}`;
     } else {
         mdStyle.href = ''
