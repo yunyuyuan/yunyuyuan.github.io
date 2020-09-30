@@ -1,38 +1,34 @@
 {
-  "name": "云与原",
-  "describe": "写点什么,放在网络上,仅此",
-  "copyright": "2019-2020",
-  "github": "https://github.com/yunyuyuan",
-  "bilibili": "https://space.bilibili.com/204446485",
-  "email": "mailto:1607439239@qq.com",
-  "theme": "auto",
-  "md": [
-    {
-      "name": "asdfasdf",
-      "file": "1600781888969",
-      "cover": "aaa",
-          "createTime": 1600781888969,
-          "modifyTime": 1600781888969,
-          "summary": "aff阿斯蒂芬",
-          "tags": [
-            "网页",
-            "网页",
-            "网页",
-            "网页",
-            "网页"
-          ]
+    "name": "云与原",
+    "describe": "写点什么,放在网络上,仅此",
+    "copyright": "2019-2020",
+    "github": "https://github.com/yunyuyuan",
+    "bilibili": "https://space.bilibili.com/204446485",
+    "email": "mailto:1607439239@qq.com",
+    "theme": "auto",
+    "md": [
+        {
+            "name": "asdfasdf",
+            "file": "1600781888969",
+            "cover": "https://s2.ax1x.com/2020/01/28/1KwnSS.jpg",
+            "createTime": 1600781888969,
+            "modifyTime": 1601472056792,
+            "summary": "aff阿斯蒂芬",
+            "tags": [
+                "非技术"
+            ]
         }
     ],
     "sticker": [
-      {
-        "name": "阿鲁",
-        "folder": "aru",
-        "count": 143
-      },
-      {
-        "name": "小黄脸",
-        "folder": "yellow-face",
-        "count": 71
-      }
+        {
+            "name": "阿鲁",
+            "folder": "aru",
+            "count": 143
+        },
+        {
+            "name": "小黄脸",
+            "folder": "yellow-face",
+            "count": 71
+        }
     ]
 }
