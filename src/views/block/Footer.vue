@@ -10,7 +10,7 @@
     </div>
     <div class="copyright" flex>
       <span>Copyright (c) {{ config.copyright }} <b>{{ config.name }} | {{ domain }}</b></span>
-      <span>All right reserved</span>
+      <span>All right reserved<router-link :to="{name: 'backend'}" target="_blank">后台管理</router-link></span>
     </div>
   </footer>
 </template>
@@ -75,12 +75,20 @@ footer{
       justify-content: center;
       flex-direction: column;
       margin: 0 1rem 0 auto;
-      > span{
+      > span {
         color: #bbbbbb;
         font-size: 0.8rem;
         margin: 0.5rem 0;
-        > b{
+
+        > b {
           color: #ddd;
+        }
+
+        > a {
+          margin-left: 0.5rem;
+          color: white;
+          padding-left: 0.5rem;
+          border-left: 1px solid;
         }
       }
   }
