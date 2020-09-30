@@ -5,7 +5,7 @@ const siteConfig = require('./src/site-config')
 module.exports = {
     lintOnSave: false,
     indexPath: '../index.html',
-    publicPath: isDev?'':'/dist',
+    publicPath: isDev?'':'dist',
     chainWebpack: config => {
         config.module
             .rule('svg')
