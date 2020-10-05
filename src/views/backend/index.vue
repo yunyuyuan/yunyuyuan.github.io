@@ -62,15 +62,15 @@ export default {
           icon: 'article'
         },
         {
+          name: '记录',
+          pathName: 'backend.record',
+          icon: 'record'
+        },
+        {
           name: '主题',
           pathName: 'backend.theme',
           icon: 'brash'
         },
-        {
-          name: '导出',
-          pathName: 'backend.export',
-          icon: 'download'
-        }
       ]
     }
   },
@@ -90,7 +90,10 @@ export default {
       this.updating = true;
       let res = await getText(`${originPrefix}/config.json`);
       if (res[0]) {
-        this.$store.commit('updateConfig', JSON.parse(res[1]));
+        this.$store.commit('updateJson', {
+          key: 'config',
+          json: JSON.parse(res[1])
+        });
         this.$message.success('从服务器获取配置成功!')
       } else {
         this.$message.error(parseAjaxError(res[1]))

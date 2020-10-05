@@ -87,20 +87,28 @@ const routes = [
                 component: () => import('@/views/backend/MdDetail')
             },
             {
+                path: 'record',
+                name: 'backend.record',
+                meta: {
+                    title: '后台-记录列表'
+                },
+                component: () => import('@/views/backend/Record')
+            },
+            {
+                path: 'record/:id',
+                name: 'backend.record.detail',
+                meta: {
+                    title: '后台-记录'
+                },
+                component: () => import('@/views/backend/RecordDetail')
+            },
+            {
                 path: 'theme',
                 name: 'backend.theme',
                 meta: {
                     title: '后台-主题'
                 },
                 component: () => import('@/views/backend/Theme'),
-            },
-            {
-                path: 'export',
-                name: 'backend.export',
-                meta: {
-                    title: '后台-导出'
-                },
-                component: () => import('@/views/backend/Export'),
             },
         ]
     },

@@ -53,7 +53,6 @@
               })
             },
             removeItem(idx) {
-              console.log(idx)
               this.list[idx].display = false;
               this.list.splice(idx, 1)
             }

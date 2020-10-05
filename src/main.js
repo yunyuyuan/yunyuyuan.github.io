@@ -14,19 +14,26 @@ import selfImage from '@/image/i.png';
 
 document.head.querySelector('link[rel="icon"]').href = selfImage;
 
-
-getText(originPrefix + '/config.json').then(res => {
-    if (res[0]) {
-        // 首次获取config
-        store.commit('updateConfig', JSON.parse(res[1]));
-
-        new Vue({
-            el: '#app',
-            store,
-            router,
-            render: h => h(App),
-        });
-    } else {
-        alert('获取网站配置失败!请检查网络并刷新网页')
+async function init() {
+    for (let i of ['config', 'md', 'record']) {
+        let res = await getText(`${originPrefix}/json/${i}.json`);
+        if (res[0]) {
+            store.commit('updateJson', {
+                key: i,
+                json: JSON.parse(res[1])
+            });
+        } else {
+            alert('获取网站配置失败!请检查网络并刷新网页')
+            return
+        }
     }
+}
+
+init().then(r => {
+    new Vue({
+        el: '#app',
+        store,
+        router,
+        render: h => h(App),
+    });
 });

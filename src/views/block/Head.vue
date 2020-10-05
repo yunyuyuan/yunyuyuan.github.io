@@ -1,5 +1,5 @@
 <template>
-  <section class="the-head" :class="{'show-bg': showBg}">
+  <section class="the-head">
     <div class="body" flex>
       <router-link class="favicon" :to="{name: 'home'}">
         <img :src="selfImage"/>
@@ -20,7 +20,6 @@ export default {
   data() {
     return {
       selfImage,
-      showBg: true
     }
   },
   mounted() {
@@ -31,9 +30,7 @@ export default {
   },
   methods: {
     toggle(b) {
-      console.log(b)
-      this.showBg = b;
-      this.$emit('toggle', !this.showBg)
+      this.$emit('toggle', b)
     }
   }
 }

@@ -9,7 +9,7 @@
       <loading-button @click.native="doExport" :loading="exporting.b" :text="'导出'" :icon="'save'" :size="1"/>
     </div>
     <div class="body" flex>
-      <div v-for="item in config.md" :key="item.file" flex>
+      <div v-for="item in md" :key="item.file" flex>
         <span :class="{active: selectList.indexOf(item)!==-1}" class="check-box" @click="toggleSelect(item)"></span>
         <router-link :to="{name: 'article.detail', params: {id: item.file}}" target="_blank">
           <img :src="item.cover"/>
@@ -42,9 +42,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['config']),
+    ...mapState(['md']),
     allSelected() {
-      return this.selectList.length === this.config.md.length
+      return this.selectList.length === this.md.length
     }
   },
   methods: {
@@ -59,7 +59,7 @@ export default {
     toggleSelectAll() {
       if (!this.allSelected) {
         this.selectList = []
-        for (let item of this.config.md) {
+        for (let item of this.md) {
           this.selectList.push(item)
         }
       } else {

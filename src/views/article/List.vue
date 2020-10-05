@@ -15,7 +15,7 @@
       </span>
     </div>
     <div class="blog">
-      <div v-for="item in this.config.md" :key="item.file" :class="{item: true, hidden: resultList.indexOf(item)===-1}"
+      <div v-for="item in this.md" :key="item.file" :class="{item: true, hidden: resultList.indexOf(item)===-1}"
            flex>
         <div class="time">
           <span>{{ parseTime(item.createTime) }}</span>
@@ -43,7 +43,7 @@
 <script>
 import {mapState} from "vuex";
 import defaultCover from '@/image/default-cover.png';
-import {parseTime, randomTagColor, randomTagColorList} from "@/utils";
+import {parseTime, randomTagColorList} from "@/utils";
 
 export default {
   name: "List",
@@ -56,12 +56,12 @@ export default {
     }
   },
   computed: {
-    ...mapState(['config']),
+    ...mapState(['md']),
     resultList() {
-      if (!this.search && !this.searchTags.length) return this.config.md;
+      if (!this.search && !this.searchTags.length) return this.md;
       let lis = [],
           vue_ = this;
-      this.config.md.forEach(e => {
+      this.md.forEach(e => {
         if (!vue_.search || e.name.indexOf(vue_.search) !== -1) {
           let tagMatched = true;
           for (let idx = 0; idx < vue_.searchTags.length; idx++) {
@@ -77,15 +77,12 @@ export default {
       return lis
     },
     colorList() {
-      return randomTagColorList(this.config.md)
+      return randomTagColorList(this.md)
     },
   },
   methods: {
     parseTime(t) {
       return parseTime(t)
-    },
-    randColor() {
-      return randomTagColor()
     },
     toggleInputFocus(b) {
       this.searchFocus = b

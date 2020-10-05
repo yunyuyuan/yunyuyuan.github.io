@@ -5,8 +5,8 @@ export default {
     changeMd(state, file) {
         state.nowMdFile = file
     },
-    updateConfig(state, config) {
-        state.config = config
+    updateJson(state, payload) {
+        state[payload.key] = payload.json
     },
     updateGitUtil(state, githubUtils) {
         state.gitUtil = githubUtils

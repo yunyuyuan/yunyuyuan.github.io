@@ -13,6 +13,8 @@ export default new Vuex.Store({
         gitUtil: null,
         nowMdFile: 0,
         config: {},
+        md: [],
+        record: [],
         loading: true
     },
     mutations,

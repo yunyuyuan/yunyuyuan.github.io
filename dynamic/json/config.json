@@ -1,0 +1,21 @@
+{
+    "name": "云与原",
+    "describe": "写点什么,放在网络上,仅此",
+    "copyright": "2019-2020",
+    "github": "https://github.com/yunyuyuan",
+    "bilibili": "https://space.bilibili.com/204446485",
+    "email": "mailto:1607439239@qq.com",
+    "theme": "auto",
+    "sticker": [
+        {
+            "name": "阿鲁",
+            "folder": "aru",
+            "count": 143
+        },
+        {
+            "name": "小黄脸",
+            "folder": "yellow-face",
+            "count": 71
+        }
+    ]
+}

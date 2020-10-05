@@ -117,12 +117,12 @@ export default {
     }
   },
   computed: {
-    ...mapState(['gitUtil', 'config']),
+    ...mapState(['gitUtil', 'md']),
     id() {
       return this.$route.params.id
     },
     info() {
-      for (let i of this.config.md) {
+      for (let i of this.md) {
         if (i.file === this.id) {
           return i
         }
@@ -249,15 +249,14 @@ export default {
           folderId = this.id;
         } else {
           // 添加
-          // config md +1
+          // md +1
           info.file = folderId.toString();
           info.createTime = folderId;
-          let mdList = this.config.md;
-          mdList.push(JSON.parse(JSON.stringify(info)));
+          this.md.push(JSON.parse(JSON.stringify(info)));
         }
         // 执行更新
-        // 更新config.json
-        let res = await this.gitUtil.updateConfig(this.config);
+        // md.json
+        let res = await this.gitUtil.updateJsonFile('md.json', this.md);
         if (res[0]) {
           // 更新 md 和 html文件
           let res = await this.gitUtil.updateMd({

@@ -1,7 +1,7 @@
 <template>
   <div class="index">
     <img :src="images[routeNow]"/>
-    <the-head v-if="showHead" @toggle="toggleShowBg"/>
+    <the-head :class="{'show-bg': showBg}" v-if="showHead" @toggle="toggleShowBg"/>
     <section :class="{body: true, 'show-head': showHead, 'show-bg': showBg}" flex>
       <router-view></router-view>
       <the-footer v-if="this.routeNow !== 'backend'"/>
@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       showHead: true,
-      showBg: true,
+      showBg: false,
       images: {
         home: HomeImage,
         articleList: ArticleListImage,
@@ -109,9 +109,9 @@ export default {
     flex-direction: column;
     background: rgba(0, 0, 0, 0.1);
     transition: opacity .2s linear;
-    opacity: 0;
+    opacity: 1;
     &.show-bg{
-      opacity: 1;
+      opacity: 0;
     }
     &.show-head{
       padding-top: $head-height;

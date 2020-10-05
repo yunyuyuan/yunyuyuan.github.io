@@ -37,7 +37,7 @@ export default {
       if (this.gitUtil) {
         this.updating = true;
         // 更新config.json
-        let res = await this.gitUtil.updateConfig(this.config);
+        let res = await this.gitUtil.updateJsonFile(`config.json`, this.config);
         this.updating = false;
         if (res[0]) {
           this.$message.success('更新成功!')

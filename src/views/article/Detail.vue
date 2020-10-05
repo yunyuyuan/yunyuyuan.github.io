@@ -43,10 +43,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['config']),
+    ...mapState(['md']),
     info() {
       if (!this.id) return {};
-      for (let i of this.config.md) {
+      for (let i of this.md) {
         if (i.file === this.id) {
           return i
         }

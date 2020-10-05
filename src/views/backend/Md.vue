@@ -5,7 +5,8 @@
         <svg-icon :name="'loading'"/>
         <span>{{ deleting.state }}</span>
       </div>
-      <loading-button :text="'新建'" :icon="'add'" class="new" @click.native="newArticle"/>
+      <loading-button :text="'新建'" :icon="'add'" class="new"
+                      @click.native="$router.push({name: 'backend.md.detail', params: {id: 'new'}})"/>
     </div>
     <div class="list" flex>
       <table>
@@ -56,7 +57,7 @@ import SingleButton from "@/components/Button";
 import {mapState} from "vuex";
 import selfImage from '@/image/i.png'
 import LoadingButton from "@/components/LoadingButton";
-import {parseAjaxError, parseTime, randomTagColor, randomTagColorList} from "@/utils";
+import {parseAjaxError, parseTime, randomTagColorList} from "@/utils";
 
 export default {
   name: "Md",
@@ -71,32 +72,17 @@ export default {
     }
   },
   computed: {
-    ...mapState(['config', 'gitUtil']),
-    mdList() {
-      //     "name": "测试",
-      //     "file": "1",
-      //     "cover": "cover.jpg",
-      //     "time": "2020.9.13",
-      //     "summary": "测试这个博客的md",
-      //     "tags": ["文章","js"]
-      return this.config.md
-    },
+    ...mapState(['md', 'gitUtil']),
     colorList() {
-      return randomTagColorList(this.mdList)
+      return randomTagColorList(this.md)
     },
     reverseList() {
-      return this.mdList.reverse()
+      return this.md.reverse()
     }
   },
   methods: {
-    newArticle() {
-      this.$router.push({name: 'backend.md.detail', params: {id: 'new'}})
-    },
     parseTime(time) {
       return parseTime(time, true)
-    },
-    ranColor() {
-      return randomTagColor();
     },
     async removeMd(file) {
       if (this.deleting.bool) return;
@@ -105,26 +91,27 @@ export default {
           let err = null;
           this.deleting = {
             bool: true,
-            state: '更新配置'
+            state: '更新md.json'
           };
-          // 更新config
-          let fakeMdList = this.mdList.slice();
-          for (let i=0;i<fakeMdList.length;i++){
-            if (fakeMdList[i].file === file){
-              fakeMdList.splice(i, 1);
+          // 更新md
+          let newMdList = this.md.slice();
+          for (let i = 0; i < newMdList.length; i++) {
+            if (newMdList[i].file === file) {
+              newMdList.splice(i, 1);
               break
             }
           }
-          let fakeConfig = JSON.parse(JSON.stringify(this.config));
-          fakeConfig.md = fakeMdList;
-          let res = await this.gitUtil.updateConfig(fakeConfig);
+          let res = await this.gitUtil.updateJsonFile('md.json', newMdList);
           this.deleting.state = '准备删除';
           if (res[0]) {
             // 删除文件夹
-            res = await this.gitUtil.removeMd(file, this.deleting);
+            res = await this.gitUtil.removeMd([file], this.deleting);
             if (res[0]) {
               this.$message.success('删除成功!');
-              this.$store.commit('updateConfig', fakeConfig);
+              this.$store.commit('updateJson', {
+                key: 'md',
+                json: newMdList
+              });
             } else {
               err = res[1];
             }
