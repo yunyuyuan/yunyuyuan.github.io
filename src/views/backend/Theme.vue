@@ -176,12 +176,7 @@ export default {
 
 <style scoped lang="scss">
 .theme {
-  width: 95%;
   height: 100%;
-  background: white;
-  border-radius: 0.6rem;
-  margin: auto;
-  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.4);
   flex-direction: column;
 
   > .head {

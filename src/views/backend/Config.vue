@@ -56,11 +56,8 @@ export default {
 <style scoped lang="scss">
 .config{
   flex-direction: column;
-  background: #f7f7f7;
-  border-radius: 0.6rem;
-  margin: 2rem auto 0 auto;
-  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.6);
-  width: 40rem;
+  margin: 2rem auto 0 auto !important;
+  width: 40rem !important;
   > .head{
     padding: 0.6rem 0;
     width: 100%;
@@ -68,8 +65,7 @@ export default {
     background: linear-gradient(to bottom, #686868, #3b3b3b);
     border-bottom: 1px solid #cecece;
     justify-content: center;
-
-    > svg {
+    > svg{
       width: 2.2rem;
       height: 2.2rem;
     }

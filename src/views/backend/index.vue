@@ -65,6 +65,11 @@ export default {
           name: '主题',
           pathName: 'backend.theme',
           icon: 'brash'
+        },
+        {
+          name: '导出',
+          pathName: 'backend.export',
+          icon: 'download'
         }
       ]
     }
@@ -231,7 +236,7 @@ export default {
     }
   }
 
-  > .body {
+  > .body{
     position: absolute;
     width: calc(100% - #{$menu-width});
     height: 100%;
@@ -240,6 +245,13 @@ export default {
     top: 0;
     align-items: flex-start;
     transition: all .2s ease-out;
+    > div{
+      background: white;
+      width: calc(100% - 4rem);
+      margin: 1rem 1rem 1rem 3rem;
+      border-radius: 0.6rem;
+      box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+    }
   }
 }
 </style>

@@ -151,18 +151,8 @@ export default {
 <style scoped lang="scss">
   @import "src/assets/style/public";
   .md{
-    width: 95%;
     min-height: 90%;
-    margin: 2rem auto 1rem auto;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 0.7rem;
-    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
     flex-direction: column;
-    transition: all .1s linear;
-
-  &:hover {
-    background: white;
-  }
 
   >.head{
     width: 100%;

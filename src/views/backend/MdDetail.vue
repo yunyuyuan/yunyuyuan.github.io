@@ -290,11 +290,6 @@ export default {
 <style scoped lang="scss">
 .md-detail {
   flex-direction: column;
-  background: white;
-  width: 95%;
-  margin: 0.8rem auto 0 auto;
-  border-radius: 0.6rem;
-  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
   position: relative;
 
   > .operate{
