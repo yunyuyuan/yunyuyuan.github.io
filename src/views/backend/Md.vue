@@ -5,7 +5,9 @@
         <svg-icon :name="'loading'"/>
         <span>{{ deleting.state }}</span>
       </div>
-      <loading-button :text="'新建'" :icon="'add'" class="new"
+      <single-button class="select-" :active="selecting" :text="selecting?'取消':'选择'" @click.native="toggleSelecting"/>
+      <single-button v-if="selecting" class="del-btn" :text="'删除'" @click.native="deleteSome"/>
+      <loading-button v-else :text="'新建'" :icon="'add'" class="new"
                       @click.native="$router.push({name: 'backend.md.detail', params: {id: 'new'}})"/>
     </div>
     <div class="list" flex>
@@ -43,7 +45,10 @@
             </div>
           </td>
           <td class="operate">
-            <single-button :text="'删除'" @click.native="removeMd(item.file)" :deleting="deleting.bool"/>
+            <span v-if="selecting" :class="{active: selectList.indexOf(item.file)!==-1}" class="check-box"
+                  @click="toggleSelect(item.file)"></span>
+            <single-button v-else class="del-btn" :text="'删除'" @click.native="removeMd([item.file])"
+                           :deleting="deleting.bool"/>
           </td>
         </tr>
         </tbody>
@@ -68,7 +73,9 @@ export default {
       deleting: {
         bool: false,
         state: ''
-      }
+      },
+      selecting: false,
+      selectList: []
     }
   },
   computed: {
@@ -84,7 +91,23 @@ export default {
     parseTime(time) {
       return parseTime(time, true)
     },
-    async removeMd(file) {
+    toggleSelecting() {
+      this.selecting = !this.selecting
+    },
+    toggleSelect(item) {
+      let idx = this.selectList.indexOf(item);
+      if (idx === -1) {
+        this.selectList.push(item)
+      } else {
+        this.selectList.splice(idx, 1);
+      }
+    },
+    async deleteSome() {
+      if (confirm('确认删除?')) {
+        await this.removeMd(this.selectList.splice());
+      }
+    },
+    async removeMd(files) {
       if (this.deleting.bool) return;
       if (this.gitUtil) {
         if (confirm('确认删除?')) {
@@ -96,7 +119,7 @@ export default {
           // 更新md
           let newMdList = this.md.slice();
           for (let i = 0; i < newMdList.length; i++) {
-            if (newMdList[i].file === file) {
+            if (files.indexOf(newMdList[i].file) !== -1) {
               newMdList.splice(i, 1);
               break
             }
@@ -105,7 +128,7 @@ export default {
           this.deleting.state = '准备删除';
           if (res[0]) {
             // 删除文件夹
-            res = await this.gitUtil.removeMd([file], this.deleting);
+            res = await this.gitUtil.removeMd(files, this.deleting);
             if (res[0]) {
               this.$message.success('删除成功!');
               this.$store.commit('updateJson', {
@@ -158,22 +181,29 @@ export default {
       }
     }
     > ::v-deep .new{
-      margin: 0 1rem 0 auto;
+      margin: 0 1rem 0 0;
       background: #ffd784;
       padding: 0.6rem 1.2rem;
       box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
       &:hover{
         background: #efca7c;
       }
-      >svg{
+      > svg{
         width: 1.2rem;
         height: 1.2rem;
         fill: #000000;
       }
-      >span{
+      > span{
         margin-left: 0.5rem;
         font-size: 0.95rem;
         color: black;
+      }
+    }
+    > .select-{
+      margin: 0 1rem 0 auto;
+      background: #00bb00;
+      &[active]{
+        background: #ff0037;
       }
     }
   }
@@ -252,20 +282,8 @@ export default {
             }
             &.operate{
               width: 8%;
-              ::v-deep .single-button {
-                border-radius: 0.2rem;
-                background: #ff344f;
-                width: 2.4rem;
-                margin: 0 0.5rem;
-
-                &[deleting] {
-                  background: #727272;
-                  cursor: not-allowed;
-                }
-
-                &:not([deleting]):hover {
-                  background: #f1314a;
-                }
+              > *{
+                margin: auto;
               }
             }
           }
@@ -273,6 +291,18 @@ export default {
       }
     }
   }
-
+    ::v-deep .single-button.del-btn{
+      border-radius: 0.2rem;
+      background: #ff344f;
+      width: 2.4rem;
+      margin: 0 0.5rem;
+      &[deleting]{
+        background: #727272;
+        cursor: not-allowed;
+      }
+      &:not([deleting]):hover{
+        background: #f1314a;
+      }
+    }
 }
 </style>

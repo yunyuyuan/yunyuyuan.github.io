@@ -256,5 +256,16 @@ export default {
       box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
     }
   }
+  ::v-deep .check-box{
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+    border: 1px solid gray;
+    border-radius: 50%;
+    &.active{
+      background: #ff3700;
+    }
+  }
 }
 </style>

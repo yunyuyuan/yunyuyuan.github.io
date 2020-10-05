@@ -108,7 +108,7 @@ export class GithubUtils {
     }
 
     async updateJsonFile(path, json) {
-        path = `${dynamicFolder}/${path}`;
+        path = `${dynamicFolder}/json/${path}`;
         return new Promise(resolve => {
             this.repos.contents(path).fetch().then(res => {
                 return this.repos.contents(path).add({
@@ -207,59 +207,60 @@ export class GithubUtils {
 
     async removeMd(folders, dic) {
         return new Promise(async resolve => {
-            let repo = this.repos;
-            dic.state = '获取 commit sha';
-            // 先获取master的commit sha
-            let res = await repo.git.refs('heads/master').fetch().catch(err => {
-                resolve([false, err])
-            });
-            dic.state = '获取 tree sha';
-            // 根据commit sha获取tree sha
-            res = await repo.git.commits(res.object.sha).fetch().catch(err => {
-                resolve([false, err])
-            });
-            // 根据tree sha递归获取sha
-            const mdPath = [dynamicFolder, 'md'];
-            async function getMdSha(treeSha) {
-                if (mdPath.length) {
-                    dic.state = `获取 ${mdPath[0]} sha`;
-                    res = await repo.git.trees(treeSha).fetch().catch(err => {
-                        resolve([false, err])
-                    });
-                    for (let t of res.tree) {
-                        if (t.type === 'tree' && t.path === mdPath[0]) {
-                            mdPath.splice(0, 1);
-                            return await getMdSha(t.sha)
-                        }
-                    }
-                } else {
-                    // 找到了
-                    return await repo.git.trees(treeSha).fetch().catch(err => {
-                        resolve([false, err])
-                    });
-                }
-            }
-
-            res = await getMdSha(res.tree.sha);
-            // // 遍历删除
-            // for (let folder of folders){
-            //     dic.state = `获取 ${folder} sha`;
-            //     res = await repo.git.trees(treeSha).fetch().catch(err => {
-            //         resolve([false, err])
-            //     });
-            // }
-            for (let i of res.tree) {
-                console.log(i)
-                continue
-                dic.state = `删除 ${i.path}`;
-                await repo.contents(`${dynamicFolder}/md/${folder}/${i.path}`).remove({
-                    sha: i.sha,
-                    message: '删除'
-                }).catch(err => {
+            try {
+                let repo = this.repos;
+                dic.state = '获取 commit sha';
+                // 先获取master的commit sha
+                let res = await repo.git.refs('heads/master').fetch().catch(err => {
                     resolve([false, err])
                 });
+                dic.state = '获取 tree sha';
+                // 根据commit sha获取tree sha
+                res = await repo.git.commits(res.object.sha).fetch().catch(err => {
+                    resolve([false, err])
+                });
+                // 根据tree sha递归获取sha
+                const mdPath = [dynamicFolder, 'md'];
+
+                async function getMdSha(treeSha) {
+                    if (mdPath.length) {
+                        dic.state = `获取 ${mdPath[0]} sha`;
+                        res = await repo.git.trees(treeSha).fetch().catch(err => {
+                            resolve([false, err])
+                        });
+                        for (let t of res.tree) {
+                            if (t.type === 'tree' && t.path === mdPath[0]) {
+                                mdPath.splice(0, 1);
+                                return await getMdSha(t.sha)
+                            }
+                        }
+                    } else {
+                        // 找到了
+                        return await repo.git.trees(treeSha).fetch().catch(err => {
+                            resolve([false, err])
+                        });
+                    }
+                }
+
+                res = await getMdSha(res.tree.sha);
+                for (let i of res.tree) {
+                    if (folders.indexOf(i.path) !== -1) {
+                        res = await repo.git.trees(i.sha).fetch().catch(err => {
+                            resolve([false, err])
+                        });
+                        dic.state = `删除 ${i.path}-${res.path}`;
+                        await repo.contents(`${dynamicFolder}/md/${i.path}/${res.path}`).remove({
+                            sha: res.sha,
+                            message: '删除'
+                        }).catch(err => {
+                            resolve([false, err])
+                        });
+                    }
+                }
+                resolve([true])
+            } catch (err) {
+                resolve([false, err])
             }
-            resolve([true])
         })
     }
 }
