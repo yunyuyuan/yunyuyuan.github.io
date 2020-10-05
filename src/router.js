@@ -94,6 +94,14 @@ const routes = [
                 },
                 component: () => import('@/views/backend/Theme'),
             },
+            {
+                path: 'export',
+                name: 'backend.export',
+                meta: {
+                    title: '后台-导出'
+                },
+                component: () => import('@/views/backend/Export'),
+            },
         ]
     },
 ];
