@@ -1,5 +1,5 @@
 import Octokat from 'octokat';
-import {originPrefix, staticFolder} from "@/main";
+import {staticFolder} from "@/main";
 import dayjs from 'dayjs';
 import Sass from 'sass.js'
 
@@ -127,7 +127,7 @@ export class GithubUtils {
         })
     }
 
-    async updateMd(payload) {
+    async updateMd(payload, dict) {
         return await this.createCommit([
             {
                 folder: `${dynamicFolder}/md/${payload.folder}/index.md`,
@@ -137,10 +137,10 @@ export class GithubUtils {
                 folder: `${dynamicFolder}/md/${payload.folder}/index.html`,
                 content: payload.html
             }
-        ], `更新 md-${payload.folder}`)
+        ], `更新 md-${payload.folder}`, dict)
     };
 
-    async updateTheme (scss) {
+    async updateTheme(scss, dict) {
         return new Promise(resolve => {
             Sass.compile(scss, async res => {
                 resolve(await this.createCommit([
@@ -152,15 +152,16 @@ export class GithubUtils {
                         folder: `${dynamicFolder}/markdown.css`,
                         content: res.text
                     }
-                ], `更新 theme`))
+                ], `更新 theme`, dict))
 
             });
         })
     }
 
     // create commit
-    async createCommit (files, message){
+    async createCommit(files, message, dict) {
         return new Promise(async resolve => {
+            dict.state = '获取master的SHA';
             let main = await this.repos.git.refs('heads/master').fetch().catch(err => {
                 resolve([false, err])
             });
@@ -168,6 +169,7 @@ export class GithubUtils {
             // 创建tree
             let treeItems = [];
             for (let item of files) {
+                dict.state = `创建blob:${item.folder.replace(/^.*\/([^/]*)$/, '$1')}`;
                 let res = await this.repos.git.blobs.create({content: stringToB64(item.content), encoding: 'base64'}).catch(err => {
                     resolve([false, err])
                 });
@@ -178,6 +180,7 @@ export class GithubUtils {
                     type: "blob"
                 });
             }
+            dict.state = '创建tree';
             let tree = await this.repos.git.trees.create({
                 tree: treeItems,
                 base_tree: main.object.sha
@@ -186,6 +189,7 @@ export class GithubUtils {
             });
 
             // commit
+            dict.state = 'commit...';
             let commit = await this.repos.git.commits.create({
                 message: message,
                 tree: tree.sha,
@@ -193,6 +197,7 @@ export class GithubUtils {
             }).catch(err => {
                 resolve([false, err])
             });
+            dict.state = 'update...';
             await main.update({sha: commit.sha}).catch(err => {
                 resolve([false, err])
             });

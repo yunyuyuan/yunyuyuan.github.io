@@ -9,7 +9,8 @@
         <svg-icon :name="'info'"/>
         markdown语法指南
       </a>
-      <loading-button :loading="saving" :text="'上传'" :icon="'save'" @click.native="save"/>
+      <loading-button :loading="saving.b" :text="'上传'" :icon="'save'" @click.native="save"/>
+      <span class="state">{{ saving.state }}</span>
     </div>
     <div class="head" flex>
       <float-input @input="inputTitle" :name="'标题'" :size="1.3" :value="getInfo()?getInfo().name:''"/>
@@ -64,7 +65,7 @@
 </template>
 
 <script>
-import {originPrefix, staticFolder} from "@/main";
+import {originPrefix} from "@/main";
 import {getText, parseAjaxError, parseMarkdown, parseTime} from "@/utils";
 import {mapState} from 'vuex'
 import FloatInput from "@/components/FloatInput";
@@ -100,7 +101,10 @@ export default {
         pos: false,
         size: false
       },
-      saving: false,
+      saving: {
+        b: false,
+        state: ''
+      },
       newInfo: {
         name: "编辑标题",
         file: "",
@@ -228,13 +232,16 @@ export default {
       }
     },
     async save() {
-      if (this.saving) return;
+      if (this.saving.b) return;
       if (this.gitUtil) {
         let info = this.getInfo();
         if (!info.name || !info.summary || !info.tags.length || !info.cover) {
           return this.$message.warning('标题,简介,标签和封面均不能为空!')
         }
-        this.saving = true;
+        this.saving = {
+          b: true,
+          state: '保存中...'
+        };
         let folderId = new Date().getTime();
         info.modifyTime = folderId;
         if (this.id !== 'new') {
@@ -257,17 +264,20 @@ export default {
             folder: folderId,
             md: this.mdText,
             html: this.htmlText
-          });
+          }, this.saving);
           if (res[0]) {
             this.$message.success('上传成功!');
-            this.$router.push({name: 'backend.md'})
+            await this.$router.push({name: 'backend.md'})
           } else {
             this.$message.error(parseAjaxError(res[1]))
           }
         } else {
           this.$message.error(parseAjaxError(res[1]))
         }
-        this.saving = false
+        this.saving = {
+          b: false,
+          state: ''
+        }
       } else {
         this.$message.warning('请先登录!');
         this.$emit('login')
@@ -287,13 +297,13 @@ export default {
   box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
   position: relative;
 
-  > .operate {
-    margin-bottom: 1rem;
+  > .operate{
+    margin-bottom: 0.5rem;
     justify-content: space-between;
     width: calc(100% - 0.5rem);
-    padding: 0.2rem;
-
-    > .back {
+    padding: 0.2rem 0.2rem 0 0.2rem;
+    flex-wrap: wrap;
+    > .back{
       cursor: pointer;
       padding: 0.4rem 0.8rem;
       border-radius: 0.2rem;
@@ -342,15 +352,21 @@ export default {
       background: #66dded;
       box-shadow: 0 0 0.3rem #00000078;
       color: black;
-
-      &:not(.loading):hover {
+      &:not(.loading):hover{
         background: #62c7db;
       }
-
-      &.loading {
+      &.loading{
         background: gray;
         color: white;
       }
+    }
+    > .state{
+      width: 100%;
+      text-align: right;
+      color: red;
+      height: 1rem;
+      font-size: 0.8rem;
+      padding: 0.2rem 0;
     }
   }
 

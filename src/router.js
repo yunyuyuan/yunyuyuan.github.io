@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import {originPrefix, staticFolder} from "@/main";
+import {originPrefix} from "@/main";
 import store from '@/store/index'
 
 

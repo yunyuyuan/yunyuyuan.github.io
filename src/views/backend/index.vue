@@ -38,7 +38,7 @@
 import Login from "./Login";
 import {getText, parseAjaxError} from "@/utils";
 import LoadingButton from "@/components/LoadingButton";
-import {originPrefix, staticFolder} from "@/main";
+import {originPrefix} from "@/main";
 import selfImage from '@/image/i.png'
 
 export default {

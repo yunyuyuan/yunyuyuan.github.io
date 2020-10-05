@@ -2,7 +2,8 @@
   <div class="theme" flex>
     <div class="head" flex>
       <loading-button :icon="'reset'" :text="'还原默认'" @click.native="reset"/>
-      <loading-button :loading="saving" :icon="'save'" :text="'保存'" @click.native="save"/>
+      <span class="state">{{ saving.state }}</span>
+      <loading-button :loading="saving.b" :icon="'save'" :text="'保存'" @click.native="save"/>
     </div>
     <div class="body" flex>
       <div class="edit" flex ref="text">
@@ -35,7 +36,7 @@
 import LoadingButton from "@/components/LoadingButton";
 import {mapState} from "vuex";
 import {getText, parseAjaxError, parseMarkdown} from "@/utils";
-import {staticFolder} from "@/main";
+import {originPrefix} from "@/main";
 import testText from 'text-loader!@/assets/test.md';
 
 import Sass from 'sass.js';
@@ -57,7 +58,10 @@ export default {
   components: {Resizer, LoadingButton},
   data() {
     return {
-      saving: false,
+      saving: {
+        b: false,
+        state: ''
+      },
       scss: '',
       html: parseMarkdown(testText),
       codeMirror: null,
@@ -147,14 +151,20 @@ export default {
     },
     async save() {
       if (this.gitUtil) {
-        this.saving = true;
-        let res = await this.gitUtil.updateTheme(this.scss);
+        this.saving = {
+          b: true,
+          state: '更新中...'
+        };
+        let res = await this.gitUtil.updateTheme(this.scss, this.saving);
         if (res[0]) {
           this.$message.success('保存成功!');
         } else {
           this.$message.error(parseAjaxError(res[1]));
         }
-        this.saving = false
+        this.saving = {
+          b: false,
+          state: ''
+        };
       } else {
         this.$message.warning('请先登录!');
         this.$emit('login')
@@ -178,16 +188,19 @@ export default {
     width: 100%;
     height: 3rem;
     justify-content: space-between;
-
     > .loading-button{
       margin: 0.2rem;
-      &:first-of-type {
+      &:first-of-type{
         background: #ff4343;
-
-        &:hover {
+        &:hover{
           background: #ff2e2e;
         }
       }
+    }
+    > .state{
+      color: red;
+      height: 1rem;
+      font-size: 0.8rem;
     }
   }
 

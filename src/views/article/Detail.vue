@@ -22,7 +22,7 @@
 
 <script>
 import {getText} from "@/utils";
-import {originPrefix, staticFolder} from "@/main";
+import {originPrefix} from "@/main";
 import {mapState} from "vuex";
 
 import TheComment from "@/views/comment/index";
