@@ -205,7 +205,7 @@ export class GithubUtils {
         })
     }
 
-    async removeMd(folders, dic) {
+    async removeSome(folders, dic, what) {
         return new Promise(async resolve => {
             try {
                 let repo = this.repos;
@@ -220,7 +220,7 @@ export class GithubUtils {
                     resolve([false, err])
                 });
                 // 根据tree sha递归获取sha
-                const mdPath = [dynamicFolder, 'md'];
+                const mdPath = [dynamicFolder, what];
 
                 async function getMdSha(treeSha) {
                     if (mdPath.length) {
@@ -248,13 +248,25 @@ export class GithubUtils {
                         res = await repo.git.trees(i.sha).fetch().catch(err => {
                             resolve([false, err])
                         });
-                        dic.state = `删除 ${i.path}-${res.path}`;
-                        await repo.contents(`${dynamicFolder}/md/${i.path}/${res.path}`).remove({
-                            sha: res.sha,
-                            message: '删除'
-                        }).catch(err => {
-                            resolve([false, err])
-                        });
+                        if (res.type === 'tree') {
+                            for (let j of res.tree) {
+                                dic.state = `删除 ${i.path}-${j.path}`;
+                                await repo.contents(`${dynamicFolder}/${what}/${i.path}/${j.path}`).remove({
+                                    sha: j.sha,
+                                    message: '删除'
+                                }).catch(err => {
+                                    resolve([false, err])
+                                });
+                            }
+                        } else {
+                            dic.state = `删除 ${i.path}-${res.path}`;
+                            await repo.contents(`${dynamicFolder}/${what}/${i.path}/${res.path}`).remove({
+                                sha: res.sha,
+                                message: '删除'
+                            }).catch(err => {
+                                resolve([false, err])
+                            });
+                        }
                     }
                 }
                 resolve([true])

@@ -5,7 +5,10 @@
         <svg-icon :name="'loading'"/>
         <span>{{ deleting.state }}</span>
       </div>
-      <loading-button :text="'新建'" :icon="'add'" class="new"
+      <single-button class="select-" :active="selecting" :text="selecting?'取消':'选择'"
+                     @click.native="selecting=!selecting"/>
+      <single-button v-if="selecting" class="del-btn" :text="'删除'" @click.native="deleteSome"/>
+      <loading-button v-else :text="'新建'" :icon="'add'" class="new"
                       @click.native="$router.push({name: 'backend.record.detail', params: {id: 'new'}})"/>
     </div>
     <div class="body">
@@ -26,7 +29,9 @@
             <span>{{ item.prefix }}</span>
           </td>
           <td>
-            <single-button @click.native="deleteItem(item)" :text="'删除'"/>
+            <span v-if="selecting" :class="{active: selectList.indexOf(item.file)!==-1}" class="check-box"
+                  @click="toggleSelect(item.file)"></span>
+            <single-button class="del-btn" v-else @click.native="deleteItem([item.file])" :text="'删除'"/>
           </td>
         </tr>
         </tbody>
@@ -39,6 +44,7 @@
 import {mapState} from "vuex";
 import SingleButton from "@/components/Button";
 import LoadingButton from "@/components/LoadingButton";
+import {parseAjaxError} from "@/utils";
 
 export default {
   name: "Record",
@@ -48,16 +54,74 @@ export default {
       deleting: {
         b: false,
         state: ''
-      }
+      },
+      selecting: false,
+      selectList: []
     }
   },
   computed: {
-    ...mapState(['record'])
+    ...mapState(['record', 'gitUtil'])
   },
   methods: {
-    deleteItem(item) {
-
-    }
+    toggleSelect(item) {
+      let idx = this.selectList.indexOf(item);
+      if (idx === -1) {
+        this.selectList.push(item)
+      } else {
+        this.selectList.splice(idx, 1);
+      }
+    },
+    async deleteSome() {
+      if (this.selectList.length) {
+        await this.deleteItem(this.selectList.slice())
+      }
+    },
+    async deleteItem(files) {
+      if (this.deleting.bool) return;
+      if (this.gitUtil) {
+        if (confirm('确认删除?')) {
+          let err = null;
+          this.deleting = {
+            bool: true,
+            state: '更新record.json'
+          };
+          // 更新md
+          let newRecordList = this.record.slice();
+          for (let i = 0; i < newRecordList.length; i++) {
+            if (files.indexOf(newRecordList[i].file) !== -1) {
+              newRecordList.splice(i, 1);
+            }
+          }
+          let res = await this.gitUtil.updateJsonFile('record.json', newRecordList);
+          this.deleting.state = '准备删除';
+          if (res[0]) {
+            // 删除文件夹
+            res = await this.gitUtil.removeSome(files, this.deleting, 'record');
+            if (res[0]) {
+              this.$message.success('删除成功!');
+              this.$store.commit('updateJson', {
+                key: 'record',
+                json: newRecordList
+              });
+            } else {
+              err = res[1];
+            }
+          } else {
+            err = res[1];
+          }
+          if (err) {
+            this.$message.error(parseAjaxError(err));
+          }
+          this.deleting = {
+            bool: false,
+            state: ''
+          };
+        }
+      } else {
+        this.$message.warning('请先登录!');
+        this.$emit('login')
+      }
+    },
   }
 }
 </script>
@@ -84,7 +148,7 @@ export default {
       }
     }
     > ::v-deep .new{
-      margin: 0 1rem 0 auto;
+      margin: 0 1rem 0 0;
       background: #ffd784;
       padding: 0.6rem 1.2rem;
       box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
@@ -100,6 +164,13 @@ export default {
         margin-left: 0.5rem;
         font-size: 0.95rem;
         color: black;
+      }
+    }
+    > .select-{
+      margin: 0 1rem 0 auto;
+      background: #00bb00;
+      &[active]{
+        background: #ff0037;
       }
     }
   }
@@ -127,18 +198,8 @@ export default {
             > span{
               @include text-overflow(4);
             }
-            ::v-deep .single-button{
-              border-radius: 0.2rem;
-              background: #ff344f;
-              width: 2.4rem;
-              margin: 0 0.5rem;
-              &[deleting]{
-                background: #727272;
-                cursor: not-allowed;
-              }
-              &:not([deleting]):hover{
-                background: #f1314a;
-              }
+            > *{
+              margin: 0 auto;
             }
           }
         }

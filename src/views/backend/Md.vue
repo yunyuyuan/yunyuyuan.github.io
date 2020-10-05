@@ -1,11 +1,12 @@
 <template>
   <div class="md" flex>
     <div class="head" flex>
-      <div class="delete-state" v-if="deleting.bool">
+      <div class="delete-state" v-if="deleting.bool" flex>
         <svg-icon :name="'loading'"/>
         <span>{{ deleting.state }}</span>
       </div>
-      <single-button class="select-" :active="selecting" :text="selecting?'取消':'选择'" @click.native="toggleSelecting"/>
+      <single-button class="select-" :active="selecting" :text="selecting?'取消':'选择'"
+                     @click.native="selecting=!selecting"/>
       <single-button v-if="selecting" class="del-btn" :text="'删除'" @click.native="deleteSome"/>
       <loading-button v-else :text="'新建'" :icon="'add'" class="new"
                       @click.native="$router.push({name: 'backend.md.detail', params: {id: 'new'}})"/>
@@ -91,9 +92,6 @@ export default {
     parseTime(time) {
       return parseTime(time, true)
     },
-    toggleSelecting() {
-      this.selecting = !this.selecting
-    },
     toggleSelect(item) {
       let idx = this.selectList.indexOf(item);
       if (idx === -1) {
@@ -103,8 +101,8 @@ export default {
       }
     },
     async deleteSome() {
-      if (confirm('确认删除?')) {
-        await this.removeMd(this.selectList.splice());
+      if (this.selectList.length) {
+        await this.removeMd(this.selectList.slice());
       }
     },
     async removeMd(files) {
@@ -121,14 +119,13 @@ export default {
           for (let i = 0; i < newMdList.length; i++) {
             if (files.indexOf(newMdList[i].file) !== -1) {
               newMdList.splice(i, 1);
-              break
             }
           }
           let res = await this.gitUtil.updateJsonFile('md.json', newMdList);
           this.deleting.state = '准备删除';
           if (res[0]) {
             // 删除文件夹
-            res = await this.gitUtil.removeMd(files, this.deleting);
+            res = await this.gitUtil.removeSome(files, this.deleting, 'md');
             if (res[0]) {
               this.$message.success('删除成功!');
               this.$store.commit('updateJson', {
@@ -159,22 +156,21 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "src/assets/style/public";
-  .md{
-    min-height: 90%;
-    flex-direction: column;
-
-  >.head{
+@import "src/assets/style/public";
+.md{
+  min-height: 90%;
+  flex-direction: column;
+  > .head{
     width: 100%;
     margin: 1rem 0;
     justify-content: space-between;
-    >.delete-state{
+    > .delete-state{
       margin-left: 1rem;
-      >svg{
+      > svg{
         width: 1.5rem;
         height: 1.5rem;
       }
-      >span{
+      > span{
         color: red;
         font-size: 0.8rem;
         margin-left: 0.6rem;
@@ -207,10 +203,10 @@ export default {
       }
     }
   }
-  >.list{
+  > .list{
     width: 95%;
     margin: 1rem 0;
-    >table{
+    > table{
       width: 100%;
       tbody{
         tr{
@@ -241,37 +237,31 @@ export default {
               font-size: 0.85rem;
               color: #545454;
             }
-            &.time {
+            &.time{
               width: 12%;
               font-weight: 500;
               max-width: 10rem;
-
-              > div {
+              > div{
                 flex-direction: column;
-
-                span, a {
+                span, a{
                   word-break: keep-all;
                   white-space: nowrap;
                 }
-
-                > span {
+                > span{
                   font-size: 0.8rem;
                   margin-right: 0.4rem;
                 }
-
-                > a {
+                > a{
                   font-size: 0.88rem;
                   color: #0003ff;
                 }
               }
             }
-            &.tags {
+            &.tags{
               width: 15%;
-
-              > div {
+              > div{
                 flex-wrap: wrap;
-
-                > span {
+                > span{
                   margin: 0.4rem 0.2rem;
                   padding: 0.3rem 0.8rem;
                   font-size: 0.8rem;
@@ -291,18 +281,5 @@ export default {
       }
     }
   }
-    ::v-deep .single-button.del-btn{
-      border-radius: 0.2rem;
-      background: #ff344f;
-      width: 2.4rem;
-      margin: 0 0.5rem;
-      &[deleting]{
-        background: #727272;
-        cursor: not-allowed;
-      }
-      &:not([deleting]):hover{
-        background: #f1314a;
-      }
-    }
 }
 </style>

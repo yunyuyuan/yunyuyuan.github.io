@@ -267,5 +267,18 @@ export default {
       background: #ff3700;
     }
   }
+  ::v-deep .single-button.del-btn{
+    border-radius: 0.2rem;
+    background: #ff344f;
+    width: 2.4rem;
+    margin: 0 0.5rem;
+    &[deleting]{
+      background: #727272;
+      cursor: not-allowed;
+    }
+    &:not([deleting]):hover{
+      background: #f1314a;
+    }
+  }
 }
 </style>
