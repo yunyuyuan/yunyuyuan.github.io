@@ -1,8 +1,8 @@
 <template>
   <div class="index">
     <img :src="images[routeNow]"/>
-    <the-head v-if="showHead"/>
-    <section :class="{body: true, 'show-head': showHead}" flex>
+    <the-head v-if="showHead" @toggle="toggleShowBg"/>
+    <section :class="{body: true, 'show-head': showHead, 'show-bg': showBg}" flex>
       <router-view></router-view>
       <the-footer v-if="this.routeNow !== 'backend'"/>
     </section>
@@ -16,7 +16,8 @@ import HomeImage from '@/image/home.jpg';
 import ArticleListImage from '@/image/articleList.jpg';
 import ArticleDetailImage from '@/image/articleDetail.jpg';
 import msgBoardImage from '@/image/msgBoard.jpg';
-import recordImage from '@/image/msgBoard.jpg';
+import backendImage from '@/image/backend.jpg';
+import recordImage from '@/image/record.jpg';
 
 import TheHead from "@/views/block/Head";
 import TheFooter from "@/views/block/Footer";
@@ -31,12 +32,13 @@ export default {
   data() {
     return {
       showHead: true,
+      showBg: true,
       images: {
         home: HomeImage,
         articleList: ArticleListImage,
         articleDetail: ArticleDetailImage,
         msgBoard: msgBoardImage,
-        backend: msgBoardImage,
+        backend: backendImage,
         record: recordImage,
       },
       routeNow: 'home'
@@ -72,7 +74,11 @@ export default {
   mounted() {
     Vue.prototype.$message = this.$refs.message
   },
-  methods: {}
+  methods: {
+    toggleShowBg(b) {
+      this.showBg = b
+    }
+  }
 }
 </script>
 
@@ -92,7 +98,7 @@ export default {
     z-index: $z-index-bg;
   }
 
-  > .body {
+  > .body{
     position: fixed;
     left: 0;
     top: 0;
@@ -102,8 +108,12 @@ export default {
     z-index: $z-index-body;
     flex-direction: column;
     background: rgba(0, 0, 0, 0.1);
-
-    &.show-head {
+    transition: opacity .2s linear;
+    opacity: 0;
+    &.show-bg{
+      opacity: 1;
+    }
+    &.show-head{
       padding-top: $head-height;
       height: calc(100% - #{$head-height});
     }

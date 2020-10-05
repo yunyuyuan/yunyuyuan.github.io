@@ -113,10 +113,11 @@ export default {
   flex-direction: column;
   height: calc(100% - 2rem);
   > .head{
-    width: calc(100% - 0.4rem);
+    width: calc(100% - 0.8rem);
     margin-bottom: 1rem;
-    padding: 0.4rem 0.2rem;
+    padding: 0.4rem;
     justify-content: space-between;
+    border-bottom: 1px solid gray;
     > .select{
       cursor: pointer;
       > a{

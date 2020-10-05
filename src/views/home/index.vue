@@ -4,17 +4,17 @@
       <router-link :to="{name: 'article.list'}" flex>
         <svg-icon :name="'article'"/>
         <span class="name">文章</span>
-        <span class="tip">一些"技术"文章</span>
+        <span class="tip">"技术"文章</span>
       </router-link>
       <router-link :to="{name: 'record'}" flex>
         <svg-icon :name="'record'"/>
         <span class="name">记录</span>
-        <span class="tip">生活中的记录</span>
+        <span class="tip">一框琐事</span>
       </router-link>
       <router-link :to="{name: 'msgBoard'}" flex>
         <svg-icon :name="'comments'"/>
         <span class="name">留言板</span>
-        <span class="tip">小伙伴的留言</span>
+        <span class="tip">谁的话语</span>
       </router-link>
     </div>
     <div class="info" flex>

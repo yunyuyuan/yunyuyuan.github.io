@@ -1,10 +1,10 @@
 <template>
-  <section class="the-head">
+  <section class="the-head" :class="{'show-bg': showBg}">
     <div class="body" flex>
       <router-link class="favicon" :to="{name: 'home'}">
         <img :src="selfImage"/>
       </router-link>
-      <b class="txt">
+      <b class="txt" @mouseenter="toggle(true)" @mouseleave="toggle(false)" flex>
         Simple Code,Simple Life
       </b>
     </div>
@@ -20,6 +20,7 @@ export default {
   data() {
     return {
       selfImage,
+      showBg: true
     }
   },
   mounted() {
@@ -29,7 +30,11 @@ export default {
     }).init()
   },
   methods: {
-
+    toggle(b) {
+      console.log(b)
+      this.showBg = b;
+      this.$emit('toggle', !this.showBg)
+    }
   }
 }
 </script>
@@ -51,6 +56,12 @@ export default {
   &:hover{
     background: rgba(0, 0, 0, 0.3);
   }
+  &.show-bg{
+    background: transparent !important;
+    .favicon{
+      opacity: 0 !important;
+    }
+  }
   > .body{
     width: 100%;
     height: 100%;
@@ -71,7 +82,11 @@ export default {
     }
     > .txt{
       margin: 0 1rem 0 auto;
+      height: 100%;
       color: white;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-family: "Source Code Pro", serif;
     }
   }
 }

@@ -44,7 +44,7 @@
       <div class="inner" flex>
         <div class="help">
           <p>关于上传图片</p>
-          <b>本站不存储图片，如果你想发送图片，建议使用以下方式</b>
+          <b>本站不存储评论图片，如果你想发送图片，建议使用以下方式:</b>
           <div flex>
             <a href="https://imgchr.com/" target="_blank">路过图床</a>
             <img src="https://s1.ax1x.com/2020/09/28/0VPxBQ.png"/>
@@ -443,10 +443,13 @@ export default {
           margin: 0.5rem auto;
           flex-direction: column;
 
-          > a {
+          > a{
             font-size: 1.1rem;
             color: #ff6600;
             font-weight: bold;
+            padding: 0.2rem;
+            margin-top: 0.5rem;
+            border: 2px dashed red;
           }
 
           > img {
@@ -458,18 +461,21 @@ export default {
         }
       }
 
-      > .submit {
+      > .submit{
         padding: 1rem 0 0.5rem 0;
         width: 100%;
         justify-content: center;
         border-top: 1px solid gray;
-
-        > .float-input {
+        background: #232323;
+        border-radius: inherit;
+        ::v-deep > .float-input{
           width: 40%;
           margin-right: 1rem;
+          input{
+            color: white !important;
+          }
         }
-
-        > .single-button {
+        > .single-button{
           background: #0073ff;
         }
       }
