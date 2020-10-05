@@ -258,14 +258,6 @@ export class GithubUtils {
                                     resolve([false, err])
                                 });
                             }
-                        } else {
-                            dic.state = `删除 ${i.path}-${res.path}`;
-                            await repo.contents(`${dynamicFolder}/${what}/${i.path}/${res.path}`).remove({
-                                sha: res.sha,
-                                message: '删除'
-                            }).catch(err => {
-                                resolve([false, err])
-                            });
                         }
                     }
                 }
