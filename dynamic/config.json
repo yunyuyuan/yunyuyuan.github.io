@@ -1,6 +1,6 @@
 {
     "name": "云与原",
-    "describe": "写点什么,放在网络上,仅此.",
+    "describe": "写点什么,放在网络上,仅此",
     "copyright": "2019-2020",
     "github": "https://github.com/yunyuyuan",
     "bilibili": "https://space.bilibili.com/204446485",
@@ -8,12 +8,12 @@
     "theme": "auto",
     "md": [
         {
-            "name": "此网站的建设",
+            "name": "网站建设",
             "file": "1600781888969",
             "cover": "https://s2.ax1x.com/2020/01/28/1KwnSS.jpg",
             "createTime": 1600781888969,
-            "modifyTime": 1601478133769,
-            "summary": "第一篇文章，谈谈本站的建设过程吧!",
+            "modifyTime": 1601883485648,
+            "summary": "aff阿斯蒂芬",
             "tags": [
                 "非技术"
             ]
