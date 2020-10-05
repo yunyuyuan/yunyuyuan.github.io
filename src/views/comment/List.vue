@@ -44,7 +44,7 @@
                                :loading="submitting" @cancel="replayItem = null" @submit="replayComment"/>
               </div>
             </div>
-            <div class="page" flex>
+            <div class="page" v-if="item.page.hasPreviousPage&&item.page.hasNextPage" flex>
               <span :disabled="!item.page.hasPreviousPage" class="left" flex
                     @click='toReply(!item.page.hasPreviousPage, item, `,before: "${item.page.startCursor}"`)'><svg-icon
                   :name="'right'"/></span>
@@ -74,7 +74,7 @@ import {
 } from "@/views/comment/utils";
 import WriteComment from "@/views/comment/Write";
 import dayjs from 'dayjs';
-import {parseMarkdown} from "@/utils";
+import {parseAjaxError, parseMarkdown} from "@/utils";
 import hljs from "highlight.js";
 import siteConfig from '@/site-config'
 
@@ -193,6 +193,8 @@ export default {
             hljs.highlightBlock(el);
           })
         })
+      } else {
+        this.$message.error(parseAjaxError(res[1]))
       }
     },
     async updateReply(cursor) {

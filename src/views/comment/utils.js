@@ -8,7 +8,7 @@ let owner = siteConfig.owner,
     repo = `${owner}.github.io`,
     repoId = '',
     // this token just can read public information
-    publicToken = 'token ' + (['5', '742fff2313f3a2a159c3f41394b7502d0a8664b'].join('')),
+    publicToken = 'token ' + (['5', '66b4e73893d07b79dbcc3e36f86acc309e78b2d'].join('')),
     headers = {
         Authorization: publicToken
     },

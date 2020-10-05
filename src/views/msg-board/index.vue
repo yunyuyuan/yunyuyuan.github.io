@@ -43,6 +43,17 @@ export default {
   }
   ::v-deep .comment{
     width: 100%;
+    > .list{
+      order: -1;
+      margin: 1rem 0;
+      padding-top: 0;
+      padding-bottom: 1rem;
+      border-top: none;
+      border-bottom: 2px solid gray;
+    }
+    > .write{
+      margin-bottom: 1rem;
+    }
   }
 }
 </style>

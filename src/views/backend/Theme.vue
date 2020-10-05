@@ -176,10 +176,9 @@ export default {
 
 <style scoped lang="scss">
 .theme {
-  height: 100%;
+  height: calc(100% - 2rem);
   flex-direction: column;
-
-  > .head {
+  > .head{
     width: 100%;
     height: 3rem;
     justify-content: space-between;

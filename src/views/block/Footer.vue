@@ -54,21 +54,27 @@ footer{
     border-radius: 0.5rem;
     justify-content: center;
     box-shadow: 0 0 0.5rem rgba(255, 255, 255, 0.4);
-
-    > svg {
+    transition: all .15s linear;
+    &:hover{
+      background: white;
+    }
+    > svg{
       height: 90%;
       width: 90%;
     }
   }
   > .social-media{
-    > a {
+    > a{
       margin: 0 0.8rem;
       background: white;
       border-radius: 0.25rem;
       padding: 0.2rem 0.4rem;
       justify-content: center;
-
-      > svg {
+      transition: all .15s linear;
+      &:hover{
+        background: #e3e3e3;
+      }
+      > svg{
         width: 1.4rem;
         height: 1.4rem;
       }

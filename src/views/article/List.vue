@@ -118,18 +118,15 @@ export default {
     border-radius: 1rem;
     border: 1px solid #787878;
     background: rgba(0, 0, 0, 0.2);
-    margin-top: $head-height+1rem;
     padding: 0.3rem;
     box-shadow: 0 0 0.5rem #d2d2d2;
     transition: all .1s linear;
-    margin-bottom: 1rem;
-
-    &.active {
+    margin: 1rem 0;
+    &.active{
       background: rgba(255, 255, 255, 0.4);
       box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
     }
-
-    > input {
+    > input{
       width: 15rem;
       height: 100%;
       font-size: 0.9rem;
@@ -246,26 +243,26 @@ export default {
         }
       }
 
-      > .info {
+      > .info{
         height: 100%;
         width: 100%;
         box-shadow: 0 0 0.5rem #171717;
         text-decoration: none;
         color: black;
         border-radius: 0 0.5rem 0.5rem 0;
-
-        > img {
-          height: 100%;
+        background: white;
+        > img{
           width: 12rem;
           object-fit: contain;
           box-shadow: 1rem 0 1rem -1rem #a8a8a8;
           z-index: 1;
+          background: white;
+          border: 1px solid #bebebe;
         }
 
         > div {
           height: 100%;
           width: 100%;
-          background: white;
           border-radius: 0 0.5rem 0.5rem 0;
           flex-direction: column;
           box-shadow: 0 0 0.4rem rgba(128, 128, 128, 0.59) inset;

@@ -209,7 +209,7 @@ export default {
               cursor: pointer;
               width: 15%;
               img{
-                height: 96%;
+                height: 8rem;
                 object-fit: contain;
               }
             }
