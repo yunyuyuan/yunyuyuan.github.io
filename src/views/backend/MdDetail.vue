@@ -13,16 +13,16 @@
       <span class="state">{{ saving.state }}</span>
     </div>
     <div class="head" flex>
-      <float-input @input="inputTitle" :name="'标题'" :size="1.3" :value="getInfo()?getInfo().name:''"/>
+      <float-input @input="inputTitle" :name="'标题'" :size="1.3" :value="info.name"/>
       <float-input class="summary" @input="inputSummary" :name="'简介'" :size="1"
-                   :value="getInfo()?getInfo().summary:''"/>
+                   :value="info.summary"/>
     </div>
     <div class="info" flex>
       <div class="cover">
-        <img :src="getInfo()?getInfo().cover: defaultCover"/>
+        <loading-img :src="info.cover" :size="[20, 15]"/>
         <label>
           <span>封面链接:</span>
-          <input :value="getInfo()?getInfo().cover: ''" @focusout="changeCover"/>
+          <input :value="info.cover" @focusout="changeCover"/>
         </label>
       </div>
       <div class="tags-time" flex>
@@ -30,7 +30,7 @@
           <span class="tag-icon">
             <svg-icon :name="'tag'"/>
           </span>
-          <div v-for="(tag, idx) in getInfo()?getInfo().tags:[]" :class="{editing: tagEditIndex===idx}" :key="tag">
+          <div v-for="(tag, idx) in info.tags" :class="{editing: tagEditIndex===idx}" :key="tag">
             <input :disabled="tagEditIndex!==idx" @focusout="editTag" :data-old="tag" :data-idx="idx" :value="tag"/>
             <div flex="">
               <span @click="clickTrash(idx)" title="删除">
@@ -46,8 +46,8 @@
           </span>
         </div>
         <div class="time" flex>
-          <span><span>创建:</span>{{ parseTime(getInfo() ? getInfo().createTime : 0) }}</span>
-          <span><span>修改:</span>{{ parseTime(getInfo() ? getInfo().modifyTime : 0) }}</span>
+          <span><span>创建:</span>{{ (info ? info.createTime : 0) | time(false) }}</span>
+          <span><span>修改:</span>{{ (info ? info.modifyTime : 0) | time(false) }}</span>
         </div>
       </div>
     </div>
@@ -66,7 +66,7 @@
 
 <script>
 import {originPrefix} from "@/main";
-import {getText, parseAjaxError, parseMarkdown, parseTime} from "@/utils";
+import {getText, parseAjaxError, parseMarkdown} from "@/utils";
 import {mapState} from 'vuex'
 import FloatInput from "@/components/FloatInput";
 
@@ -85,10 +85,11 @@ import '@/assets/style/code-mirror/light-markdown.scss';
 import '@/assets/style/code-mirror/dracula-markdown.scss';
 import Resizer from "@/components/Resizer";
 import MarkdownHelp from "@/views/block/MarkdownHelp";
+import LoadingImg from "@/components/LoadingImg";
 
 export default {
   name: "MdDetail",
-  components: {MarkdownHelp, Resizer, LoadingButton, FloatInput},
+  components: {LoadingImg, MarkdownHelp, Resizer, LoadingButton, FloatInput},
   data() {
     return {
       defaultCover,
@@ -105,6 +106,7 @@ export default {
         b: false,
         state: ''
       },
+      info: {},
       newInfo: {
         name: "编辑标题",
         file: "",
@@ -121,13 +123,6 @@ export default {
     id() {
       return this.$route.params.id
     },
-    info() {
-      for (let i of this.md) {
-        if (i.file === this.id) {
-          return i
-        }
-      }
-    },
     htmlText() {
       return parseMarkdown(this.mdText)
     }
@@ -137,33 +132,33 @@ export default {
   },
   watch: {
     async $route() {
-      await this.init()
+      if (this.$route.name === 'backend.md.detail') {
+        await this.init()
+      }
     }
   },
   methods: {
     async init() {
+      // 初始化信息
+      this.info = JSON.parse(JSON.stringify(this.id === 'new' ? this.newInfo : this.md.find(v => v.file === this.id)));
       this.mdText = '';
-      if (this.$route.name === 'backend.md.detail') {
-        // 标题
-        document.title = '后台-文章-' + this.id;
-        if (this.$route.params.id !== 'new') {
-          await this.getMdText()
-        }
+      // 标题
+      document.title = '后台-文章-' + this.id;
+      if (this.$route.params.id !== 'new') {
+        await this.getMdText()
       }
-      if (!this.codeMirror) {
-        this.codeMirror = new CodeMirror(this.$refs.textarea, {
-          indentUnit: 2,
-          tabSize: 2,
-          theme: 'dracula',
-          lineNumbers: true,
-          line: true,
-          mode: 'markdown',
-        });
-        this.codeMirror.on('change', () => {
-          this.mdText = this.codeMirror.getValue()
-        });
-        this.codeMirror.setValue(this.mdText);
-      }
+      this.codeMirror = new CodeMirror(this.$refs.textarea, {
+        indentUnit: 2,
+        tabSize: 2,
+        theme: 'dracula',
+        lineNumbers: true,
+        line: true,
+        mode: 'markdown',
+      });
+      this.codeMirror.on('change', () => {
+        this.mdText = this.codeMirror.getValue()
+      });
+      this.codeMirror.setValue(this.mdText);
     },
     async getMdText() {
       let res = await getText(`${originPrefix}/md/${this.id}/index.md`);
@@ -173,28 +168,18 @@ export default {
         this.$message.error(parseAjaxError(res[1]))
       }
     },
-    getInfo() {
-      return this.id === 'new' ? this.newInfo : this.info;
-    },
-    parseTime(t) {
-      return parseTime(t, true)
-    },
 
     inputTitle(payload) {
-      let info = this.getInfo();
-      info.name = payload[1]
+      this.info.name = payload[1]
     },
     inputSummary(payload) {
-      let info = this.getInfo();
-      info.summary = payload[1]
+      this.info.summary = payload[1]
     },
     changeCover(e) {
-      let info = this.getInfo();
-      info.cover = e.target.value;
+      this.info.cover = e.target.value;
     },
     clickTrash(idx) {
-      let info = this.getInfo();
-      info.tags.splice(idx, 1)
+      this.info.tags.splice(idx, 1)
     },
     clickEdit(e) {
       let span = e.currentTarget;
@@ -204,7 +189,7 @@ export default {
       })
     },
     editTag(e) {
-      let info = this.getInfo(),
+      let info = this.info,
           input = e.target;
       this.tagEditIndex = -1;
       for (let i of info.tags) {
@@ -215,8 +200,7 @@ export default {
       info.tags.splice(parseInt(input.getAttribute('data-idx')), 1, input.value);
     },
     addTag() {
-      let info = this.getInfo();
-      info.tags.push('输入标签' + info.tags.length)
+      this.info.tags.push('输入标签' + this.info.tags.length)
     },
     startResize (startPos){
       this.resizeStart = {
@@ -234,7 +218,7 @@ export default {
     async save() {
       if (this.saving.b) return;
       if (this.gitUtil) {
-        let info = this.getInfo();
+        let info = this.info;
         if (!info.name || !info.summary || !info.tags.length || !info.cover) {
           return this.$message.warning('标题,简介,标签和封面均不能为空!')
         }
@@ -245,7 +229,7 @@ export default {
         let folderId = new Date().getTime();
         info.modifyTime = folderId;
         if (this.id !== 'new') {
-          // 更新
+          // 不改folder
           folderId = this.id;
         } else {
           // 添加
@@ -255,7 +239,14 @@ export default {
           this.md.push(JSON.parse(JSON.stringify(info)));
         }
         // 执行更新
-        // md.json
+        // 更新本地md
+        for (let i in this.md) {
+          if (this.md[i].file === this.id) {
+            this.md[i] = info;
+            break
+          }
+        }
+        this.saving.state = '更新:md.json'
         let res = await this.gitUtil.updateJsonFile('md.json', this.md);
         if (res[0]) {
           // 更新 md 和 html文件
@@ -396,13 +387,6 @@ export default {
       flex-direction: column;
       border: 1px solid gray;
       box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.15);
-
-      > img {
-        width: 20rem;
-        height: 15rem;
-        object-fit: contain;
-        border-radius: inherit;
-      }
 
       > label {
         display: flex;
@@ -587,6 +571,5 @@ export default {
       }
     }
   }
-
 }
 </style>

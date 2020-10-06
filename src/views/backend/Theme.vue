@@ -90,27 +90,13 @@ export default {
         }
       }
     },
-    scss: {
-      immediate: true,
-      handler: async function () {
-        let style = document.head.querySelector('#fake-markdown-style');
-        if (!style) {
-          style = document.createElement('style');
-          style.id = 'fake-markdown-style';
-          document.head.appendChild(style);
-        }
-        Sass.compile(this.scss, (res) => {
-          if (res)
-            style.innerHTML = res.text
-        });
-      }
-    }
   },
   methods: {
     async init() {
       let res = await getText(`${originPrefix}/markdown.scss`);
       if (res[0]) {
         this.scss = res[1];
+        this.uploadStyle()
         if (this.codeMirror) {
           this.codeMirror.setValue(this.scss)
         }
@@ -127,21 +113,34 @@ export default {
           mode: 'sass',
         });
         this.codeMirror.on('change', () => {
-          this.scss = this.codeMirror.getValue()
+          this.scss = this.codeMirror.getValue();
+          this.uploadStyle()
         });
         this.codeMirror.setValue(this.scss);
       }
     },
-    startResize (startPos){
+    uploadStyle() {
+      let style = document.head.querySelector('#fake-markdown-style');
+      if (!style) {
+        style = document.createElement('style');
+        style.id = 'fake-markdown-style';
+        document.head.appendChild(style);
+      }
+      Sass.compile(this.scss, (res) => {
+        if (res)
+          style.innerHTML = res.text
+      });
+    },
+    startResize(startPos) {
       this.resizeStart = {
         pos: startPos,
         size: this.$refs.text.querySelector('.left').scrollWidth
       };
     },
-    doResize (delta){
+    doResize(delta) {
       let parentWidth = this.$refs.text.scrollWidth;
-      let newSize = this.resizeStart.size + (delta-this.resizeStart.pos);
-      if (newSize > parentWidth/5 && newSize < parentWidth*4/5){
+      let newSize = this.resizeStart.size + (delta - this.resizeStart.pos);
+      if (newSize > parentWidth / 5 && newSize < parentWidth * 4 / 5) {
         this.mdWidth = `${newSize}px`;
       }
     },

@@ -47,11 +47,11 @@
           <b>本站不存储评论图片，如果你想发送图片，建议使用以下方式:</b>
           <div flex>
             <a href="https://imgchr.com/" target="_blank">路过图床</a>
-            <img src="https://s1.ax1x.com/2020/09/28/0VPxBQ.png"/>
+            <loading-img :src="'https://s1.ax1x.com/2020/09/28/0VPxBQ.png'" :size="[]"/>
           </div>
           <div flex>
             <a href="https://sm.ms/" target="_blank">sm.ms</a>
-            <img src="https://s1.ax1x.com/2020/09/28/0VPvng.png"/>
+            <loading-img :src="'https://s1.ax1x.com/2020/09/28/0VPvng.png'" :size="[]"/>
           </div>
         </div>
         <div class="submit" flex>
@@ -85,10 +85,11 @@ import '@/assets/style/code-mirror/codeMirror.scss';
 
 import '@/assets/style/code-mirror/light-markdown.scss';
 import '@/assets/style/code-mirror/dracula-markdown.scss';
+import LoadingImg from "@/components/LoadingImg";
 
 export default {
   name: "WriteComment",
-  components: {SingleButton, MarkdownHelp, Resizer, LoadingButton, FloatInput},
+  components: {LoadingImg, SingleButton, MarkdownHelp, Resizer, LoadingButton, FloatInput},
   props: {
     loading: {
       type: Boolean,
@@ -452,10 +453,12 @@ export default {
             border: 2px dashed red;
           }
 
-          > img {
-            width: 90%;
+          ::v-deep .loading-img{
+            width: 90% !important;
             margin: 0.8rem auto;
-            object-fit: contain;
+            img{
+              object-fit: contain;
+            }
             box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
           }
         }

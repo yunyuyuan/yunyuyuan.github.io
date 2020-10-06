@@ -8,8 +8,8 @@
       <single-button class="select-" :active="selecting" :text="selecting?'取消':'选择'"
                      @click.native="selecting=!selecting"/>
       <single-button v-if="selecting" class="del-btn" :text="'删除'" @click.native="deleteSome"/>
-      <loading-button v-else :text="'新建'" :icon="'add'" class="new"
-                      @click.native="$router.push({name: 'backend.md.detail', params: {id: 'new'}})"/>
+      <loading-button :text="selecting?'导出':'新建'" :icon="selecting?'download':'add'" class="new"
+                      @click.native="clickBtn"/>
     </div>
     <div class="list" flex>
       <table>
@@ -26,28 +26,28 @@
         <tbody>
         <tr v-for="item in reverseList" :key="item.file">
           <router-link tag="td" class="cover" :to="{name: 'backend.md.detail', params: {id: item.file}}">
-            <img :src="item.cover || selfImage"/>
+            <loading-img :src="item.cover || selfImage" :size="[-1, 8]"/>
           </router-link>
           <td class="title"><span>{{ item.name }}</span></td>
           <td class="summary"><span>{{ item.summary }}</span></td>
           <td class="time">
             <div flex>
               <span>创建:</span>
-              <a>{{ parseTime(item.createTime) }}</a>
+              <a>{{ item.createTime | time(true) }}</a>
             </div>
             <div flex>
               <span>修改:</span>
-              <a>{{ parseTime(item.modifyTime) }}</a>
+              <a>{{ item.modifyTime | time(true) }}</a>
             </div>
           </td>
           <td class="tags">
             <div flex="">
-              <span :style="{background: colorList[tag]}" v-for="tag in item.tags">{{ tag }}</span>
+              <span :style="{background: $options.filters.color(tag)}" v-for="tag in item.tags">{{ tag }}</span>
             </div>
           </td>
           <td class="operate">
-            <span v-if="selecting" :class="{active: selectList.indexOf(item.file)!==-1}" class="check-box"
-                  @click="toggleSelect(item.file)"></span>
+            <span v-if="selecting" :class="{active: selectList.indexOf(item)!==-1}" class="check-box"
+                  @click="toggleSelect(item)"></span>
             <single-button v-else class="del-btn" :text="'删除'" @click.native="removeMd([item.file])"
                            :deleting="deleting.bool"/>
           </td>
@@ -63,11 +63,15 @@ import SingleButton from "@/components/Button";
 import {mapState} from "vuex";
 import selfImage from '@/image/i.png'
 import LoadingButton from "@/components/LoadingButton";
-import {parseAjaxError, parseTime, randomTagColorList} from "@/utils";
+import {parseAjaxError} from "@/utils";
+import jszip from "jszip";
+import {originPrefix} from "@/main";
+import * as fileSaver from "file-saver";
+import LoadingImg from "@/components/LoadingImg";
 
 export default {
   name: "Md",
-  components: {LoadingButton, SingleButton},
+  components: {LoadingImg, LoadingButton, SingleButton},
   data() {
     return {
       selfImage,
@@ -81,17 +85,11 @@ export default {
   },
   computed: {
     ...mapState(['md', 'gitUtil']),
-    colorList() {
-      return randomTagColorList(this.md)
-    },
     reverseList() {
       return this.md.reverse()
     }
   },
   methods: {
-    parseTime(time) {
-      return parseTime(time, true)
-    },
     toggleSelect(item) {
       let idx = this.selectList.indexOf(item);
       if (idx === -1) {
@@ -102,7 +100,50 @@ export default {
     },
     async deleteSome() {
       if (this.selectList.length) {
-        await this.removeMd(this.selectList.slice());
+        await this.removeMd(this.selectList.filter(v => {
+          return v.file
+        }));
+      }
+    },
+    async clickBtn() {
+      if (this.selecting) {
+        if (this.deleting.b) return;
+        if (!this.selectList.length) {
+          this.$message.warning('请选择需要导出的项目!');
+          return
+        }
+        this.deleting = {
+          b: true,
+          state: '导出中...'
+        }
+        let zip = new jszip(),
+            ranTime = new Date().getTime();
+        try {
+          this.deleting.state = '下载:md.json';
+          let res = await fetch(`${originPrefix}/json/md.json?ran=${ranTime}`);
+          let txt = await res.text();
+          zip.file('md.json', txt);
+          for (let item of this.selectList) {
+            for (let extend of ['md', 'html']) {
+              this.deleting.state = `下载:${item.file}/index.${extend}`;
+              let zipFolder = zip.folder(`${item.name}-${item.file}`)
+              res = await fetch(`${originPrefix}/md/${item.file}/index.${extend}?ran=${ranTime}`);
+              txt = await res.text();
+              zipFolder.file(`index.${extend}`, txt);
+            }
+          }
+          this.deleting.state = `正在压缩...`;
+          let content = await zip.generateAsync({type: "blob"});
+          fileSaver.saveAs(content, "md-export.zip");
+        } catch (err) {
+          this.$message.error(parseAjaxError(err));
+        }
+        this.deleting = {
+          b: false,
+          state: ''
+        }
+      } else {
+        await this.$router.push({name: 'backend.md.detail', params: {id: 'new'}})
       }
     },
     async removeMd(files) {
@@ -185,8 +226,8 @@ export default {
         background: #efca7c;
       }
       > svg{
-        width: 1.2rem;
-        height: 1.2rem;
+        width: 1.4rem;
+        height: 1.4rem;
         fill: #000000;
       }
       > span{
@@ -198,9 +239,6 @@ export default {
     > .select-{
       margin: 0 1rem 0 auto;
       background: #00bb00;
-      &[active]{
-        background: #ff0037;
-      }
     }
   }
   > .list{
@@ -221,9 +259,9 @@ export default {
             &.cover{
               cursor: pointer;
               width: 15%;
-              img{
-                height: 8rem;
-                object-fit: contain;
+              ::v-deep img{
+                height: 8rem !important;
+                object-fit: contain !important;
               }
             }
             &.title{

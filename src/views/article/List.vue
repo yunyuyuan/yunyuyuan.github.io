@@ -7,7 +7,8 @@
       </span>
     </div>
     <div class="tags" flex>
-      <span @click="removeTag(tag)" v-for="tag in searchTags" :key="tag" :style="{background: colorList[tag]}" flex>
+      <span @click="removeTag(tag)" v-for="tag in searchTags" :key="tag"
+            :style="{background: $options.filters.color(tag)}" flex>
         {{ tag }}
         <span title="取消过滤">
           <svg-icon :name="'trash'"/>
@@ -18,7 +19,7 @@
       <div v-for="item in this.md" :key="item.file" :class="{item: true, hidden: resultList.indexOf(item)===-1}"
            flex>
         <div class="time">
-          <span>{{ parseTime(item.createTime) }}</span>
+          <span>{{ item.createTime | time(false) }}</span>
         </div>
         <div class="mid" flex>
           <span class="line"></span>
@@ -30,7 +31,8 @@
             <b>{{ item.name }}</b>
             <span>{{ item.summary }}</span>
             <div class="tags" flex>
-              <span v-for="tag in item.tags" @click.prevent.stop="addTag(tag)" :style="{background: colorList[tag]}"
+              <span v-for="tag in item.tags" @click.prevent.stop="addTag(tag)"
+                    :style="{background: $options.filters.color(tag)}"
                     :title="`搜索-${tag}`">{{ tag }}</span>
             </div>
           </div>
@@ -43,7 +45,6 @@
 <script>
 import {mapState} from "vuex";
 import defaultCover from '@/image/default-cover.png';
-import {parseTime, randomTagColorList} from "@/utils";
 
 export default {
   name: "List",
@@ -76,14 +77,8 @@ export default {
       });
       return lis
     },
-    colorList() {
-      return randomTagColorList(this.md)
-    },
   },
   methods: {
-    parseTime(t) {
-      return parseTime(t)
-    },
     toggleInputFocus(b) {
       this.searchFocus = b
     },

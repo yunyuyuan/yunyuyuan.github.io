@@ -8,6 +8,7 @@ export const staticFolder = process.env.NODE_ENV === 'development'?'':'dynamic',
 import '@/icons'
 import store from '@/store'
 import router from '@/router'
+import '@/filter'
 import {getText} from "@/utils";
 
 import selfImage from '@/image/i.png';

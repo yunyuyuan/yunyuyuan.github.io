@@ -258,8 +258,8 @@ export default {
   }
   ::v-deep .check-box{
     display: block;
-    width: 1rem;
-    height: 1rem;
+    width: 1.5rem;
+    height: 1.5rem;
     cursor: pointer;
     border: 1px solid gray;
     border-radius: 50%;

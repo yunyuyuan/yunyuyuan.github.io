@@ -1,6 +1,5 @@
 import Octokat from 'octokat';
 import {staticFolder} from "@/main";
-import dayjs from 'dayjs';
 import Sass from 'sass.js'
 
 export const dynamicFolder = 'dynamic';
@@ -27,10 +26,6 @@ export async function getText(path) {
             resolve([false, err])
         })
     })
-}
-
-export function parseTime(time, detail) {
-    return new dayjs(time).format(`YYYY-MM-DD${detail ? ' HH:mm:ss' : ''}`)
 }
 
 export function parseMarkdown(text) {
@@ -62,38 +57,14 @@ export function parseAjaxError(err) {
     }
     switch (err.message) {
         case "Network Error":
-            return `网络错误 :${err}，请检查网络连接`;
+            return `网络错误: ${err}，请检查网络连接`;
         default:
-            return `未知错误 :${err}`;
+            return `未知错误: ${err}`;
     }
 }
 
 export function stringToB64(s) {
     return btoa(unescape(encodeURIComponent(s)))
-}
-
-const colorList = [
-    '#ff1616', '#ac00d7',
-    '#ff16aa', '#3934ff',
-    '#1d94ec', '#00bf83',
-    '#27ce00', '#82a500',
-    '#bf8600', '#7000ff',
-]
-
-export function randomTagColorList(mdList) {
-    let list = {};
-    mdList.forEach(e => {
-        e.tags.forEach(t => {
-            if (Object.keys(list).indexOf(t) === -1) {
-                list[t] = randomColor();
-            }
-        })
-    })
-    return list;
-}
-
-export function randomColor() {
-    return colorList[Math.ceil(Math.random() * 10) - 1]
 }
 
 // github

@@ -5,7 +5,7 @@
       <b>修改配置信息</b>
     </div>
     <div class="list" flex>
-      <float-input v-for="k in keys" :name="k" :value="config[k]||''" :id="k" :size="1" @input="input"/>
+      <float-input v-for="k in keys" :name="k" :value="info[k]||''" :id="k" :size="1" @input="input"/>
     </div>
     <loading-button :loading="updating" :text="'上传'" :icon="'save'" @click.native="commitConfig"/>
   </div>
@@ -23,20 +23,37 @@ export default {
   data() {
     return {
       updating: false,
+      info: {},
       keys: ["name", "describe", "copyright", "github", "bilibili", "email"]
     }
   },
   computed: {
     ...mapState(['config', 'gitUtil'])
   },
+  mounted() {
+    this.init()
+  },
+  watch: {
+    $route() {
+      if (this.$route.name === 'backend.config') {
+        this.init()
+      }
+    }
+  },
   methods: {
+    init() {
+      this.info = JSON.parse(JSON.stringify(this.config))
+    },
     input(payload) {
-      this.config[payload[0]] = payload[1]
+      this.info[payload[0]] = payload[1]
     },
     async commitConfig() {
       if (this.gitUtil) {
         this.updating = true;
         // 更新config.json
+        for (let k of this.keys) {
+          this.config[k] = this.info[k]
+        }
         let res = await this.gitUtil.updateJsonFile(`config.json`, this.config);
         this.updating = false;
         if (res[0]) {

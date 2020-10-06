@@ -8,8 +8,8 @@
       <single-button class="select-" :active="selecting" :text="selecting?'取消':'选择'"
                      @click.native="selecting=!selecting"/>
       <single-button v-if="selecting" class="del-btn" :text="'删除'" @click.native="deleteSome"/>
-      <loading-button v-else :text="'新建'" :icon="'add'" class="new"
-                      @click.native="$router.push({name: 'backend.record.detail', params: {id: 'new'}})"/>
+      <loading-button :text="selecting?'导出':'新建'" :icon="selecting?'download':'add'" class="new"
+                      @click.native="clickBtn"/>
     </div>
     <div class="body">
       <table>
@@ -45,6 +45,9 @@ import {mapState} from "vuex";
 import SingleButton from "@/components/Button";
 import LoadingButton from "@/components/LoadingButton";
 import {parseAjaxError} from "@/utils";
+import jszip from "jszip";
+import {originPrefix} from "@/main";
+import * as fileSaver from "file-saver";
 
 export default {
   name: "Record",
@@ -69,6 +72,44 @@ export default {
         this.selectList.push(item)
       } else {
         this.selectList.splice(idx, 1);
+      }
+    },
+    async clickBtn() {
+      if (this.selecting) {
+        if (this.deleting.b) return;
+        if (!this.selectList.length) {
+          this.$message.warning('请选择需要导出的项目!');
+          return
+        }
+        this.deleting = {
+          b: true,
+          state: '导出中...'
+        }
+        let zip = new jszip(),
+            ranTime = new Date().getTime();
+        try {
+          this.deleting.state = '下载:record.json';
+          let res = await fetch(`${originPrefix}/json/record.json?ran=${ranTime}`);
+          let txt = await res.text();
+          zip.file('record.json', txt);
+          for (let item of this.selectList) {
+            this.deleting.state = `下载:${item.file}.txt`;
+            res = await fetch(`${originPrefix}/record/${item.file}.txt?ran=${ranTime}`);
+            txt = await res.text();
+            zip.file(`${item.file}.txt`, txt);
+          }
+          this.deleting.state = `正在压缩...`;
+          let content = await zip.generateAsync({type: "blob"});
+          fileSaver.saveAs(content, "record-export.zip");
+        } catch (err) {
+          this.$message.error(parseAjaxError(err));
+        }
+        this.deleting = {
+          b: false,
+          state: ''
+        }
+      } else {
+        await this.$router.push({name: 'backend.record.detail', params: {id: 'new'}})
       }
     },
     async deleteSome() {
@@ -156,8 +197,8 @@ export default {
         background: #efca7c;
       }
       > svg{
-        width: 1.2rem;
-        height: 1.2rem;
+        width: 1.4rem;
+        height: 1.4rem;
         fill: #000000;
       }
       > span{
@@ -169,9 +210,6 @@ export default {
     > .select-{
       margin: 0 1rem 0 auto;
       background: #00bb00;
-      &[active]{
-        background: #ff0037;
-      }
     }
   }
   > .body{
