@@ -54,12 +54,13 @@ export default {
       newInfo: {
         file: '',
         time: 0,
+        summary: '',
         images: []
       },
     }
   },
   computed: {
-    ...mapState(['record']),
+    ...mapState(['record', 'gitUtil']),
     id() {
       return this.$route.params.id
     },
@@ -120,6 +121,8 @@ export default {
         this.saving.state = '更新:record.json'
         let res = await this.gitUtil.updateJsonFile('record.json', this.record);
         if (res[0]) {
+          // summary
+          info.summary = this.text.substr(0, 30) + '... ...'
           // 更新 txt 文件
           let res = await this.gitUtil.updateRecord({
             file: file,
