@@ -224,11 +224,11 @@ export class GithubUtils {
 
                 res = await getMdSha(res.tree.sha);
                 for (let i of res.tree) {
-                    if (folders.indexOf(i.path) !== -1) {
-                        res = await repo.git.trees(i.sha).fetch().catch(err => {
-                            resolve([false, err])
-                        });
-                        if (res.type === 'tree') {
+                    if (i.type === 'tree') {
+                        if (folders.indexOf(i.path) !== -1) {
+                            res = await repo.git.trees(i.sha).fetch().catch(err => {
+                                resolve([false, err])
+                            });
                             for (let j of res.tree) {
                                 dic.state = `删除 ${i.path}-${j.path}`;
                                 await repo.contents(`${dynamicFolder}/${what}/${i.path}/${j.path}`).remove({
@@ -238,6 +238,16 @@ export class GithubUtils {
                                     resolve([false, err])
                                 });
                             }
+                        }
+                    }else{
+                        if (folders.indexOf(i.path.replace('.txt', '')) !== -1){
+                            dic.state = `删除 ${i.path}`;
+                            await repo.contents(`${dynamicFolder}/${what}/${i.path}`).remove({
+                                sha: i.sha,
+                                message: '删除'
+                            }).catch(err => {
+                                resolve([false, err])
+                            });
                         }
                     }
                 }

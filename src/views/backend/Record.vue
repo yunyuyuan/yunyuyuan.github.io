@@ -126,7 +126,7 @@ export default {
             bool: true,
             state: '更新record.json'
           };
-          // 更新md
+          // 更新record
           let newRecordList = [];
           for (let i = 0; i < this.record.length; i++) {
             if (files.indexOf(this.record[i].file) === -1) {
