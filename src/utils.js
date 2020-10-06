@@ -111,6 +111,15 @@ export class GithubUtils {
         ], `更新 md-${payload.folder}`, dict)
     };
 
+    async updateRecord(payload, dict) {
+        return await this.createCommit([
+            {
+                folder: `${dynamicFolder}/record/${payload.file}.txt`,
+                content: payload.txt
+            }
+        ], `更新 record-${payload.file}`, dict)
+    };
+
     async updateTheme(scss, dict) {
         return new Promise(resolve => {
             Sass.compile(scss, async res => {

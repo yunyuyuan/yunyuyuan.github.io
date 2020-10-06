@@ -1,5 +1,5 @@
 <template>
-  <div class="record-detail" v-if="getInfo" flex>
+  <div class="record-detail" flex>
     <div class="operate" flex>
       <div class="back" @click="$router.push({name: 'backend.md'})" flex="">
         <svg-icon :name="'back'"/>
@@ -9,20 +9,25 @@
       <loading-button :loading="saving.b" :text="'上传'" :icon="'save'" @click.native="save"/>
     </div>
     <div class="edit">
-      <div class="images">
-        <span class="head">
+      <div class="images" flex>
+        <span class="head" flex>
           <svg-icon :name="'picture'"/>
+          封面
         </span>
-        <div class="item" v-for="(i,idx) in getInfo.images">
-          <loading-img :src="i" :size="[20, 15]"/>
-          <div>
-            <input :data-idx="idx" @focusout="editImg(idx)"/>
-            <single-button @click.native="delImg(idx)" :text="'删除'"/>
+        <div class="item" v-for="(i,idx) in info.images" :key="idx" flex>
+          <loading-img :src="i" :size="[12, 8]"/>
+          <div class="bottom" flex>
+            <input :value="i" :data-idx="idx" @focusout="editImg"/>
+            <single-button class="del-btn" @click.native="delImg(idx)" :text="'删除'"/>
           </div>
         </div>
         <span class="add" @click="addImg">
           <svg-icon :name="'add'"/>
         </span>
+      </div>
+      <div class="text">
+        <p>文本:</p>
+        <textarea v-model="text"></textarea>
       </div>
     </div>
   </div>
@@ -33,21 +38,24 @@ import {mapState} from "vuex";
 import LoadingButton from "@/components/LoadingButton";
 import LoadingImg from "@/components/LoadingImg";
 import SingleButton from "@/components/Button";
+import {parseAjaxError} from "@/utils";
 
 export default {
   name: "RecordDetail",
   components: {SingleButton, LoadingImg, LoadingButton},
   data() {
     return {
+      saving: {
+        b: false,
+        state: ''
+      },
+      text: '',
+      info: {},
       newInfo: {
         file: '',
         time: 0,
         images: []
       },
-      saving: {
-        b: false,
-        state: ''
-      }
     }
   },
   computed: {
@@ -55,21 +63,85 @@ export default {
     id() {
       return this.$route.params.id
     },
-    getInfo() {
-      return this.id === 'new' ? this.newInfo : this.record.find(v => v.file === this.id)
-    },
+  },
+  mounted() {
+    this.init()
+  },
+  watch: {
+    $route() {
+      if (this.$route.name === 'backend.record.detail') {
+        this.init()
+      }
+    }
   },
   methods: {
-    delImg() {
+    init() {
+      this.info = JSON.parse(JSON.stringify(this.id === 'new' ? this.newInfo : this.record.find(v => v.file === this.id)));
     },
-    editImg() {
-
+    delImg(idx) {
+      this.info.images.splice(idx, 1)
+    },
+    editImg(e) {
+      this.info.images.splice(parseInt(e.target.getAttribute('data-idx')), 1, e.target.value)
     },
     addImg() {
-
+      this.info.images.push('')
     },
     async save() {
-
+      if (this.saving.b) return;
+      if (this.gitUtil) {
+        let info = this.info;
+        if (!info.images.length) {
+          return this.$message.warning('封面不能为空!')
+        }
+        this.saving = {
+          b: true,
+          state: '保存中...'
+        };
+        let file = new Date().getTime();
+        info.time = file;
+        if (this.id !== 'new') {
+          // 不改file
+          file = this.id;
+        } else {
+          // 添加
+          // record +1
+          info.file = file.toString();
+          this.record.push(JSON.parse(JSON.stringify(info)));
+        }
+        // 执行更新
+        // 更新本地record
+        for (let i in this.record) {
+          if (this.record[i].file === this.id) {
+            this.record[i] = info;
+            break
+          }
+        }
+        this.saving.state = '更新:record.json'
+        let res = await this.gitUtil.updateJsonFile('record.json', this.record);
+        if (res[0]) {
+          // 更新 txt 文件
+          let res = await this.gitUtil.updateRecord({
+            file: file,
+            txt: this.text
+          }, this.saving);
+          if (res[0]) {
+            this.$message.success('上传成功!');
+            await this.$router.push({name: 'backend.record'})
+          } else {
+            this.$message.error(parseAjaxError(res[1]))
+          }
+        } else {
+          this.$message.error(parseAjaxError(res[1]))
+        }
+        this.saving = {
+          b: false,
+          state: ''
+        }
+      } else {
+        this.$message.warning('请先登录!');
+        this.$emit('login')
+      }
     }
   }
 }
@@ -126,17 +198,66 @@ export default {
     }
   }
   > .edit{
+    margin: 1rem;
+    width: calc(100% - 2rem);
     > .images{
+      flex-wrap: wrap;
       > .head{
+        margin-right: 1rem;
+        font-size: 0.95rem;
         > svg{
-
+          width: 2.6rem;
+          height: 2.6rem;
+          margin-right: 0.5rem;
         }
       }
       > .item{
-
+        flex-direction: column;
+        margin: 0.6rem 1rem;
+        > .bottom{
+          margin-top: 0.5rem;
+          > input{
+            width: 8rem;
+            font-size: 0.85rem;
+            padding: 0.2rem;
+          }
+        }
       }
       > .add{
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 50%;
+        background: #ffc722;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        margin-left: 1rem;
+        box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
 
+        &:hover{
+          background: #eab61f;
+        }
+
+        > svg{
+          width: 1.2rem;
+          height: 1.2rem;
+          fill: white;
+        }
+      }
+    }
+    > .text{
+      width: 95%;
+      padding: 0 2.5%;
+      margin: 2rem 0;
+      > p{
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+      }
+      > textarea{
+        width: calc(100% - 0.6rem);
+        min-height: 10rem;
+        font-size: 0.95rem;
+        padding: 0.3rem;
       }
     }
   }
