@@ -1,7 +1,7 @@
 <template>
   <div class="record-detail" flex>
     <div class="operate" flex>
-      <div class="back" @click="$router.push({name: 'backend.md'})" flex="">
+      <div class="back" @click="$router.push({name: 'backend.md'})" flex>
         <svg-icon :name="'back'"/>
         <span>返回</span>
       </div>
@@ -99,6 +99,8 @@ export default {
           b: true,
           state: '保存中...'
         };
+        // summary
+        info.summary = this.text.substr(0, 30) + '... ...'
         let file = new Date().getTime();
         info.time = file;
         if (this.id !== 'new') {
@@ -121,8 +123,6 @@ export default {
         this.saving.state = '更新:record.json'
         let res = await this.gitUtil.updateJsonFile('record.json', this.record);
         if (res[0]) {
-          // summary
-          info.summary = this.text.substr(0, 30) + '... ...'
           // 更新 txt 文件
           let res = await this.gitUtil.updateRecord({
             file: file,

@@ -1,7 +1,7 @@
 <template>
   <div class="record" flex>
     <div class="head" flex>
-      <div class="delete-state" v-if="deleting.bool">
+      <div class="delete-state" v-if="deleting.bool" flex>
         <svg-icon :name="'loading'"/>
         <span>{{ deleting.state }}</span>
       </div>
@@ -26,7 +26,7 @@
             <img :src="item.images[0]"/>
           </td>
           <td>
-            <span>{{ item.prefix }}</span>
+            <span>{{ item.summary }}</span>
           </td>
           <td>
             <span v-if="selecting" :class="{active: selectList.indexOf(item.file)!==-1}" class="check-box"
