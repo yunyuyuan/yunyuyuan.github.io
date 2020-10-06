@@ -127,10 +127,10 @@ export default {
             state: '更新record.json'
           };
           // 更新md
-          let newRecordList = this.record.slice();
-          for (let i = 0; i < newRecordList.length; i++) {
-            if (files.indexOf(newRecordList[i].file) !== -1) {
-              newRecordList.splice(i, 1);
+          let newRecordList = [];
+          for (let i = 0; i < this.record.length; i++) {
+            if (files.indexOf(this.record[i].file) === -1) {
+              newRecordList.push(this.record[i]);
             }
           }
           let res = await this.gitUtil.updateJsonFile('record.json', newRecordList);

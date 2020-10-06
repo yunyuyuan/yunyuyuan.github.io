@@ -156,10 +156,10 @@ export default {
             state: '更新md.json'
           };
           // 更新md
-          let newMdList = this.md.slice();
-          for (let i = 0; i < newMdList.length; i++) {
-            if (files.indexOf(newMdList[i].file) !== -1) {
-              newMdList.splice(i, 1);
+          let newMdList = [];
+          for (let i = 0; i < this.md.length; i++) {
+            if (files.indexOf(this.md[i].file) === -1) {
+              newMdList.push(this.md[i]);
             }
           }
           let res = await this.gitUtil.updateJsonFile('md.json', newMdList);
