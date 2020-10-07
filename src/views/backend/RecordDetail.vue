@@ -8,6 +8,10 @@
       <span class="state">{{ saving.state }}</span>
       <loading-button :loading="saving.b" :text="'上传'" :icon="'save'" @click.native="save"/>
     </div>
+    <div class="time" flex>
+      <span><span>创建:</span>{{ (info ? info.time : 0) | time(false) }}</span>
+      <span><span>修改:</span>{{ (info ? info.modifyTime : 0) | time(false) }}</span>
+    </div>
     <div class="edit">
       <div class="images" flex>
         <span class="head" flex>
@@ -55,6 +59,7 @@ export default {
       newInfo: {
         file: '',
         time: 0,
+        modifyTime: 0,
         summary: '',
         images: []
       },
@@ -111,13 +116,14 @@ export default {
         // summary
         info.summary = this.text.substr(0, 30) + (this.text.length >= 30 ? '... ...' : '')
         let file = new Date().getTime();
-        info.time = file;
+        info.modifyTime = file;
         if (this.id !== 'new') {
           // 不改file
           file = this.id;
         } else {
           // 添加
           // record +1
+          info.time = file;
           info.file = file.toString();
           this.record.push(JSON.parse(JSON.stringify(info)));
         }
@@ -207,6 +213,23 @@ export default {
       &.loading{
         background: gray;
         color: white;
+      }
+    }
+  }
+  > .time{
+    width: 60%;
+    height: 3rem;
+    justify-content: space-around;
+    margin-left: auto;
+
+    > span{
+      color: #0003ff;
+      font-size: 0.9rem;
+
+      > span{
+        font-size: 0.9em;
+        color: black;
+        margin-right: 0.5rem;
       }
     }
   }

@@ -68,6 +68,7 @@ html, body{
 input, textarea, select, button {
   outline: none;
   resize: none;
+  font-family: "Source Code Pro", serif;
 }
 table{
   border-collapse: collapse;
