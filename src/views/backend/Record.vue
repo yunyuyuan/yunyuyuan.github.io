@@ -23,7 +23,9 @@
         <tbody>
         <tr v-for="item in record" :key="item.file">
           <td>
-            <img :src="item.images[0]"/>
+            <router-link :to="{name: 'backend.record.detail', params: {id: item.file}}" flex>
+              <img :src="item.images[0]"/>
+            </router-link>
           </td>
           <td>
             <span>{{ item.summary }}</span>
@@ -229,10 +231,14 @@ export default {
             &:nth-child(2){
               width: 65%;
             }
-            > img{
-              width: 100%;
-              object-fit: contain;
+            > a{
               cursor: pointer;
+              width: 100%;
+              height: 100%;
+              img{
+                width: 100%;
+                object-fit: contain;
+              }
             }
             > span{
               @include text-overflow(4);

@@ -1,7 +1,7 @@
 <template>
   <div class="record-detail" flex>
     <div class="operate" flex>
-      <div class="back" @click="$router.push({name: 'backend.md'})" flex>
+      <div class="back" @click="$router.push({name: 'backend.record'})" flex>
         <svg-icon :name="'back'"/>
         <span>返回</span>
       </div>
@@ -38,7 +38,8 @@ import {mapState} from "vuex";
 import LoadingButton from "@/components/LoadingButton";
 import LoadingImg from "@/components/LoadingImg";
 import SingleButton from "@/components/Button";
-import {parseAjaxError, sortByTime} from "@/utils";
+import {getText, parseAjaxError, sortByTime} from "@/utils";
+import {originPrefix} from "@/main";
 
 export default {
   name: "RecordDetail",
@@ -65,19 +66,27 @@ export default {
       return this.$route.params.id
     },
   },
-  mounted() {
-    this.init()
+  async mounted() {
+    await this.init()
   },
   watch: {
-    $route() {
+    async $route() {
       if (this.$route.name === 'backend.record.detail') {
-        this.init()
+        await this.init()
       }
     }
   },
   methods: {
-    init() {
+    async init() {
       this.info = JSON.parse(JSON.stringify(this.id === 'new' ? this.newInfo : this.record.find(v => v.file === this.id)));
+      if (this.id !== 'new') {
+        let res = await getText(`${originPrefix}/record/${this.id}.txt`);
+        if (res[0]) {
+          this.text = res[1]
+        } else {
+          this.$message.error(parseAjaxError(res[1]))
+        }
+      }
     },
     delImg(idx) {
       this.info.images.splice(idx, 1)
