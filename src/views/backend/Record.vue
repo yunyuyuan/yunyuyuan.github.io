@@ -93,10 +93,10 @@ export default {
           let txt = await res.text();
           zip.file('record.json', txt);
           for (let item of this.selectList) {
-            this.deleting.state = `下载:${item.file}.txt`;
-            res = await fetch(`${originPrefix}/record/${item.file}.txt?ran=${ranTime}`);
+            this.deleting.state = `下载:${item}.txt`;
+            res = await fetch(`${originPrefix}/record/${item}.txt?ran=${ranTime}`);
             txt = await res.text();
-            zip.file(`${item.file}.txt`, txt);
+            zip.file(`${item}.txt`, txt);
           }
           this.deleting.state = `正在压缩...`;
           let content = await zip.generateAsync({type: "blob"});

@@ -100,7 +100,7 @@ export default {
           state: '保存中...'
         };
         // summary
-        info.summary = this.text.substr(0, 30) + '... ...'
+        info.summary = this.text.substr(0, 30) + (this.text.length >= 30 ? '... ...' : '')
         let file = new Date().getTime();
         info.time = file;
         if (this.id !== 'new') {
