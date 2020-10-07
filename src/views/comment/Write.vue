@@ -198,6 +198,7 @@ export default {
       this.imageUrl = payload[1]
     },
     insertImg() {
+      if (!this.imageUrl) return;
       if (!this.focusAt) {
         this.$message.warning('请先点选择输入框!');
         return

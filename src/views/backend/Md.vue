@@ -11,6 +11,10 @@
       <loading-button :text="selecting?'导出':'新建'" :icon="selecting?'download':'add'" class="new"
                       @click.native="clickBtn"/>
     </div>
+    <label class="search">
+      <span>搜索</span>
+      <input v-model="search"/>
+    </label>
     <div class="list" flex>
       <table>
         <thead>
@@ -80,13 +84,21 @@ export default {
         state: ''
       },
       selecting: false,
-      selectList: []
+      selectList: [],
+      search: ''
     }
   },
   computed: {
     ...mapState(['md', 'gitUtil']),
     reverseList() {
-      return this.md.reverse()
+      if (this.search === '') return this.md;
+      let lis = [];
+      this.md.forEach(e => {
+        if (e.name.search(this.search) !== -1) {
+          lis.push(e)
+        }
+      })
+      return lis
     }
   },
   methods: {
@@ -240,6 +252,22 @@ export default {
     > .select-{
       margin: 0 1rem 0 auto;
       background: #00bb00;
+    }
+  }
+  > .search{
+    border-top: 1px solid #f3f3f3;
+    padding: 1rem 5%;
+    width: 90%;
+    > span{
+      margin-right: 1rem;
+      font-size: 0.95rem;
+    }
+    > input{
+      padding: 0.2rem;
+      border-radius: 0.25em;
+      font-size: 0.88rem;
+      border: 1px solid gray;
+      width: 15rem;
     }
   }
   > .list{

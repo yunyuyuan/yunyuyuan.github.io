@@ -209,14 +209,8 @@ export default {
       width: 60rem;
       height: 10rem;
       padding: 1rem 0;
-      transition: all .15s linear;
       overflow: hidden;
       margin: 0 auto;
-
-      &.hidden {
-        padding: 0;
-        height: 0;
-      }
 
       > .time {
         > span {
