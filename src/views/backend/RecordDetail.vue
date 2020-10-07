@@ -38,7 +38,7 @@ import {mapState} from "vuex";
 import LoadingButton from "@/components/LoadingButton";
 import LoadingImg from "@/components/LoadingImg";
 import SingleButton from "@/components/Button";
-import {parseAjaxError} from "@/utils";
+import {parseAjaxError, sortByTime} from "@/utils";
 
 export default {
   name: "RecordDetail",
@@ -121,6 +121,7 @@ export default {
           }
         }
         this.saving.state = '更新:record.json'
+        sortByTime(this.record)
         let res = await this.gitUtil.updateJsonFile('record.json', this.record);
         if (res[0]) {
           // 更新 txt 文件

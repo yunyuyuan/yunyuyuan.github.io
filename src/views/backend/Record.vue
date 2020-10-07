@@ -44,7 +44,7 @@
 import {mapState} from "vuex";
 import SingleButton from "@/components/Button";
 import LoadingButton from "@/components/LoadingButton";
-import {parseAjaxError} from "@/utils";
+import {parseAjaxError, sortByTime} from "@/utils";
 import jszip from "jszip";
 import {originPrefix} from "@/main";
 import * as fileSaver from "file-saver";
@@ -133,6 +133,7 @@ export default {
               newRecordList.push(this.record[i]);
             }
           }
+          sortByTime(newRecordList);
           let res = await this.gitUtil.updateJsonFile('record.json', newRecordList);
           this.deleting.state = '准备删除';
           if (res[0]) {

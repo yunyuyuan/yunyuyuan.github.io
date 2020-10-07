@@ -14,7 +14,7 @@
               <span class="--markdown" v-html="calcMdToHtml(item.content, false)"></span>
             </div>
             <div class="foot">
-              <a class="time">{{ calcTime(item.time) }}</a>
+              <a class="time">{{ item.time | time(false) }}</a>
               <span class="reply" @click="clickReply(item, null)">回复</span>
               <span v-if="login===item.nick||login===siteConfig.owner" class="delete"
                     @click="closeComment(item.id)">删除</span>
@@ -35,7 +35,7 @@
                 </div>
               </div>
               <div class="foot">
-                <a class="time">{{ calcTime(child.time) }}</a>
+                <a class="time">{{ child.time | time(false) }}</a>
                 <span class="reply" @click="clickReply(item, child)">回复</span>
                 <span v-if="login===child.nick||login===siteConfig.owner" class="delete"
                       @click="deleteReply(child.id)">删除</span>
@@ -56,11 +56,13 @@
         </div>
       </div>
     </div>
-    <div class="pagination" flex>
-      <span v-for="p in pages" :class="{active: p === pageNow,disabled: p===''}" @click="toPage(p)">
-        {{ p }}
-        <svg-icon v-if="p===''" :name="'ellipsis'"/>
-      </span>
+    <div class="page" flex>
+      <span :disabled="!pageInfo.hasPreviousPage" class="left" flex
+            @click='toComment(!pageInfo.hasPreviousPage, -1)'><svg-icon
+          :name="'right'"/></span>
+      <span :disabled="!pageInfo.hasNextPage" class="right" flex
+            @click='toComment(!pageInfo.hasNextPage, 1)'><svg-icon
+          :name="'right'"/></span>
     </div>
   </div>
 </template>
@@ -73,12 +75,9 @@ import {
   close_deleteComment, deleteReply, getCommentChildren
 } from "@/views/comment/utils";
 import WriteComment from "@/views/comment/Write";
-import dayjs from 'dayjs';
 import {parseAjaxError, parseMarkdown} from "@/utils";
 import hljs from "highlight.js";
 import siteConfig from '@/site-config'
-
-const pagerCount = 3;
 
 export default {
   name: "ListComment",
@@ -96,49 +95,13 @@ export default {
   data() {
     return {
       siteConfig,
-      count: 0,
-      pageNow: 1,
       onePageItemsCount: 2,
       pageInfo: {},
-      oldCursor: '',
       items: [],
       replayItem: null,
       replyChild: null,
       submitting: false,
-    }
-  },
-  computed: {
-    pages() {
-      let i = 1,
-          list = [this.pageNow],
-          pageCount = Math.ceil(this.count / this.onePageItemsCount);
-      while (true) {
-        if (list.length < pagerCount && list.length < pageCount) {
-          let next = this.pageNow + i;
-          if (next > 0 && next <= pageCount) {
-            list.push(next)
-          }
-        } else {
-          break
-        }
-        let newI = i * -1;
-        if (i < 0) {
-          newI++;
-        }
-        i = newI;
-      }
-      list = list.sort((a, b) => {
-        return a > b ? 1 : -1
-      })
-      if (list.length > pagerCount) {
-        if (list[1] !== 2) {
-          list.splice(0, 1, 1, '')
-        }
-        if (list[list.length - 2] !== pageCount - 1) {
-          list.splice(list.length - 1, 1, '', pageCount)
-        }
-      }
-      return list
+      updating: false,
     }
   },
   async created() {
@@ -153,8 +116,6 @@ export default {
       });
       if (res[0]) {
         let data = res[1].data.data.search;
-        this.count = data.issueCount;
-        this.oldCursor = cursor || '';
         this.pageInfo = data.pageInfo;
         this.items = [];
         for (const e of data.nodes) {
@@ -197,13 +158,6 @@ export default {
         this.$message.error(parseAjaxError(res[1]))
       }
     },
-    async updateReply(cursor) {
-
-    },
-    calcTime(time) {
-      let t = new dayjs(time);
-      return t.format(`YYYY-MM-DD HH:mm`)
-    },
     calcMdToHtml(text, isReply) {
       text = text.replaceAll('<', '&lt;').replace(/(?<!^|\n)>/g, '&gt;')
       if (isReply) {
@@ -214,26 +168,23 @@ export default {
       }
       return parseMarkdown(text)
     },
-    async toPage(p) {
-      if (p !== '') {
-        let cursor = {}
-        switch (this.pageNow - p) {
-          case -1:
-            cursor = `,after: "${this.pageInfo.endCursor}"`
-            break
-          case 0:
-            cursor = this.oldCursor
-            break
-          case 1:
-            cursor = `,before: "${this.pageInfo.startCursor}"`
-            break
-        }
-        await this.updatePage(cursor);
-        this.pageNow = p;
+    async toComment(cant, p) {
+      if (cant) return
+      if (this.updating) return;
+      this.updating = true;
+      let cursor = '';
+      if (p === 1) {
+        cursor = `,after: "${this.pageInfo.endCursor}"`
+      } else {
+        cursor = `,before: "${this.pageInfo.startCursor}"`
       }
+      await this.updatePage(cursor);
+      this.updating = false
     },
     async toReply(cant, item, cursor) {
       if (cant) return
+      if (this.updating) return;
+      this.updating = true;
       let res = await getCommentChildren(item.id, this.onePageItemsCount, cursor);
       if (res[0]) {
         let data = res[1].data.data.node.comments;
@@ -252,6 +203,7 @@ export default {
           })
         })
       }
+      this.updating = false
     },
 
     clickReply(o, t) {
@@ -396,41 +348,6 @@ export default {
               }
             }
           }
-
-          > .page {
-            margin-top: 0.5rem;
-
-            > span {
-              margin: 0 0.5rem;
-              padding: 0.15rem;
-              border-radius: 0.15rem;
-              justify-content: center;
-              cursor: not-allowed;
-
-              &:not([disabled]) {
-                cursor: pointer;
-
-                &:hover {
-                  background: rgba(0, 0, 0, 0.15);
-                }
-              }
-
-              &[disabled] {
-                > svg {
-                  fill: gray
-                }
-              }
-
-              > svg {
-                width: 1rem;
-                height: 1rem;
-              }
-
-              &.left {
-                transform: rotate(180deg);
-              }
-            }
-          }
         }
       }
       .foot{
@@ -459,44 +376,44 @@ export default {
           }
         }
 
-        > .write {
+        > .write{
           width: 100%;
         }
       }
     }
   }
 
-  > .pagination {
-    margin-top: 1rem;
-    width: 100%;
-    justify-content: center;
+  .page{
+    margin-top: 0.5rem;
 
-    > span:not(.disabled) {
-      cursor: pointer;
-      background: #69f6ff;
-      border-radius: 0.2rem;
-      padding: 0.3rem 0.8rem;
-      font-size: 0.9rem;
+    > span{
       margin: 0 0.5rem;
-      transition: all .1s linear;
-      color: black;
+      padding: 0.15rem;
+      border-radius: 0.15rem;
+      justify-content: center;
+      cursor: not-allowed;
 
-      &:hover {
-        color: white;
-        background: #005eff;
+      &:not([disabled]){
+        cursor: pointer;
+
+        &:hover{
+          background: rgba(0, 0, 0, 0.15);
+        }
       }
 
-      &.active {
-        color: white;
-        background: #424242;
+      &[disabled]{
+        > svg{
+          fill: gray
+        }
       }
-    }
 
-    > span.disabled {
-      > svg {
-        width: 2.4rem;
-        height: 2.4rem;
-        margin: 0 0.8rem;
+      > svg{
+        width: 1rem;
+        height: 1rem;
+      }
+
+      &.left{
+        transform: rotate(180deg);
       }
     }
   }

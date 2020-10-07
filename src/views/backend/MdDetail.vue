@@ -46,7 +46,7 @@
           </span>
         </div>
         <div class="time" flex>
-          <span><span>创建:</span>{{ (info ? info.createTime : 0) | time(false) }}</span>
+          <span><span>创建:</span>{{ (info ? info.time : 0) | time(false) }}</span>
           <span><span>修改:</span>{{ (info ? info.modifyTime : 0) | time(false) }}</span>
         </div>
       </div>
@@ -66,7 +66,7 @@
 
 <script>
 import {originPrefix} from "@/main";
-import {getText, parseAjaxError, parseMarkdown} from "@/utils";
+import {getText, parseAjaxError, parseMarkdown, sortByTime} from "@/utils";
 import {mapState} from 'vuex'
 import FloatInput from "@/components/FloatInput";
 
@@ -111,7 +111,7 @@ export default {
         name: "编辑标题",
         file: "",
         cover: "",
-        createTime: "",
+        time: "",
         modifyTime: "",
         summary: "编辑简介",
         tags: []
@@ -235,7 +235,7 @@ export default {
           // 添加
           // md +1
           info.file = folderId.toString();
-          info.createTime = folderId;
+          info.time = folderId;
           this.md.push(JSON.parse(JSON.stringify(info)));
         }
         // 执行更新
@@ -246,7 +246,8 @@ export default {
             break
           }
         }
-        this.saving.state = '更新:md.json'
+        this.saving.state = '更新:md.json';
+        sortByTime(this.md);
         let res = await this.gitUtil.updateJsonFile('md.json', this.md);
         if (res[0]) {
           // 更新 md 和 html文件

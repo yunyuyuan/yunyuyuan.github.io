@@ -67,6 +67,12 @@ export function stringToB64(s) {
     return btoa(unescape(encodeURIComponent(s)))
 }
 
+export function sortByTime(lis) {
+    lis.sort((a, b) => {
+        return a.time > b.time ? -1 : 1
+    })
+}
+
 // github
 export class GithubUtils {
     constructor(token, user, repo, committer) {

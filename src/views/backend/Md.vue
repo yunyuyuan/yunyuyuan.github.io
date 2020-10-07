@@ -33,7 +33,7 @@
           <td class="time">
             <div flex>
               <span>创建:</span>
-              <a>{{ item.createTime | time(true) }}</a>
+              <a>{{ item.time | time(true) }}</a>
             </div>
             <div flex>
               <span>修改:</span>
@@ -63,7 +63,7 @@ import SingleButton from "@/components/Button";
 import {mapState} from "vuex";
 import selfImage from '@/image/i.png'
 import LoadingButton from "@/components/LoadingButton";
-import {parseAjaxError} from "@/utils";
+import {parseAjaxError, sortByTime} from "@/utils";
 import jszip from "jszip";
 import {originPrefix} from "@/main";
 import * as fileSaver from "file-saver";
@@ -162,6 +162,7 @@ export default {
               newMdList.push(this.md[i]);
             }
           }
+          sortByTime(newMdList);
           let res = await this.gitUtil.updateJsonFile('md.json', newMdList);
           this.deleting.state = '准备删除';
           if (res[0]) {

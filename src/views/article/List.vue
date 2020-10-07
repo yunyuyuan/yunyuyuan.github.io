@@ -16,17 +16,17 @@
       </span>
     </div>
     <div class="blog">
-      <div v-for="item in this.md" :key="item.file" :class="{item: true, hidden: resultList.indexOf(item)===-1}"
+      <div v-for="item in this.pagedList" :key="item.file" class="item"
            flex>
         <div class="time">
-          <span>{{ item.createTime | time(false) }}</span>
+          <span>{{ item.time | time(true) }}</span>
         </div>
         <div class="mid" flex>
           <span class="line"></span>
           <span class="circle"></span>
         </div>
         <router-link class="info" :to="{name: 'article.detail', params: {id: item.file}}" flex>
-          <img :src="item.cover || defaultCover">
+          <loading-img :src="item.cover || defaultCover" :size="[12, -1]"/>
           <div flex>
             <b>{{ item.name }}</b>
             <span>{{ item.summary }}</span>
@@ -38,6 +38,7 @@
           </div>
         </router-link>
       </div>
+      <pagination @turn="turnPage" :item-count="this.resultList.length" :page-now="pageNow" :per-count="perCount"/>
     </div>
   </div>
 </template>
@@ -45,19 +46,28 @@
 <script>
 import {mapState} from "vuex";
 import defaultCover from '@/image/default-cover.png';
+import LoadingImg from "@/components/LoadingImg";
+import Pagination from "@/components/Pagination";
 
 export default {
   name: "List",
+  components: {Pagination, LoadingImg},
   data() {
     return {
       defaultCover,
       search: '',
       searchFocus: false,
       searchTags: [],
+      pageNow: 1,
+      perCount: 8
     }
   },
   computed: {
     ...mapState(['md']),
+    pagedList() {
+      let start = (this.pageNow - 1) * this.perCount;
+      return this.resultList.slice(start, start + this.perCount)
+    },
     resultList() {
       if (!this.search && !this.searchTags.length) return this.md;
       let lis = [],
@@ -78,6 +88,12 @@ export default {
       return lis
     },
   },
+  watch: {
+    resultList() {
+      // 重置pageNoe
+      this.pageNow = 1;
+    }
+  },
   methods: {
     toggleInputFocus(b) {
       this.searchFocus = b
@@ -91,6 +107,9 @@ export default {
     },
     removeTag(tag) {
       this.searchTags.splice(this.searchTags.indexOf(tag), 1)
+    },
+    turnPage(p) {
+      this.pageNow = p;
     }
   }
 }
@@ -180,13 +199,13 @@ export default {
     }
   }
 
-  > .blog {
+  > .blog{
     width: 100%;
-    margin-top: 1rem;
+    margin: 1rem 0;
     flex-grow: 1;
     overflow-x: auto;
 
-    > .item {
+    > .item{
       width: 60rem;
       height: 10rem;
       padding: 1rem 0;
@@ -243,23 +262,23 @@ export default {
         color: black;
         border-radius: 0 0.5rem 0.5rem 0;
         background: white;
-        > img{
-          width: 12rem;
-          object-fit: contain;
-          box-shadow: 1rem 0 1rem -1rem #a8a8a8;
-          z-index: 1;
-          background: white;
-          border: 1px solid #bebebe;
+        ::v-deep .loading-img{
+          display: flex;
+          align-items: center;
+          img{
+            object-fit: contain;
+            background: white;
+          }
         }
 
-        > div {
+        > div{
           height: 100%;
           width: 100%;
           border-radius: 0 0.5rem 0.5rem 0;
           flex-direction: column;
           box-shadow: 0 0 0.4rem rgba(128, 128, 128, 0.59) inset;
 
-          > b {
+          > b{
             font-size: 1.2rem;
             @include text-overflow(2);
             margin: 0.5rem 0;
