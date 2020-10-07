@@ -2,7 +2,7 @@
 
 ---
 
-### 💭 概述
+### 🎂 概述
 
 这是一个**半静态的博客**
 
@@ -14,13 +14,15 @@
 - [ ] 评论功能
 - [ ] 第三方图片上传
 
-### ⚓ power by
+### ⚓ Power by
 * web框架 [vue](https://vuejs.org)
 * github api access [octokat](https://github.com/philschatz/octokat.js)
 
 --- 
 
-1. npm run build
-2. git add -> git commit -> git push
-3. create github release
-4. have fun with your blog
+### 👊 Get start!
+
+1. 🛠 `npm run build `
+2. 📤 `git add .` -> `git commit -m build` -> `git push`
+3. 🚀 create github release
+4. 😁 have fun

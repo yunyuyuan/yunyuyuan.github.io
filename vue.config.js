@@ -6,6 +6,7 @@ module.exports = {
     lintOnSave: false,
     indexPath: '../index.html',
     publicPath: isDev?'':'dist',
+    productionSourceMap: false,
     chainWebpack: config => {
         config.module
             .rule('svg')
