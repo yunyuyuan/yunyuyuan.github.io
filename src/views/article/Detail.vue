@@ -2,11 +2,23 @@
   <div class="detail">
     <div class="content" flex>
       <aside class="info" :style="{transform: `translateY(${asideTop}px)`}" ref="aside" flex>
-        <div :class="{'active': asideActive}">
+        <div :class="{'active': asideActive}" flex>
           <div class="anchors" flex>
             <span class="anchor" v-for="item in anchors" @click="toAnchor(item.el)">{{ item.text }}</span>
           </div>
-          <div class="share"></div>
+          <div class="share" flex>
+            <div class="qr" @mouseenter="loadQr" @mouseleave="showQr = false">
+              <span flex>
+                <svg-icon :name="'qr'"/>
+              </span>
+              <div v-show="showQr" flex>
+                <div class="load" v-if="!qrcode">
+                  <svg-icon :name="'loading'"/>
+                </div>
+                <img v-else :src="qrcode"/>
+              </div>
+            </div>
+          </div>
         </div>
         <span class="toggle-aside" :class="{active: asideActive}" @click="asideActive = !asideActive" flex
               :title="`${asideActive?'关闭':'展开'}侧栏`">
@@ -28,6 +40,7 @@ import {mapState} from "vuex";
 import TheComment from "@/views/comment/index";
 
 import hljs from 'highlight.js'
+import qrcode from "qrcode";
 
 export default {
   name: "Detail",
@@ -39,7 +52,9 @@ export default {
       anchors: [],
       asideActive: false,
       asideTop: 0,
-      animationHandle: undefined
+      animationHandle: undefined,
+      qrcode: '',
+      showQr: false
     }
   },
   computed: {
@@ -86,12 +101,13 @@ export default {
             };
             let before = document.createElement('img');
             before.src = `${originPrefix}/halberd.svg`;
+            before.alt = 'anchor';
             el.appendChild(before);
           })
           // hljs
           this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
             hljs.highlightBlock(el);
-          })
+          });
         })
       } else {
         this.$message.error(`获取文章失败: ${res[1]}`);
@@ -124,6 +140,14 @@ export default {
         })
       }
     },
+    loadQr() {
+      this.showQr = true
+      if (!this.qrcode) {
+        qrcode.toDataURL(location.href, (err, url) => {
+          this.qrcode = url
+        })
+      }
+    }
   }
 }
 </script>
@@ -145,12 +169,18 @@ export default {
       top: 0;
       transition: all .1s ease-out;
       align-items: self-start;
+      z-index: 1;
       > div{
         max-height: calc(100vh - 11rem);
+        flex-direction: column;
         &.active > .anchors{
           width: 12rem;
         }
-        > .anchors{
+        &.active .share{
+          overflow: unset;
+          width: 6rem;
+        }
+        > .anchors, > .share{
           width: 0;
           flex-direction: column;
           background: white;
@@ -158,6 +188,8 @@ export default {
           box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.4);
           transition: all .15s ease-out;
           overflow: hidden;
+        }
+        > .anchors{
           > span{
             margin: 0.5rem 0;
             font-size: 0.85rem;
@@ -170,6 +202,41 @@ export default {
           }
         }
         > .share{
+          margin-top: 1rem;
+          padding: 1rem 0;
+          > .qr{
+            position: relative;
+            > span{
+              cursor: pointer;
+              > svg{
+                width: 2rem;
+                height: 2rem;
+              }
+            }
+            > div{
+              position: absolute;
+              right: 0;
+              top: 0;
+              transform: translateX(calc(100% + 1rem));
+              border-radius: 0.3rem;
+              border: 1px solid #d2d2d2;
+              box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.6);
+              > .load{
+                padding: 1rem;
+                background: white;
+                border-radius: inherit;
+                > svg{
+                  width: 3rem;
+                  height: 3rem;
+                }
+              }
+              > img{
+                width: 10rem;
+                height: 10rem;
+                border-radius: inherit;
+              }
+            }
+          }
         }
       }
       > .toggle-aside {
