@@ -100,7 +100,7 @@ export default {
               this.toAnchor(el)
             };
             let before = document.createElement('img');
-            before.src = `${originPrefix}/halberd.svg`;
+            before.src = `${originPrefix}/favicon.svg`;
             before.alt = 'anchor';
             el.appendChild(before);
           })
