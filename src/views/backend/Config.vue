@@ -28,7 +28,7 @@ export default {
     return {
       updating: false,
       info: {},
-      keys: ["name", "describe", "copyright", "github", "bilibili", "email"]
+      keys: ["name", "describe", "copyright", "github", "bilibili", "email"],
     }
   },
   computed: {
@@ -61,6 +61,7 @@ export default {
         for (let k of this.keys) {
           this.config[k] = this.info[k]
         }
+        this.config.backgroundImg = this.info.backgroundImg;
         let res = await this.gitUtil.updateJsonFile(`config.json`, this.config);
         this.updating = false;
         if (res[0]) {
