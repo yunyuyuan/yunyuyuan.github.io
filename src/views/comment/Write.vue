@@ -72,7 +72,7 @@ import SingleButton from "@/components/Button";
 import Resizer from "@/components/Resizer";
 
 import {mapState} from "vuex";
-import {baseUrl} from "@/main";
+import {baseDynamicUrl} from "@/main";
 import {parseMarkdown} from "@/utils";
 
 import hljs from "highlight.js";
@@ -106,7 +106,7 @@ export default {
   },
   data() {
     return {
-      baseUrl,
+      baseUrl: baseDynamicUrl,
       comment: '',
       showGuide: false,
       showSticker: false,

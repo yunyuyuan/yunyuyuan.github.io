@@ -1,5 +1,5 @@
 import Octokat from 'octokat';
-import {baseUrl} from "@/main";
+import {baseDynamicUrl} from "@/main";
 import Sass from 'sass.js'
 
 export const dynamicFolder = 'dynamic';
@@ -33,7 +33,7 @@ export function parseMarkdown(text) {
         // target=_blank
         .replace(/(?<=^|[^\\])#\[(.*?)]\((.*?)\)/g, '<a target="_blank" href="$2">$1</a>')
         // sticker
-        .replace(/(?<=^|[^\\])!\[sticker]\((aru|yellow-face)\/(\d+)\)/g, `<img alt="sticker" src="${baseUrl}/sticker/$1/$2.png"/>`)
+        .replace(/(?<=^|[^\\])!\[sticker]\((aru|yellow-face)\/(\d+)\)/g, `<img alt="sticker" src="${baseDynamicUrl}/sticker/$1/$2.png"/>`)
         // dimension image
         .replace(/(?<=^|[^\\])!\[(.*?) x (.*?)]\((.*?)\)/g, (a, b, c, d) => {
             return `<img alt="dimension img" style="${b !== 'null' ? `width: ${b} !important;` : ''}${c !== 'null' ? `height: ${c} !important;` : ''}" src="${d}"/>`
