@@ -5,9 +5,8 @@ import siteConfig from '@/./site-config'
 Vue.config.productionTip = false;
 const isDev = process.env.NODE_ENV === 'development';
 export const
-    dynamicUrl = isDev?'':'dynamic',
-    cdnDynamic = (isDev?'':siteConfig.cdn+'/') + dynamicUrl,
-    originPrefix = `${location.origin}/${dynamicUrl}`
+    baseUrl = isDev?'':siteConfig.cdn+'/',
+    originPrefix = location.origin + isDev?'':'dynamic';
 
 import '@/icons'
 import store from '@/store'
