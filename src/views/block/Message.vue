@@ -46,9 +46,9 @@
                 this.$el.querySelectorAll('.item').forEach(el => {
                   if (el.hasAttribute('listened')) return;
                   el.setAttribute('listened', '');
-                  el.onanimationend = () => {
+                  el.addEventListener('animationend', () => {
                     obj.display = false
-                  }
+                  })
                 })
               })
             },

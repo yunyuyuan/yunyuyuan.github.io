@@ -5,7 +5,7 @@ const siteConfig = require('./src/site-config')
 module.exports = {
     lintOnSave: false,
     indexPath: '../index.html',
-    publicPath: isDev?'':'dist',
+    publicPath: isDev?'':siteConfig.cdn,
     productionSourceMap: false,
     chainWebpack: config => {
         config.module
@@ -27,8 +27,6 @@ module.exports = {
         config
             .plugin('html')
             .tap(args => {
-                args[0].isDev = isDev
-                args[0].owner = siteConfig.owner
                 return args
             })
         // 开发模式 server静态目录

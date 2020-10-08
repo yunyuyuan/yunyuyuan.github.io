@@ -8,7 +8,7 @@
             <div class="inner" :style="{width: `${config.sticker.length}00%`, left: `${stickerSlideNow*-100}%`}" flex>
               <div v-for="item in config.sticker" :style="{width: `${100/config.sticker.length}%`}" flex>
                 <span v-for="idx in item.count" @click="addSticker(item.folder, idx)" flex>
-                  <img :src="`${staticFolder}/sticker/${item.folder}/${idx}.png`"/>
+                  <img :src="`${cdnDynamic}/sticker/${item.folder}/${idx}.png`"/>
                 </span>
               </div>
             </div>
@@ -72,7 +72,7 @@ import SingleButton from "@/components/Button";
 import Resizer from "@/components/Resizer";
 
 import {mapState} from "vuex";
-import {staticFolder} from "@/main";
+import {cdnDynamic} from "@/main";
 import {parseMarkdown} from "@/utils";
 
 import hljs from "highlight.js";
@@ -106,7 +106,7 @@ export default {
   },
   data() {
     return {
-      staticFolder,
+      cdnDynamic,
       comment: '',
       showGuide: false,
       showSticker: false,
@@ -328,6 +328,7 @@ export default {
         > .switch {
           width: 100%;
           height: 1.5rem;
+          flex-shrink: 0;
           border-top: 1px solid #676767;
           background: #ececec;
 

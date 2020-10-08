@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
+import siteConfig from '@/./site-config'
 
 Vue.config.productionTip = false;
-export const staticFolder = process.env.NODE_ENV === 'development'?'':'dynamic',
-    originPrefix = `${location.origin}/${staticFolder}`
+const isDev = process.env.NODE_ENV === 'development';
+export const
+    dynamicUrl = isDev?'':'dynamic',
+    cdnDynamic = (isDev?'':siteConfig.cdn+'/') + dynamicUrl,
+    originPrefix = `${location.origin}/${dynamicUrl}`
 
 import '@/icons'
 import store from '@/store'
@@ -11,7 +15,7 @@ import router from '@/router'
 import '@/filter'
 import {getText} from "@/utils";
 
-document.head.querySelector('link[rel="icon"]').href = `${staticFolder}/favicon.svg`;
+document.head.querySelector('link[rel="icon"]').href = `${cdnDynamic}/favicon.svg`;
 
 async function init() {
     for (let i of ['config', 'md', 'record']) {

@@ -53,6 +53,7 @@ export default {
   width: 100%;
   height: calc(100% - #{$footer-height});
   justify-content: space-around;
+  overflow-y: auto;
   > .btns {
     flex-direction: column;
     width: 30%;
@@ -149,7 +150,7 @@ export default {
     }
     >.info{
       width: 95%;
-      margin-top: 4rem;
+      margin: 4rem 0 2rem 0;
     }
   }
 }
