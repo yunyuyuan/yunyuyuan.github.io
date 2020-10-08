@@ -4,7 +4,7 @@
       <aside class="info" :style="{transform: `translateY(${asideTop}px)`}" ref="aside" flex>
         <div :class="{'active': asideActive}" flex>
           <div class="anchors" flex>
-            <span class="anchor" v-for="item in anchors" @click="toAnchor(item.el)">{{ item.text }}</span>
+            <span class="anchor" :class="{active: item.active}" v-for="item in anchors" @click="toAnchor(item.el)">{{ item.text }}</span>
           </div>
           <div class="share" flex>
             <div class="qr" @mouseenter="loadQr" @mouseleave="showQr = false">
@@ -15,7 +15,7 @@
                 <div class="load" v-if="!qrcode">
                   <svg-icon :name="'loading'"/>
                 </div>
-                <img v-else :src="qrcode"/>
+                <img v-else :src="qrcode" alt="qr"/>
               </div>
             </div>
           </div>
@@ -91,10 +91,12 @@ export default {
         this.$nextTick(() => {
           // 取出anchor
           this.anchors = [];
-          this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').forEach(el => {
+          let headList = this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
+          headList.forEach(el => {
             this.anchors.push({
               el: el,
-              text: el.innerText
+              text: el.innerText,
+              active: false
             });
             el.onclick = () => {
               this.toAnchor(el)
@@ -104,6 +106,19 @@ export default {
             before.alt = 'anchor';
             el.appendChild(before);
           })
+          // 监听滚动
+          this.body.onscroll = ()=>{
+            let last = {};
+            for (let el of headList){
+              if (last && el.getBoundingClientRect().top > document.querySelector('section.the-head').scrollHeight){
+                break
+              }
+              last = el;
+            }
+            this.anchors.forEach(a=>{
+              a.active = a.text === last.innerText;
+            })
+          }
           // hljs
           this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
             hljs.highlightBlock(el);
@@ -190,14 +205,17 @@ export default {
           overflow: hidden;
         }
         > .anchors{
+          padding: 0.6rem 0;
           > span{
-            margin: 0.5rem 0;
+            margin: 0.4rem 0;
             font-size: 0.85rem;
             transition: all .15s linear;
             cursor: pointer;
             @include text-overflow(1);
             &.active{
-              font-size: 1.1rem;
+              transform: scale(1.2);
+              font-weight: bold;
+              color: red;
             }
           }
         }

@@ -105,6 +105,7 @@
 
       > div {
         width: 40%;
+        max-width: 50rem;
         border-radius: 0.6rem;
         box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
         padding: 0.6rem 1rem;
@@ -116,6 +117,7 @@
         flex-shrink: 0;
         @include media{
           width: 80%;
+          max-width: unset;
           >.close{
             display: unset !important;
           }

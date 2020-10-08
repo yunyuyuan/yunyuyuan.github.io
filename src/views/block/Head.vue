@@ -38,6 +38,7 @@ export default {
 
 <style scoped lang="scss">
 @import "src/assets/style/public";
+
 .the-head {
   position: fixed;
   top: 0;
@@ -84,6 +85,14 @@ export default {
       cursor: pointer;
       font-size: 0.95rem;
       font-family: "Source Code Pro", serif;
+    }
+  }
+  @include media{
+    >.body{
+      > .txt{
+        font-size: 0.85rem;
+        margin-right: 0.3rem;
+      }
     }
   }
 }

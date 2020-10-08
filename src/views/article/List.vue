@@ -293,7 +293,7 @@ export default {
             margin-top: auto;
 
             > span {
-              font-size: 0.1rem;
+              font-size: 0.8rem;
               line-height: 1rem;
               border-radius: 0.1rem;
               padding: 0.2rem 0.6rem;

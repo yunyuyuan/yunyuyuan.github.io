@@ -15,7 +15,7 @@ import router from '@/router'
 import '@/filter'
 import {getText} from "@/utils";
 
-document.head.querySelector('link[rel="icon"]').href = `${cdnDynamic}/favicon.svg`;
+document.head.querySelector('link[rel="icon"]').href = `${originPrefix}/favicon.svg`;
 
 async function init() {
     for (let i of ['config', 'md', 'record']) {
