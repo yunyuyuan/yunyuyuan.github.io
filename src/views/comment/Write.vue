@@ -236,6 +236,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "src/assets/style/public";
+
 .write {
   flex-direction: column;
   width: 80%;
@@ -294,6 +296,7 @@ export default {
               height: 100%;
               overflow-y: auto;
               flex-wrap: wrap;
+              align-items: flex-start;
 
               > span {
                 width: 3rem;
@@ -472,6 +475,7 @@ export default {
         border-top: 1px solid gray;
         background: #232323;
         border-radius: inherit;
+        margin-top: auto;
         ::v-deep > .float-input{
           width: 40%;
           margin-right: 1rem;
@@ -482,6 +486,14 @@ export default {
         > .single-button{
           background: #0073ff;
         }
+      }
+    }
+  }
+  @include media{
+    >.upload-img{
+      >.inner{
+        width: 95%;
+        height: 70%;
       }
     }
   }

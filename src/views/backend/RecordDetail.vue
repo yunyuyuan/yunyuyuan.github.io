@@ -25,7 +25,7 @@
             <single-button class="del-btn" @click.native="delImg(idx)" :text="'删除'"/>
           </div>
         </div>
-        <span class="add" @click="addImg">
+        <span class="add" @click="addImg" flex>
           <svg-icon :name="'add'"/>
         </span>
       </div>
@@ -167,6 +167,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "src/assets/style/public";
+
 .record-detail{
   flex-direction: column;
   > .operate{
@@ -265,8 +267,6 @@ export default {
         border-radius: 50%;
         background: #ffc722;
         justify-content: center;
-        display: flex;
-        align-items: center;
         margin-left: 1rem;
         box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
 
@@ -296,6 +296,10 @@ export default {
         padding: 0.3rem;
       }
     }
+  }
+  @include media{
+    width: 99% !important;
+    margin-left: 0.5% !important;
   }
 }
 </style>

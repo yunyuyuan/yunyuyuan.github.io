@@ -1,11 +1,11 @@
 <template>
   <div class="list" flex>
-    <div onclick="this.querySelector('input').focus()" :class="{search: true, active: searchFocus}" flex>
+    <label onclick="this.querySelector('input').focus()" :class="{search: true, active: searchFocus}" flex>
       <input v-model="search" @focusin="toggleInputFocus(true)" @focusout="toggleInputFocus(false)"/>
       <span flex>
           <svg-icon :fill="searchFocus?'black':'#ddd'" :name="'search'"/>
       </span>
-    </div>
+    </label>
     <div class="tags" flex>
       <span @click="removeTag(tag)" v-for="tag in searchTags" :key="tag"
             :style="{background: $options.filters.color(tag)}" flex>
@@ -26,7 +26,7 @@
           <span class="circle"></span>
         </div>
         <router-link class="info" :to="{name: 'article.detail', params: {id: item.file}}" flex>
-          <loading-img :src="item.cover || defaultCover" :size="[12, -1]"/>
+          <loading-img :src="item.cover" :size="[12, -1]"/>
           <div flex>
             <b>{{ item.name }}</b>
             <span>{{ item.summary }}</span>
@@ -45,7 +45,6 @@
 
 <script>
 import {mapState} from "vuex";
-import defaultCover from '@/image/default-cover.png';
 import LoadingImg from "@/components/LoadingImg";
 import Pagination from "@/components/Pagination";
 
@@ -54,7 +53,6 @@ export default {
   components: {Pagination, LoadingImg},
   data() {
     return {
-      defaultCover,
       search: '',
       searchFocus: false,
       searchTags: [],
@@ -160,14 +158,14 @@ export default {
   > .tags {
     transition: all .15s linear;
     width: 80%;
-    height: 3rem;
+    flex-wrap: wrap;
 
     > span {
       padding: 0.5rem 1.3rem;
       cursor: pointer;
       transition: all .1s linear;
       font-size: 0.96rem;
-      margin: 0 1rem;
+      margin: 1rem;
       height: 1.2rem;
       line-height: 1.8rem;
       box-shadow: 0 0 0.4rem #000000a1;
@@ -310,6 +308,19 @@ export default {
               }
             }
           }
+        }
+      }
+    }
+  }
+  @include media{
+    >.blog{
+      >.item{
+        width: 98%;
+        >.time{
+          display: none;
+        }
+        >.mid{
+          display: none;
         }
       }
     }

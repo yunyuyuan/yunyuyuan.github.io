@@ -9,7 +9,7 @@
       </a>
     </div>
     <div class="copyright" flex>
-      <span>Copyright (c) {{ config.copyright }} <b>{{ config.name }} | {{ domain }}</b></span>
+      <span>Copyright (c) {{ config.copyright }} <b write-font>{{ config.name }}</b><b> | {{ domain }}</b></span>
       <span>All right reserved</span>
     </div>
   </footer>
@@ -55,6 +55,7 @@ footer{
     justify-content: center;
     box-shadow: 0 0 0.5rem rgba(255, 255, 255, 0.4);
     transition: all .15s linear;
+    flex-shrink: 0;
     &:hover{
       background: white;
     }
@@ -94,6 +95,20 @@ footer{
           color: #ddd;
         }
       }
+  }
+  @include media{
+    flex-wrap: wrap;
+    padding: 1rem 0 0 0;
+    height: unset;
+    >.copyright{
+      width: 100%;
+      height: 3.6rem;
+      margin: 0;
+      justify-content: space-around;
+      >span{
+        margin: 0;
+      }
+    }
   }
 }
 </style>

@@ -11,9 +11,7 @@ import router from '@/router'
 import '@/filter'
 import {getText} from "@/utils";
 
-import selfImage from '@/image/i.png';
-
-document.head.querySelector('link[rel="icon"]').href = selfImage;
+document.head.querySelector('link[rel="icon"]').href = `${staticFolder}/favicon.svg`;
 
 async function init() {
     for (let i of ['config', 'md', 'record']) {

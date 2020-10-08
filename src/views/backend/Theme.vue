@@ -174,6 +174,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "src/assets/style/public";
+
 .theme {
   height: calc(100% - 2rem);
   flex-direction: column;
@@ -289,6 +291,10 @@ export default {
         }
       }
     }
+  }
+  @include media{
+    width: 99% !important;
+    margin-left: 0.5% !important;
   }
 }
 </style>

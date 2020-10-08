@@ -12,12 +12,12 @@
               </span>
       </div>
       <div class="option">
-        <label @click="remember = !remember">
-          <a :class="{active: remember}"></a>
+        <label @click="remember = !remember" flex>
+          <a :class="{active: remember}" flex></a>
           <span>在本机上记住我</span>
         </label>
-        <label @click="withUpdate = !withUpdate">
-          <a :class="{active: withUpdate}"></a>
+        <label @click="withUpdate = !withUpdate" flex>
+          <a :class="{active: withUpdate}" flex></a>
           <span>保存后立即更新配置</span>
         </label>
       </div>
@@ -132,8 +132,6 @@ export default {
       align-items: flex-start;
       > label{
         cursor: pointer;
-        display: flex;
-        align-items: center;
         margin: 0.5rem 0;
         &:hover{
           > a{
@@ -143,8 +141,6 @@ export default {
         > a{
           width: 1rem;
           height: 1rem;
-          display: flex;
-          align-items: center;
           justify-content: center;
           border-radius: 50%;
           border: 2px solid #252525;

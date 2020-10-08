@@ -246,6 +246,7 @@ export default {
         height: 2rem;
         position: relative;
         cursor: pointer;
+        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.4);
 
         > span {
           transition: all .2s ease-out;
@@ -316,6 +317,24 @@ export default {
     margin: 2rem auto;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
     padding: 1rem 0;
+  }
+  @include media{
+    >.content{
+      min-width: 100%;
+      max-width: 100%;
+      >.info{
+
+      }
+      >.--markdown{
+        width: 100% !important;
+      }
+    }
+    > ::v-deep .comment{
+      width: 98%;
+      >.write{
+        width: 95%;
+      }
+    }
   }
 }
 </style>

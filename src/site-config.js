@@ -1,5 +1,4 @@
 module.exports = {
     owner: 'yunyuyuan',
-    email: '326178275@qq.com',
-    backgroundImg: false
+    email: '326178275@qq.com'
 }

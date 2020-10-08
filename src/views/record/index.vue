@@ -101,9 +101,9 @@ export default {
       }
       > span{
         width: calc(100% - 0.4rem);
-        padding: 0.4rem;
+        padding: 0 0.4rem;
         background: white;
-        height: 3rem;
+        height: 2.5rem;
         line-height: 1.2rem;
         font-size: 0.8rem;
         @include text-overflow(2)
@@ -112,6 +112,43 @@ export default {
   }
   > .pagination{
     margin: 1rem 0;
+  }
+  @include media{
+    max-width: 100%;
+    width: 100%;
+    >.list{
+      justify-content: center;
+      >.item{
+        height: unset;
+        width: calc(98% - 2rem);
+        &:hover{
+          height: unset;
+        }
+        >.time{
+          opacity: 1;
+        }
+        >.img{
+          flex-wrap: wrap;
+          height: unset;
+          ::v-deep .loading-img{
+            height: 100% !important;
+            width: calc(50% - 1px) !important;
+            &:not(:last-of-type){
+              border-right: 1px solid white;
+            }
+            img{
+              height: 100%;
+              width: 100%;
+              object-fit: contain;
+              background: rgba(255, 255, 255, 0.5);
+            }
+          }
+        }
+        >span{
+
+        }
+      }
+    }
   }
 }
 </style>

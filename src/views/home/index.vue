@@ -4,26 +4,26 @@
       <router-link :to="{name: 'article.list'}" flex>
         <svg-icon :name="'article'"/>
         <span class="name">文章</span>
-        <span class="tip">"技术"文章</span>
+        <span write-font class="tip">"技术"文章</span>
       </router-link>
       <router-link :to="{name: 'record'}" flex>
         <svg-icon :name="'record'"/>
         <span class="name">记录</span>
-        <span class="tip">一框琐事</span>
+        <span write-font class="tip">一框琐事</span>
       </router-link>
       <router-link :to="{name: 'msgBoard'}" flex>
         <svg-icon :name="'comments'"/>
         <span class="name">留言板</span>
-        <span class="tip">谁的话语</span>
+        <span write-font class="tip">谁的话语</span>
       </router-link>
     </div>
     <div class="info" flex>
       <div class="head" flex>
         <img :src="selfImage"/>
-        <span class="name">{{ config.name }}</span>
+        <span write-font class="name">{{ config.name }}</span>
       </div>
       <div class="body" flex>
-        <span>{{ config.describe }}</span>
+        <span write-font>{{ config.describe }}</span>
       </div>
     </div>
   </div>
@@ -53,7 +53,6 @@ export default {
   width: 100%;
   height: calc(100% - #{$footer-height});
   justify-content: space-around;
-
   > .btns {
     flex-direction: column;
     width: 30%;
@@ -93,10 +92,11 @@ export default {
         width: 0;
         transition: all .15s ease-out;
         opacity: 0;
-        font-size: 0.85rem;
+        font-size: 1.05rem;
         color: white;
         word-break: keep-all;
         white-space: nowrap;
+        text-align: center;
       }
     }
   }
@@ -116,7 +116,7 @@ export default {
 
       > span {
         padding: 0.6rem 0 0.6rem 2rem;
-        font-size: 1.3rem;
+        font-size: 1.6rem;
         font-weight: bold;
         border-left: 2px solid white;
         color: white;
@@ -130,8 +130,26 @@ export default {
         padding: 1rem;
         background: rgba(255, 255, 255, 0.4);
         word-break: break-all;
-        font-size: 1rem;
+        font-size: 1.1rem;
       }
+    }
+  }
+  @include media{
+    flex-direction: column;
+    justify-content: flex-start;
+    >.btns{
+      width: 100%;
+      margin: 2rem 0;
+      >a{
+        >.tip{
+          width: 6rem;
+          opacity: 1;
+        }
+      }
+    }
+    >.info{
+      width: 95%;
+      margin-top: 4rem;
     }
   }
 }

@@ -114,6 +114,12 @@
         justify-content: center;
         overflow: hidden;
         flex-shrink: 0;
+        @include media{
+          width: 80%;
+          >.close{
+            display: unset !important;
+          }
+        }
 
         &:hover {
           animation-play-state: paused;

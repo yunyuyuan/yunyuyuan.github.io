@@ -1,9 +1,9 @@
 <template>
   <div class="index">
-    <img class="bg" v-if="siteConfig.backgroundImg" :src="images[routeNow]"/>
+    <img class="bg" v-if="config.backgroundImg" :src="images[routeNow]"/>
     <span class="bg" :style="{background: bgColor}" v-else></span>
     <the-head :class="{'show-bg': showBg}" v-if="showHead" @toggle="toggleShowBg"/>
-    <section :class="{body: true, 'show-head': showHead, 'show-bg': showBg, 'mask-bg': siteConfig.backgroundImg}" flex>
+    <section :class="{body: true, 'show-head': showHead, 'show-bg': showBg, 'mask-bg': config.backgroundImg}" flex>
       <router-view></router-view>
       <the-footer v-if="this.routeNow !== 'backend'"/>
     </section>
@@ -15,9 +15,7 @@
 <script>
 import HomeImage from '@/image/home.jpg';
 import ArticleListImage from '@/image/articleList.jpg';
-import ArticleDetailImage from '@/image/articleDetail.jpg';
 import msgBoardImage from '@/image/msgBoard.jpg';
-import backendImage from '@/image/backend.jpg';
 import recordImage from '@/image/record.jpg';
 
 import TheHead from "@/views/block/Head";
@@ -27,6 +25,7 @@ import Loading from "@/views/block/Loading";
 
 import Vue from 'vue';
 import siteConfig from '@/site-config'
+import {mapState} from "vuex";
 
 export default {
   name: "index",
@@ -40,13 +39,15 @@ export default {
       images: {
         home: HomeImage,
         articleList: ArticleListImage,
-        articleDetail: ArticleDetailImage,
         msgBoard: msgBoardImage,
-        backend: backendImage,
+        backend: HomeImage,
         record: recordImage,
       },
       routeNow: 'home'
     }
+  },
+  computed: {
+    ...mapState(['config'])
   },
   watch: {
     $route() {

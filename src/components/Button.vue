@@ -1,5 +1,5 @@
 <template>
-  <div :disabled="disabled" :style="{fontSize: `${size}rem`}" class="single-button">
+  <div :disabled="disabled" :style="{fontSize: `${size}rem`}" class="single-button" flex>
     <span>{{ text }}</span>
   </div>
 </template>
@@ -29,8 +29,6 @@ export default {
   border-radius: 0.3em;
   cursor: pointer;
   transition: all .1s linear;
-  display: flex;
-  align-items: center;
   justify-content: center;
   box-shadow: 0 0 0.3em rgba(0, 0, 0, 0.3);
 

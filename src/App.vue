@@ -7,6 +7,7 @@
 <script>
 import TheIndex from '@/views/index';
 import '@/assets/style/source-code-pro.css'
+import '@/assets/style/write-font.css'
 
 export default {
   name: 'App',
@@ -20,6 +21,9 @@ html, body{
   width: 100%;
   height: 100%;
   font-size: 16px;
+  @include media{
+    font-size: 14px;
+  }
   &[unselectable]{
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -63,6 +67,9 @@ html, body{
       box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.4);
       border: 1px solid #939393;
   }
+}
+*[write-font]{
+  font-family: "write-font", serif;
 }
 
 input, textarea, select, button {
@@ -131,5 +138,10 @@ table{
 ::-webkit-scrollbar-track{
     border-radius: 0.6rem;
     background: transparent;
+}
+@include media{
+  ::-webkit-scrollbar{
+    width: 0;
+  }
 }
 </style>

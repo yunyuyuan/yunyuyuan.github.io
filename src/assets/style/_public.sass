@@ -17,3 +17,7 @@ $z-index-loading: 101
   -webkit-line-clamp: $line
   word-break: break-all
   white-space: pre-wrap
+
+@mixin media()
+  @media screen and (max-width: 768px)
+    @content

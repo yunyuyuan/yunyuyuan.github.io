@@ -20,14 +20,14 @@
     <div class="info" flex>
       <div class="cover">
         <loading-img :src="info.cover" :size="[20, 15]"/>
-        <label>
+        <label flex>
           <span>封面链接:</span>
           <input :value="info.cover" @focusout="changeCover"/>
         </label>
       </div>
       <div class="tags-time" flex>
         <div class="tags" flex>
-          <span class="tag-icon">
+          <span class="tag-icon" flex>
             <svg-icon :name="'tag'"/>
           </span>
           <div v-for="(tag, idx) in info.tags" :class="{editing: tagEditIndex===idx}" :key="tag">
@@ -41,7 +41,7 @@
               </span>
             </div>
           </div>
-          <span class="add" @click="addTag" title="添加标签">
+          <span class="add" @click="addTag" title="添加标签" flex>
             <svg-icon :name="'add'"/>
           </span>
         </div>
@@ -72,8 +72,6 @@ import FloatInput from "@/components/FloatInput";
 
 import LoadingButton from "@/components/LoadingButton";
 
-import defaultCover from '@/image/default-cover.png';
-
 
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/markdown/markdown';
@@ -92,7 +90,6 @@ export default {
   components: {LoadingImg, MarkdownHelp, Resizer, LoadingButton, FloatInput},
   data() {
     return {
-      defaultCover,
       showGuide: false,
       tagEditIndex: -1,
       mdText: '',
@@ -279,6 +276,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "src/assets/style/public";
+
 .md-detail {
   flex-direction: column;
   position: relative;
@@ -388,10 +387,12 @@ export default {
       flex-direction: column;
       border: 1px solid gray;
       box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.15);
-
+      ::v-deep .loading-img{
+        img{
+          object-fit: contain;
+        }
+      }
       > label {
-        display: flex;
-        align-items: center;
         margin: 1rem 0 0.5rem 0;
 
         > span {
@@ -417,8 +418,6 @@ export default {
 
         > .tag-icon {
           margin-right: 2rem;
-          display: flex;
-          align-items: center;
 
           > svg {
             width: 2.6rem;
@@ -493,8 +492,6 @@ export default {
           border-radius: 50%;
           background: #ffc722;
           justify-content: center;
-          display: flex;
-          align-items: center;
           margin-left: 1rem;
           box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
 
@@ -569,6 +566,18 @@ export default {
         word-break: break-all;
         white-space: pre-line;
         width: 100%;
+      }
+    }
+  }
+  @include media{
+    width: 99% !important;
+    margin-left: 0.5% !important;
+    > .info {
+      flex-direction: column;
+      >.cover{
+        ::v-deep .loading-img{
+          width: 100% !important;
+        }
       }
     }
   }

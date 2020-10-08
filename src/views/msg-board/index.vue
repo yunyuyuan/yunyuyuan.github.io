@@ -18,6 +18,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "src/assets/style/public";
+
 .msg-board{
   width: 90%;
   max-width: 60rem;
@@ -53,6 +55,14 @@ export default {
     }
     > .write{
       margin-bottom: 1rem;
+    }
+  }
+  @include media{
+    width: 98%;
+    ::v-deep .comment{
+      >.write{
+        width: 95%;
+      }
     }
   }
 }
