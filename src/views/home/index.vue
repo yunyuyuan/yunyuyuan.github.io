@@ -51,7 +51,8 @@ export default {
 
 .home {
   width: 100%;
-  height: calc(100% - #{$footer-height});
+  height: 100%;
+  flex-shrink: 0;
   justify-content: space-around;
   overflow-y: auto;
   > .btns {
@@ -67,6 +68,7 @@ export default {
       text-decoration: none;
       transition: all .15s ease-out;
       box-shadow: 0 0 0.8rem rgba(255, 255, 255, 0.6);
+      flex-shrink: 0;
 
       &:hover {
         background: rgba(0, 0, 0, 0.5);
