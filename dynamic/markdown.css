@@ -81,6 +81,8 @@
   .--markdown table {
     width: 90%;
     margin: 1rem auto; }
+    .--markdown table tbody td {
+      text-align: center; }
   .--markdown ul > li:not(.task-list-item):before {
     content: '';
     width: 0.6rem;
@@ -112,24 +114,33 @@
     font-family: "Source Code Pro", serif; }
   .--markdown pre {
     position: relative;
-    margin: 2rem 0 0.5rem 0; }
-    .--markdown pre:before {
-      display: flex;
+    margin: 0.5rem 0; }
+    .--markdown pre:hover > span {
+      display: flex; }
+    .--markdown pre > span {
+      display: none;
       align-items: center;
       text-align: center;
       position: absolute;
-      right: 0;
-      top: 0;
-      transform: translateY(calc(-100% - 0.3rem));
-      background: #3c3c3c;
-      content: attr(data-lang);
+      right: 0.1rem;
+      top: 0.1rem;
+      background: #f0f0f0;
+      border: none;
+      cursor: pointer;
       font-size: 0.5rem;
       border-radius: 0.16rem;
       padding: 0.2rem 0.4rem;
-      box-shadow: 0 0 0.4rem rgba(255, 255, 255, 0.3);
-      color: white;
-      max-height: 1rem;
-      min-height: 1rem; }
+      box-shadow: 0 0 0.4rem rgba(255, 255, 255, 0.4);
+      color: black;
+      height: 1rem;
+      z-index: 1; }
+      .--markdown pre > span:hover {
+        background: #ff5500;
+        color: white; }
+
+@media screen and (max-width: 768px) {
+  .--markdown pre > span {
+    display: none !important; } }
     .--markdown pre > code.hljs {
       display: block;
       overflow: visible;
