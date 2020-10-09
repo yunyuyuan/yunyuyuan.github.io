@@ -43,7 +43,7 @@ export function parseMarkdown(text) {
 }
 
 export function insertCopyBtn (el){
-    let sourceCode = el.innerHTML;
+    let sourceCode = el.innerText;
     let btn = document.createElement('span');
     btn.innerText = el.classList[0];
     btn.onmouseenter = ()=>{btn.innerText = '复制'}
