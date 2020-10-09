@@ -29,6 +29,9 @@
     margin: 0 0.3rem;
     word-break: break-all;
     text-decoration: none;
+  	&:hover{
+    	text-decoration: underline;	
+  	}
   }
 
   img {
@@ -87,12 +90,12 @@
   ul{
     > li:not(.task-list-item):before{
       content: '';
-      width: 0.4rem;
-      height: 0.4rem;
-      border-radius: 35%;
-      top: 0.4rem;
-      background: black;
-      border: 0.2rem solid;
+      width: 0.6rem;
+      height: 0.6rem;
+      border-radius: 0.2rem;
+      top: 0.3rem;
+      background: #00ff68;
+      border: 0.15rem solid #0032ff;
     }
   }
 
@@ -103,7 +106,8 @@
       counter-increment: xx;
       display: block;
       font-size: 1em;
-      color: black;
+      color: #0032ff;
+  		top: 0.2rem;
       font-weight: bold;
     }
   }
@@ -120,6 +124,7 @@
 
   li {
     position: relative;
+  	margin: 0.6rem;
   }
 
   code {

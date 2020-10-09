@@ -46,6 +46,8 @@
     margin: 0 0.3rem;
     word-break: break-all;
     text-decoration: none; }
+    .--markdown a[href]:hover {
+      text-decoration: underline; }
   .--markdown img {
     display: block;
     width: 80%;
@@ -81,12 +83,12 @@
     margin: 1rem auto; }
   .--markdown ul > li:not(.task-list-item):before {
     content: '';
-    width: 0.4rem;
-    height: 0.4rem;
-    border-radius: 35%;
-    top: 0.4rem;
-    background: black;
-    border: 0.2rem solid; }
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 0.2rem;
+    top: 0.3rem;
+    background: #00ff68;
+    border: 0.15rem solid #0032ff; }
   .--markdown ol {
     counter-reset: xx 0; }
     .--markdown ol > li:before {
@@ -94,7 +96,8 @@
       counter-increment: xx;
       display: block;
       font-size: 1em;
-      color: black;
+      color: #0032ff;
+      top: 0.2rem;
       font-weight: bold; }
   .--markdown ul, .--markdown ol {
     list-style: none;
@@ -103,7 +106,8 @@
       position: absolute;
       left: -2rem; }
   .--markdown li {
-    position: relative; }
+    position: relative;
+    margin: 0.6rem; }
   .--markdown code {
     font-family: "Source Code Pro", serif; }
   .--markdown pre > code.hljs {
