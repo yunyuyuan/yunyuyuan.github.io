@@ -120,15 +120,15 @@ table{
   }
 }
 ::-webkit-scrollbar{
-    width: 0.66rem;
-    height: 0.66rem;
+    width: 0.5rem;
+    height: 0.5rem;
 }
 ::-webkit-scrollbar-corner,
 ::-webkit-scrollbar-button{
     display: none;
 }
 ::-webkit-scrollbar-thumb{
-    border-radius: 0.6rem;
+    border-radius: 0.5rem;
     background: #404040;
     border: 1px solid #828282;
 }
@@ -136,7 +136,7 @@ table{
     background: #323232
 }
 ::-webkit-scrollbar-track{
-    border-radius: 0.6rem;
+    border-radius: 0.5rem;
     background: transparent;
 }
 @include media{

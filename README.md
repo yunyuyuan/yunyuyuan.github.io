@@ -11,8 +11,8 @@
 ### 🔨 基本实现
 - [x] vue-cli 静态化部署
 - [x] dynamic文件夹内容可用*博客本身*编辑
-- [ ] 评论功能
-- [ ] 第三方图片上传
+- [x] 评论功能
+- [ ] 主题颜色和字体/大小
 
 ### ⚓ Power by
 * web框架 [vue](https://vuejs.org),开发工具 [vue-cli](https://cli.vuejs.org)

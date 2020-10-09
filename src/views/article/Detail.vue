@@ -121,6 +121,7 @@ export default {
           }
           // hljs
           this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
+            el.parentElement.setAttribute('data-lang', el.classList[0])
             hljs.highlightBlock(el);
           });
         })

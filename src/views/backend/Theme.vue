@@ -52,6 +52,7 @@ import '@/assets/style/code-mirror/dracula-code.scss';
 
 import defaultMarkdownStyle from '!!text-loader!@/assets/style/markdown-default.scss'
 import Resizer from "@/components/Resizer";
+import hljs from "highlight.js";
 
 export default {
   name: "Theme",
@@ -77,6 +78,13 @@ export default {
   },
   async created() {
     await this.init()
+  },
+  mounted() {
+    // hljs
+    this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
+      el.parentElement.setAttribute('data-lang', el.classList[0])
+      hljs.highlightBlock(el);
+    });
   },
   watch: {
     async $route() {

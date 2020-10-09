@@ -150,6 +150,7 @@ export default {
         }
         this.$nextTick(() => {
           this.$refs.list.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
+            el.parentElement.setAttribute('data-lang', el.classList[0])
             el.innerText = el.innerText.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
             hljs.highlightBlock(el);
           })
@@ -323,6 +324,7 @@ export default {
               }
               > div {
                 line-height: 1.5rem;
+                width: 100%;
 
                 > a {
                   margin-right: 0.8rem;
