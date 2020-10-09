@@ -32,6 +32,7 @@ export default {
   },
   watch: {
     async info() {
+      if (!this.info.file) return;
       let res = await getText(`${originPrefix}/record/${this.info.file}.txt`);
       if (res[0]) {
         this.text = res[1]
@@ -70,7 +71,7 @@ export default {
     > span{
       width: 95%;
       border-top: 1px solid gray;
-      font-size: 0.95rem;
+      font-size: 1.1rem;
       margin: 1rem 0 5rem 0;
       white-space: pre-wrap;
       padding-top: 0.8rem;

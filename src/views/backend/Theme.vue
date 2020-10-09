@@ -35,7 +35,7 @@
 <script>
 import LoadingButton from "@/components/LoadingButton";
 import {mapState} from "vuex";
-import {getText, parseAjaxError, parseMarkdown} from "@/utils";
+import {getText, insertCopyBtn, parseAjaxError, parseMarkdown} from "@/utils";
 import {originPrefix} from "@/main";
 import testText from 'text-loader!@/assets/test.md';
 
@@ -52,7 +52,6 @@ import '@/assets/style/code-mirror/dracula-code.scss';
 
 import defaultMarkdownStyle from '!!text-loader!@/assets/style/markdown-default.scss'
 import Resizer from "@/components/Resizer";
-import hljs from "highlight.js";
 
 export default {
   name: "Theme",
@@ -82,8 +81,7 @@ export default {
   mounted() {
     // hljs
     this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
-      el.parentElement.setAttribute('data-lang', el.classList[0])
-      hljs.highlightBlock(el);
+      insertCopyBtn(el);
     });
   },
   watch: {

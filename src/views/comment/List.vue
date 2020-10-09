@@ -75,8 +75,7 @@ import {
   close_deleteComment, deleteReply, getCommentChildren
 } from "@/views/comment/utils";
 import WriteComment from "@/views/comment/Write";
-import {parseAjaxError, parseMarkdown} from "@/utils";
-import hljs from "highlight.js";
+import {insertCopyBtn, parseAjaxError, parseMarkdown} from "@/utils";
 import siteConfig from '@/site-config'
 
 export default {
@@ -150,9 +149,8 @@ export default {
         }
         this.$nextTick(() => {
           this.$refs.list.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
-            el.parentElement.setAttribute('data-lang', el.classList[0])
             el.innerText = el.innerText.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
-            hljs.highlightBlock(el);
+            insertCopyBtn(el);
           })
         })
       } else {

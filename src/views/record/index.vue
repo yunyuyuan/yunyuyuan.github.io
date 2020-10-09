@@ -106,6 +106,7 @@ export default {
         height: 2.5rem;
         line-height: 1.2rem;
         font-size: 0.8rem;
+        margin-top: 0.5rem;
         @include text-overflow(2)
       }
     }

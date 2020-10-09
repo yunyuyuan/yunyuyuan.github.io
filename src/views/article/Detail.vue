@@ -33,13 +33,12 @@
 </template>
 
 <script>
-import {getText} from "@/utils";
+import {getText, insertCopyBtn} from "@/utils";
 import {originPrefix} from "@/main";
 import {mapState} from "vuex";
 
 import TheComment from "@/views/comment/index";
 
-import hljs from 'highlight.js'
 import qrcode from "qrcode";
 
 export default {
@@ -121,8 +120,7 @@ export default {
           }
           // hljs
           this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
-            el.parentElement.setAttribute('data-lang', el.classList[0])
-            hljs.highlightBlock(el);
+            insertCopyBtn(el);
           });
         })
       } else {

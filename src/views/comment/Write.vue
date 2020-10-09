@@ -73,9 +73,8 @@ import Resizer from "@/components/Resizer";
 
 import {mapState} from "vuex";
 import {baseDynamicUrl} from "@/main";
-import {parseMarkdown} from "@/utils";
+import {insertCopyBtn, parseMarkdown} from "@/utils";
 
-import hljs from "highlight.js";
 import CodeMirror from 'codemirror';
 
 import 'codemirror/mode/markdown/markdown'
@@ -129,7 +128,7 @@ export default {
       // hljs
       this.$nextTick(() => {
         this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
-          hljs.highlightBlock(el);
+          insertCopyBtn(el);
         })
       })
       return parseMarkdown(this.comment);

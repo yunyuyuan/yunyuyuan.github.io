@@ -1,6 +1,7 @@
 import Octokat from 'octokat';
 import {baseDynamicUrl} from "@/main";
 import Sass from 'sass.js'
+import hljs from "highlight.js";
 
 export const dynamicFolder = 'dynamic';
 
@@ -39,6 +40,25 @@ export function parseMarkdown(text) {
             return `<img alt="dimension img" style="${b !== 'null' ? `width: ${b} !important;` : ''}${c !== 'null' ? `height: ${c} !important;` : ''}" src="${d}"/>`
         })
     return converter.makeHtml(text)
+}
+
+export function insertCopyBtn (el){
+    let btn = document.createElement('span');
+    btn.innerText = el.classList[0];
+    btn.onmouseenter = ()=>{btn.innerText = '复制'}
+    btn.onmouseleave = ()=>{btn.innerText = el.classList[0]}
+    btn.onclick = ()=>{
+        let textArea = document.createElement("textarea");
+        textArea.style.maxHeight = '0';
+        textArea.value = el.innerHTML;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("Copy");
+        textArea.remove();
+        btn.innerText = '复制成功'
+    }
+    el.parentElement.insertBefore(btn, el);
+    hljs.highlightBlock(el);
 }
 
 export function parseAjaxError(err) {
