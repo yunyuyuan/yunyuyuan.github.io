@@ -43,6 +43,7 @@ export function parseMarkdown(text) {
 }
 
 export function insertCopyBtn (el){
+    let sourceCode = el.innerHTML;
     let btn = document.createElement('span');
     btn.innerText = el.classList[0];
     btn.onmouseenter = ()=>{btn.innerText = '复制'}
@@ -50,7 +51,7 @@ export function insertCopyBtn (el){
     btn.onclick = ()=>{
         let textArea = document.createElement("textarea");
         textArea.style.maxHeight = '0';
-        textArea.value = el.innerHTML;
+        textArea.value = sourceCode;
         document.body.appendChild(textArea);
         textArea.select();
         document.execCommand("Copy");
