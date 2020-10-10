@@ -25,17 +25,18 @@ async function init() {
                 json: JSON.parse(res[1])
             });
         } else {
-            alert('获取网站配置失败!请检查网络并刷新网页')
+            alert(`获取${i}失败!`)
             return
         }
     }
 }
 
-init().then(r => {
-    new Vue({
-        el: '#app',
-        store,
-        router,
-        render: h => h(App),
-    });
+new Vue({
+    el: '#app',
+    store,
+    router,
+    beforeCreate() {
+        init().then()
+    },
+    render: h => h(App),
 });
