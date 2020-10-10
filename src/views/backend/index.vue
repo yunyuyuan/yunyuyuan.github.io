@@ -88,7 +88,7 @@ export default {
     async getConfig() {
       if (this.updating) return;
       this.updating = true;
-      let res = await getText(`${originPrefix}/config.json`);
+      let res = await getText(`${originPrefix}/json/config.json`);
       if (res[0]) {
         this.$store.commit('updateJson', {
           key: 'config',
