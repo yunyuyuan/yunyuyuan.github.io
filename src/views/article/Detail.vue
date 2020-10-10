@@ -331,6 +331,7 @@ export default {
   }
   > ::v-deep .comment{
     width: 90%;
+    max-width: 60rem;
     margin: 2rem auto;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
     padding: 1rem 0;
@@ -348,6 +349,7 @@ export default {
     }
     > ::v-deep .comment{
       width: 98%;
+      max-width: unset;
       >.write{
         width: 95%;
       }
