@@ -73,7 +73,7 @@ import Resizer from "@/components/Resizer";
 
 import {mapState} from "vuex";
 import {baseDynamicUrl} from "@/main";
-import {insertCopyBtn, parseMarkdown} from "@/utils";
+import {hljsAndInsertCopyBtn, parseMarkdown} from "@/utils";
 
 import CodeMirror from 'codemirror';
 
@@ -125,11 +125,10 @@ export default {
   computed: {
     ...mapState(['config']),
     html() {
+      if (!this.$el) return '';
       // hljs
-      this.$nextTick(() => {
-        this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
-          insertCopyBtn(el);
-        })
+      this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
+        hljsAndInsertCopyBtn(el);
       })
       return parseMarkdown(this.comment);
     }

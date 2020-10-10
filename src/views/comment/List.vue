@@ -56,14 +56,7 @@
         </div>
       </div>
     </div>
-    <div class="page" flex>
-      <span :disabled="!pageInfo.hasPreviousPage" class="left" flex
-            @click='toComment(!pageInfo.hasPreviousPage, -1)'><svg-icon
-          :name="'right'"/></span>
-      <span :disabled="!pageInfo.hasNextPage" class="right" flex
-            @click='toComment(!pageInfo.hasNextPage, 1)'><svg-icon
-          :name="'right'"/></span>
-    </div>
+    <pagination @turn="turnCommentPage" :item-count="itemCount" :page-now="pageNow" :per-count="onePageItemsCount"/>
   </div>
 </template>
 
@@ -75,12 +68,13 @@ import {
   close_deleteComment, deleteReply, getCommentChildren
 } from "@/views/comment/utils";
 import WriteComment from "@/views/comment/Write";
-import {insertCopyBtn, parseAjaxError, parseMarkdown} from "@/utils";
+import {hljsAndInsertCopyBtn, parseAjaxError, parseMarkdown} from "@/utils";
 import siteConfig from '@/site-config'
+import Pagination from "@/components/Pagination";
 
 export default {
   name: "ListComment",
-  components: {WriteComment},
+  components: {Pagination, WriteComment},
   props: {
     title: {
       type: String,
@@ -96,6 +90,8 @@ export default {
       siteConfig,
       onePageItemsCount: 2,
       pageInfo: {},
+      pageNow: 1,
+      itemCount: 0,
       items: [],
       replayItem: null,
       replyChild: null,
@@ -103,7 +99,7 @@ export default {
       updating: false,
     }
   },
-  async created() {
+  async mounted() {
     await this.updatePage();
   },
   methods: {
@@ -115,7 +111,7 @@ export default {
       });
       if (res[0]) {
         let data = res[1].data.data.search;
-        this.pageInfo = data.pageInfo;
+        this.itemCount = data.issueCount;
         this.items = [];
         for (const e of data.nodes) {
           // 子评论
@@ -148,9 +144,10 @@ export default {
           });
         }
         this.$nextTick(() => {
+          if (!this.$refs.list) return ;
           this.$refs.list.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
             el.innerText = el.innerText.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
-            insertCopyBtn(el);
+            hljsAndInsertCopyBtn(el);
           })
         })
       } else {
@@ -167,17 +164,11 @@ export default {
       }
       return parseMarkdown(text)
     },
-    async toComment(cant, p) {
-      if (cant) return
+    async turnCommentPage(p) {
       if (this.updating) return;
       this.updating = true;
-      let cursor = '';
-      if (p === 1) {
-        cursor = `,after: "${this.pageInfo.endCursor}"`
-      } else {
-        cursor = `,before: "${this.pageInfo.startCursor}"`
-      }
-      await this.updatePage(cursor);
+      await this.updatePage(`,after: "${btoa(`cursor:${(p-1)*this.onePageItemsCount}`)}"`);
+      this.pageNow = p;
       this.updating = false
     },
     async toReply(cant, item, cursor) {

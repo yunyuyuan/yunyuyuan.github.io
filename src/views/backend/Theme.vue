@@ -35,7 +35,7 @@
 <script>
 import LoadingButton from "@/components/LoadingButton";
 import {mapState} from "vuex";
-import {getText, insertCopyBtn, parseAjaxError, parseMarkdown} from "@/utils";
+import {getText, hljsAndInsertCopyBtn, parseAjaxError, parseMarkdown} from "@/utils";
 import {originPrefix} from "@/main";
 import testText from 'text-loader!@/assets/test.md';
 
@@ -81,7 +81,7 @@ export default {
   mounted() {
     // hljs
     this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
-      insertCopyBtn(el);
+      hljsAndInsertCopyBtn(el);
     });
   },
   watch: {

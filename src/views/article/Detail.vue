@@ -28,12 +28,12 @@
       </aside>
       <span :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html"></span>
     </div>
-    <the-comment :title="this.info.file"/>
+    <the-comment v-if="this.info" :title="this.info.file"/>
   </div>
 </template>
 
 <script>
-import {getText, insertCopyBtn} from "@/utils";
+import {getText, hljsAndInsertCopyBtn} from "@/utils";
 import {originPrefix} from "@/main";
 import {mapState} from "vuex";
 
@@ -73,7 +73,7 @@ export default {
       return encodeURI(location.hash.replace(/^#/, ''))
     }
   },
-  async created() {
+  async mounted() {
     this.id = this.$route.params.id;
     await this.getHtml();
     document.title = '文章-' + this.info.name;
@@ -120,7 +120,7 @@ export default {
           }
           // hljs
           this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
-            insertCopyBtn(el);
+            hljsAndInsertCopyBtn(el);
           });
         })
       } else {

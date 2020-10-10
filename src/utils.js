@@ -42,7 +42,7 @@ export function parseMarkdown(text) {
     return converter.makeHtml(text)
 }
 
-export function insertCopyBtn (el){
+export function hljsAndInsertCopyBtn (el){
     let sourceCode = el.innerText;
     let btn = document.createElement('span');
     btn.innerText = el.classList[0];
