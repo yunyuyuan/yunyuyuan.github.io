@@ -144,17 +144,19 @@ export default {
       if (this.$route.params.id !== 'new') {
         await this.getMdText()
       }
-      this.codeMirror = new CodeMirror(this.$refs.textarea, {
-        indentUnit: 2,
-        tabSize: 2,
-        theme: 'dracula',
-        lineNumbers: true,
-        line: true,
-        mode: 'markdown',
-      });
-      this.codeMirror.on('change', () => {
-        this.mdText = this.codeMirror.getValue()
-      });
+      if (!this.codeMirror) {
+        this.codeMirror = new CodeMirror(this.$refs.textarea, {
+          indentUnit: 2,
+          tabSize: 2,
+          theme: 'dracula',
+          lineNumbers: true,
+          line: true,
+          mode: 'markdown',
+        });
+        this.codeMirror.on('change', () => {
+          this.mdText = this.codeMirror.getValue()
+        });
+      }
       this.codeMirror.setValue(this.mdText);
     },
     async getMdText() {
