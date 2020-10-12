@@ -51,8 +51,10 @@
   .--markdown img {
     display: block;
     width: 80%;
-    margin: 0 auto;
+    margin: 1rem auto;
     object-fit: contain; }
+    .--markdown img:not([alt=sticker]) {
+      box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.5); }
     .--markdown img[alt=sticker] {
       display: inline-block;
       width: 1.6rem;
