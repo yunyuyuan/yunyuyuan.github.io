@@ -57,7 +57,7 @@
       </div>
       <resizer :orient="'h'" @start="startResize" @resize="doResize"/>
       <div class="html" flex>
-        <span class="--markdown" v-html="htmlText"></span>
+        <span ref="html" class="--markdown" v-html="htmlText"></span>
       </div>
     </div>
     <markdown-help v-show="showGuide" @click.native.self="showGuide=false"/>
@@ -66,7 +66,7 @@
 
 <script>
 import {originPrefix} from "@/main";
-import {getText, parseAjaxError, parseMarkdown, sortByTime} from "@/utils";
+import {getText, hljsAndInsertCopyBtn, parseAjaxError, parseMarkdown, sortByTime} from "@/utils";
 import {mapState} from 'vuex'
 import FloatInput from "@/components/FloatInput";
 
@@ -74,6 +74,7 @@ import LoadingButton from "@/components/LoadingButton";
 
 
 import CodeMirror from 'codemirror';
+import 'codemirror/addon/edit/matchtags'
 import 'codemirror/mode/markdown/markdown';
 
 import 'codemirror/lib/codemirror.css';
@@ -121,7 +122,13 @@ export default {
       return this.$route.params.id
     },
     htmlText() {
-      return parseMarkdown(this.mdText)
+      let html = parseMarkdown(this.mdText);
+      this.$nextTick(()=>{
+        this.$refs.html.querySelectorAll('pre>code').forEach(el=>{
+          hljsAndInsertCopyBtn(el)
+        })
+      })
+      return html
     }
   },
   async mounted() {
@@ -152,6 +159,7 @@ export default {
           lineNumbers: true,
           line: true,
           mode: 'markdown',
+          matchTags: {bothTags: true},
         });
         this.codeMirror.on('change', () => {
           this.mdText = this.codeMirror.getValue()

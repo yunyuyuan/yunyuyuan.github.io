@@ -42,6 +42,7 @@ import testText from 'text-loader!@/assets/test.md';
 import Sass from 'sass.js';
 
 import CodeMirror from 'codemirror';
+import 'codemirror/addon/edit/matchtags'
 import 'codemirror/mode/sass/sass.js';
 
 import 'codemirror/lib/codemirror.css';
@@ -117,6 +118,7 @@ export default {
           lineNumbers: true,
           line: true,
           mode: 'sass',
+          matchTags: {bothTags: true},
         });
         this.codeMirror.on('change', () => {
           this.scss = this.codeMirror.getValue();

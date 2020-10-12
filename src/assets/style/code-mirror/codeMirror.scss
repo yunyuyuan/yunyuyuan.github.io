@@ -6,3 +6,10 @@
 .CodeMirror .CodeMirror-scrollbar-filler {
   background: transparent !important;
 }
+
+.CodeMirror-matchingtag{
+  background: unset;
+  &.cm-tag:not(.cm-bracket){
+    text-decoration: underline;
+  }
+}

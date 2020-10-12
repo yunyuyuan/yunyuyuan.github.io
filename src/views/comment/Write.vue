@@ -76,6 +76,7 @@ import {baseDynamicUrl} from "@/main";
 import {hljsAndInsertCopyBtn, parseMarkdown} from "@/utils";
 
 import CodeMirror from 'codemirror';
+import 'codemirror/addon/edit/matchtags'
 
 import 'codemirror/mode/markdown/markdown'
 
@@ -143,6 +144,7 @@ export default {
       theme: 'light',
       line: true,
       mode: 'markdown',
+      matchTags: {bothTags: true},
     });
     this.codeMirror.on('change', () => {
       this.comment = this.codeMirror.getValue()
