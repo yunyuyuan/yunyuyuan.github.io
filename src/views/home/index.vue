@@ -19,7 +19,7 @@
     </div>
     <div class="info" flex>
       <div class="head" flex>
-        <img :src="selfImage"/>
+        <img :src="selfImage" alt="self"/>
         <span write-font class="name">{{ config.name }}</span>
       </div>
       <div class="body" flex>
@@ -128,12 +128,15 @@ export default {
 
     > .body {
       margin-top: 1rem;
+      flex-direction: column;
 
       > span {
         padding: 1rem;
         background: rgba(255, 255, 255, 0.4);
         word-break: break-all;
         font-size: 1.1rem;
+        white-space: pre-line;
+        width: 60%;
       }
     }
   }
@@ -153,6 +156,11 @@ export default {
     >.info{
       width: 95%;
       margin: 4rem 0 2rem 0;
+      >.body{
+        >span{
+          width: 100%;
+        }
+      }
     }
   }
 }
