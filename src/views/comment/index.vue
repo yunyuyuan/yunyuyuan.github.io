@@ -23,14 +23,12 @@
 <script>
 import WriteComment from "@/views/comment/Write";
 import ListComment from "@/views/comment/List";
-import {createComment, getLoginInfo, getRepoId, logError, removeToken} from "@/views/comment/utils";
+import {createComment, getLoginInfo, getRepoId, logError, removeToken, tokenKey} from "@/views/comment/utils";
 import {parseAjaxError} from "@/utils";
 import FloatInput from "@/components/FloatInput";
 import SingleButton from "@/components/Button";
 import LoadingButton from "@/components/LoadingButton";
 import {mapState} from "vuex";
-
-const tokenKey = 'comment-token';
 
 export default {
   name: "TheComment",

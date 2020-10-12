@@ -5,7 +5,7 @@
       <b>修改配置信息</b>
     </div>
     <div class="list" flex>
-      <float-input v-for="k in keys" :name="k" :value="info[k]||''" :id="k" :size="1" @input="input"/>
+      <float-input v-for="k in keys" :name="k" :value="info[k]||''" :id="k" :size="1" :is-area="k==='describe'" @input="input"/>
       <label @click="toggle('backgroundImg')" flex>
         <a :class="{active: info.backgroundImg}" flex></a>
         <span>背景图片</span>

@@ -1,7 +1,7 @@
 <template>
   <div class="float-input">
-    <input :style="{height: `${2*size}rem`, fontSize: `${0.95*size}rem`}" :value="value" :class="{inputed: text!==''}"
-           :id="`float-input-${_uid}`" @input="input"/>
+    <component :is="isArea?'textarea':'input'" :style="{height: `${(isArea?5:2)*size}rem`, fontSize: `${0.95*size}rem`}" :value="value" :class="{inputed: text!==''}"
+               :id="`float-input-${_uid}`" @input="input">{{value}}</component>
     <label :style="{lineHeight: `${2*size}rem`, fontSize: `${1.4*size}rem`}" :for="`login-${_uid}`">{{ name }}</label>
     <div class="bar"></div>
   </div>
@@ -27,6 +27,10 @@ export default {
       type: Number,
       default: 1
     },
+    isArea: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -52,25 +56,21 @@ export default {
 .float-input {
   position: relative;
 
-  input {
+  input, textarea{
+    width: 100%;
+    border: 0;
+    color: #212121;
+    font-weight: 400;
     outline: none;
     z-index: 1;
     position: relative;
     background: transparent !important;
-    width: 100%;
-    height: 2rem;
-    border: 0;
-    color: #212121;
-    font-size: 0.95rem;
-    font-weight: 400;
-
     &:focus, &.inputed {
       ~ label {
         color: #9d9d9d;
         transform: translate(-12%, -70%) scale(0.75);
       }
     }
-
     &:focus {
       ~ .bar {
         &:before,
@@ -79,6 +79,15 @@ export default {
         }
       }
     }
+  }
+
+  input {
+    height: 2rem;
+  }
+
+  textarea{
+    height: 10rem;
+    border-top: 1px dashed gray;
   }
 
   label {

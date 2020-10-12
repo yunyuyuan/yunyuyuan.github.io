@@ -1,6 +1,7 @@
 import axios from 'axios';
 import siteConfig from '@/site-config';
 import {parseAjaxError} from "@/utils";
+export const tokenKey = 'comment-token';
 
 let owner = siteConfig.owner,
     //  owner = 'vuejs',
@@ -85,7 +86,8 @@ export async function getLoginInfo(token) {
 }
 
 export function removeToken() {
-    headers.Authorization = ''
+    headers.Authorization = '';
+    localStorage.removeItem(tokenKey)
 }
 
 export async function getPageComment(payload) {
