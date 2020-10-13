@@ -27,27 +27,16 @@ export default {
   data() {
     return {
       updating: false,
-      info: {},
       keys: ["name", "describe", "copyright", "github", "bilibili", "email"],
     }
   },
   computed: {
-    ...mapState(['config', 'gitUtil'])
-  },
-  mounted() {
-    this.init()
-  },
-  watch: {
-    $route() {
-      if (this.$route.name === 'backend.config') {
-        this.init()
-      }
+    ...mapState(['config', 'gitUtil']),
+    info (){
+      return JSON.parse(JSON.stringify(this.config))
     }
   },
   methods: {
-    init() {
-      this.info = JSON.parse(JSON.stringify(this.config))
-    },
     input(payload) {
       this.info[payload[0]] = payload[1]
     },

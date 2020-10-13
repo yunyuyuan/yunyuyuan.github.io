@@ -20,7 +20,7 @@ async function init() {
     for (let i of ['config', 'md', 'record']) {
         let res = await getText(`${originPrefix}/json/${i}.json`);
         if (res[0]) {
-            this.$store.commit('updateJson', {
+            store.commit('updateJson', {
                 key: i,
                 json: JSON.parse(res[1])
             });
@@ -35,8 +35,8 @@ new Vue({
     el: '#app',
     store,
     router,
-    async mounted() {
-        await init.call(this);
+    beforeCreate() {
+        init().then();
     },
     render: h => h(App),
 });
