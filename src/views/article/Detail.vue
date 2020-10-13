@@ -79,7 +79,7 @@ export default {
     document.title = '文章-' + this.info.name;
     this.body.addEventListener('scroll', this.moveAside)
   },
-  destroyed() {
+  beforeDestroy() {
     this.body.removeEventListener('scroll', this.moveAside)
   },
   methods: {

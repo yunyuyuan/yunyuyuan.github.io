@@ -76,6 +76,7 @@ import {baseDynamicUrl} from "@/main";
 import {hljsAndInsertCopyBtn, parseMarkdown} from "@/utils";
 
 import CodeMirror from 'codemirror';
+import 'codemirror/addon/edit/matchbrackets'
 import 'codemirror/addon/edit/matchtags'
 
 import 'codemirror/mode/markdown/markdown'
@@ -145,6 +146,7 @@ export default {
       line: true,
       mode: 'markdown',
       matchTags: {bothTags: true},
+      matchBrackets: true
     });
     this.codeMirror.on('change', () => {
       this.comment = this.codeMirror.getValue()

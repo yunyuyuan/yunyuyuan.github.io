@@ -75,6 +75,7 @@ import LoadingButton from "@/components/LoadingButton";
 
 import CodeMirror from 'codemirror';
 import 'codemirror/addon/edit/matchtags'
+import 'codemirror/addon/edit/matchbrackets'
 import 'codemirror/mode/markdown/markdown';
 
 import 'codemirror/lib/codemirror.css';
@@ -160,6 +161,7 @@ export default {
           line: true,
           mode: 'markdown',
           matchTags: {bothTags: true},
+          matchBrackets: true
         });
         this.codeMirror.on('change', () => {
           this.mdText = this.codeMirror.getValue()

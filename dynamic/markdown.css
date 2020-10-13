@@ -53,7 +53,7 @@
     width: 80%;
     margin: 1rem auto;
     object-fit: contain; }
-    .--markdown img:not([alt=sticker]), .--markdown img:not([alt=anchor]) {
+    .--markdown img:not([alt=sticker]):not([alt=anchor]) {
       box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.5); }
     .--markdown img[alt=sticker] {
       display: inline-block;

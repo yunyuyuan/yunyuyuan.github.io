@@ -39,7 +39,7 @@
     width: 80%;
     margin: 1rem auto;
     object-fit: contain;
-  	&:not([alt=sticker]), &:not([alt=anchor]){
+  	&:not([alt=sticker]):not([alt=anchor]){
   		box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.5);
   	}
 

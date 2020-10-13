@@ -43,6 +43,7 @@ import Sass from 'sass.js';
 
 import CodeMirror from 'codemirror';
 import 'codemirror/addon/edit/matchtags'
+import 'codemirror/addon/edit/matchbrackets'
 import 'codemirror/mode/sass/sass.js';
 
 import 'codemirror/lib/codemirror.css';
@@ -119,6 +120,7 @@ export default {
           line: true,
           mode: 'sass',
           matchTags: {bothTags: true},
+          matchBrackets: true
         });
         this.codeMirror.on('change', () => {
           this.scss = this.codeMirror.getValue();
