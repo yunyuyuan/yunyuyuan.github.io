@@ -87,12 +87,12 @@ $theme: light;
   }
 
   span.cm-bracket {
-    color: #cc7;
+    color: #909018;
   }
 
-  .CodeMirror-matchingbracket {
-    outline: 1px solid grey;
-    color: black !important;
+  span.CodeMirror-matchingbracket {
+    background-color: #d5fff7;
+    font-weight: bold;
   }
 }
 

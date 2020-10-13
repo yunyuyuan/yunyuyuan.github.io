@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="preview" v-show="showPreview">
-      <span ref="markdown" class="--markdown" v-html="html"></span>
+      <span ref="markdown" class="--markdown" v-html="$el?html:'waiting'"></span>
     </div>
     <div v-show="showUploadImg" class="upload-img" is-dialog @click.self="showUploadImg = false">
       <div class="inner" flex>
@@ -127,11 +127,12 @@ export default {
   computed: {
     ...mapState(['config']),
     html() {
-      if (!this.$el) return '';
       // hljs
-      this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
-        hljsAndInsertCopyBtn(el);
-      })
+      this.$nextTick(()=>{{
+        this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
+          hljsAndInsertCopyBtn(el);
+        })
+      }})
       return parseMarkdown(this.comment);
     }
   },
@@ -259,7 +260,7 @@ export default {
         width: 100%;
         height: 100%;
         border-radius: inherit;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
       }
     }
     >.utils {

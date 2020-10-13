@@ -556,7 +556,7 @@ export default {
 
         > ::v-deep .CodeMirror {
           height: 100%;
-          font-size: 0.9rem;
+          font-size: 0.85rem;
         }
       }
     }
