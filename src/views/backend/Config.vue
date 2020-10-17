@@ -7,9 +7,9 @@
     <div class="list" flex>
       <float-input v-for="k in keys" :name="k" :value="info[k]||''" :id="k" :size="1" @input="input"/>
       <label flex>
-        <span :class="{active: this.info.backgroundImg==='img'}" @click="changeBg('img')">图片背景</span>
-        <span :class="{active: this.info.backgroundImg==='color'}" @click="changeBg('color')">彩色背景</span>
-        <span :class="{active: this.info.backgroundImg==='random'}" @click="changeBg('random')">随机</span>
+        <span :class="{active: info.backgroundImg==='img'}" @click="changeBg('img')">图片背景</span>
+        <span :class="{active: info.backgroundImg==='color'}" @click="changeBg('color')">彩色背景</span>
+        <span :class="{active: info.backgroundImg==='random'}" @click="changeBg('random')">随机</span>
       </label>
     </div>
     <loading-button :loading="updating" :text="'上传'" :icon="'save'" @click.native="commitConfig"/>
@@ -28,16 +28,28 @@ export default {
   data() {
     return {
       updating: false,
+      info: {},
       keys: ["name", "describe", "copyright", "github", "bilibili", "email"],
+    }
+  },
+  watch: {
+    $route (){
+      if (this.$route.name === 'backend.config'){
+        this.init()
+      }
+    },
+    '$store.state.config': function (){
+      this.init()
     }
   },
   computed: {
     ...mapState(['config', 'gitUtil']),
-    info (){
-      return JSON.parse(JSON.stringify(this.config))
-    }
   },
   methods: {
+    init (){
+      console.log('init')
+      this.info = JSON.parse(JSON.stringify(this.config))
+    },
     input(payload) {
       this.info[payload[0]] = payload[1]
     },
