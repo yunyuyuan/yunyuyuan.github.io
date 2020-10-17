@@ -5,10 +5,18 @@
       <b>修改配置信息</b>
     </div>
     <div class="list" flex>
+<<<<<<< HEAD
       <float-input v-for="k in keys" :name="k" :value="info[k]||''" :id="k" :size="1" :is-area="k==='describe'" @input="input"/>
       <label @click="toggle('backgroundImg')" flex>
         <a :class="{active: info.backgroundImg}" flex></a>
         <span>背景图片</span>
+=======
+      <float-input v-for="k in keys" :name="k" :value="info[k]||''" :id="k" :size="1" @input="input"/>
+      <label flex>
+        <span :class="{active: this.info.backgroundImg==='img'}" @click="changeBg('img')">图片背景</span>
+        <span :class="{active: this.info.backgroundImg==='color'}" @click="changeBg('color')">彩色背景</span>
+        <span :class="{active: this.info.backgroundImg==='random'}" @click="changeBg('random')">随机</span>
+>>>>>>> 3e444bd... backend-color
       </label>
     </div>
     <loading-button :loading="updating" :text="'上传'" :icon="'save'" @click.native="commitConfig"/>
@@ -40,8 +48,8 @@ export default {
     input(payload) {
       this.info[payload[0]] = payload[1]
     },
-    toggle (k){
-      this.info[k] = !this.info[k]
+    changeBg (v){
+      this.info.backgroundImg = v;
     },
     async commitConfig() {
       if (this.gitUtil) {
@@ -103,35 +111,26 @@ export default {
       margin: 1rem 0;
     }
     > label{
-        cursor: pointer;
         margin: 0.5rem 0;
         width: 60%;
-        &:hover{
-          > a{
-            border-color: red;
-          }
-        }
-        > a{
-          width: 1rem;
-          height: 1rem;
-          justify-content: center;
-          border-radius: 50%;
-          border: 2px solid #252525;
-          &:before{
-            width: 100%;
-            height: 100%;
-            border-radius: inherit;
-            content: '';
+        > span{
+          cursor: pointer;
+          font-size: 0.85rem;
+          background: #b9b9b9;
+          border-radius: 0.2rem;
+          padding: 0.3rem 0.8rem;
+          margin: 0 0.5rem;
+          color: black;
+          transition: all .15s linear;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.3);
+          &:hover{
+            border-color: rgba(0, 0, 0, 0.4);
           }
           &.active{
-            &:before{
-              background: #ffca2e;
-            }
+            background: #1b00ff;
+            color: white;
           }
-        }
-        > span{
-          font-size: 0.85rem;
-          margin-left: 1rem;
         }
       }
   }
