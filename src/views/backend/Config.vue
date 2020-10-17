@@ -32,6 +32,9 @@ export default {
       keys: ["name", "describe", "copyright", "github", "bilibili", "email"],
     }
   },
+  created() {
+    this.init()
+  },
   watch: {
     $route (){
       if (this.$route.name === 'backend.config'){
@@ -47,7 +50,6 @@ export default {
   },
   methods: {
     init (){
-      console.log('init')
       this.info = JSON.parse(JSON.stringify(this.config))
     },
     input(payload) {
