@@ -1,15 +1,10 @@
 <template>
   <div class="index">
-<<<<<<< HEAD
-    <img class="bg" v-if="config.backgroundImg" :src="images[routeNow]"/>
+    <img class="bg" v-if="config.backgroundImg==='img'||(config.backgroundImg==='random'&& (parseInt(Math.random()*10)%2))" :src="images[routeNow]"/>
     <div class="bg" :style="{background: bgColor}" v-else>
       <div :style="waveStyle" class="wave"></div>
       <div :style="waveStyle" class="wave"></div>
     </div>
-=======
-    <img class="bg" v-if="config.backgroundImg==='img'||(config.backgroundImg==='random'&& (parseInt(Math.random()*10)%2))" :src="images[routeNow]"/>
-    <span class="bg" :style="{background: bgColor}" v-else></span>
->>>>>>> 3e444bd... backend-color
     <the-head :class="{'show-bg': showBg}" v-if="showHead" @toggle="toggleShowBg"/>
     <section :class="{body: true, 'show-head': showHead, 'show-bg': showBg, 'mask-bg': config.backgroundImg}" flex>
       <router-view></router-view>

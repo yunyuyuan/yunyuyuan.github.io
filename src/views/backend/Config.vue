@@ -5,18 +5,11 @@
       <b>修改配置信息</b>
     </div>
     <div class="list" flex>
-<<<<<<< HEAD
-      <float-input v-for="k in keys" :name="k" :value="info[k]||''" :id="k" :size="1" :is-area="k==='describe'" @input="input"/>
-      <label @click="toggle('backgroundImg')" flex>
-        <a :class="{active: info.backgroundImg}" flex></a>
-        <span>背景图片</span>
-=======
       <float-input v-for="k in keys" :name="k" :value="info[k]||''" :id="k" :size="1" @input="input"/>
       <label flex>
         <span :class="{active: this.info.backgroundImg==='img'}" @click="changeBg('img')">图片背景</span>
         <span :class="{active: this.info.backgroundImg==='color'}" @click="changeBg('color')">彩色背景</span>
         <span :class="{active: this.info.backgroundImg==='random'}" @click="changeBg('random')">随机</span>
->>>>>>> 3e444bd... backend-color
       </label>
     </div>
     <loading-button :loading="updating" :text="'上传'" :icon="'save'" @click.native="commitConfig"/>
