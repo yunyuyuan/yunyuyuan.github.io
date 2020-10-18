@@ -1,4 +1,5 @@
 import {baseDynamicUrl} from "@/need";
+import siteConfig from "@/site-config";
 
 const showdown = require('showdown');
 const converter = new showdown.Converter({
@@ -14,7 +15,7 @@ export function parseMarkdown(text) {
         // target=_blank
         .replace(/(?<=^|[^\\])#\[(.*?)]\((.*?)\)/g, '<a target="_blank" href="$2">$1</a>')
         // sticker
-        .replace(/(?<=^|[^\\])!\[sticker]\((aru|yellow-face)\/(\d+)\)/g, `<img alt="sticker" src="${baseDynamicUrl}/sticker/$1/$2.png"/>`)
+        .replace(/(?<=^|[^\\])!\[sticker]\((aru|yellow-face)\/(\d+)\)/g, `<img alt="sticker" src="${baseDynamicUrl}/sticker/$1/$2.png?ran=${siteConfig.timeStamp}"/>`)
         // dimension image
         .replace(/(?<=^|[^\\])!\[(.*?) x (.*?)]\((.*?)\)/g, (a, b, c, d) => {
             return `<img alt="dimension img" style="${b !== 'null' ? `width: ${b} !important;` : ''}${c !== 'null' ? `height: ${c} !important;` : ''}" src="${d}"/>`

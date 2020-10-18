@@ -50,7 +50,6 @@ import LoadingImg from "@/components/LoadingImg";
 import Pagination from "@/components/Pagination";
 import {getText} from "@/utils/utils";
 import {originPrefix} from "@/need";
-import './style.css'
 
 export default {
   name: "List",
@@ -125,190 +124,196 @@ export default {
 
 <style scoped lang="scss">
 @import "src/assets/style/public";
-.list{
+.article{
   width: 100%;
-  height: 100%;
+  min-height: 100%;
+  position: relative;
   flex-shrink: 0;
-  flex-direction: column;
-  overflow-y: auto;
-  > .search{
-    border-radius: 1rem;
-    border: 1px solid #787878;
-    background: rgba(0, 0, 0, 0.2);
-    padding: 0.3rem;
-    box-shadow: 0 0 0.5rem #d2d2d2;
-    transition: all .1s linear;
-    margin: 1rem 0;
-    &.active{
-      background: rgba(255, 255, 255, 0.4);
-      box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
-    }
-    > input{
-      width: 15rem;
-      height: 100%;
-      font-size: 0.9rem;
-      border: none;
-      padding-left: 0.5rem;
-      background: transparent;
-    }
-    > span{
-      justify-content: center;
-      > svg{
-        width: 1.2rem;
-        height: 1.2rem;
-        margin-right: 0.3rem;
-      }
-    }
-  }
-  > .tags{
-    transition: all .15s linear;
-    width: 80%;
-    flex-wrap: wrap;
-    > span{
-      padding: 0.5rem 1.3rem;
-      cursor: pointer;
+  > .list{
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    flex-direction: column;
+    overflow-y: auto;
+    > .search{
+      border-radius: 1rem;
+      border: 1px solid #787878;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.3rem;
+      box-shadow: 0 0 0.5rem #d2d2d2;
       transition: all .1s linear;
-      font-size: 0.96rem;
-      margin: 1rem;
-      height: 1.2rem;
-      line-height: 1.8rem;
-      box-shadow: 0 0 0.4rem #000000a1;
-      color: white;
-      position: relative;
-      > span{
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
+      margin: 1rem 0;
+      &.active{
+        background: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
+      }
+      > input{
+        width: 15rem;
         height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        cursor: pointer;
-        display: none;
-        align-items: center;
+        font-size: 0.9rem;
+        border: none;
+        padding-left: 0.5rem;
+        background: transparent;
+      }
+      > span{
         justify-content: center;
         > svg{
-          width: 1.4rem;
-        }
-      }
-      &:hover{
-        > span{
-          display: flex;
+          width: 1.2rem;
+          height: 1.2rem;
+          margin-right: 0.3rem;
         }
       }
     }
-  }
-  > .blog{
-    width: 100%;
-    margin: 1rem 0;
-    flex-grow: 1;
-    overflow-x: auto;
-    > .item{
-      width: 60rem;
-      height: 10rem;
-      padding: 1rem 0;
-      overflow: hidden;
-      margin: 0 auto;
-      > .time{
-        > span{
-          background: rgba(0, 0, 0, 0.4);
-          color: white;
-          padding: 0.4rem 0.8rem;
-          border-radius: 0.4rem;
-          font-size: 0.9rem;
-          word-break: keep-all;
-          white-space: nowrap;
-        }
-      }
-      > .mid{
-        justify-content: center;
-        height: calc(100% + 2rem);
-        padding: 0 1rem;
-        margin: 0 0.3rem;
+    > .tags{
+      transition: all .15s linear;
+      width: 80%;
+      flex-wrap: wrap;
+      > span{
+        padding: 0.5rem 1.3rem;
+        cursor: pointer;
+        transition: all .1s linear;
+        font-size: 0.96rem;
+        margin: 1rem;
+        height: 1.2rem;
+        line-height: 1.8rem;
+        box-shadow: 0 0 0.4rem #000000a1;
+        color: white;
         position: relative;
-        > .line{
-          width: 100%;
-          height: 0.1rem;
-          background: black;
+        > span{
           position: absolute;
-        }
-        > .circle{
-          width: 1rem;
-          height: 1rem;
-          border-radius: 50%;
-          border: 0.16rem solid black;
-          background: #00f3ff;
-          z-index: 1;
-        }
-      }
-      > .info{
-        height: 100%;
-        width: 100%;
-        box-shadow: 0 0 0.5rem #171717;
-        text-decoration: none;
-        color: black;
-        border-radius: 0 0.5rem 0.5rem 0;
-        background: white;
-        ::v-deep .loading-img{
-          display: flex;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.7);
+          cursor: pointer;
+          display: none;
           align-items: center;
-          img{
-            object-fit: contain;
-            background: white;
+          justify-content: center;
+          > svg{
+            width: 1.4rem;
           }
         }
-        > div{
+        &:hover{
+          > span{
+            display: flex;
+          }
+        }
+      }
+    }
+    > .blog{
+      width: 100%;
+      margin: 1rem 0;
+      flex-grow: 1;
+      overflow-x: auto;
+      > .item{
+        width: 60rem;
+        height: 10rem;
+        padding: 1rem 0;
+        overflow: hidden;
+        margin: 0 auto;
+        > .time{
+          > span{
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.4rem;
+            font-size: 0.9rem;
+            word-break: keep-all;
+            white-space: nowrap;
+          }
+        }
+        > .mid{
+          justify-content: center;
+          height: calc(100% + 2rem);
+          padding: 0 1rem;
+          margin: 0 0.3rem;
+          position: relative;
+          > .line{
+            width: 100%;
+            height: 0.1rem;
+            background: black;
+            position: absolute;
+          }
+          > .circle{
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            border: 0.16rem solid black;
+            background: #00f3ff;
+            z-index: 1;
+          }
+        }
+        > .info{
           height: 100%;
           width: 100%;
+          box-shadow: 0 0 0.5rem #171717;
+          text-decoration: none;
+          color: black;
           border-radius: 0 0.5rem 0.5rem 0;
-          flex-direction: column;
-          box-shadow: 0 0 0.4rem rgba(128, 128, 128, 0.59) inset;
-          > b{
-            font-size: 1.2rem;
-            @include text-overflow(2);
-            margin: 0.5rem 0;
-            line-height: 1.5rem;
-            text-align: center;
+          background: white;
+          ::v-deep .loading-img{
+            display: flex;
+            align-items: center;
+            img{
+              object-fit: contain;
+              background: white;
+            }
           }
-          > span{
-            font-size: 0.88rem;
-            color: #686868;
-            line-height: 1.2rem;
-            @include text-overflow(3);
-            text-align: center;
-          }
-          > .tags{
+          > div{
+            height: 100%;
             width: 100%;
-            height: 2rem;
-            justify-content: flex-end;
-            margin-top: auto;
+            border-radius: 0 0.5rem 0.5rem 0;
+            flex-direction: column;
+            box-shadow: 0 0 0.4rem rgba(128, 128, 128, 0.59) inset;
+            > b{
+              font-size: 1.2rem;
+              @include text-overflow(2);
+              margin: 0.5rem 0;
+              line-height: 1.5rem;
+              text-align: center;
+            }
             > span{
-              font-size: 0.8rem;
-              line-height: 1rem;
-              border-radius: 0.1rem;
-              padding: 0.2rem 0.6rem;
-              margin-right: 0.5rem;
-              transition: all .15s linear;
-              box-shadow: 0 0 0.2rem #00000078;
-              color: white;
-              &:hover{
-                background: #444444;
+              font-size: 0.88rem;
+              color: #686868;
+              line-height: 1.2rem;
+              @include text-overflow(3);
+              text-align: center;
+            }
+            > .tags{
+              width: 100%;
+              height: 2rem;
+              justify-content: flex-end;
+              margin-top: auto;
+              > span{
+                font-size: 0.8rem;
+                line-height: 1rem;
+                border-radius: 0.1rem;
+                padding: 0.2rem 0.6rem;
+                margin-right: 0.5rem;
+                transition: all .15s linear;
+                box-shadow: 0 0 0.2rem #00000078;
                 color: white;
+                &:hover{
+                  background: #444444;
+                  color: white;
+                }
               }
             }
           }
         }
       }
     }
-  }
-  @include media{
-    > .blog{
-      > .item{
-        width: 98%;
-        > .time{
-          display: none;
-        }
-        > .mid{
-          display: none;
+    @include media{
+      > .blog{
+        > .item{
+          width: 98%;
+          > .time{
+            display: none;
+          }
+          > .mid{
+            display: none;
+          }
         }
       }
     }

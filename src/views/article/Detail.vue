@@ -38,8 +38,6 @@
 <script>
 import {getText} from "@/utils/utils";
 import {originPrefix} from "@/need";
-import './style.css'
-
 import TheComment from "@/views/comment/index";
 
 import qrcode from "qrcode";
@@ -181,182 +179,188 @@ export default {
 
 <style scoped lang="scss">
 @import "src/assets/style/public";
-.detail{
+.article{
   width: 100%;
   min-height: 100%;
-  > .content{
-    min-width: 50rem;
-    max-width: 75rem;
-    margin: 1rem auto;
-    position: relative;
-    justify-content: flex-end;
-    > .info{
-      position: absolute;
-      left: 0;
-      top: 0;
-      transition: all .1s ease-out;
-      align-items: self-start;
-      z-index: 1;
-      > div{
-        max-height: calc(100vh - 11rem);
-        flex-direction: column;
-        &.active > .anchors{
-          width: 12rem;
-        }
-        &.active .share{
-          overflow: unset;
-          width: 6rem;
-        }
-        > .anchors, > .share{
-          width: 0;
+  position: relative;
+  flex-shrink: 0;
+  >.detail{
+    width: 100%;
+    min-height: 100%;
+    > .content{
+      min-width: 50rem;
+      max-width: 75rem;
+      margin: 1rem auto;
+      position: relative;
+      justify-content: flex-end;
+      > .info{
+        position: absolute;
+        left: 0;
+        top: 0;
+        transition: all .1s ease-out;
+        align-items: self-start;
+        z-index: 1;
+        > div{
+          max-height: calc(100vh - 11rem);
           flex-direction: column;
-          background: white;
-          border-radius: 0.4rem;
-          box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.4);
-          transition: all .15s ease-out;
-          overflow: hidden;
-        }
-        > .anchors{
-          padding: 0.6rem 0;
-          > span{
-            margin: 0.4rem 0;
-            font-size: 0.85rem;
-            transition: all .15s linear;
-            cursor: pointer;
-            @include text-overflow(1);
-            &.active{
-              transform: scale(1.2);
-              font-weight: bold;
-              color: red;
-            }
+          &.active > .anchors{
+            width: 12rem;
           }
-        }
-        > .share{
-          margin-top: 1rem;
-          padding: 1rem 0;
-          > .qr{
-            position: relative;
+          &.active .share{
+            overflow: unset;
+            width: 6rem;
+          }
+          > .anchors, > .share{
+            width: 0;
+            flex-direction: column;
+            background: white;
+            border-radius: 0.4rem;
+            box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.4);
+            transition: all .15s ease-out;
+            overflow: hidden;
+          }
+          > .anchors{
+            padding: 0.6rem 0;
             > span{
+              margin: 0.4rem 0;
+              font-size: 0.85rem;
+              transition: all .15s linear;
               cursor: pointer;
-              > svg{
-                width: 2rem;
-                height: 2rem;
+              @include text-overflow(1);
+              &.active{
+                transform: scale(1.2);
+                font-weight: bold;
+                color: red;
               }
             }
-            > div{
-              position: absolute;
-              right: 0;
-              top: 0;
-              transform: translateX(calc(100% + 1rem));
-              border-radius: 0.3rem;
-              border: 1px solid #d2d2d2;
-              box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.6);
-              > .load{
-                padding: 1rem;
-                background: white;
-                border-radius: inherit;
+          }
+          > .share{
+            margin-top: 1rem;
+            padding: 1rem 0;
+            > .qr{
+              position: relative;
+              > span{
+                cursor: pointer;
                 > svg{
-                  width: 3rem;
-                  height: 3rem;
+                  width: 2rem;
+                  height: 2rem;
                 }
               }
-              > img{
-                width: 10rem;
-                height: 10rem;
-                border-radius: inherit;
+              > div{
+                position: absolute;
+                right: 0;
+                top: 0;
+                transform: translateX(calc(100% + 1rem));
+                border-radius: 0.3rem;
+                border: 1px solid #d2d2d2;
+                box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.6);
+                > .load{
+                  padding: 1rem;
+                  background: white;
+                  border-radius: inherit;
+                  > svg{
+                    width: 3rem;
+                    height: 3rem;
+                  }
+                }
+                > img{
+                  width: 10rem;
+                  height: 10rem;
+                  border-radius: inherit;
+                }
+              }
+            }
+          }
+        }
+        > .toggle-aside{
+          background: white;
+          border-radius: 50%;
+          width: 2rem;
+          height: 2rem;
+          position: relative;
+          cursor: pointer;
+          box-shadow: 0 0 1rem rgba(0, 0, 0, 0.4);
+          > span{
+            transition: all .2s ease-out;
+            position: absolute;
+            width: 50%;
+            height: 0.25rem;
+            background: black;
+            border-radius: 0.15rem;
+            margin: 0 25%;
+            &.top{
+              transform: rotate(45deg);
+              top: 30%;
+            }
+            &.bottom{
+              transform: rotate(-45deg);
+              bottom: 30%;
+            }
+          }
+          &.active{
+            > span{
+              &.top{
+                top: 45%;
+              }
+              &.bottom{
+                bottom: 45%;
               }
             }
           }
         }
       }
-      > .toggle-aside{
-        background: white;
-        border-radius: 50%;
-        width: 2rem;
-        height: 2rem;
-        position: relative;
-        cursor: pointer;
-        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.4);
-        > span{
-          transition: all .2s ease-out;
-          position: absolute;
-          width: 50%;
-          height: 0.25rem;
-          background: black;
-          border-radius: 0.15rem;
-          margin: 0 25%;
-          &.top{
-            transform: rotate(45deg);
-            top: 30%;
-          }
-          &.bottom{
-            transform: rotate(-45deg);
-            bottom: 30%;
-          }
-        }
-        &.active{
-          > span{
-            &.top{
-              top: 45%;
-            }
-            &.bottom{
-              bottom: 45%;
-            }
-          }
-        }
-      }
-    }
-    > .--markdown{
-      border-radius: 0.6rem;
-      box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.4);
-      background: white;
-      padding: 2rem 1rem 2rem 2.8rem;
-      width: calc(100% - 5.8rem);
-      transition: all .15s ease-out;
-      &.show-aside{
-        width: calc(100% - 17.8rem);
-      }
-      @each $size in 1, 2, 3, 4, 5, 6{
-        ::v-deep h#{$size}{
-          position: relative;
-          cursor: pointer;
-          height: 1.5+1.2rem*1/$size;
-          display: flex;
-          align-items: center;
-          img{
-            position: absolute;
-            left: 0;
-            transform: translateX(calc(-100% - 0.5rem));
-            width: 1+1.2rem/$size;
-            height: 1+1.2rem/$size;
-            object-fit: contain;
-          }
-        }
-      }
-    }
-  }
-  > ::v-deep .comment{
-    width: 90%;
-    max-width: 60rem;
-    margin: 2rem auto;
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
-    padding: 1rem 0;
-  }
-  @include media{
-    > .content{
-      min-width: 100%;
-      max-width: 100%;
-      > .info{
-      }
       > .--markdown{
-        width: 100% !important;
+        border-radius: 0.6rem;
+        box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.4);
+        background: white;
+        padding: 2rem 1rem 2rem 2.8rem;
+        width: calc(100% - 5.8rem);
+        transition: all .15s ease-out;
+        &.show-aside{
+          width: calc(100% - 17.8rem);
+        }
+        @each $size in 1, 2, 3, 4, 5, 6{
+          ::v-deep h#{$size}{
+            position: relative;
+            cursor: pointer;
+            height: 1.5+1.2rem*1/$size;
+            display: flex;
+            align-items: center;
+            img{
+              position: absolute;
+              left: 0;
+              transform: translateX(calc(-100% - 0.5rem));
+              width: 1+1.2rem/$size;
+              height: 1+1.2rem/$size;
+              object-fit: contain;
+            }
+          }
+        }
       }
     }
     > ::v-deep .comment{
-      width: 98%;
-      max-width: unset;
-      > .write{
-        width: 95%;
+      width: 90%;
+      max-width: 60rem;
+      margin: 2rem auto;
+      box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+      padding: 1rem 0;
+    }
+    @include media{
+      > .content{
+        min-width: 100%;
+        max-width: 100%;
+        > .info{
+        }
+        > .--markdown{
+          width: 100% !important;
+        }
+      }
+      > ::v-deep .comment{
+        width: 98%;
+        max-width: unset;
+        > .write{
+          width: 95%;
+        }
       }
     }
   }

@@ -3,7 +3,6 @@ function routeInfo (){
     let pathname = window.location.pathname.replace(/^(.+?)\/*$/, '$1');
     for (let i of routes){
         let regexp = i.path.replace(/\/:(\w+)/g, '/(?<$1>[^/]+)');
-        console.log(regexp)
         let matcher = pathname.match(new RegExp(`^${regexp}$`));
         if (matcher){
             return {
@@ -11,6 +10,10 @@ function routeInfo (){
                 params: matcher.groups||{}
             }
         }
+    }
+    return {
+        name: null,
+        params: {}
     }
 }
 

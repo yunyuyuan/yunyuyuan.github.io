@@ -1,6 +1,7 @@
 <template>
   <div class="index">
-    <img class="bg" v-if="config.backgroundImg==='img'||(config.backgroundImg==='random'&& rand)" :src="images[routeNow]" alt="bg"/>
+    <NotFound v-if="routeNow===''"/>
+    <img class="bg" v-else-if="config.backgroundImg==='img'||(config.backgroundImg==='random'&& rand)" :src="images[routeNow]" alt="bg"/>
     <div class="bg" :style="{background: bgColor}" v-else>
       <div :style="waveStyle" class="wave"></div>
       <div :style="waveStyle" class="wave"></div>
@@ -28,6 +29,7 @@ import TheHead from "@/views/block/Head";
 import TheFooter from "@/views/block/Footer";
 import Message from "./block/Message";
 import Loading from "@/views/block/Loading";
+import NotFound from '@/views/404/index'
 
 import Vue from 'vue';
 import siteConfig from '@/site-config'
@@ -37,7 +39,7 @@ import {originPrefix} from "@/need";
 
 export default {
   name: "index",
-  components: {Loading, Message, TheHead, TheFooter},
+  components: {Loading, Message, TheHead, TheFooter, NotFound},
   data() {
     return {
       siteConfig,
@@ -78,54 +80,48 @@ export default {
     }
   },
   async created() {
-    console.log('create')
     await this.updateConfig();
     const route = routeInfo();
 
+    this.showHead = route.name !== 'backend';
     switch (route.name){
       case 'index':
         this.routeNow = 'home';
         this.bgColor = 'linear-gradient(45deg, #ff7e10 0%, #3c2fff 80%, #00c7ff)';
-        this.showHead = true;
         this.comp = ()=>import('@/views/home/index')
         break;
       case 'article':
         this.routeNow = 'article';
         this.bgColor = 'linear-gradient(135deg, rgb(16, 112, 255) 0%, rgb(13 220 186) 60%, rgb(255 235 0))';
-        this.showHead = true;
         this.comp = ()=>import('@/views/article/List')
         break;
       case 'articleDetail':
-        console.log('detail')
         this.routeNow = 'articleDetail';
         this.bgColor = 'linear-gradient(135deg, rgb(16, 112, 255) 0%, rgb(13 220 186) 60%, rgb(255 235 0))';
-        this.showHead = true;
         this.comp = ()=>import('@/views/article/Detail')
         break;
       case 'record':
         this.routeNow = 'record';
         this.bgColor = 'linear-gradient(45deg, rgb(255 16 204) 0%, rgb(47 245 255) 80%, rgb(0 255 67))';
-        this.showHead = true;
         this.comp = ()=>import('@/views/record/index')
         break;
       case 'msgBoard':
         this.routeNow = 'msgBoard';
         this.bgColor = 'linear-gradient(135deg, rgb(31 16 255) 0%, rgb(255 47 220) 80%, rgb(255 165 0))';
-        this.showHead = true;
         this.comp = ()=>import('@/views/msg-board/index')
         break;
       case 'backend':
         this.routeNow = 'backend';
         this.bgColor = 'linear-gradient(45deg, rgb(255, 159, 16) 0%, rgb(0 185 255) 80%, rgb(214 117 255))';
-        this.showHead = false;
         this.comp = ()=>import('@/views/backend/index')
         break;
       case 'about':
         this.routeNow = 'about';
         this.bgColor = 'linear-gradient(45deg, rgb(255 97 74) 0%, rgb(129 255 185) 80%, rgb(189 167 255))';
-        this.showHead = true;
         this.comp = ()=>import('@/views/about/index')
         break
+      default:
+        this.routeNow = ''
     }
   },
   mounted() {

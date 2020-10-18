@@ -8,7 +8,7 @@
             <div class="inner" :style="{width: `${config.sticker.length}00%`, left: `${stickerSlideNow*-100}%`}" flex>
               <div v-for="item in config.sticker" :style="{width: `${100/config.sticker.length}%`}" flex>
                 <span v-for="idx in item.count" @click="addSticker(item.folder, idx)" flex>
-                  <img :src="`${baseUrl}/sticker/${item.folder}/${idx}.png`"/>
+                  <img :src="`${baseUrl}/sticker/${item.folder}/${idx}.png?ran=${stamp}`"/>
                 </span>
               </div>
             </div>
@@ -87,6 +87,7 @@ import '@/assets/style/code-mirror/dracula-markdown.scss';
 import LoadingImg from "@/components/LoadingImg";
 import {parseMarkdown} from "@/utils/parseMd";
 import {hljsAndInsertCopyBtn} from "@/utils/highlight";
+import siteConfig from "@/site-config";
 
 export default {
   name: "WriteComment",
@@ -107,6 +108,7 @@ export default {
   },
   data() {
     return {
+      stamp: siteConfig.timeStamp,
       baseUrl: baseDynamicUrl,
       comment: '',
       showGuide: false,
