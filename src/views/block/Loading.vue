@@ -1,9 +1,7 @@
 <template>
-  <transition name="fade">
-    <div v-show="loading" class="loading" flex>
-      <svg-icon :name="'loading'"/>
-    </div>
-  </transition>
+  <div id="loading" flex>
+    <svg-icon :name="'loading'"/>
+  </div>
 </template>
 
 <script>
@@ -21,10 +19,10 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @import "src/assets/style/public";
 
-.loading {
+#loading {
   position: fixed;
   top: 0;
   left: 0;
@@ -33,16 +31,21 @@ export default {
   z-index: $z-index-loading;
   background: rgba(255, 255, 255, 0.9);
   justify-content: center;
-  transition: opacity .5s;
-
-  &.fade-enter, &.fade-enter-to, &.fade-leave {
-    opacity: 1;
+  overflow: hidden;
+  @keyframes hide-loading{
+    0%{
+      opacity: 1;
+    }
+    99%{
+      opacity: 0;
+      height: 100%;
+    }100%{
+      height: 0;
+     }
   }
-
-  &.fade-leave-to {
-    opacity: 0;
+  &.hide.config-loaded{
+    animation: hide-loading .4s ease-out forwards;
   }
-
   > svg {
     width: 4rem;
     height: 4rem;

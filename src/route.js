@@ -7,13 +7,15 @@ function routeInfo (){
         if (matcher){
             return {
                 name: i.name,
-                params: matcher.groups||{}
+                params: matcher.groups||{},
+                title: i.title
             }
         }
     }
     return {
         name: null,
-        params: {}
+        params: {},
+        title: '404'
     }
 }
 

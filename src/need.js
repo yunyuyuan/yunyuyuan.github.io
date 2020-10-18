@@ -9,3 +9,5 @@ import '@/icons'
 import '@/filter'
 import '@/assets/style/source-code-pro.css'
 import '@/assets/style/write-font.css'
+
+document.head.querySelector('link[rel=icon]').href = originPrefix+'/favicon.svg?stamp='+siteConfig.timeStamp

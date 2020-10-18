@@ -1,4 +1,6 @@
 // 直接从站点上获取文件text
+import {originPrefix} from "@/need";
+
 export async function getText(path) {
     return new Promise(resolve => {
         fetch(path+'?ran='+new Date().getTime()).then(res => {
@@ -43,4 +45,12 @@ export function sortByTime(lis) {
     lis.sort((a, b) => {
         return a.time > b.time ? -1 : 1
     })
+}
+
+export function insertMdStyle (){
+    document.head.querySelector('#markdown-stylesheet').href = `${originPrefix}/markdown.css?ran=${new Date().getTime()}`
+}
+
+export function loadFinish (){
+    document.querySelector('#loading').classList.add('hide');
 }

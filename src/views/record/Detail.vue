@@ -5,7 +5,10 @@
       <div class="image" flex>
         <loading-img v-for="i in info.images" :src="i"/>
       </div>
-      <span write-font>{{ text }}</span>
+      <div class="loading" v-if="text===''" flex>
+        <svg-icon :name="'loading'"/>
+      </div>
+      <span v-else write-font>{{ text }}</span>
     </div>
   </div>
 </template>
@@ -41,6 +44,9 @@ export default {
         this.text = ''
       }
     }
+  },
+  mounted() {
+    document.body.append(this.$el)
   }
 }
 </script>
@@ -49,6 +55,7 @@ export default {
 @import "src/assets/style/public";
 
 .record-detail{
+  z-index: $z-index-record-detail;
   > .inner{
     width: 80%;
     height: 90%;
@@ -58,7 +65,7 @@ export default {
       flex-wrap: wrap;
       ::v-deep .loading-img{
         width: calc(50% - 2rem) !important;
-        height: 15rem !important;
+        height: unset !important;
         margin: 1rem;
         &:not(:last-of-type){
           border-bottom: 1px solid white;
@@ -68,13 +75,22 @@ export default {
         }
       }
     }
+    >.loading{
+      width: 100%;
+      justify-content: center;
+      >svg{
+        height: 3rem;
+        width: 3rem;
+      }
+    }
     > span{
       width: 95%;
       border-top: 1px solid gray;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       margin: 1rem 0 5rem 0;
       white-space: pre-wrap;
       padding-top: 0.8rem;
+      font-weight: bold;
     }
     >a{
       display: none;

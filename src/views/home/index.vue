@@ -31,6 +31,7 @@
 
 <script>
 import selfImage from '@/image/i.png'
+import {loadFinish} from "@/utils/utils";
 
 export default {
   name: "Home",
@@ -43,6 +44,9 @@ export default {
     config (){
       return this._config()
     }
+  },
+  mounted() {
+    loadFinish()
   },
   inject: ['_config']
 }

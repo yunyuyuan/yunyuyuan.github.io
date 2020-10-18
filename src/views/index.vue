@@ -12,7 +12,7 @@
       <the-footer v-if="this.routeNow !== 'backend'"/>
     </section>
     <message ref="message"/>
-    <loading/>
+    <loading :class="configLoaded"/>
   </div>
 </template>
 
@@ -58,7 +58,8 @@ export default {
         record: recordImage,
         about: aboutImage,
       },
-      routeNow: 'home'
+      routeNow: 'home',
+      configLoaded: ''
     }
   },
   provide() {
@@ -68,7 +69,7 @@ export default {
   },
   computed: {
     rand (){
-      return parseInt(Math.random()*10)%2
+      return Math.floor(Math.random()*10)%2
     },
     waveStyle (){
       return {
@@ -82,6 +83,7 @@ export default {
   async created() {
     await this.updateConfig();
     const route = routeInfo();
+    document.title = route.title;
 
     this.showHead = route.name !== 'backend';
     switch (route.name){
@@ -92,40 +94,41 @@ export default {
         break;
       case 'article':
         this.routeNow = 'article';
-        this.bgColor = 'linear-gradient(135deg, rgb(16, 112, 255) 0%, rgb(13 220 186) 60%, rgb(255 235 0))';
+        this.bgColor = 'linear-gradient(135deg, rgb(16, 112, 255) 0%, rgb(13, 220, 186) 60%, rgb(255, 235, 0))';
         this.comp = ()=>import('@/views/article/List')
         break;
       case 'articleDetail':
         this.routeNow = 'articleDetail';
-        this.bgColor = 'linear-gradient(135deg, rgb(16, 112, 255) 0%, rgb(13 220 186) 60%, rgb(255 235 0))';
+        this.bgColor = 'linear-gradient(135deg, rgb(16, 112, 255) 0%, rgb(13, 220,186) 60%, rgb(255, 235, 0))';
         this.comp = ()=>import('@/views/article/Detail')
         break;
       case 'record':
         this.routeNow = 'record';
-        this.bgColor = 'linear-gradient(45deg, rgb(255 16 204) 0%, rgb(47 245 255) 80%, rgb(0 255 67))';
+        this.bgColor = 'linear-gradient(45deg, rgb(255, 16, 204) 0%, rgb(47, 245, 255) 80%, rgb(0, 255, 67))';
         this.comp = ()=>import('@/views/record/index')
         break;
       case 'msgBoard':
         this.routeNow = 'msgBoard';
-        this.bgColor = 'linear-gradient(135deg, rgb(31 16 255) 0%, rgb(255 47 220) 80%, rgb(255 165 0))';
+        this.bgColor = 'linear-gradient(135deg, rgb(31, 16, 255) 0%, rgb(255, 47 220) 80%, rgb(255, 165, 0))';
         this.comp = ()=>import('@/views/msg-board/index')
         break;
       case 'backend':
         this.routeNow = 'backend';
-        this.bgColor = 'linear-gradient(45deg, rgb(255, 159, 16) 0%, rgb(0 185 255) 80%, rgb(214 117 255))';
+        this.bgColor = 'linear-gradient(45deg, rgb(255, 159, 16) 0%, rgb(0, 185, 255) 80%, rgb(214, 117, 255))';
         this.comp = ()=>import('@/views/backend/index')
         break;
       case 'about':
         this.routeNow = 'about';
-        this.bgColor = 'linear-gradient(45deg, rgb(255 97 74) 0%, rgb(129 255 185) 80%, rgb(189 167 255))';
+        this.bgColor = 'linear-gradient(45deg, rgb(255, 97, 74) 0%, rgb(129, 255, 185) 80%, rgb(189, 167, 255))';
         this.comp = ()=>import('@/views/about/index')
         break
       default:
         this.routeNow = ''
     }
+    this.configLoaded = 'config-loaded'
   },
   mounted() {
-    Vue.prototype.$message = this.$refs.message
+    Vue.prototype.$message = this.$refs.message;
   },
   methods: {
     toggleShowBg(b) {

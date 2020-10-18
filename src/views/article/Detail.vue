@@ -8,18 +8,23 @@
               <span class="anchor" :class="{active: item.active}" v-for="item in anchors"
                     @click="toAnchor(item.el)">{{ item.text }}</span>
             </div>
-            <div class="share" flex>
-              <div class="qr" @mouseenter="loadQr" @mouseleave="showQr = false">
-              <span flex>
-                <svg-icon :name="'qr'"/>
-              </span>
-                <div v-show="showQr" flex>
-                  <div class="load" v-if="!qrcode">
-                    <svg-icon :name="'loading'"/>
+            <div class="tail" flex>
+              <div class="share" flex title="二维码">
+                <div class="qr">
+                <span flex>
+                  <svg-icon :name="'qr'"/>
+                </span>
+                  <div flex>
+                    <div class="load" v-if="!qrcode">
+                      <svg-icon :name="'loading'"/>
+                    </div>
+                    <img v-else :src="qrcode" alt="qr"/>
                   </div>
-                  <img v-else :src="qrcode" alt="qr"/>
                 </div>
               </div>
+              <a class="back" href="/article" title="返回文章列表">
+                <svg-icon :name="'back'"/>
+              </a>
             </div>
           </div>
           <span class="toggle-aside" :class="{active: asideActive}" @click="asideActive = !asideActive" flex
@@ -36,7 +41,7 @@
 </template>
 
 <script>
-import {getText} from "@/utils/utils";
+import {getText, insertMdStyle, loadFinish} from "@/utils/utils";
 import {originPrefix} from "@/need";
 import TheComment from "@/views/comment/index";
 
@@ -56,7 +61,7 @@ export default {
       asideTop: 0,
       animationHandle: undefined,
       qrcode: '',
-      showQr: false
+      showQr: ''
     }
   },
   computed: {
@@ -83,12 +88,16 @@ export default {
     if (res[0]) {
       this.md = JSON.parse(res[1])
     }
-    document.head.querySelector('#markdown-stylesheet').href = `${originPrefix}/markdown.css?ran=${new Date().getTime()}`;
+    insertMdStyle();
+    qrcode.toDataURL(location.href, (err, url) => {
+      this.qrcode = url
+    })
   },
   async mounted() {
     await this.getHtml();
     document.title = '文章-' + this.info.name;
-    this.body.addEventListener('scroll', this.moveAside)
+    this.body.addEventListener('scroll', this.moveAside);
+    loadFinish();
   },
   beforeDestroy() {
     this.body.removeEventListener('scroll', this.moveAside)
@@ -164,14 +173,6 @@ export default {
           }
         })
       }
-    },
-    loadQr() {
-      this.showQr = true
-      if (!this.qrcode) {
-        qrcode.toDataURL(location.href, (err, url) => {
-          this.qrcode = url
-        })
-      }
     }
   }
 }
@@ -206,11 +207,11 @@ export default {
           &.active > .anchors{
             width: 12rem;
           }
-          &.active .share{
+          &.active .tail{
             overflow: unset;
             width: 6rem;
           }
-          > .anchors, > .share{
+          > .anchors, > .tail{
             width: 0;
             flex-direction: column;
             background: white;
@@ -234,40 +235,67 @@ export default {
               }
             }
           }
-          > .share{
+          >.tail{
+            flex-direction: column;
             margin-top: 1rem;
             padding: 1rem 0;
-            > .qr{
-              position: relative;
-              > span{
-                cursor: pointer;
-                > svg{
-                  width: 2rem;
-                  height: 2rem;
-                }
-              }
-              > div{
-                position: absolute;
-                right: 0;
-                top: 0;
-                transform: translateX(calc(100% + 1rem));
-                border-radius: 0.3rem;
-                border: 1px solid #d2d2d2;
-                box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.6);
-                > .load{
-                  padding: 1rem;
-                  background: white;
-                  border-radius: inherit;
+            > .share{
+              margin-bottom: 1rem;
+              > .qr{
+                position: relative;
+                > span{
+                  cursor: pointer;
                   > svg{
-                    width: 3rem;
-                    height: 3rem;
+                    width: 2rem;
+                    height: 2rem;
+                  }
+                  &:hover{
+                    ~ div{
+                      height: 10rem;
+                      width: 10rem;
+                    }
                   }
                 }
-                > img{
-                  width: 10rem;
-                  height: 10rem;
-                  border-radius: inherit;
+                > div{
+                  position: absolute;
+                  right: 0;
+                  top: 0;
+                  height: 0;
+                  width: 0;
+                  transform: translateX(calc(100% + 1rem));
+                  border-radius: 0.3rem;
+                  box-shadow: 0 0 1.2rem rgba(0, 0, 0, 0.6);
+                  align-items: center;
+                  overflow: hidden;
+                  transition: all .3s ease-out;
+                  > .load{
+                    background: white;
+                    border-radius: inherit;
+                    > svg{
+                      width: 3rem;
+                      height: 3rem;
+                    }
+                  }
+                  > img{
+                    width: 100%;
+                    height: 100%;
+                    border-radius: inherit;
+                  }
                 }
+              }
+            }
+            >.back{
+              text-decoration: none;
+              &:hover{
+                >svg{
+                  fill: #ff2a2a;
+                }
+              }
+              >svg{
+                width: 2rem;
+                height: 2rem;
+                fill: #f08080;
+                transition: fill .15s linear;
               }
             }
           }

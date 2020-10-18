@@ -66,7 +66,7 @@
 
 <script>
 import {originPrefix} from "@/need";
-import {getText, parseAjaxError, sortByTime} from "@/utils/utils";
+import {getText, insertMdStyle, parseAjaxError, sortByTime} from "@/utils/utils";
 import FloatInput from "@/components/FloatInput";
 
 import LoadingButton from "@/components/LoadingButton";
@@ -143,7 +143,7 @@ export default {
   },
   inject: ['_gitUtil'],
   created() {
-    document.head.querySelector('#markdown-stylesheet').href = `${originPrefix}/markdown.css?ran=${new Date().getTime()}`
+    insertMdStyle()
   },
   async mounted() {
     await this.init()
@@ -278,7 +278,7 @@ export default {
           }, this.saving);
           if (res[0]) {
             this.$message.success('上传成功!');
-            await this.$router.push({name: 'backend.md'})
+            await this.$router.push('/article')
           } else {
             this.$message.error(parseAjaxError(res[1]))
           }

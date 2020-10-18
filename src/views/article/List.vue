@@ -48,7 +48,7 @@
 <script>
 import LoadingImg from "@/components/LoadingImg";
 import Pagination from "@/components/Pagination";
-import {getText} from "@/utils/utils";
+import {getText, loadFinish} from "@/utils/utils";
 import {originPrefix} from "@/need";
 
 export default {
@@ -61,7 +61,8 @@ export default {
       searchFocus: false,
       searchTags: [],
       pageNow: 1,
-      perCount: 8
+      perCount: 8,
+      promise: null
     }
   },
   computed: {
@@ -95,11 +96,12 @@ export default {
       this.pageNow = 1;
     }
   },
-  async created() {
+  async mounted() {
     let res = await getText(`${originPrefix}/json/md.json`);
     if (res[0]) {
       this.md = JSON.parse(res[1])
     }
+    loadFinish();
   },
   methods: {
     toggleInputFocus(b) {

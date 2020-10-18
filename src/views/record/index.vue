@@ -18,7 +18,7 @@
 import Pagination from "@/components/Pagination";
 import LoadingImg from "@/components/LoadingImg";
 import Detail from "@/views/record/Detail";
-import {getText} from "@/utils/utils";
+import {getText, loadFinish} from "@/utils/utils";
 import {originPrefix} from "@/need";
 
 export default {
@@ -48,6 +48,9 @@ export default {
     turnPage(p) {
       this.pageNow = p;
     }
+  },
+  mounted() {
+    loadFinish()
   }
 }
 </script>

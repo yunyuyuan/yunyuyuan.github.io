@@ -4,7 +4,7 @@
       <a class="favicon" href="/">
         <img :src="selfImage"/>
       </a>
-      <a class="txt" href="/simple-code-simple-life" flex>
+      <a class="txt" href="/simple-code-simple-life" flex title="简单代码，简单生活">
         Simple Code,Simple Life
       </a>
     </div>
