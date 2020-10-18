@@ -28,7 +28,6 @@ import {parseAjaxError} from "@/utils";
 import FloatInput from "@/components/FloatInput";
 import SingleButton from "@/components/Button";
 import LoadingButton from "@/components/LoadingButton";
-import {mapState} from "vuex";
 
 export default {
   name: "TheComment",
@@ -38,8 +37,8 @@ export default {
       type: String,
       default: ''
     },
-
   },
+  inject: ['_config'],
   data() {
     return {
       token: null,
@@ -50,9 +49,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['config']),
     name() {
       return this.config.name
+    },
+    config (){
+      return this._config()
     }
   },
   async created() {

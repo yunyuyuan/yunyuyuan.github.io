@@ -25,7 +25,7 @@
           <span class="line"></span>
           <span class="circle"></span>
         </div>
-        <router-link class="info" :to="{name: 'article.detail', params: {id: item.file}}" flex>
+        <a class="info" :href="`?id=${item.file}`" flex>
           <loading-img :src="item.cover" :size="[12, -1]"/>
           <div flex>
             <b>{{ item.name }}</b>
@@ -36,7 +36,7 @@
                     :title="`搜索-${tag}`">{{ tag }}</span>
             </div>
           </div>
-        </router-link>
+        </a>
       </div>
       <pagination @turn="turnPage" :item-count="this.resultList.length" :page-now="pageNow" :per-count="perCount"/>
     </div>
@@ -44,13 +44,18 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
 import LoadingImg from "@/components/LoadingImg";
 import Pagination from "@/components/Pagination";
 
 export default {
   name: "List",
   components: {Pagination, LoadingImg},
+  props: {
+    md: {
+      type: Array,
+      default: ()=>[]
+    }
+  },
   data() {
     return {
       search: '',
@@ -61,7 +66,6 @@ export default {
     }
   },
   computed: {
-    ...mapState(['md']),
     pagedList() {
       let start = (this.pageNow - 1) * this.perCount;
       return this.resultList.slice(start, start + this.perCount)

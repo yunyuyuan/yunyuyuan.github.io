@@ -1,13 +1,13 @@
 <template>
   <div class="index">
-    <img class="bg" v-if="config.backgroundImg==='img'||(config.backgroundImg==='random'&& (parseInt(Math.random()*10)%2))" :src="images[routeNow]"/>
+    <img class="bg" v-if="config.backgroundImg==='img'||(config.backgroundImg==='random'&& rand)" :src="images[routeNow]" alt="bg"/>
     <div class="bg" :style="{background: bgColor}" v-else>
       <div :style="waveStyle" class="wave"></div>
       <div :style="waveStyle" class="wave"></div>
     </div>
     <the-head :class="{'show-bg': showBg}" v-if="showHead" @toggle="toggleShowBg"/>
     <section :class="{body: true, 'show-head': showHead, 'show-bg': showBg, 'mask-bg': config.backgroundImg}" flex>
-      <router-view></router-view>
+      <component :is="comp" @updateConfig="updateConfig"/>
       <the-footer v-if="this.routeNow !== 'backend'"/>
     </section>
     <message ref="message"/>
@@ -17,9 +17,10 @@
 
 <script>
 import HomeImage from '@/image/home.jpg';
-import ArticleListImage from '@/image/articleList.jpg';
+import ArticleImage from '@/image/article.jpg';
 import msgBoardImage from '@/image/msgBoard.jpg';
 import recordImage from '@/image/record.jpg';
+import aboutImage from '@/image/about.jpg';
 import waveSvg from '@/assets/wave.svg'
 
 import TheHead from "@/views/block/Head";
@@ -28,8 +29,13 @@ import Message from "./block/Message";
 import Loading from "@/views/block/Loading";
 
 import Vue from 'vue';
+import '@/need'
+import '@/assets/style/source-code-pro.css'
+import '@/assets/style/write-font.css'
 import siteConfig from '@/site-config'
-import {mapState} from "vuex";
+import {routeName} from "@/route";
+import {getText, parseAjaxError} from "@/utils";
+import {originPrefix} from "@/need";
 
 export default {
   name: "index",
@@ -37,57 +43,81 @@ export default {
   data() {
     return {
       siteConfig,
+      config: {},
+      comp: null,
+
       showHead: true,
       showBg: false,
       bgColor: '',
       images: {
         home: HomeImage,
-        articleList: ArticleListImage,
+        article: ArticleImage,
         msgBoard: msgBoardImage,
         backend: HomeImage,
         record: recordImage,
+        about: aboutImage,
       },
       routeNow: 'home'
     }
   },
+  provide() {
+    return {
+      _config: () => this.computeConfig
+    }
+  },
   computed: {
-    ...mapState(['config']),
+    rand (){
+      return parseInt(Math.random()*10)%2
+    },
     waveStyle (){
       return {
         background: `url(${waveSvg}) repeat-x`
       }
+    },
+    computeConfig (){
+      return this.config
     }
   },
-  watch: {
-    $route() {
-      if (!this.$route.name) return;
-      switch (this.$route.name.replace(/^(.*?)\..*$/, '$1')) {
-        case 'home':
-          this.routeNow = 'home';
-          this.bgColor = 'linear-gradient(45deg, #ff7e10 0%, #3c2fff 80%, #00c7ff)';
-          this.showHead = true;
-          break;
-        case 'article':
-          this.routeNow = 'articleList';
-          this.bgColor = 'linear-gradient(135deg, rgb(16, 112, 255) 0%, rgb(13 220 186) 60%, rgb(255 235 0))';
-          this.showHead = true;
-          break;
-        case 'record':
-          this.routeNow = 'record';
-          this.bgColor = 'linear-gradient(45deg, rgb(255 16 204) 0%, rgb(47 245 255) 80%, rgb(0 255 67))';
-          this.showHead = true;
-          break;
-        case 'msgBoard':
-          this.routeNow = 'msgBoard';
-          this.bgColor = 'linear-gradient(135deg, rgb(31 16 255) 0%, rgb(255 47 220) 80%, rgb(255 165 0))';
-          this.showHead = true;
-          break;
-        case 'backend':
-          this.routeNow = 'backend';
-          this.bgColor = 'linear-gradient(45deg, rgb(255 159 16) 0%, rgb(0 243 255) 80%, rgb(180 0 255))';
-          this.showHead = false;
-          break;
-      }
+  async created() {
+    await this.updateConfig()
+
+    switch (routeName()){
+      case 'index':
+        this.routeNow = 'home';
+        this.bgColor = 'linear-gradient(45deg, #ff7e10 0%, #3c2fff 80%, #00c7ff)';
+        this.showHead = true;
+        this.comp = ()=>import('@/views/home/index')
+        break;
+      case 'article':
+        this.routeNow = 'article';
+        this.bgColor = 'linear-gradient(135deg, rgb(16, 112, 255) 0%, rgb(13 220 186) 60%, rgb(255 235 0))';
+        this.showHead = true;
+        this.comp = ()=>import('@/views/article/index')
+        break;
+      case 'record':
+        this.routeNow = 'record';
+        this.bgColor = 'linear-gradient(45deg, rgb(255 16 204) 0%, rgb(47 245 255) 80%, rgb(0 255 67))';
+        this.showHead = true;
+        this.comp = ()=>import('@/views/record/index')
+        break;
+      case 'msgBoard':
+        this.routeNow = 'msgBoard';
+        this.bgColor = 'linear-gradient(135deg, rgb(31 16 255) 0%, rgb(255 47 220) 80%, rgb(255 165 0))';
+        this.showHead = true;
+        this.comp = ()=>import('@/views/msg-board/index')
+        break;
+      case 'backend':
+        this.routeNow = 'backend';
+        this.bgColor = 'linear-gradient(45deg, rgb(255, 159, 16) 0%, rgb(0 185 255) 80%, rgb(214 117 255))';
+        this.showHead = false;
+        this.comp = ()=>import('@/views/backend/index')
+        break;
+      case 'about':
+        this.routeNow = 'about';
+        this.bgColor = 'linear-gradient(45deg, rgb(255 97 74) 0%, rgb(129 255 185) 80%, rgb(189 167 255))';
+        this.showHead = true;
+        this.comp = ()=>import('@/views/about/index')
+        break
     }
   },
   mounted() {
@@ -96,6 +126,19 @@ export default {
   methods: {
     toggleShowBg(b) {
       this.showBg = b
+    },
+    async updateConfig(config) {
+      if (config){
+        this.config = config
+      }else {
+        // 获取config
+        let res = await getText(`${originPrefix}/json/config.json`);
+        if (res[0]) {
+          this.config = JSON.parse(res[1])
+        } else {
+        this.$message.error(parseAjaxError(res[1]))
+        }
+      }
     }
   }
 }
@@ -171,6 +214,137 @@ export default {
     &.mask-bg{
       background: rgba(0, 0, 0, 0.1);
     }
+  }
+}
+</style>
+
+<style lang="scss">
+@import "src/assets/style/public";
+html, body{
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+  @include media{
+    font-size: 14px;
+  }
+  &[unselectable]{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    -ms-user-select: none;
+  }
+}
+#app{
+  width: 100%;
+  height: 100%;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+
+*[flex] {
+  display: flex;
+  align-items: center;
+}
+
+*[is-dialog] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: $z-index-dialog;
+  background: rgba(0, 0, 0, 0.4);
+  justify-content: space-around;
+
+  &, > .inner {
+    display: flex;
+    align-items: center;
+  }
+
+  > .inner {
+      background: white;
+      border-radius: 1rem;
+      flex-direction: column;
+      box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.4);
+      border: 1px solid #939393;
+  }
+}
+*[write-font]{
+  font-family: "write-font", serif;
+}
+
+input, textarea, select, button {
+  outline: none;
+  resize: none;
+  font-family: "Source Code Pro", serif;
+}
+table{
+  border-collapse: collapse;
+  box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
+  tr{
+    td{
+
+    }
+  }
+  thead{
+    background: #2b2b2b;
+    border-bottom: 2px solid #9f9f9f;
+    td, th{
+      padding: 0.5rem 0;
+      color: white;
+      font-size: 1.06rem;
+      text-align: center;
+      &:not(:last-of-type){
+        border-right: 1px solid #d2d2d2;
+      }
+    }
+  }
+  tbody{
+    tr{
+      &:not(:last-of-type){
+        border-bottom: 1px solid #d2d2d2;
+      }
+      background: white;
+      &:nth-child(even){
+        background: #f5f5f5;
+      }
+      &:hover{
+          background: #ebfffc;
+      }
+      td{
+        padding: 0.4rem 0;
+        &:not(:last-of-type){
+          border-right: 1px solid #d2d2d2;
+        }
+      }
+    }
+  }
+}
+::-webkit-scrollbar{
+    width: 0.5rem;
+    height: 0.5rem;
+}
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar-button{
+    display: none;
+}
+::-webkit-scrollbar-thumb{
+    border-radius: 0.5rem;
+    background: #404040;
+    border: 1px solid #828282;
+}
+::-webkit-scrollbar-thumb:hover{
+    background: #323232
+}
+::-webkit-scrollbar-track{
+    border-radius: 0.5rem;
+    background: transparent;
+}
+@include media{
+  ::-webkit-scrollbar{
+    width: 0;
   }
 }
 </style>

@@ -5,7 +5,7 @@
       <b>修改配置信息</b>
     </div>
     <div class="list" flex>
-      <float-input v-for="k in keys" :name="k" :value="info[k]||''" :id="k" :size="1" @input="input"/>
+      <float-input v-for="k in keys" :name="k" :value="info[k]||''" :id="k" :size="1" :isArea="k==='describe'" @input="input"/>
       <label flex>
         <span :class="{active: info.backgroundImg==='img'}" @click="changeBg('img')">图片背景</span>
         <span :class="{active: info.backgroundImg==='color'}" @click="changeBg('color')">彩色背景</span>
@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
 import FloatInput from "@/components/FloatInput";
 import {parseAjaxError} from "@/utils";
 import LoadingButton from "@/components/LoadingButton";
@@ -32,22 +31,18 @@ export default {
       keys: ["name", "describe", "copyright", "github", "bilibili", "email"],
     }
   },
+  computed: {
+    config (){
+      return this._config()
+    },
+    gitUtil (){
+      return this._gitUtil()
+    }
+  },
   created() {
     this.init()
   },
-  watch: {
-    $route (){
-      if (this.$route.name === 'backend.config'){
-        this.init()
-      }
-    },
-    '$store.state.config': function (){
-      this.init()
-    }
-  },
-  computed: {
-    ...mapState(['config', 'gitUtil']),
-  },
+  inject: ['_config', '_gitUtil'],
   methods: {
     init (){
       this.info = JSON.parse(JSON.stringify(this.config))

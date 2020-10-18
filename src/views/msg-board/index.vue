@@ -10,10 +10,14 @@
 
 <script>
 import TheComment from "@/views/comment/index";
+import {originPrefix} from "@/need";
 
 export default {
   name: "index",
-  components: {TheComment}
+  components: {TheComment},
+  created() {
+    document.head.querySelector('#markdown-stylesheet').href = `${originPrefix}/markdown.css?ran=${new Date().getTime()}`
+  }
 }
 </script>
 

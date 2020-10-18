@@ -34,9 +34,8 @@
 
 <script>
 import LoadingButton from "@/components/LoadingButton";
-import {mapState} from "vuex";
 import {getText, hljsAndInsertCopyBtn, parseAjaxError, parseMarkdown} from "@/utils";
-import {originPrefix} from "@/main";
+import {originPrefix} from "@/need";
 import testText from 'text-loader!@/assets/test.md';
 
 import Sass from 'sass.js';
@@ -75,8 +74,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['gitUtil'])
+    gitUtil (){
+      return this._gitUtil()
+    }
   },
+  inject: ['_gitUtil'],
   async created() {
     await this.init()
   },

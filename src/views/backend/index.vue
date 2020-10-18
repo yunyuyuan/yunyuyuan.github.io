@@ -11,21 +11,20 @@
                   d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942"/>
           </svg>
         </span>
-        <router-link class="home" :to="{name: 'home'}" flex="">
-          <img :src="selfImage"/>
-        </router-link>
+        <a class="home" href="/" flex="">
+          <img :src="selfImage" alt="favicon"/>
+        </a>
       </div>
-      <router-link v-for="item in menu" :key="item.name" :to="{name: item.pathName}"
-                   :class="{active: $route.name.indexOf(item.pathName)===0}" class="item" flex>
+      <router-link v-for="item in menu" :key="item.name" :to="{path: item.pathName}"
+                   :class="{active: $route.path.indexOf(item.pathName)===0}" class="item" flex>
         <span class="icon">
           <svg-icon :name="item.icon"/>
         </span>
         <span class="name">{{ item.name }}</span>
       </router-link>
-      <loading-button class="update" :loading="updating" :text="'更新'" :icon="'update'" @click.native="getConfig"/>
       <loading-button :icon="'account'" :text="'登录'" @click.native="showLogin = true"/>
     </div>
-    <login v-show="showLogin" @save="loginFinish" @hide="showLogin = false"/>
+    <login v-show="showLogin" @gitUtil="initGitUtil" @save="loginFinish" @hide="showLogin = false"/>
     <div class="body">
       <keep-alive>
         <router-view @login="showLogin = true"></router-view>
@@ -38,67 +37,122 @@
 import Login from "./Login";
 import {getText, parseAjaxError} from "@/utils";
 import LoadingButton from "@/components/LoadingButton";
-import {originPrefix} from "@/main";
-import selfImage from '@/image/i.png'
+import {originPrefix} from "@/need";
+import selfImage from '@/image/i.png';
+
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+
+Vue.use(VueRouter);
+
 
 export default {
   name: "index",
   components: {LoadingButton, Login},
+  router: new VueRouter({
+    routes: [
+      {
+        path: '/',
+        redirect: '/config'
+      },
+      {
+        path: '/config',
+        component: ()=>import('@/views/backend/Config')
+      },
+      {
+        path: '/article',
+        component: ()=>import('@/views/backend/Article'),
+        children: [
+          {
+            path: '',
+            component: ()=>import('@/views/backend/ArticleList'),
+          },
+          {
+            path: ':id',
+            component: ()=>import('@/views/backend/ArticleDetail'),
+          }
+        ]
+      },
+      {
+        path: '/record',
+        component: ()=>import('@/views/backend/Record'),
+        children: [
+          {
+            path: '',
+            component: ()=>import('@/views/backend/RecordList'),
+          },
+          {
+            path: ':id',
+            component: ()=>import('@/views/backend/RecordDetail'),
+          }
+        ]
+      },
+      {
+        path: '/theme',
+        component: ()=>import('@/views/backend/Theme')
+      }
+    ]
+  }),
   data() {
     return {
       selfImage,
       showMenu: true,
       showLogin: false,
       updating: false,
+      gitUtil: null,
       menu: [
         {
           name: '配置',
-          pathName: 'backend.config',
+          pathName: '/config',
           icon: 'config'
         },
         {
           name: '文章',
-          pathName: 'backend.md',
+          pathName: '/article',
           icon: 'article'
         },
         {
           name: '记录',
-          pathName: 'backend.record',
+          pathName: '/record',
           icon: 'record'
         },
         {
           name: '主题',
-          pathName: 'backend.theme',
+          pathName: '/theme',
           icon: 'brash'
         },
       ]
+    }
+  },
+  computed: {
+    computeGitUtil (){
+      return this.gitUtil
+    }
+  },
+  provide() {
+    return {
+      _gitUtil: () => this.computeGitUtil
     }
   },
   methods: {
     toggleMenu() {
       this.showMenu = !this.showMenu
     },
-    loginFinish(withUpdate) {
+    initGitUtil (gitUtil){
+      this.gitUtil = gitUtil
+    },
+    async loginFinish(withUpdate) {
       this.showLogin = false;
       if (withUpdate) {
-        this.getConfig()
+        let res = await getText(`${originPrefix}/json/config.json`);
+        if (res[0]) {
+          this.$emit('updateConfig', JSON.parse(res[1]))
+          this.$message.success('从服务器获取配置成功!')
+        } else {
+          this.$message.error(parseAjaxError(res[1]))
+        }
       }
       this.$message.success('保存成功!')
-    },
-    async getConfig() {
-      if (this.updating) return;
-      this.updating = true;
-      let res = await getText(`${originPrefix}/json/config.json`);
-      if (res[0]) {
-        this.$store.commit('updateJson', {
-          key: 'config',
-          json: JSON.parse(res[1])
-        });
-        this.$message.success('从服务器获取配置成功!')
-      } else {
-        this.$message.error(parseAjaxError(res[1]))
-      }
-      this.updating = false
     },
   }
 }
@@ -222,15 +276,10 @@ export default {
 
     ::v-deep .loading-button {
       background: #ac60ff;
-      margin-bottom: 1rem;
+      margin: auto 0 1rem 0;
 
-      &:not(.loading):hover {
+      &:hover {
         background: #8c8e8d;
-      }
-
-      &.update {
-        background: #4a91ff;
-        margin: auto 0 1rem 0;
       }
 
       &.loading {

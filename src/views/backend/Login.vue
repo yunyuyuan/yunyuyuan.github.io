@@ -67,7 +67,7 @@ export default {
       this.$emit('save', this.withUpdate)
     },
     commitUpdateGitutil() {
-      this.$store.commit('updateGitUtil', new GithubUtils(
+      this.$emit('gitUtil', new GithubUtils(
           this.token,
           siteConfig.owner,
           `${siteConfig.owner}.github.io`,

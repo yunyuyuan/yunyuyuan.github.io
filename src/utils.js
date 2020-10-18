@@ -1,5 +1,5 @@
 import Octokat from 'octokat';
-import {baseDynamicUrl} from "@/main";
+import {baseDynamicUrl} from "@/need";
 import Sass from 'sass.js'
 import hljs from "highlight.js";
 

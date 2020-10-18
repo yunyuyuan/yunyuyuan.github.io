@@ -87,7 +87,9 @@ export default {
 
   textarea{
     height: 10rem;
-    border-top: 1px dashed gray;
+    padding-top: 0.2rem;
+    margin-top: 0.4rem;
+    border-top: 1px dashed #b6b6b6;
   }
 
   label {

@@ -34,8 +34,7 @@
 
 <script>
 import {getText, hljsAndInsertCopyBtn} from "@/utils";
-import {originPrefix} from "@/main";
-import {mapState} from "vuex";
+import {originPrefix} from "@/need";
 
 import TheComment from "@/views/comment/index";
 
@@ -44,9 +43,18 @@ import qrcode from "qrcode";
 export default {
   name: "Detail",
   components: {TheComment},
+  props: {
+    id: {
+      type: String,
+      default: ''
+    },
+    md: {
+      type: Array,
+      default: ()=>[]
+    }
+  },
   data() {
     return {
-      id: '',
       html: '',
       anchors: [],
       asideActive: false,
@@ -57,7 +65,6 @@ export default {
     }
   },
   computed: {
-    ...mapState(['md']),
     info() {
       if (!this.id) return {};
       for (let i of this.md) {
@@ -74,7 +81,6 @@ export default {
     }
   },
   async mounted() {
-    this.id = this.$route.params.id;
     await this.getHtml();
     document.title = '文章-' + this.info.name;
     this.body.addEventListener('scroll', this.moveAside)

@@ -72,7 +72,7 @@ import SingleButton from "@/components/Button";
 import Resizer from "@/components/Resizer";
 
 import {mapState} from "vuex";
-import {baseDynamicUrl} from "@/main";
+import {baseDynamicUrl} from "@/need";
 import {hljsAndInsertCopyBtn, parseMarkdown} from "@/utils";
 
 import CodeMirror from 'codemirror';
@@ -124,8 +124,8 @@ export default {
       },
     }
   },
+  inject: ['_config'],
   computed: {
-    ...mapState(['config']),
     html() {
       // hljs
       this.$nextTick(()=>{{
@@ -134,6 +134,9 @@ export default {
         })
       }})
       return parseMarkdown(this.comment);
+    },
+    config (){
+      return this._config()
     }
   },
   created() {

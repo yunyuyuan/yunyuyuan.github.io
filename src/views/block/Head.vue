@@ -1,12 +1,12 @@
 <template>
   <section class="the-head">
-    <div class="body" flex>
-      <router-link class="favicon" :to="{name: 'home'}">
+    <div class="body" @mouseenter="toggle(true)" @mouseleave="toggle(false)" flex>
+      <a class="favicon" href="/">
         <img :src="selfImage"/>
-      </router-link>
-      <b class="txt" @mouseenter="toggle(true)" @mouseleave="toggle(false)" flex>
+      </a>
+      <a class="txt" href="/simple-code-simple-life" flex>
         Simple Code,Simple Life
-      </b>
+      </a>
     </div>
   </section>
 </template>
@@ -56,9 +56,6 @@ export default {
   }
   &.show-bg{
     background: transparent !important;
-    .favicon{
-      opacity: 0 !important;
-    }
   }
   > .body{
     width: 100%;
@@ -79,9 +76,11 @@ export default {
       }
     }
     > .txt{
+      font-weight: bold;
       margin: 0 1rem 0 auto;
       height: 100%;
       color: white;
+      text-decoration: none;
       cursor: pointer;
       font-size: 0.95rem;
       font-family: "Source Code Pro", serif;

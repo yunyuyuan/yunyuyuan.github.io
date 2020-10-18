@@ -15,26 +15,33 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
 import Pagination from "@/components/Pagination";
 import LoadingImg from "@/components/LoadingImg";
 import Detail from "@/views/record/Detail";
+import {getText} from "@/utils";
+import {originPrefix} from "@/need";
 
 export default {
   name: "index",
   components: {Detail, LoadingImg, Pagination},
   data() {
     return {
+      record: [],
       pageNow: 1,
       perCount: 20,
-      activeInfo: {}
+      activeInfo: {},
     }
   },
   computed: {
-    ...mapState(['record']),
     pagedList() {
       let start = (this.pageNow - 1) * this.perCount;
       return this.record.slice(start, start + this.perCount)
+    }
+  },
+  async created (){
+    let res = await getText(`${originPrefix}/json/record.json`);
+    if (res[0]){
+      this.record = JSON.parse(res[1])
     }
   },
   methods: {

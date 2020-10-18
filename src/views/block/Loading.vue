@@ -7,15 +7,16 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
 
 export default {
   name: "Loading",
-  data() {
-    return {}
+  props: {
+    loading: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
-    ...mapState(['loading'])
   }
 }
 </script>

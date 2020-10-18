@@ -1,21 +1,21 @@
 <template>
   <div class="home" flex>
     <div class="btns" flex>
-      <router-link :to="{name: 'article.list'}" flex>
+      <a href="/article" flex>
         <svg-icon :name="'article'"/>
         <span class="name">文章</span>
         <span write-font class="tip">"技术"文章</span>
-      </router-link>
-      <router-link :to="{name: 'record'}" flex>
+      </a>
+      <a href="/record" flex>
         <svg-icon :name="'record'"/>
         <span class="name">记录</span>
         <span write-font class="tip">一框琐事</span>
-      </router-link>
-      <router-link :to="{name: 'msgBoard'}" flex>
+      </a>
+      <a  href="/msg-board" flex>
         <svg-icon :name="'comments'"/>
         <span class="name">留言板</span>
         <span write-font class="tip">谁的话语</span>
-      </router-link>
+      </a>
     </div>
     <div class="info" flex>
       <div class="head" flex>
@@ -31,7 +31,6 @@
 
 <script>
 import selfImage from '@/image/i.png'
-import {mapState} from "vuex";
 
 export default {
   name: "Home",
@@ -41,8 +40,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['config'])
-  }
+    config (){
+      return this._config()
+    }
+  },
+  inject: ['_config']
 }
 </script>
 
@@ -158,7 +160,7 @@ export default {
       margin: 4rem 0 2rem 0;
       >.body{
         >span{
-          width: 100%;
+          width: calc(100% - 2rem);
         }
       }
     }

@@ -13,7 +13,7 @@
 <script>
 import LoadingImg from "@/components/LoadingImg";
 import {getText, parseAjaxError} from "@/utils";
-import {originPrefix} from "@/main";
+import {originPrefix} from "@/need";
 
 export default {
   name: "Detail",

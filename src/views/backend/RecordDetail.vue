@@ -1,7 +1,7 @@
 <template>
   <div class="record-detail" flex>
     <div class="operate" flex>
-      <div class="back" @click="$router.push({name: 'backend.record'})" flex>
+      <div class="back" @click="$router.push('/record')" flex>
         <svg-icon :name="'back'"/>
         <span>返回</span>
       </div>
@@ -18,42 +18,48 @@
           <svg-icon :name="'picture'"/>
           封面
         </span>
-        <div class="item" v-for="(i,idx) in info.images" :key="idx" flex>
+        <div class="item" v-for="(i,idx) in info.images" :key="i" flex>
           <loading-img :src="i" :size="[12, 8]"/>
-          <div class="bottom" flex>
+          <label class="bottom" flex>
             <input :value="i" :data-idx="idx" @focusout="editImg"/>
             <single-button class="del-btn" @click.native="delImg(idx)" :text="'删除'"/>
-          </div>
+          </label>
         </div>
         <span class="add" @click="addImg" flex>
           <svg-icon :name="'add'"/>
         </span>
       </div>
-      <div class="text">
-        <p>文本:</p>
+      <label class="text">
+        <span>文本:</span>
         <textarea v-model="text"></textarea>
-      </div>
+      </label>
     </div>
   </div>
 </template>
 
 <script>
-import {mapState} from "vuex";
 import LoadingButton from "@/components/LoadingButton";
 import LoadingImg from "@/components/LoadingImg";
 import SingleButton from "@/components/Button";
 import {getText, parseAjaxError, sortByTime} from "@/utils";
-import {originPrefix} from "@/main";
+import {originPrefix} from "@/need";
 
 export default {
   name: "RecordDetail",
   components: {SingleButton, LoadingImg, LoadingButton},
+  props: {
+    record: {
+      type: Array,
+      default: ()=>[]
+    }
+  },
   data() {
     return {
       saving: {
         b: false,
         state: ''
       },
+      tempRecord: [],
       text: '',
       info: {},
       newInfo: {
@@ -66,24 +72,25 @@ export default {
     }
   },
   computed: {
-    ...mapState(['record', 'gitUtil']),
     id() {
       return this.$route.params.id
     },
+    gitUtil (){
+      return this._gitUtil()
+    }
   },
+  inject: ['_gitUtil'],
   async mounted() {
     await this.init()
   },
   watch: {
-    async $route() {
-      if (this.$route.name === 'backend.record.detail') {
-        await this.init()
-      }
+    async '$props.record' (){
+      await this.init()
     }
   },
   methods: {
     async init() {
-      this.info = JSON.parse(JSON.stringify(this.id === 'new' ? this.newInfo : this.record.find(v => v.file === this.id)));
+      this.info = JSON.parse(JSON.stringify(this.id === 'new' ? this.newInfo : this.record.find(v => v.file === this.id)||this.newInfo));
       if (this.id !== 'new') {
         let res = await getText(`${originPrefix}/record/${this.id}.txt`);
         if (res[0]) {

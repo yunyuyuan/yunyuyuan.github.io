@@ -1,8 +1,8 @@
 <template>
   <footer flex>
-    <router-link :to="{name: 'backend'}" class="favicon" flex title="后台管理">
+    <a href="/backend" class="favicon" flex title="后台管理">
       <svg-icon :name="'halberd'"/>
-    </router-link>
+    </a>
     <div class="social-media" flex>
       <a v-for="k in links" :key="k" target="_blank" :href="config[k]" :title="k" flex>
         <svg-icon :name="k"/>
@@ -17,7 +17,6 @@
 
 <script>
 import selfImage from '@/image/i.png'
-import {mapState} from "vuex";
 
 export default {
   name: "Footer",
@@ -28,16 +27,27 @@ export default {
     }
   },
   computed: {
-    ...mapState(['config']),
     domain() {
       return location.hostname
+    },
+    config (){
+      return this._config()
     }
-  }
+  },
+  inject: ['_config']
 }
 </script>
 
 <style scoped lang="scss">
 @import "src/assets/style/public";
+
+@keyframes shine{
+  0%{
+    box-shadow: 0 0 0 #00FFD9;
+  }100%{
+    box-shadow: 0 0 1.5rem #d900ff;
+   }
+}
 
 footer{
   width: 100%;
@@ -53,11 +63,11 @@ footer{
     background: #cdcdcd;
     border-radius: 0.5rem;
     justify-content: center;
-    box-shadow: 0 0 0.5rem rgba(255, 255, 255, 0.4);
     transition: all .15s linear;
     flex-shrink: 0;
     &:hover{
       background: white;
+      animation: shine 1s ease-out infinite alternate;
     }
     > svg{
       height: 90%;
@@ -74,6 +84,7 @@ footer{
       transition: all .15s linear;
       &:hover{
         background: #e3e3e3;
+        animation: shine 1s linear infinite alternate;
       }
       > svg{
         width: 1.4rem;
