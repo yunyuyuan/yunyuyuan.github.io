@@ -45,7 +45,7 @@
 <script>
 import SingleButton from "@/components/Button";
 import LoadingButton from "@/components/LoadingButton";
-import {parseAjaxError, sortByTime} from "@/utils";
+import {parseAjaxError, sortByTime} from "@/utils/utils";
 import jszip from "jszip";
 import {originPrefix} from "@/need";
 import * as fileSaver from "file-saver";

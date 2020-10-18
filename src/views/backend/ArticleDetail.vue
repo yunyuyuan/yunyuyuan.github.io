@@ -66,7 +66,7 @@
 
 <script>
 import {originPrefix} from "@/need";
-import {getText, hljsAndInsertCopyBtn, parseAjaxError, parseMarkdown, sortByTime} from "@/utils";
+import {getText, parseAjaxError, sortByTime} from "@/utils/utils";
 import FloatInput from "@/components/FloatInput";
 
 import LoadingButton from "@/components/LoadingButton";
@@ -85,6 +85,8 @@ import '@/assets/style/code-mirror/dracula-markdown.scss';
 import Resizer from "@/components/Resizer";
 import MarkdownHelp from "@/views/block/MarkdownHelp";
 import LoadingImg from "@/components/LoadingImg";
+import {parseMarkdown} from "@/utils/parseMd";
+import {hljsAndInsertCopyBtn} from "@/utils/highlight";
 
 export default {
   name: "ArticleDetail",

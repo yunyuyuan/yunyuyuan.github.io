@@ -161,6 +161,7 @@ export default {
       >.body{
         >span{
           width: calc(100% - 2rem);
+          font-size: 1.2rem;
         }
       }
     }

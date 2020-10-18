@@ -18,7 +18,7 @@
 import Pagination from "@/components/Pagination";
 import LoadingImg from "@/components/LoadingImg";
 import Detail from "@/views/record/Detail";
-import {getText} from "@/utils";
+import {getText} from "@/utils/utils";
 import {originPrefix} from "@/need";
 
 export default {

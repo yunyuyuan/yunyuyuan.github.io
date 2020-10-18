@@ -1,60 +1,57 @@
 <template>
-  <div class="detail">
-    <div class="content" flex>
-      <aside class="info" :style="{transform: `translateY(${asideTop}px)`}" ref="aside" flex>
-        <div :class="{'active': asideActive}" flex>
-          <div class="anchors" flex>
-            <span class="anchor" :class="{active: item.active}" v-for="item in anchors" @click="toAnchor(item.el)">{{ item.text }}</span>
-          </div>
-          <div class="share" flex>
-            <div class="qr" @mouseenter="loadQr" @mouseleave="showQr = false">
+  <div class="article">
+    <div class="detail">
+      <div class="content" flex>
+        <aside class="info" :style="{transform: `translateY(${asideTop}px)`}" ref="aside" flex>
+          <div :class="{'active': asideActive}" flex>
+            <div class="anchors" flex>
+              <span class="anchor" :class="{active: item.active}" v-for="item in anchors"
+                    @click="toAnchor(item.el)">{{ item.text }}</span>
+            </div>
+            <div class="share" flex>
+              <div class="qr" @mouseenter="loadQr" @mouseleave="showQr = false">
               <span flex>
                 <svg-icon :name="'qr'"/>
               </span>
-              <div v-show="showQr" flex>
-                <div class="load" v-if="!qrcode">
-                  <svg-icon :name="'loading'"/>
+                <div v-show="showQr" flex>
+                  <div class="load" v-if="!qrcode">
+                    <svg-icon :name="'loading'"/>
+                  </div>
+                  <img v-else :src="qrcode" alt="qr"/>
                 </div>
-                <img v-else :src="qrcode" alt="qr"/>
               </div>
             </div>
           </div>
-        </div>
-        <span class="toggle-aside" :class="{active: asideActive}" @click="asideActive = !asideActive" flex
-              :title="`${asideActive?'关闭':'展开'}侧栏`">
+          <span class="toggle-aside" :class="{active: asideActive}" @click="asideActive = !asideActive" flex
+                :title="`${asideActive?'关闭':'展开'}侧栏`">
           <span class="top"></span>
           <span class="bottom"></span>
         </span>
-      </aside>
-      <span :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html"></span>
+        </aside>
+        <span :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html"></span>
+      </div>
+      <the-comment v-if="this.info" :title="this.info.file"/>
     </div>
-    <the-comment v-if="this.info" :title="this.info.file"/>
   </div>
 </template>
 
 <script>
-import {getText, hljsAndInsertCopyBtn} from "@/utils";
+import {getText} from "@/utils/utils";
 import {originPrefix} from "@/need";
+import './style.css'
 
 import TheComment from "@/views/comment/index";
 
 import qrcode from "qrcode";
+import {hljsAndInsertCopyBtn} from "@/utils/highlight";
+import {routeInfo} from "@/route";
 
 export default {
   name: "Detail",
   components: {TheComment},
-  props: {
-    id: {
-      type: String,
-      default: ''
-    },
-    md: {
-      type: Array,
-      default: ()=>[]
-    }
-  },
   data() {
     return {
+      md: [],
       html: '',
       anchors: [],
       asideActive: false,
@@ -65,6 +62,9 @@ export default {
     }
   },
   computed: {
+    id() {
+      return routeInfo().params.id
+    },
     info() {
       if (!this.id) return {};
       for (let i of this.md) {
@@ -79,6 +79,13 @@ export default {
     url() {
       return encodeURI(location.hash.replace(/^#/, ''))
     }
+  },
+  async created() {
+    let res = await getText(`${originPrefix}/json/md.json`);
+    if (res[0]) {
+      this.md = JSON.parse(res[1])
+    }
+    document.head.querySelector('#markdown-stylesheet').href = `${originPrefix}/markdown.css?ran=${new Date().getTime()}`;
   },
   async mounted() {
     await this.getHtml();
@@ -112,15 +119,15 @@ export default {
             el.appendChild(before);
           })
           // 监听滚动
-          this.body.onscroll = ()=>{
+          this.body.onscroll = () => {
             let last = {};
-            for (let el of headList){
-              if (last && el.getBoundingClientRect().top > document.querySelector('section.the-head').scrollHeight){
+            for (let el of headList) {
+              if (last && el.getBoundingClientRect().top > document.querySelector('section.the-head').scrollHeight) {
                 break
               }
               last = el;
             }
-            this.anchors.forEach(a=>{
+            this.anchors.forEach(a => {
               a.active = a.text === last.innerText;
             })
           }
@@ -262,7 +269,7 @@ export default {
           }
         }
       }
-      > .toggle-aside {
+      > .toggle-aside{
         background: white;
         border-radius: 50%;
         width: 2rem;
@@ -270,8 +277,7 @@ export default {
         position: relative;
         cursor: pointer;
         box-shadow: 0 0 1rem rgba(0, 0, 0, 0.4);
-
-        > span {
+        > span{
           transition: all .2s ease-out;
           position: absolute;
           width: 50%;
@@ -279,25 +285,21 @@ export default {
           background: black;
           border-radius: 0.15rem;
           margin: 0 25%;
-
-          &.top {
+          &.top{
             transform: rotate(45deg);
             top: 30%;
           }
-
-          &.bottom {
+          &.bottom{
             transform: rotate(-45deg);
             bottom: 30%;
           }
         }
-
-        &.active {
-          > span {
-            &.top {
+        &.active{
+          > span{
+            &.top{
               top: 45%;
             }
-
-            &.bottom {
+            &.bottom{
               bottom: 45%;
             }
           }
@@ -314,16 +316,14 @@ export default {
       &.show-aside{
         width: calc(100% - 17.8rem);
       }
-
-      @each $size in 1, 2, 3, 4, 5, 6 {
-        ::v-deep h#{$size} {
+      @each $size in 1, 2, 3, 4, 5, 6{
+        ::v-deep h#{$size}{
           position: relative;
           cursor: pointer;
           height: 1.5+1.2rem*1/$size;
           display: flex;
           align-items: center;
-
-          img {
+          img{
             position: absolute;
             left: 0;
             transform: translateX(calc(-100% - 0.5rem));
@@ -343,20 +343,19 @@ export default {
     padding: 1rem 0;
   }
   @include media{
-    >.content{
+    > .content{
       min-width: 100%;
       max-width: 100%;
-      >.info{
-
+      > .info{
       }
-      >.--markdown{
+      > .--markdown{
         width: 100% !important;
       }
     }
     > ::v-deep .comment{
       width: 98%;
       max-width: unset;
-      >.write{
+      > .write{
         width: 95%;
       }
     }

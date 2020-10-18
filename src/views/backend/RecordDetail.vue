@@ -41,7 +41,7 @@
 import LoadingButton from "@/components/LoadingButton";
 import LoadingImg from "@/components/LoadingImg";
 import SingleButton from "@/components/Button";
-import {getText, parseAjaxError, sortByTime} from "@/utils";
+import {getText, parseAjaxError, sortByTime} from "@/utils/utils";
 import {originPrefix} from "@/need";
 
 export default {

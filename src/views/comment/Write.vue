@@ -71,9 +71,7 @@ import MarkdownHelp from "@/views/block/MarkdownHelp";
 import SingleButton from "@/components/Button";
 import Resizer from "@/components/Resizer";
 
-import {mapState} from "vuex";
 import {baseDynamicUrl} from "@/need";
-import {hljsAndInsertCopyBtn, parseMarkdown} from "@/utils";
 
 import CodeMirror from 'codemirror';
 import 'codemirror/addon/edit/matchbrackets'
@@ -87,6 +85,8 @@ import '@/assets/style/code-mirror/codeMirror.scss';
 import '@/assets/style/code-mirror/light-markdown.scss';
 import '@/assets/style/code-mirror/dracula-markdown.scss';
 import LoadingImg from "@/components/LoadingImg";
+import {parseMarkdown} from "@/utils/parseMd";
+import {hljsAndInsertCopyBtn} from "@/utils/highlight";
 
 export default {
   name: "WriteComment",

@@ -1,12 +1,13 @@
 <template>
-  <div class="list" flex>
-    <label onclick="this.querySelector('input').focus()" :class="{search: true, active: searchFocus}" flex>
-      <input v-model="search" @focusin="toggleInputFocus(true)" @focusout="toggleInputFocus(false)"/>
-      <span flex>
+  <div class="article">
+    <div class="list" flex>
+      <label onclick="this.querySelector('input').focus()" :class="{search: true, active: searchFocus}" flex>
+        <input v-model="search" @focusin="toggleInputFocus(true)" @focusout="toggleInputFocus(false)"/>
+        <span flex>
           <svg-icon :fill="searchFocus?'black':'#ddd'" :name="'search'"/>
       </span>
-    </label>
-    <div class="tags" flex>
+      </label>
+      <div class="tags" flex>
       <span @click="removeTag(tag)" v-for="tag in searchTags" :key="tag"
             :style="{background: $options.filters.color(tag)}" flex>
         {{ tag }}
@@ -14,31 +15,32 @@
           <svg-icon :name="'trash'"/>
         </span>
       </span>
-    </div>
-    <div class="blog">
-      <div v-for="item in this.pagedList" :key="item.file" class="item"
-           flex>
-        <div class="time">
-          <span>{{ item.time | time(true) }}</span>
-        </div>
-        <div class="mid" flex>
-          <span class="line"></span>
-          <span class="circle"></span>
-        </div>
-        <a class="info" :href="`?id=${item.file}`" flex>
-          <loading-img :src="item.cover" :size="[12, -1]"/>
-          <div flex>
-            <b>{{ item.name }}</b>
-            <span>{{ item.summary }}</span>
-            <div class="tags" flex>
+      </div>
+      <div class="blog">
+        <div v-for="item in this.pagedList" :key="item.file" class="item"
+             flex>
+          <div class="time">
+            <span>{{ item.time | time(true) }}</span>
+          </div>
+          <div class="mid" flex>
+            <span class="line"></span>
+            <span class="circle"></span>
+          </div>
+          <a class="info" :href="`/article/${item.file}`" flex>
+            <loading-img :src="item.cover" :size="[12, -1]"/>
+            <div flex>
+              <b>{{ item.name }}</b>
+              <span>{{ item.summary }}</span>
+              <div class="tags" flex>
               <span v-for="tag in item.tags" @click.prevent.stop="addTag(tag)"
                     :style="{background: $options.filters.color(tag)}"
                     :title="`搜索-${tag}`">{{ tag }}</span>
+              </div>
             </div>
-          </div>
-        </a>
+          </a>
+        </div>
+        <pagination @turn="turnPage" :item-count="this.resultList.length" :page-now="pageNow" :per-count="perCount"/>
       </div>
-      <pagination @turn="turnPage" :item-count="this.resultList.length" :page-now="pageNow" :per-count="perCount"/>
     </div>
   </div>
 </template>
@@ -46,18 +48,16 @@
 <script>
 import LoadingImg from "@/components/LoadingImg";
 import Pagination from "@/components/Pagination";
+import {getText} from "@/utils/utils";
+import {originPrefix} from "@/need";
+import './style.css'
 
 export default {
   name: "List",
   components: {Pagination, LoadingImg},
-  props: {
-    md: {
-      type: Array,
-      default: ()=>[]
-    }
-  },
   data() {
     return {
+      md: [],
       search: '',
       searchFocus: false,
       searchTags: [],
@@ -96,6 +96,12 @@ export default {
       this.pageNow = 1;
     }
   },
+  async created() {
+    let res = await getText(`${originPrefix}/json/md.json`);
+    if (res[0]) {
+      this.md = JSON.parse(res[1])
+    }
+  },
   methods: {
     toggleInputFocus(b) {
       this.searchFocus = b
@@ -119,15 +125,13 @@ export default {
 
 <style scoped lang="scss">
 @import "src/assets/style/public";
-
-.list {
+.list{
   width: 100%;
   height: 100%;
   flex-shrink: 0;
   flex-direction: column;
   overflow-y: auto;
-
-  > .search {
+  > .search{
     border-radius: 1rem;
     border: 1px solid #787878;
     background: rgba(0, 0, 0, 0.2);
@@ -147,24 +151,20 @@ export default {
       padding-left: 0.5rem;
       background: transparent;
     }
-
-    > span {
+    > span{
       justify-content: center;
-
-      > svg {
+      > svg{
         width: 1.2rem;
         height: 1.2rem;
         margin-right: 0.3rem;
       }
     }
   }
-
-  > .tags {
+  > .tags{
     transition: all .15s linear;
     width: 80%;
     flex-wrap: wrap;
-
-    > span {
+    > span{
       padding: 0.5rem 1.3rem;
       cursor: pointer;
       transition: all .1s linear;
@@ -175,8 +175,7 @@ export default {
       box-shadow: 0 0 0.4rem #000000a1;
       color: white;
       position: relative;
-
-      > span {
+      > span{
         position: absolute;
         top: 0;
         left: 0;
@@ -187,35 +186,30 @@ export default {
         display: none;
         align-items: center;
         justify-content: center;
-
-        > svg {
+        > svg{
           width: 1.4rem;
         }
       }
-
-      &:hover {
-        > span {
+      &:hover{
+        > span{
           display: flex;
         }
       }
     }
   }
-
   > .blog{
     width: 100%;
     margin: 1rem 0;
     flex-grow: 1;
     overflow-x: auto;
-
     > .item{
       width: 60rem;
       height: 10rem;
       padding: 1rem 0;
       overflow: hidden;
       margin: 0 auto;
-
-      > .time {
-        > span {
+      > .time{
+        > span{
           background: rgba(0, 0, 0, 0.4);
           color: white;
           padding: 0.4rem 0.8rem;
@@ -225,22 +219,19 @@ export default {
           white-space: nowrap;
         }
       }
-
-      > .mid {
+      > .mid{
         justify-content: center;
         height: calc(100% + 2rem);
         padding: 0 1rem;
         margin: 0 0.3rem;
         position: relative;
-
-        > .line {
+        > .line{
           width: 100%;
           height: 0.1rem;
           background: black;
           position: absolute;
         }
-
-        > .circle {
+        > .circle{
           width: 1rem;
           height: 1rem;
           border-radius: 50%;
@@ -249,7 +240,6 @@ export default {
           z-index: 1;
         }
       }
-
       > .info{
         height: 100%;
         width: 100%;
@@ -266,14 +256,12 @@ export default {
             background: white;
           }
         }
-
         > div{
           height: 100%;
           width: 100%;
           border-radius: 0 0.5rem 0.5rem 0;
           flex-direction: column;
           box-shadow: 0 0 0.4rem rgba(128, 128, 128, 0.59) inset;
-
           > b{
             font-size: 1.2rem;
             @include text-overflow(2);
@@ -281,22 +269,19 @@ export default {
             line-height: 1.5rem;
             text-align: center;
           }
-
-          > span {
+          > span{
             font-size: 0.88rem;
             color: #686868;
             line-height: 1.2rem;
             @include text-overflow(3);
             text-align: center;
           }
-
-          > .tags {
+          > .tags{
             width: 100%;
             height: 2rem;
             justify-content: flex-end;
             margin-top: auto;
-
-            > span {
+            > span{
               font-size: 0.8rem;
               line-height: 1rem;
               border-radius: 0.1rem;
@@ -305,8 +290,7 @@ export default {
               transition: all .15s linear;
               box-shadow: 0 0 0.2rem #00000078;
               color: white;
-
-              &:hover {
+              &:hover{
                 background: #444444;
                 color: white;
               }
@@ -317,13 +301,13 @@ export default {
     }
   }
   @include media{
-    >.blog{
-      >.item{
+    > .blog{
+      > .item{
         width: 98%;
-        >.time{
+        > .time{
           display: none;
         }
-        >.mid{
+        > .mid{
           display: none;
         }
       }

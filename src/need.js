@@ -7,3 +7,5 @@ export const
 
 import '@/icons'
 import '@/filter'
+import '@/assets/style/source-code-pro.css'
+import '@/assets/style/write-font.css'

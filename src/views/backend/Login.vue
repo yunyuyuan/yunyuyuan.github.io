@@ -30,10 +30,10 @@
 </template>
 
 <script>
-import {GithubUtils} from "@/utils";
 import FloatInput from "@/components/FloatInput";
 import SingleButton from "@/components/Button";
 import siteConfig from '@/site-config'
+import {GithubUtils} from "@/utils/githubApi";
 
 export default {
   name: "Login",

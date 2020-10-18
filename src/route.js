@@ -1,10 +1,15 @@
-const prefix = process.env.NODE_ENV === 'development'?'':'../';
-
-function routeName (){
+function routeInfo (){
+    // 去掉最后的 '/'
     let pathname = window.location.pathname.replace(/^(.+?)\/*$/, '$1');
-    for (let i of route){
-        if (i.path === pathname){
-            return i.name
+    for (let i of routes){
+        let regexp = i.path.replace(/\/:(\w+)/g, '/(?<$1>[^/]+)');
+        console.log(regexp)
+        let matcher = pathname.match(new RegExp(`^${regexp}$`));
+        if (matcher){
+            return {
+                name: i.name,
+                params: matcher.groups||{}
+            }
         }
     }
 }
@@ -31,47 +36,46 @@ function queryMap (){
     return map
 }
 
-const route = [
+const routes = [
     {
         path: '/',
         name: 'index',
         title: '主页',
-        htmlPath: prefix+'index.html',
     },
     {
         path: '/article',
         name: 'article',
         title: '文章列表',
-        htmlPath: prefix+'article/index.html',
+    },
+    {
+        path: '/article/:id',
+        name: 'articleDetail',
+        title: '文章详情',
     },
     {
         path: '/record',
         name: 'record',
         title: '记录列表',
-        htmlPath: prefix+'record/index.html',
     },
     {
         path: '/backend',
         name: 'backend',
         title: '后台管理',
-        htmlPath: prefix+'backend/index.html',
     },
     {
         path: '/msg-board',
         name: 'msgBoard',
         title: '留言板',
-        htmlPath: prefix+'msg-board/index.html',
     },
     {
         path: '/simple-code-simple-life',
         name: 'about',
         title: '简单代码-简单生活',
-        htmlPath: prefix+'about/index.html',
     },
 ]
 
 module.exports = {
-    route,
-    routeName,
+    route: routes,
+    routeInfo,
     queryMap
 }

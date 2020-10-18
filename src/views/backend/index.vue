@@ -35,7 +35,7 @@
 
 <script>
 import Login from "./Login";
-import {getText, parseAjaxError} from "@/utils";
+import {getText, parseAjaxError} from "@/utils/utils";
 import LoadingButton from "@/components/LoadingButton";
 import {originPrefix} from "@/need";
 import selfImage from '@/image/i.png';

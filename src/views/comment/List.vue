@@ -68,9 +68,11 @@ import {
   close_deleteComment, deleteReply, getCommentChildren
 } from "@/views/comment/utils";
 import WriteComment from "@/views/comment/Write";
-import {hljsAndInsertCopyBtn, parseAjaxError, parseMarkdown} from "@/utils";
+import {parseAjaxError} from "@/utils/utils";
 import siteConfig from '@/site-config'
 import Pagination from "@/components/Pagination";
+import {parseMarkdown} from "@/utils/parseMd";
+import {hljsAndInsertCopyBtn} from "@/utils/highlight";
 
 export default {
   name: "ListComment",

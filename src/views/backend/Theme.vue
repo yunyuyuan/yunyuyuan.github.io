@@ -34,7 +34,7 @@
 
 <script>
 import LoadingButton from "@/components/LoadingButton";
-import {getText, hljsAndInsertCopyBtn, parseAjaxError, parseMarkdown} from "@/utils";
+import {getText, parseAjaxError} from "@/utils/utils";
 import {originPrefix} from "@/need";
 import testText from 'text-loader!@/assets/test.md';
 
@@ -53,6 +53,8 @@ import '@/assets/style/code-mirror/dracula-code.scss';
 
 import defaultMarkdownStyle from '!!text-loader!@/assets/style/markdown-default.scss'
 import Resizer from "@/components/Resizer";
+import {parseMarkdown} from "@/utils/parseMd";
+import {hljsAndInsertCopyBtn} from "@/utils/highlight";
 
 export default {
   name: "Theme",

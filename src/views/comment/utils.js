@@ -1,11 +1,9 @@
 import axios from 'axios';
 import siteConfig from '@/site-config';
-import {parseAjaxError} from "@/utils";
+import {parseAjaxError} from "@/utils/utils";
 export const tokenKey = 'comment-token';
 
 let owner = siteConfig.owner,
-    //  owner = 'vuejs',
-    //  repo = `vue`,
     repo = `${owner}.github.io`,
     repoId = '',
     // this token just can read public information

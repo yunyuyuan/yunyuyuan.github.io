@@ -18,6 +18,7 @@
 <script>
 import HomeImage from '@/image/home.jpg';
 import ArticleImage from '@/image/article.jpg';
+import ArticleDetailImage from '@/image/articleDetail.jpg';
 import msgBoardImage from '@/image/msgBoard.jpg';
 import recordImage from '@/image/record.jpg';
 import aboutImage from '@/image/about.jpg';
@@ -29,12 +30,9 @@ import Message from "./block/Message";
 import Loading from "@/views/block/Loading";
 
 import Vue from 'vue';
-import '@/need'
-import '@/assets/style/source-code-pro.css'
-import '@/assets/style/write-font.css'
 import siteConfig from '@/site-config'
-import {routeName} from "@/route";
-import {getText, parseAjaxError} from "@/utils";
+import {routeInfo} from "@/route";
+import {getText, parseAjaxError} from "@/utils/utils";
 import {originPrefix} from "@/need";
 
 export default {
@@ -52,6 +50,7 @@ export default {
       images: {
         home: HomeImage,
         article: ArticleImage,
+        articleDetail: ArticleDetailImage,
         msgBoard: msgBoardImage,
         backend: HomeImage,
         record: recordImage,
@@ -79,9 +78,11 @@ export default {
     }
   },
   async created() {
-    await this.updateConfig()
+    console.log('create')
+    await this.updateConfig();
+    const route = routeInfo();
 
-    switch (routeName()){
+    switch (route.name){
       case 'index':
         this.routeNow = 'home';
         this.bgColor = 'linear-gradient(45deg, #ff7e10 0%, #3c2fff 80%, #00c7ff)';
@@ -92,7 +93,14 @@ export default {
         this.routeNow = 'article';
         this.bgColor = 'linear-gradient(135deg, rgb(16, 112, 255) 0%, rgb(13 220 186) 60%, rgb(255 235 0))';
         this.showHead = true;
-        this.comp = ()=>import('@/views/article/index')
+        this.comp = ()=>import('@/views/article/List')
+        break;
+      case 'articleDetail':
+        console.log('detail')
+        this.routeNow = 'articleDetail';
+        this.bgColor = 'linear-gradient(135deg, rgb(16, 112, 255) 0%, rgb(13 220 186) 60%, rgb(255 235 0))';
+        this.showHead = true;
+        this.comp = ()=>import('@/views/article/Detail')
         break;
       case 'record':
         this.routeNow = 'record';

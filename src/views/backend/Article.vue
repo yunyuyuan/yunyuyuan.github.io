@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import {getText} from "@/utils";
+import {getText} from "@/utils/utils";
 import {originPrefix} from "@/need";
 
 export default {

@@ -18,7 +18,7 @@
 
 <script>
 import FloatInput from "@/components/FloatInput";
-import {parseAjaxError} from "@/utils";
+import {parseAjaxError} from "@/utils/utils";
 import LoadingButton from "@/components/LoadingButton";
 
 export default {

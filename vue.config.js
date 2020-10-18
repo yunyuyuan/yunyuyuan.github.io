@@ -1,22 +1,12 @@
 const path = require('path');
 const isDev = process.env.NODE_ENV === 'development';
 const siteConfig = require('./src/site-config');
-const {route} = require("./src/route")
-
-const pages = {};
-route.forEach(e=>{
-    pages[e.name] = {
-      entry: 'src/index.js',
-      template: 'public/index.html',
-      filename: e.htmlPath
-    }
-})
 
 module.exports = {
     lintOnSave: false,
-    publicPath: isDev?'':(siteConfig.cdn+'/dist'),
+    indexPath: isDev?'index.html':'../404.html',
+    publicPath: isDev?'/':(siteConfig.cdn+'/dist'),
     productionSourceMap: false,
-    pages: pages,
     chainWebpack: config => {
         config.module
             .rule('svg')
@@ -43,4 +33,7 @@ module.exports = {
                 })
         }
     },
+    devServer: {
+        historyApiFallback: true
+    }
 };
