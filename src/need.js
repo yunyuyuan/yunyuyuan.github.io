@@ -1,4 +1,4 @@
-import siteConfig from '@/./site-config'
+import siteConfig from '@/site-config'
 
 const isDev = process.env.NODE_ENV === 'development';
 export const
