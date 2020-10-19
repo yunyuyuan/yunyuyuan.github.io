@@ -303,6 +303,7 @@ export default {
     > div{
       background: white;
       width: calc(100% - 4rem);
+      overflow-x: hidden;
       margin: 1rem 1rem 1rem 3rem;
       border-radius: 0.6rem;
       box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);

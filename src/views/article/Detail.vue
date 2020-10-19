@@ -46,7 +46,6 @@ import {originPrefix} from "@/need";
 import TheComment from "@/views/comment/index";
 
 import qrcode from "qrcode";
-import {hljsAndInsertCopyBtn} from "@/utils/highlight";
 import {routeInfo} from "@/route";
 
 export default {
@@ -108,10 +107,6 @@ export default {
       if (res[0]) {
         this.html = res[1];
         this.$nextTick(() => {
-          // viewer
-          this.$refs.markdown.querySelectorAll('img:not([alt=sticker])').forEach(el=>{
-            el.setAttribute('data-viewer', '')
-          })
           // 取出anchor
           this.anchors = [];
           let headList = this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
@@ -124,12 +119,8 @@ export default {
             el.onclick = () => {
               this.toAnchor(el)
             };
-            let before = document.createElement('img');
-            before.src = `${originPrefix}/favicon.svg`;
-            before.alt = 'anchor';
-            el.appendChild(before);
           })
-          // 监听滚动
+          // 监听滚动到anchor
           this.body.onscroll = () => {
             let last = {};
             for (let el of headList) {
@@ -142,10 +133,6 @@ export default {
               a.active = a.text === last.innerText;
             })
           }
-          // hljs
-          this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
-            hljsAndInsertCopyBtn(el);
-          });
         })
       } else {
         this.$message.error(`获取文章失败: ${res[1]}`);
@@ -350,23 +337,6 @@ export default {
         transition: all .15s ease-out;
         &.show-aside{
           width: calc(100% - 17.8rem);
-        }
-        @each $size in 1, 2, 3, 4, 5, 6{
-          ::v-deep h#{$size}{
-            position: relative;
-            cursor: pointer;
-            height: 1.5+1.2rem*1/$size;
-            display: flex;
-            align-items: center;
-            img{
-              position: absolute;
-              left: 0;
-              transform: translateX(calc(-100% - 0.5rem));
-              width: 1+1.2rem/$size;
-              height: 1+1.2rem/$size;
-              object-fit: contain;
-            }
-          }
         }
       }
     }

@@ -75,8 +75,10 @@ export default {
       border-radius: 0.2rem;
       background: white;
       cursor: pointer;
+      margin-bottom: 4rem;
       &:hover{
         height: 11rem;
+        margin-bottom: 1rem;
         > .time{
           opacity: 1;
         }

@@ -52,12 +52,34 @@
       </div>
     </div>
     <div class="text" flex ref="text">
-      <div class="markdown" :style="{width: mdWidth}" flex>
-        <div ref="textarea" class="textarea"></div>
+      <div class="head" flex>
+        <span @click="enableSticker" title="表情" :class="{active: showSticker}" flex>
+          <svg-icon :name="'cmt-sticker'"/>
+        </span>
+        <div class="sticker" ref="sticker" :class="{active: showSticker}" flex>
+          <div class="content">
+            <div class="inner" :style="{width: `${config.sticker.length}00%`, left: `${stickerSlideNow*-100}%`}" flex>
+              <div v-for="item in config.sticker" :style="{width: `${100/config.sticker.length}%`}" flex>
+                <span v-for="idx in item.count" @click="addSticker(item.folder, idx)" flex>
+                  <img :src="`${baseUrl}/sticker/${item.folder}/${idx}.png?ran=${stamp}`"/>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="switch" flex>
+            <span v-for="(item, idx) in config.sticker" @click="stickerSlideNow = idx"
+                  :class="{active: stickerSlideNow===idx}" flex>{{ item.name }}</span>
+          </div>
+        </div>
       </div>
-      <resizer :orient="'h'" @start="startResize" @resize="doResize"/>
-      <div class="html" flex>
-        <span ref="html" class="--markdown" v-html="htmlText" v-viewer></span>
+      <div class="body" flex>
+        <div class="markdown" :style="{width: mdWidth}" flex>
+          <div ref="textarea" class="textarea"></div>
+        </div>
+        <resizer :orient="'h'" @start="startResize" @resize="doResize"/>
+        <div class="html" flex>
+          <span ref="html" class="--markdown" v-html="htmlText" v-viewer></span>
+        </div>
       </div>
     </div>
     <markdown-help v-show="showGuide" @click.native.self="showGuide=false"/>
@@ -65,12 +87,13 @@
 </template>
 
 <script>
-import {originPrefix} from "@/need";
+import {baseDynamicUrl, originPrefix} from "@/need";
 import {getText, insertMdStyle, parseAjaxError, sortByTime} from "@/utils/utils";
+import checkedImg from "!!text-loader!@/icons/svg/checked.svg";
+import unCheckedImg from "!!text-loader!@/icons/svg/unchecked.svg";
+
 import FloatInput from "@/components/FloatInput";
-
 import LoadingButton from "@/components/LoadingButton";
-
 
 import CodeMirror from 'codemirror';
 import 'codemirror/addon/edit/matchtags'
@@ -87,6 +110,8 @@ import MarkdownHelp from "@/views/block/MarkdownHelp";
 import LoadingImg from "@/components/LoadingImg";
 import {parseMarkdown} from "@/utils/parseMd";
 import {hljsAndInsertCopyBtn} from "@/utils/highlight";
+import siteConfig from "@/site-config";
+
 
 export default {
   name: "ArticleDetail",
@@ -99,7 +124,12 @@ export default {
   },
   data() {
     return {
+      stamp: siteConfig.timeStamp,
+      baseUrl: baseDynamicUrl,
       showGuide: false,
+      showSticker: false,
+      stickerSlideNow: 0,
+      focusAt: 0,
       tagEditIndex: -1,
       mdText: '',
       codeMirror: null,
@@ -131,20 +161,40 @@ export default {
     htmlText() {
       let html = parseMarkdown(this.mdText);
       this.$nextTick(()=>{
-        this.$refs.html.querySelectorAll('pre>code').forEach(el=>{
+        let htmlEl = this.$refs.html;
+        // hljs
+        htmlEl.querySelectorAll('pre>code').forEach(el=>{
           hljsAndInsertCopyBtn(el)
         })
-        this.$refs.html.querySelectorAll('img:not([alt=sticker])').forEach(el=>{
+        // anchor
+        let headList = htmlEl.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
+        headList.forEach(el => {
+          let before = document.createElement('span');
+          before.style.backgroundImage = `url("${originPrefix}/favicon.svg")`;
+          el.appendChild(before);
+        })
+        // viewer
+        htmlEl.querySelectorAll('img:not([alt=sticker])').forEach(el=>{
           el.setAttribute('data-viewer', '')
+        })
+        // task
+        htmlEl.querySelectorAll('input[type=checkbox]').forEach(el=>{
+          let svg = document.createElement('svg');
+          el.parentElement.insertBefore(svg, el);
+          el.remove();
+          svg.outerHTML = el.checked?checkedImg:unCheckedImg;
         })
       })
       return html
     },
     gitUtil (){
       return this._gitUtil()
+    },
+    config (){
+      return this._config()
     }
   },
-  inject: ['_gitUtil'],
+  inject: ['_config', '_gitUtil'],
   created() {
     insertMdStyle()
   },
@@ -180,6 +230,9 @@ export default {
         this.codeMirror.on('change', () => {
           this.mdText = this.codeMirror.getValue()
         });
+        this.codeMirror.on('blur', () => {
+          this.focusAt = this.codeMirror.getCursor();
+        })
       }
       this.codeMirror.setValue(this.mdText);
     },
@@ -190,6 +243,42 @@ export default {
       } else {
         this.$message.error(parseAjaxError(res[1]))
       }
+    },
+    enableSticker(e) {
+      if (this.showSticker) {
+        document.removeEventListener('click', this.handleStickerDiv)
+        this.showSticker = false;
+        return
+      }
+      this.showSticker = true;
+      e.stopPropagation();
+      document.addEventListener('click', this.handleStickerDiv)
+    },
+    handleStickerDiv(e) {
+      let vue_ = this,
+          stickerDiv = this.$refs.sticker;
+      let target = e.target;
+      while (true) {
+        if (target !== stickerDiv) {
+          target = target.parentElement;
+          if (!target) {
+            document.removeEventListener('click', this.handleStickerDiv);
+            vue_.showSticker = false;
+            break;
+          }
+        } else {
+          break
+        }
+      }
+    },
+    addSticker (folder, idx){
+      if (!this.focusAt) {
+        this.$message.warning('请先点选择输入框!');
+        return
+      }
+      this.codeMirror.replaceRange(`![sticker](${folder}/${idx})`, this.focusAt);
+      document.removeEventListener('click', this.handleStickerDiv);
+      this.showSticker = false;
     },
 
     inputTitle(payload) {
@@ -555,45 +644,145 @@ export default {
     }
   }
 
-  > .text {
-    margin: 1rem 0 0.4rem 0;
-    width: 99%;
-    max-height: 50rem;
-    min-height: 10rem;
-    align-items: stretch;
-    border: 1px solid #656565;
+  > .text{
+    width: 100%;
+    flex-direction: column;
+    margin: 0.5rem 0 0.4rem 0;
+    border-top: 1px dashed gray;
+    > .head{
+      width: 95%;
+      padding: 0.5rem 2.5%;
+      position: relative;
+      margin: 0.5rem 0;
+      >span{
+        >svg{
+          width: 2rem;
+          height: 2rem;
+        }
+      }
+      > .sticker {
+        width: 90%;
+        position: absolute;
+        left: 5%;
+        top: 105%;
+        border-radius: 0.2rem;
+        height: 0;
+        background: white;
+        flex-direction: column;
+        z-index: 10;
+        overflow: hidden;
+        transition: height .1s linear;
+        &.active{
+          height: 30vh;
+          border: 1px solid #ababab;
+          box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.4);
+        }
+        >.content{
+          width: 100%;
+          overflow: hidden;
+          flex-grow: 1;
+          >.inner{
+            border-radius: inherit;
+            height: 100%;
+            transition: all .1s linear;
+            position: relative;
+            >div {
+              height: 100%;
+              overflow-y: auto;
+              flex-wrap: wrap;
+              align-items: flex-start;
 
-    > .markdown {
-      align-items: stretch;
-      flex-shrink: 0;
+              > span {
+                width: 3rem;
+                height: 3rem;
+                border: 1px solid #d8d8d8;
+                cursor: pointer;
+                background: white;
+                justify-content: center;
 
-      > .textarea {
-        width: 100%;
+                &:hover {
+                  background: #e6e6e6;
 
-        > ::v-deep .CodeMirror {
-          height: 100%;
-          font-size: 0.85rem;
+                  > img {
+                    transform: scale(1.1);
+                  }
+                }
+
+                > img {
+                  transition: transform .1s ease-out;
+                  width: 70%;
+                  height: 70%;
+                  object-fit: contain;
+                }
+              }
+            }
+          }
+        }
+
+        > .switch {
+          width: 100%;
+          height: 1.5rem;
+          flex-shrink: 0;
+          border-top: 1px solid #676767;
+          background: #ececec;
+
+          > span {
+            height: 100%;
+            font-size: 0.8rem;
+            justify-content: center;
+            width: 4rem;
+            border-right: 1px solid #b5b5b5;
+            cursor: pointer;
+
+            &:not(.active):hover {
+              background: #bababa;
+            }
+
+            &.active {
+              background: #333333;
+              color: white;
+            }
+          }
         }
       }
     }
-    > ::v-deep .resizer{
-      background: #828282;
-      width: 0.3rem;
-      flex-shrink: 0;
-      &[resizing]{
-        background: #505050;
-      }
-    }
-    > .html {
-      overflow-y: auto;
-      display: block;
-      flex-grow: 1;
+    > .body{
+      width: calc(100% - 2px);
+      max-height: 50rem;
+      min-height: 10rem;
+      align-items: stretch;
+      border: 1px solid #656565;
+      > .markdown{
+        align-items: stretch;
+        flex-shrink: 0;
 
-      > span {
+        > .textarea{
+          width: 100%;
+
+          > ::v-deep .CodeMirror{
+            height: 100%;
+            font-size: 0.85rem;
+          }
+        }
+      }
+      > ::v-deep .resizer{
+        background: #828282;
+        width: 0.3rem;
+        flex-shrink: 0;
+        &[resizing]{
+          background: #505050;
+        }
+      }
+      > .html{
+        overflow-y: auto;
         display: block;
-        word-break: break-all;
-        white-space: pre-line;
-        width: 100%;
+        flex-grow: 1;
+
+        > span{
+          display: block;
+          width: calc(100% - 5.8rem);
+          padding: 2rem 1rem 2rem 2.8rem;
+        }
       }
     }
   }
