@@ -125,8 +125,13 @@
 </template>
 
 <script>
+import {loadFinish} from "@/utils/utils";
+
 export default {
-  name: "index"
+  name: "index",
+  mounted() {
+    loadFinish()
+  }
 }
 </script>
 

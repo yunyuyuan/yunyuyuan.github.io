@@ -57,7 +57,7 @@ export default {
 
 .home {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   flex-shrink: 0;
   justify-content: space-around;
   overflow-y: auto;
