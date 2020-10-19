@@ -32,3 +32,4 @@
 - [x] img-viewer
 - [ ] about页面
 - [x] 路由history模式
+- [ ] 日/夜间模式,字体可调
