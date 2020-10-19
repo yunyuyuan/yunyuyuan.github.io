@@ -19,7 +19,7 @@
     </div>
     <div class="info" flex>
       <div class="cover">
-        <loading-img :src="info.cover" :size="[20, 15]"/>
+        <loading-img :src="info.cover" :size="[20, 15]" :data-viewer="true" v-viewer/>
         <label flex>
           <span>封面链接:</span>
           <input :value="info.cover" @focusout="changeCover"/>
@@ -57,7 +57,7 @@
       </div>
       <resizer :orient="'h'" @start="startResize" @resize="doResize"/>
       <div class="html" flex>
-        <span ref="html" class="--markdown" v-html="htmlText"></span>
+        <span ref="html" class="--markdown" v-html="htmlText" v-viewer></span>
       </div>
     </div>
     <markdown-help v-show="showGuide" @click.native.self="showGuide=false"/>
@@ -241,6 +241,8 @@ export default {
     async save() {
       if (this.saving.b) return;
       if (this.gitUtil) {
+        const md = this.mdText,
+            html = this.htmlText;
         let info = this.info;
         if (!info.name || !info.summary || !info.tags.length || !info.cover) {
           return this.$message.warning('标题,简介,标签和封面均不能为空!')
@@ -276,8 +278,8 @@ export default {
           // 更新 md 和 html文件
           let res = await this.gitUtil.updateMd({
             folder: folderId,
-            md: this.mdText,
-            html: this.htmlText
+            md: md,
+            html: html
           }, this.saving);
           if (res[0]) {
             this.$message.success('上传成功!');

@@ -13,7 +13,7 @@
       <span><span>修改:</span>{{ (info ? info.modifyTime : 0) | time(false) }}</span>
     </div>
     <div class="edit">
-      <div class="images" flex>
+      <div class="images" flex v-viewer>
         <span class="head" flex>
           <svg-icon :name="'picture'"/>
           封面

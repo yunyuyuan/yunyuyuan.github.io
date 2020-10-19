@@ -2,7 +2,7 @@
   <div class="record-detail" v-if="info.hasOwnProperty('images')" is-dialog @click.self="$emit('close')">
     <div class="inner">
       <a @click="$emit('close')">关闭</a>
-      <div class="image" flex>
+      <div class="image" flex v-viewer>
         <loading-img v-for="i in info.images" :src="i" :data-viewer="true"/>
       </div>
       <div class="loading" v-if="text===''" flex>

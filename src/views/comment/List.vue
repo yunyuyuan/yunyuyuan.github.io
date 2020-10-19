@@ -11,7 +11,7 @@
               <a :href="item.site" target="_blank">{{ item.nick }}</a>
             </div>
             <div class="content">
-              <span class="--markdown" v-html="calcMdToHtml(item.content, false)"></span>
+              <span class="--markdown" v-html="calcMdToHtml(item.content, false)" v-viewer></span>
             </div>
             <div class="foot">
               <a class="time">{{ item.time | time(false) }}</a>
@@ -31,7 +31,7 @@
                 </a>
                 <div>
                   <a :href="child.site" target="_blank">{{ child.nick }}</a>
-                  <span class="--markdown" v-html="calcMdToHtml(child.content, true)"></span>
+                  <span class="--markdown" v-html="calcMdToHtml(child.content, true)" v-viewer></span>
                 </div>
               </div>
               <div class="foot">

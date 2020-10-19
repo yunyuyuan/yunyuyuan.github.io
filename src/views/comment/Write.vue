@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="preview" v-show="showPreview">
-      <span ref="markdown" class="--markdown" v-html="$el?html:'waiting'"></span>
+      <span ref="markdown" class="--markdown" v-html="$el?html:'waiting'" v-viewer></span>
     </div>
     <div v-show="showUploadImg" class="upload-img" is-dialog @click.self="showUploadImg = false">
       <div class="inner" flex>

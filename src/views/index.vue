@@ -1,5 +1,5 @@
 <template>
-  <div id="index" v-viewer>
+  <div id="index">
     <NotFound v-if="routeNow===''"/>
     <img class="bg" v-else-if="config.backgroundImg==='img'||(config.backgroundImg==='random'&& rand)" :src="images[routeNow]" alt="bg"/>
     <div class="bg" :style="{background: bgColor}" v-else>
