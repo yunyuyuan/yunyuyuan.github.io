@@ -21,3 +21,14 @@
 |表情包| 哔哩哔哩,阿鲁|
 |图床| 路过图床|
 |开发工具|pycharm|
+
+整个图片
+![img](https://s2.ax1x.com/2020/01/28/1KcLeU.png)
+
+指定大小的图片
+![30% x ](https://s2.ax1x.com/2020/01/28/1KcLeU.png)
+
+任务列表
+- [x] img-viewer
+- [ ] about页面
+- [x] 路由history模式
