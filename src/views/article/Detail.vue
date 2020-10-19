@@ -33,7 +33,7 @@
           <span class="bottom"></span>
         </span>
         </aside>
-        <span :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html"></span>
+        <span :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html" v-viewer></span>
       </div>
       <the-comment v-if="this.info" :title="this.info.file"/>
     </div>

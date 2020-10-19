@@ -134,6 +134,9 @@ export default {
         this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
           hljsAndInsertCopyBtn(el);
         })
+        this.$refs.markdown.querySelectorAll('img:not([alt=sticker])').forEach(el => {
+          el.setAttribute('data-viewer', '')
+        })
       }})
       return parseMarkdown(this.comment);
     },
