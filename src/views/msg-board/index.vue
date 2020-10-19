@@ -10,14 +10,16 @@
 
 <script>
 import TheComment from "@/views/comment/index";
-import {originPrefix} from "@/need";
-import {insertMdStyle} from "@/utils/utils";
+import {insertMdStyle, loadFinish} from "@/utils/utils";
 
 export default {
   name: "index",
   components: {TheComment},
   created() {
     insertMdStyle()
+  },
+  mounted() {
+    loadFinish()
   }
 }
 </script>

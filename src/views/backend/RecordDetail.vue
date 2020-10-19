@@ -19,7 +19,7 @@
           封面
         </span>
         <div class="item" v-for="(i,idx) in info.images" :key="i" flex>
-          <loading-img :src="i" :size="[12, 8]"/>
+          <loading-img :src="i" :size="[12, 8]" :data-viewer="true"/>
           <label class="bottom" flex>
             <input :value="i" :data-idx="idx" @focusout="editImg"/>
             <single-button class="del-btn" @click.native="delImg(idx)" :text="'删除'"/>

@@ -3,7 +3,7 @@
     <div class="inner">
       <a @click="$emit('close')">关闭</a>
       <div class="image" flex>
-        <loading-img v-for="i in info.images" :src="i"/>
+        <loading-img v-for="i in info.images" :src="i" :data-viewer="true"/>
       </div>
       <div class="loading" v-if="text===''" flex>
         <svg-icon :name="'loading'"/>
@@ -24,8 +24,7 @@ export default {
   props: {
     info: {
       type: Object,
-      default: () => {
-      }
+      default: () => {}
     }
   },
   data() {
@@ -46,7 +45,7 @@ export default {
     }
   },
   mounted() {
-    document.body.append(this.$el)
+    document.querySelector('#index').append(this.$el)
   }
 }
 </script>
@@ -99,15 +98,16 @@ export default {
   @include media{
     >.inner{
       width: 100%;
-      height: calc(100% - #{$head-height});
+      height: 100%;
       position: absolute;
-      top: $head-height;
+      top: 0;
       border-radius: 0;
       >a{
+        cursor: pointer;
         display: flex;
         position: fixed;
         right: 0;
-        top: $head-height;
+        top: 0;
         background: rgba(255, 0, 0, 0.6);
         color: white;
         padding: 0.3rem 1rem;

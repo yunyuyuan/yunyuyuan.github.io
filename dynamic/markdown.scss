@@ -33,15 +33,20 @@
       text-decoration: underline;
     }
   }
+  strong{
+
+  }
+  em{
+  }
 
   img {
     display: block;
     width: 80%;
     margin: 1rem auto;
     object-fit: contain;
-  	&:not([alt=sticker]):not([alt=anchor]){
-  		box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.5);
-  	}
+    &:not([alt=sticker]):not([alt=anchor]){
+      box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.5);
+    }
 
     &[alt=sticker] {
       display: inline-block;
@@ -68,11 +73,11 @@
   blockquote{
     line-height: 1.8rem;
     position: relative;
-    border-left: 0.3rem solid;
+    border-left: 0.3rem solid #aa40ff;
     padding: 0.5rem 0.8rem;
     margin: 1rem 0.6rem;
-    background: rgb(226, 226, 226);
-    border-radius: 0 0.7rem 0.7rem 0;
+    background: rgb(239, 239, 239);
+    border-radius: 0 0.5rem 0.5rem 0;
   }
   table {
     width: 90%;
@@ -135,6 +140,12 @@
 
   code {
     font-family: "Source Code Pro", serif;
+    &:not(.hljs){
+      background: rgb(210, 210, 210);
+      padding: 0.15rem 0.25rem;
+      border-radius: 0.25rem;
+      margin: 0 0.2rem;
+    }
   }
 
   pre {

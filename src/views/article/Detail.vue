@@ -108,6 +108,10 @@ export default {
       if (res[0]) {
         this.html = res[1];
         this.$nextTick(() => {
+          // viewer
+          this.$refs.markdown.querySelectorAll('img:not([alt=sticker])').forEach(el=>{
+            el.setAttribute('data-viewer', '')
+          })
           // 取出anchor
           this.anchors = [];
           let headList = this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');

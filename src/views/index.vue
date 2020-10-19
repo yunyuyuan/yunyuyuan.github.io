@@ -1,5 +1,5 @@
 <template>
-  <div class="index">
+  <div id="index" v-viewer>
     <NotFound v-if="routeNow===''"/>
     <img class="bg" v-else-if="config.backgroundImg==='img'||(config.backgroundImg==='random'&& rand)" :src="images[routeNow]" alt="bg"/>
     <div class="bg" :style="{background: bgColor}" v-else>
@@ -30,12 +30,21 @@ import TheFooter from "@/views/block/Footer";
 import Message from "./block/Message";
 import Loading from "@/views/block/Loading";
 import NotFound from '@/views/404/index'
+import Viewer from 'v-viewer'
 
 import Vue from 'vue';
 import siteConfig from '@/site-config'
 import {routeInfo} from "@/route";
 import {getText, parseAjaxError} from "@/utils/utils";
 import {originPrefix} from "@/need";
+
+Vue.use(Viewer)
+
+Viewer.setDefaults({
+  filter (img){
+    return img.hasAttribute('data-viewer')
+  }
+})
 
 export default {
   name: "index",
@@ -109,7 +118,7 @@ export default {
         break;
       case 'msgBoard':
         this.routeNow = 'msgBoard';
-        this.bgColor = 'linear-gradient(135deg, rgb(31, 16, 255) 0%, rgb(255, 47 220) 80%, rgb(255, 165, 0))';
+        this.bgColor = 'linear-gradient(135deg, rgb(31, 16, 255) 0%, rgb(255, 47, 220) 80%, rgb(255, 165, 0))';
         this.comp = ()=>import('@/views/msg-board/index')
         break;
       case 'backend':
@@ -154,7 +163,7 @@ export default {
 <style scoped lang="scss">
 @import "src/assets/style/public";
 
-.index {
+#index {
   height: 100%;
   width: 100%;
   position: relative;
@@ -241,10 +250,6 @@ html, body{
     -ms-user-select: none;
   }
 }
-#app{
-  width: 100%;
-  height: 100%;
-}
 * {
   margin: 0;
   padding: 0;
@@ -280,6 +285,9 @@ html, body{
 }
 *[write-font]{
   font-family: "write-font", serif;
+}
+*[data-viewer]{
+  cursor: zoom-in;
 }
 
 input, textarea, select, button {

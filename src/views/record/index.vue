@@ -10,7 +10,7 @@
       </div>
     </div>
     <pagination @turn="turnPage" :item-count="this.record.length" :page-now="pageNow" :per-count="perCount"/>
-    <detail :info="activeInfo" @close="activeInfo={}"/>
+    <detail v-if="activeInfo!=={}" :info="activeInfo" @close="activeInfo={}"/>
   </div>
 </template>
 

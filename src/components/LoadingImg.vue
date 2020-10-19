@@ -1,6 +1,6 @@
 <template>
   <div class="loading-img" :style="calcStyle">
-    <img :class="{failed: failed}" :src="srcNow" @load="loaded" @error="errored" @click="reload" alt="img"/>
+    <img :data-viewer="dataViewer" :class="{failed: failed}" :src="srcNow" @load="loaded" @error="errored" @click="reload" alt="img"/>
     <span v-if="loading" flex>
       <svg-icon :name="'loading'"/>
     </span>
@@ -20,6 +20,10 @@ export default {
     size: {
       type: Array,
       default: () => [8, 8]
+    },
+    dataViewer: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

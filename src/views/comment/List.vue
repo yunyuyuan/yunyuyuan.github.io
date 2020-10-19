@@ -90,7 +90,7 @@ export default {
   data() {
     return {
       siteConfig,
-      onePageItemsCount: 2,
+      onePageItemsCount: 8,
       pageInfo: {},
       pageNow: 1,
       itemCount: 0,
@@ -150,6 +150,9 @@ export default {
           this.$refs.list.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
             el.innerText = el.innerText.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
             hljsAndInsertCopyBtn(el);
+          })
+          this.$refs.list.querySelectorAll('img:not([alt=sticker])').forEach(el=>{
+            el.setAttribute('data-viewer', '');
           })
         })
       } else {
