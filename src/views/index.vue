@@ -1,5 +1,8 @@
 <template>
   <div id="index">
+<!--  放在最前面防止 mounted() 时<loading/>还不存在  -->
+    <loading :class="configLoaded"/>
+
     <NotFound v-if="routeNow===''"/>
     <img class="bg" v-else-if="config.backgroundImg==='img'||(config.backgroundImg==='random'&& rand)" :src="images[routeNow]" alt="bg"/>
     <div class="bg" :style="{background: bgColor}" v-else>
@@ -12,7 +15,6 @@
       <the-footer v-if="this.routeNow !== 'backend'"/>
     </section>
     <message ref="message"/>
-    <loading :class="configLoaded"/>
   </div>
 </template>
 
