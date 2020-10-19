@@ -75,11 +75,11 @@
   .--markdown blockquote {
     line-height: 1.8rem;
     position: relative;
-    border-left: 0.3rem solid;
+    border-left: 0.3rem solid #aa40ff;
     padding: 0.5rem 0.8rem;
     margin: 1rem 0.6rem;
-    background: #e2e2e2;
-    border-radius: 0 0.7rem 0.7rem 0; }
+    background: #efefef;
+    border-radius: 0 0.5rem 0.5rem 0; }
   .--markdown table {
     width: 90%;
     margin: 1rem auto; }
@@ -114,6 +114,11 @@
     margin: 0.6rem; }
   .--markdown code {
     font-family: "Source Code Pro", serif; }
+    .--markdown code:not(.hljs) {
+      background: #d2d2d2;
+      padding: 0.15rem 0.25rem;
+      border-radius: 0.25rem;
+      margin: 0 0.2rem; }
   .--markdown pre {
     position: relative;
     margin: 0.5rem 0; }
