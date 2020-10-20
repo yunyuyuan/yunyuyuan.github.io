@@ -23,6 +23,11 @@ module.exports = {
             .options({
                 symbolId: 'icon-[name]'
             });
+        config.plugin('html')
+            .tap(args => {
+                args[0].owner = siteConfig.owner
+                return args
+            })
         // 开发模式 server静态目录
         if (isDev) {
             config
