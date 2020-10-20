@@ -7,12 +7,15 @@
       </div>
       <single-button class="select-" :active="selecting" :text="selecting?'取消':'选择'"
                      @click.native="selecting=!selecting"/>
-      <single-button v-if="selecting" class="del-btn" :text="'删除'" @click.native="deleteSome"/>
+      <single-button v-if="selecting" class="del-btn" :deleting="deleting.b" :text="'删除'" @click.native="deleteSome"/>
       <loading-button :text="selecting?'导出':'新建'" :icon="selecting?'download':'add'" class="new"
                       @click.native="clickBtn"/>
     </div>
     <div class="body">
-      <table>
+      <div class="init-load" v-if="!inited" flex>
+        <svg-icon :name="'loading'"/>
+      </div>
+      <table v-else>
         <thead>
         <tr>
           <td>图</td>
@@ -57,6 +60,10 @@ export default {
     record: {
       type: Array,
       default: ()=>[]
+    },
+    inited: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

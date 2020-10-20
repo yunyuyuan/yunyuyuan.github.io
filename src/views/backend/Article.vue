@@ -1,5 +1,5 @@
 <template>
-  <router-view :md="md"></router-view>
+  <router-view :md="md" :inited="inited"></router-view>
 </template>
 
 <script>
@@ -10,6 +10,7 @@ export default {
   name: "Article",
   data (){
     return {
+      inited: false,
       md: []
     }
   },
@@ -18,6 +19,7 @@ export default {
     if (res[0]){
       this.md = JSON.parse(res[1])
     }
+    this.inited = true
   },
 }
 </script>

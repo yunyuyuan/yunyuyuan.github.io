@@ -324,11 +324,12 @@ table{
         border-bottom: 1px solid #d2d2d2;
       }
       background: white;
+      transition: all .1s linear;
       &:nth-child(even){
         background: #f5f5f5;
       }
       &:hover{
-          background: #ebfffc;
+        background: #ebfffc;
       }
       td{
         padding: 0.4rem 0;

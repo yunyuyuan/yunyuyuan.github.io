@@ -55,7 +55,6 @@ export default {
 
   > span {
     font-size: 0.9em;
-    line-height: 0.9em;
     margin-left: 0.6em;
   }
 }

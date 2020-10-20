@@ -7,7 +7,7 @@
       </div>
       <single-button class="select-" :active="selecting" :text="selecting?'取消':'选择'"
                      @click.native="selecting=!selecting"/>
-      <single-button v-if="selecting" class="del-btn" :text="'删除'" @click.native="deleteSome"/>
+      <single-button v-if="selecting" class="del-btn" :text="'删除'" :deleting="deleting.bool" @click.native="deleteSome"/>
       <loading-button :text="selecting?'导出':'新建'" :icon="selecting?'download':'add'" class="new"
                       @click.native="clickBtn"/>
     </div>
@@ -16,7 +16,10 @@
       <input v-model="search"/>
     </label>
     <div class="list" flex>
-      <table>
+      <div class="init-load" v-if="!inited" flex>
+        <svg-icon :name="'loading'"/>
+      </div>
+      <table v-else>
         <thead>
         <tr>
           <td class="cover">封面</td>
@@ -79,6 +82,10 @@ export default {
     md: {
       type: Array,
       default: ()=>[]
+    },
+    inited: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

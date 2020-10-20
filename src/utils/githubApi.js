@@ -193,4 +193,47 @@ export class GithubUtils {
             }
         })
     }
+
+    async getTag (){
+        return new Promise(async resolve => {
+            // 获取master的commit sha
+            let res = await this.repos.git.refs('heads/master').fetch().catch(err => {
+                resolve([false, err])
+            });
+            let last = res.object.sha;
+            res = await this.repos.git.refs.tags('').fetch().catch(err => {
+                resolve([false, err])
+            });
+            res.items.forEach(v=>v.last=v.object.sha===last)
+            resolve([true, res.items])
+        })
+    }
+
+    async createRelease (name){
+        return new Promise(async resolve => {
+            // 获取master的commit sha
+            let res = await this.repos.git.refs('heads/master').fetch().catch(err => {
+                resolve([false, err])
+            });
+            await this.repos.git.refs.create({
+                ref: 'refs/tags/' + name,
+                sha: res.object.sha
+            }).catch(err => {
+                resolve([false, err])
+            });
+            resolve([true])
+        })
+    }
+
+    async deleteTag (lis, dic){
+        return new Promise(async resolve => {
+            for (const tag of lis) {
+                dic.state = '删除:'+tag;
+                await this.repos.git(tag).remove().catch(err => {
+                    resolve([false, err])
+                });
+            }
+            resolve([true])
+        })
+    }
 }

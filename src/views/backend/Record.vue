@@ -1,5 +1,5 @@
 <template>
-  <router-view :record="record"></router-view>
+  <router-view :record="record" :inited="inited"></router-view>
 </template>
 
 <script>
@@ -10,14 +10,16 @@ export default {
   name: "Record",
   data (){
     return {
+      inited: false,
       record: []
     }
   },
   async created() {
     let res = await getText(`${originPrefix}/json/record.json`);
     if (res[0]){
-      this.record = JSON.parse(res[1])
+      this.record = JSON.parse(res[1]);
     }
+    this.inited = true
   },
 }
 </script>

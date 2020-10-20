@@ -90,6 +90,10 @@ export default {
       {
         path: '/theme',
         component: ()=>import('@/views/backend/Theme')
+      },
+      {
+        path: '/version',
+        component: ()=>import('@/views/backend/Version')
       }
     ]
   }),
@@ -120,6 +124,11 @@ export default {
           name: '主题',
           pathName: '/theme',
           icon: 'brash'
+        },
+        {
+          name: '版本',
+          pathName: '/version',
+          icon: 'version'
         },
       ]
     }
@@ -331,6 +340,15 @@ export default {
     }
     &:not([deleting]):hover{
       background: #f1314a;
+    }
+  }
+  ::v-deep .init-load{
+    width: 100%;
+    margin-top: 2rem;
+    justify-content: center;
+    >svg{
+      width: 5rem;
+      height: 5rem;
     }
   }
 }
