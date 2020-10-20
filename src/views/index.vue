@@ -92,7 +92,6 @@ export default {
     }
   },
   async created() {
-    await this.updateConfig();
     const route = routeInfo();
     document.title = route.title;
 
@@ -136,10 +135,11 @@ export default {
       default:
         this.routeNow = ''
     }
-    this.configLoaded = 'config-loaded'
   },
-  mounted() {
+  async mounted() {
     Vue.prototype.$message = this.$refs.message;
+    await this.updateConfig();
+    this.configLoaded = 'config-loaded'
   },
   methods: {
     toggleShowBg(b) {
@@ -154,7 +154,7 @@ export default {
         if (res[0]) {
           this.config = JSON.parse(res[1])
         } else {
-        this.$message.error(parseAjaxError(res[1]))
+          this.$message.error(parseAjaxError(res[1]))
         }
       }
     }

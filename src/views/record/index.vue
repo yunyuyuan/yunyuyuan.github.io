@@ -144,7 +144,7 @@ export default {
           height: unset;
           ::v-deep .loading-img{
             height: 100% !important;
-            width: calc(50% - 1px) !important;
+            width: calc(50% - 2px) !important;
             &:not(:last-of-type){
               margin-right: 1px;
             }
