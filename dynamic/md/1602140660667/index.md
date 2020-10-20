@@ -13,6 +13,9 @@
 * **99.9%**的文件由#[jsdelivr](https://www.jsdelivr.com/)的CDN加速
 * 动态更新api基于#[github api](https://developer.github.com/)
 
+1. nothing
+2. 呵呵
+
 ## 其他
 
 测试下表格
@@ -33,3 +36,4 @@
 - [ ] about页面
 - [x] 路由history模式
 - [ ] 日/夜间模式,字体可调
+- [x] 在线发布release
