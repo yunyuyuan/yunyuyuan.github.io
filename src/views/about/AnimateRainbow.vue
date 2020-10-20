@@ -26,10 +26,11 @@ export default {
 .animate{
   @keyframes rainbow-colors {
     0% { color: #ff0000; }
-    25% { color: #ffca00; }
-    50% { color: #00ff2f; }
-    75% { color: #00baff; }
-    100% { color: #5d00ff; }
+    20% { color: #ffca00; }
+    40% { color: #00ff2f; }
+    60% { color: #00baff; }
+    80% { color: #4400ff; }
+    100% { color: #ff00d5; }
   }
   > .text{
     margin: 0 0.1rem;

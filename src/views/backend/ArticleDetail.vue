@@ -331,7 +331,7 @@ export default {
       if (this.saving.b) return;
       if (this.gitUtil) {
         const md = this.mdText,
-            html = this.htmlText;
+            html = this.$refs.html.innerHTML;
         let info = this.info;
         if (!info.name || !info.summary || !info.tags.length || !info.cover) {
           return this.$message.warning('标题,简介,标签和封面均不能为空!')
