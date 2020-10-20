@@ -1,5 +1,18 @@
 [
     {
+        "name": "论vue-cli项目如何优雅的托管在github page上",
+        "file": "1603206409367",
+        "cover": "https://s1.ax1x.com/2020/10/20/BpxBvQ.png",
+        "time": 1603206409367,
+        "modifyTime": 1603206409367,
+        "summary": "简谈我最近尝试的一些静态网站骚操作",
+        "tags": [
+            "前端",
+            "vue",
+            "github"
+        ]
+    },
+    {
         "name": "关于此站建设",
         "file": "1602140660667",
         "cover": "https://s1.ax1x.com/2020/10/08/0wH4oR.jpg",
