@@ -150,6 +150,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "src/assets/style/public";
+
 .version{
   min-height: calc(100% - 2rem);
   label.checkbox{
@@ -172,6 +174,7 @@ export default {
     ::v-deep .loading-button{
       width: 15rem;
       background: linear-gradient(to right, red, blue);
+      padding: 1rem 1.8rem;
       &:hover{
         background: linear-gradient(to right, blue, red);
       }
@@ -232,6 +235,10 @@ export default {
         }
       }
     }
+  }
+  @include media{
+    width: 99% !important;
+    margin-left: 0.5% !important;
   }
 }
 </style>

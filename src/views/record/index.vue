@@ -78,7 +78,6 @@ export default {
       margin-bottom: 4rem;
       &:hover{
         height: 11rem;
-        margin-bottom: 1rem;
         > .time{
           opacity: 1;
         }
