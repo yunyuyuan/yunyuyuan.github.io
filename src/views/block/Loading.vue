@@ -43,7 +43,7 @@ export default {
       height: 0;
      }
   }
-  &.hide.config-loaded{
+  &.config-loaded[hide]{
     animation: hide-loading .4s ease-out forwards;
   }
   > svg {

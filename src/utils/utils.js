@@ -52,5 +52,5 @@ export function insertMdStyle (){
 }
 
 export function loadFinish (){
-    document.querySelector('#loading').classList.add('hide');
+    document.querySelector('#loading').setAttribute('hide', '');
 }
