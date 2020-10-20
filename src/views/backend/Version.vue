@@ -115,8 +115,8 @@ export default {
     },
     async deleteTag() {
       if (this.deletingTag.b || !this.tags.some(v=>v.selected)) return;
-      if (this.allSelected){
-        alert('确认删除全部版本?若如此,网站将会无法使用')
+      if (this.allSelected && !confirm('确认删除全部版本?若如此,网站将会无法使用')){
+        return
       }
       if (this.gitUtil) {
         this.deletingTag = {

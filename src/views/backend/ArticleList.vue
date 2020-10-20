@@ -247,21 +247,21 @@ export default {
     }
     > ::v-deep .new{
       margin: 0 1rem 0 0;
-      background: #ffd784;
+      background: linear-gradient(to right, red, blue);
       padding: 0.6rem 1.2rem;
       box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
       &:hover{
-        background: #efca7c;
+        background: linear-gradient(to left, red, blue);
       }
       > svg{
         width: 1.4rem;
         height: 1.4rem;
-        fill: #000000;
+        fill: white;
       }
       > span{
         margin-left: 0.5rem;
         font-size: 0.95rem;
-        color: black;
+        color: white;
       }
     }
     > .select-{

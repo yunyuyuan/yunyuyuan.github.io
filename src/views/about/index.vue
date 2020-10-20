@@ -52,11 +52,11 @@ export default {
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.4);
     margin: 2rem 0 1rem 0;
     >.animate{
-      padding: 1.4rem 0;
+      padding: 1rem 0;
       flex-wrap: wrap;
     }
     ::v-deep span.text{
-      font-size: 2.8rem;
+      font-size: 1.8rem;
       font-weight: bold;
       white-space: pre-line;
     }
