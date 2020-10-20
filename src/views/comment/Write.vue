@@ -71,7 +71,7 @@ import MarkdownHelp from "@/views/block/MarkdownHelp";
 import SingleButton from "@/components/Button";
 import Resizer from "@/components/Resizer";
 
-import {baseDynamicUrl} from "@/need";
+import {cdnDynamicUrl} from "@/need";
 
 import CodeMirror from 'codemirror';
 import 'codemirror/addon/edit/matchbrackets'
@@ -109,7 +109,7 @@ export default {
   data() {
     return {
       stamp: siteConfig.timeStamp,
-      baseUrl: baseDynamicUrl,
+      baseUrl: cdnDynamicUrl,
       comment: '',
       showGuide: false,
       showSticker: false,

@@ -63,9 +63,9 @@ export default {
       width: 100%;
       flex-wrap: wrap;
       ::v-deep .loading-img{
-        width: calc(50% - 2rem) !important;
+        width: calc(50% - 0.2rem) !important;
         height: unset !important;
-        margin: 1rem;
+        margin: 0.1rem;
         &:not(:last-of-type){
           border-bottom: 1px solid white;
         }

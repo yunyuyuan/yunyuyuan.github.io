@@ -4,7 +4,7 @@
       <div class="item" v-for="item in pagedList" :key="item.file" @click="activeInfo=item">
         <a class="time">{{ item.time | time(true) }}</a>
         <div class="img" flex>
-          <loading-img v-for="i in item.images" :src="i"/>
+          <loading-img v-for="i in item.images.slice(0, 4)" :src="i"/>
         </div>
         <span>{{ item.summary }}</span>
       </div>
@@ -60,7 +60,7 @@ export default {
 
 .record{
   width: 90%;
-  max-width: 60rem;
+  max-width: 80rem;
   > .list{
     flex-wrap: wrap;
     width: 100%;
@@ -146,7 +146,7 @@ export default {
             height: 100% !important;
             width: calc(50% - 1px) !important;
             &:not(:last-of-type){
-              border-right: 1px solid white;
+              margin-right: 1px;
             }
             img{
               height: 100%;

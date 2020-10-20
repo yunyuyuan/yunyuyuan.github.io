@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {baseDynamicUrl, originPrefix} from "@/need";
+import {cdnDynamicUrl, originPrefix} from "@/need";
 import {getText, insertMdStyle, parseAjaxError, sortByTime} from "@/utils/utils";
 import checkedImg from "!!text-loader!@/icons/svg/checked.svg";
 import unCheckedImg from "!!text-loader!@/icons/svg/unchecked.svg";
@@ -125,7 +125,7 @@ export default {
   data() {
     return {
       stamp: siteConfig.timeStamp,
-      baseUrl: baseDynamicUrl,
+      baseUrl: cdnDynamicUrl,
       showGuide: false,
       showSticker: false,
       stickerSlideNow: 0,

@@ -45,7 +45,7 @@ export default {
     animation-name: text-rotate;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
-    transform-origin: 50% 50% 2.8rem;
+    transform-origin: 50% 50% 1.8rem;
     transform: rotateX(-90deg);
     &.blank{
       margin: 0 0.5rem;
