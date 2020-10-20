@@ -97,7 +97,7 @@ export default {
         let res = await this.gitUtil.createRelease(this.newTag);
         if (res[0]) {
           this.$message.success('创建成功!');
-          await this.getTag();
+          this.getTag();
         } else {
           this.$message.error(parseAjaxError(res[1]))
         }
