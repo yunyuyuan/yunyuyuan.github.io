@@ -1,8 +1,8 @@
 .--markdown {
   width: 100%;
   display: block;
-  line-height: 2rem;
-  word-break: break-word; }
+  word-break: break-word;
+  line-height: 2rem; }
   .--markdown h1 {
     color: #ff5218;
     font-size: 1.6rem;
@@ -188,8 +188,7 @@
       position: absolute;
       left: -2rem; }
   .--markdown li {
-    position: relative;
-    margin: 0.5rem 0 0.5rem 0.2rem; }
+    position: relative; }
   .--markdown code {
     font-family: "Source Code Pro", serif; }
     .--markdown code:not(.hljs) {
