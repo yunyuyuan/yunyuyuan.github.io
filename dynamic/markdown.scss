@@ -31,6 +31,7 @@
   hr{
     width: 100%;
     background: black;
+  	margin: 0.5rem 0;
   }
   p{
     font-size: 0.95rem;
@@ -43,9 +44,10 @@
     position: relative;
     margin: 0 0.3rem;
     word-break: break-all;
-    text-decoration: none;
     background: #f0fffd;
     transition: all .1s linear;
+  	padding: 0.2rem 0.6rem;
+  	border-radius: 0.15rem;
     &:hover{
       background: #9dfffa;
     }
@@ -113,33 +115,23 @@
   }
 
   ul{
-    > li:not(.task-list-item):before{
-      content: '';
-      width: 0.6rem;
-      height: 0.6rem;
-      border-radius: 0.2rem;
-      top: 0.28rem;
-      background: #00ff68;
-      border: 0.15rem solid #0032ff;
+    > li:not(.task-list-item)::marker{
+      color: #00c561;
+      font-weight: bold;
+      font-size: 1.5rem;
     }
   }
 
   ol{
-    counter-reset: xx 0;
-    > li:before{
-      content: counter(xx) ".";
-      counter-increment: xx;
-      display: block;
+    > li::marker{
       font-size: 1em;
       color: #0032ff;
-      top: 0.1rem;
       font-weight: bold;
     }
   }
 
   ul, ol{
-    list-style: none;
-    padding: 0 0 0 2rem;
+    padding: 0 0 0 1.5rem;
 
     > li:before {
       position: absolute;
@@ -149,7 +141,7 @@
 
   li {
     position: relative;
-    margin: 0.6rem;
+    margin: 0.5rem 0 0.5rem 0.2rem;
   }
 
   code {
@@ -179,16 +171,16 @@
       position: absolute;
       right: 0.1rem;
       top: 0.1rem;
-      background: rgb(240, 240, 240);
+      background: transparent;
       border: none;
       cursor: pointer;
       font-size: 0.5rem;
       border-radius: 0.16rem;
       padding: 0.2rem 0.4rem;
-      box-shadow: 0 0 0.4rem rgba(255, 255, 255, 0.4);
-      color: black;
+      color: #b5b5b5;
       height: 1rem;
       z-index: 1;
+      font-family: 'Source Code Pro';
       &:hover{
         background: #ff5500;
         color: white;

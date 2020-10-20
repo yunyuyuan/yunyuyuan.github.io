@@ -354,7 +354,7 @@ export default {
         > .info{
         }
         > .--markdown{
-          width: 100% !important;
+          width: calc(100% - 3.8rem) !important;
         }
       }
       > ::v-deep .comment{
