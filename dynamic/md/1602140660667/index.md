@@ -32,9 +32,17 @@
 指定大小的图片
 ![30% x ](https://s2.ax1x.com/2020/01/28/1KcLeU.png)
 
+一段代码
+```javascript
+function choice(list){
+	return list[parseInt(Math.random()*list.length)]
+}
+```
+
 任务列表
 - [x] img-viewer
 - [ ] about页面
 - [x] 路由history模式
 - [ ] 日/夜间模式,字体可调
 - [x] 在线发布release
+- [] 未写完存草稿到localStorage
