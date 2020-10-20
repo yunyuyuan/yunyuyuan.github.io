@@ -1,0 +1,138 @@
+<h3 id="__markdown_header_id_githubpage">github page的局限<span style="background-image: url(&quot;https://blog.halberd.cn/dynamic/favicon.svg&quot;);"></span></h3>
+<p>本站是由<a target="_blank" href="https://github.io">github page</a>托管的，但是正常情况下它有几个缺点：</p>
+<ul>
+<li>网速贼慢，或者不翻墙压根无法访问</li>
+<li>无法使用vue router的history</li>
+<li>静态网站没办法自身更新</li>
+</ul>
+<blockquote>
+  <p>接下来依次展示我的三个小技巧了<img alt="sticker" src="https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/yellow-face/59.png?ran=1603202675767"></p>
+</blockquote>
+<h4 id="__markdown_header_id_jsdelivrcdn">jsdelivr非常🐂🍺的CDN<span style="background-image: url(&quot;https://blog.halberd.cn/dynamic/favicon.svg&quot;);"></span></h4>
+<p>第一个问题，当然是最大的问题: <strong>访问github page非常非常非常慢</strong>，至于有多慢就得自己试试，由于已经解决了该问题，此站访问很快。</p>
+<blockquote>
+  <p>本节的主角是<a target="_blank" href="https://www.jsdelivr.com/">jsdelivr</a>，它是一个免费的优质cdn网站，提供npm，github等cdn加速</p>
+</blockquote>
+<p>问题是如何在vue-cli中一键开启该cdn呢?下面用代码说明。</p>
+<ol>
+<li>修改<code>vue.config.js</code>。由<a target="_blank" href="https://www.jsdelivr.com/?docs=gh">jsdelivr的说明</a>可知，jsdelivr的cdn可以直接从url上加速github资源访问，所以我们修改<code>vue.config.js</code>如下:</li>
+</ol>
+<pre><span>javascript</span><code class="javascript language-javascript hljs"><span class="hljs-built_in">module</span>.exports = {
+    ......
+    <span class="hljs-comment">/* 如果是开发环境就默认未根目录
+     * 如果是生产环境就打包为cdn前缀的目录
+     *name即是github账户名
+    **/</span>
+    <span class="hljs-attr">publicPath</span>: process.env.NODE_ENV === <span class="hljs-string">'development'</span>?<span class="hljs-string">'/'</span>:(<span class="hljs-string">`https://cdn.jsdelivr.net/gh/<span class="hljs-subst">${name}</span>/<span class="hljs-subst">${name}</span>.github.io@latest/dist`</span>),
+    ......
+}
+</code></pre>
+<ol start="2">
+<li>需要写在vue里的cdn文件，使用前缀：</li>
+</ol>
+<pre><span>javascript</span><code class="javascript language-javascript hljs"><span class="hljs-keyword">const</span> baseDynamicUrl = process.env.NODE_ENV === <span class="hljs-string">'development'</span>?<span class="hljs-string">''</span>:(<span class="hljs-string">`https://cdn.jsdelivr.net/gh/<span class="hljs-subst">${name}</span>/<span class="hljs-subst">${name}</span>.github.io@latest/<span class="hljs-subst">${your directory}</span>`</span>)
+</code></pre>
+<h4 id="__markdown_header_id_404htmlapp">使用404.html作为app<span style="background-image: url(&quot;https://blog.halberd.cn/dynamic/favicon.svg&quot;);"></span></h4>
+<p>这是一个基于<a target="_blank" href="https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/creating-a-custom-404-page-for-your-github-pages-site">github.io的404</a>的骚操作。</p>
+<blockquote>
+  <p>思路是把<code>404.html</code>作为app，不写任何<code>index.html</code>以及<code>README.md</code>，让静态网站无论收到什么请求都<em>404</em>，然后手动写路由识别。下面介绍需要的步骤</p>
+</blockquote>
+<ol>
+<li>编辑<code>vue.config.js</code>：</li>
+</ol>
+<pre><span>js</span><code class="js language-js hljs javascript"><span class="hljs-built_in">module</span>.exports = {
+    ......
+    <span class="hljs-comment">/* 如果是开发环境就正常打包
+     * 如果是生产环境就打包index为404
+    **/</span>
+    <span class="hljs-attr">indexPath</span>: process.env.NODE_ENV?<span class="hljs-string">'index.html'</span>:<span class="hljs-string">'../404.html'</span>,
+    ......
+}
+</code></pre>
+<ol start="2">
+<li>手写路由识别，其实这里可以用vue router的history路由的，但当时我打算自己写一个简单的：</li>
+</ol>
+<pre><span>js</span><code class="js language-js hljs javascript"><span class="hljs-comment">/**********
+  route.js
+***********/</span>
+
+<span class="hljs-comment">// 获取路由变量</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">routeInfo</span> (<span class="hljs-params"></span>)</span>{
+    <span class="hljs-comment">// 去掉最后的 '/'</span>
+    <span class="hljs-keyword">let</span> pathname = <span class="hljs-built_in">window</span>.location.pathname.replace(<span class="hljs-regexp">/^(.+?)\/*$/</span>, <span class="hljs-string">'$1'</span>);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i <span class="hljs-keyword">of</span> routes){
+        <span class="hljs-keyword">let</span> regexp = i.path.replace(<span class="hljs-regexp">/\/:(\w+)/g</span>, <span class="hljs-string">'/(?&lt;$1&gt;[^/]+)'</span>);
+        <span class="hljs-keyword">let</span> matcher = pathname.match(<span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(<span class="hljs-string">`^<span class="hljs-subst">${regexp}</span>$`</span>));
+        <span class="hljs-keyword">if</span> (matcher){
+            <span class="hljs-keyword">return</span> {
+                <span class="hljs-attr">name</span>: i.name,
+                <span class="hljs-attr">params</span>: matcher.groups||{},
+                <span class="hljs-attr">title</span>: i.title
+            }
+        }
+    }
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-attr">name</span>: <span class="hljs-literal">null</span>,
+        <span class="hljs-attr">params</span>: {},
+        <span class="hljs-attr">title</span>: <span class="hljs-string">'404'</span>
+    }
+}
+
+<span class="hljs-keyword">const</span> routes = [
+    {
+        <span class="hljs-attr">path</span>: <span class="hljs-string">'/'</span>,
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'index'</span>,
+        <span class="hljs-attr">title</span>: <span class="hljs-string">'主页'</span>,
+    },
+    {
+        <span class="hljs-attr">path</span>: <span class="hljs-string">'/article'</span>,
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'article'</span>,
+        <span class="hljs-attr">title</span>: <span class="hljs-string">'文章列表'</span>,
+    },
+    {
+        <span class="hljs-attr">path</span>: <span class="hljs-string">'/article/:id'</span>,
+        <span class="hljs-attr">name</span>: <span class="hljs-string">'articleDetail'</span>,
+        <span class="hljs-attr">title</span>: <span class="hljs-string">'文章详情'</span>,
+    },
+    ......
+]
+</code></pre>
+<p><strong>在<code>index.vue</code>中这么使用：</strong></p>
+<pre><span>js</span><code class="js language-js hljs javascript">&lt;template&gt;
+......
+&lt;component :is=<span class="hljs-string">"comp"</span>/&gt;
+......
+&lt;/template&gt;
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+......
+  <span class="hljs-function"><span class="hljs-title">created</span>(<span class="hljs-params"></span>)</span>{
+    <span class="hljs-keyword">const</span> route = routeInfo();
+    <span class="hljs-built_in">document</span>.title = route.title;
+
+    <span class="hljs-comment">// 判断路由位置</span>
+    <span class="hljs-keyword">switch</span> (route.name){
+      <span class="hljs-keyword">case</span> <span class="hljs-string">'index'</span>:
+        <span class="hljs-built_in">this</span>.routeNow = <span class="hljs-string">'home'</span>;
+        <span class="hljs-built_in">this</span>.comp = <span class="hljs-function">()=&gt;</span><span class="hljs-keyword">import</span>(<span class="hljs-string">'@/views/home/index'</span>)
+        <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">case</span> <span class="hljs-string">'article'</span>:
+        <span class="hljs-built_in">this</span>.routeNow = <span class="hljs-string">'article'</span>;
+        <span class="hljs-built_in">this</span>.comp = <span class="hljs-function">()=&gt;</span><span class="hljs-keyword">import</span>(<span class="hljs-string">'@/views/article/List'</span>);
+        bread;
+      ......
+    }
+  }
+......
+}
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
+</code></pre>
+<hr>
+<p>这样在打包完成后就只有一个<code>404.html</code>，所有请求都会转到这里，然后由js去决定加载哪个页面，这操作够<img alt="sticker" src="https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/aru/79.png?ran=1603202675767">吧。</p>
+<h4 id="__markdown_header_id_">静态网站自我更新<span style="background-image: url(&quot;https://blog.halberd.cn/dynamic/favicon.svg&quot;);"></span></h4>
+<blockquote>
+  <p>这个没啥介绍的，只能说github牛逼<img alt="sticker" src="https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/yellow-face/52.png?ran=1603202675767">，此站的自我更新基于<a target="_blank" href="https://developer.github.com/">github rest api</a>。
+  这里的<code>自我更新</code>指的是使用静态网站本身更新网站，实在想不到别的术语了<img alt="sticker" src="https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/aru/62.png?ran=1603202675767"></p>
+</blockquote>
+<hr>
+<p>就这么多了，本文结束!</p>
