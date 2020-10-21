@@ -81,19 +81,17 @@ export default {
     }
   },
   inject: ['_gitUtil'],
-  async created() {
-    await this.init()
-  },
   mounted() {
+    this.init()
     // hljs
     this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
       hljsAndInsertCopyBtn(el);
     });
   },
   watch: {
-    async $route() {
+    $route() {
       if (this.$route.name === 'backend.theme') {
-        await this.init()
+        this.init()
       } else {
         // 删除fake style
         let style = document.head.querySelector('#fake-markdown-style');
@@ -104,17 +102,7 @@ export default {
     },
   },
   methods: {
-    async init() {
-      let res = await getText(`${originPrefix}/markdown.scss`);
-      if (res[0]) {
-        this.scss = res[1];
-        this.uploadStyle()
-        if (this.codeMirror) {
-          this.codeMirror.setValue(this.scss)
-        }
-      } else {
-        this.$message.error('获取markdown.scss失败!请检查网络')
-      }
+    init() {
       if (!this.codeMirror) {
         this.codeMirror = new CodeMirror(this.$refs.textarea, {
           indentUnit: 2,
@@ -130,8 +118,18 @@ export default {
           this.scss = this.codeMirror.getValue();
           this.uploadStyle()
         });
-        this.codeMirror.setValue(this.scss);
       }
+      getText(`${originPrefix}/markdown.scss`).then(res=>{
+        if (res[0]) {
+          this.scss = res[1];
+          this.uploadStyle()
+          if (this.codeMirror) {
+            this.codeMirror.setValue(this.scss)
+          }
+        } else {
+          this.$message.error('获取markdown.scss失败!请检查网络')
+        }
+      })
     },
     uploadStyle() {
       let style = document.head.querySelector('#fake-markdown-style');

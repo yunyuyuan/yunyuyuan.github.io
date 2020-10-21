@@ -5,14 +5,13 @@
   line-height: 2rem;
   @each $size in 1, 2, 3, 4, 5, 6{
     h#{$size}{
-      color: rgb(255, 82, 24);
-      font-size: 0.8rem/$size + 0.8rem;
-      position: relative;
       cursor: pointer;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       min-height: 2rem;
-      margin: 0.4rem 0;
+      margin: 0.8rem 0;
+      color: rgb(255, 82, 24);
+      font-size: 0.8rem/$size + 0.8rem;
 
       &:hover {
         text-decoration: underline;
@@ -20,18 +19,24 @@
       >span{
         background-size: 100% 100%;
         display: block;
-        position: absolute;
-        left: 0;
-        transform: translateX(calc(-100% - 0.4rem));
         width: 1.8rem;
         height: 1.8rem;
+        flex-shrink: 0;
+        position: absolute;
+        transform: translateX(calc(-100% - 0.4rem));
+      }
+      @media screen and (max-width: 768px){
+        >span{
+          position: unset;
+          transform: translateX(-0.4rem);
+        }
       }
     }
   }
   hr{
     width: 100%;
     background: black;
-  	margin: 0.5rem 0;
+    margin: 1rem 0;
   }
   p{
     font-size: 0.95rem;
@@ -45,8 +50,8 @@
     word-break: break-all;
     background: #f0fffd;
     transition: all .1s linear;
-  	padding: 0.2rem 0.6rem;
-  	border-radius: 0.15rem;
+    padding: 0 0.6rem;
+    border-radius: 0.15rem;
     &:hover{
       background: #9dfffa;
     }
@@ -179,7 +184,7 @@
       color: #b5b5b5;
       height: 1rem;
       z-index: 1;
-      font-family: 'Source Code Pro';
+      font-family: 'Source Code Pro', serif;
       &:hover{
         background: #ff5500;
         color: white;
@@ -197,7 +202,7 @@
       border-radius: 0.3rem;
       background: rgba(43, 43, 43, 0.95);
       max-height: 100vh;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       line-height: 1.4rem;
       position: relative;
       &, .hljs-subst {

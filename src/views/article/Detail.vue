@@ -212,13 +212,39 @@ export default {
             overflow: hidden;
           }
           > .anchors{
-            padding: 0.6rem 0;
+            padding: 0.5rem 0;
             > span{
               margin: 0.4rem 0;
+              padding: 0.4rem 0;
               font-size: 0.85rem;
               transition: all .15s linear;
               cursor: pointer;
               @include text-overflow(1);
+              display: block;
+              position: relative;
+              width: 100%;
+              text-align: center;
+              &:after, &:before{
+                position: absolute;
+                content: '';
+                display: block;
+                height: 1px;
+                width: 0;
+                background: red;
+                transition: all .35s ease-out;
+              }
+              &:after{
+                bottom: 0;
+                left: 10%;
+              }
+              &:before{
+                top: 0;
+                right: 10%;
+              }
+              &:hover:not(.active):after, &:hover:not(.active):before{
+                background: blue;
+                width: 80%;
+              }
               &.active{
                 transform: scale(1.2);
                 font-weight: bold;
@@ -332,11 +358,11 @@ export default {
         border-radius: 0.6rem;
         box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.4);
         background: white;
-        padding: 2rem 1rem 2rem 2.8rem;
-        width: calc(100% - 5.8rem);
+        padding: 1.5rem 1rem 1.5rem 3.4rem;
+        width: calc(100% - 6.4rem);
         transition: all .15s ease-out;
         &.show-aside{
-          width: calc(100% - 17.8rem);
+          width: calc(100% - 15rem);
         }
       }
     }
@@ -354,7 +380,8 @@ export default {
         > .info{
         }
         > .--markdown{
-          width: calc(100% - 3.8rem) !important;
+          padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+          width: calc(100% - 1rem);
         }
       }
       > ::v-deep .comment{

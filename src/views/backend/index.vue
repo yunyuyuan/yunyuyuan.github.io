@@ -11,9 +11,6 @@
                   d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942"/>
           </svg>
         </span>
-        <a class="home" href="/" flex="">
-          <img :src="selfImage" alt="favicon"/>
-        </a>
       </div>
       <router-link v-for="item in menu" :key="item.name" :to="{path: item.pathName}"
                    :class="{active: $route.path.indexOf(item.pathName)===0}" class="item" flex>
@@ -22,6 +19,9 @@
         </span>
         <span class="name">{{ item.name }}</span>
       </router-link>
+      <a class="home" href="/" flex="" title="回到主页">
+        <img :src="selfImage" alt="favicon"/>
+      </a>
       <loading-button :icon="'account'" :text="'登录'" @click.native="showLogin = true"/>
     </div>
     <login v-show="showLogin" @gitUtil="initGitUtil" @save="loginFinish" @hide="showLogin = false"/>
@@ -30,6 +30,7 @@
         <router-view @login="showLogin = true"></router-view>
       </keep-alive>
     </div>
+    <span ref="cache" class="save-cache">草稿已保存</span>
   </div>
 </template>
 
@@ -140,11 +141,18 @@ export default {
   },
   provide() {
     return {
-      _gitUtil: () => this.computeGitUtil
+      _gitUtil: () => this.computeGitUtil,
+      showCacheFinish: ()=>{
+        let span = this.$refs.cache;
+        span.setAttribute('data-run', '');
+      }
     }
   },
   mounted() {
-    loadFinish()
+    loadFinish();
+    this.$refs.cache.addEventListener('animationend', ()=>{
+      this.$refs.cache.removeAttribute('data-run');
+    })
   },
   methods: {
     toggleMenu() {
@@ -242,13 +250,6 @@ export default {
           }
         }
       }
-
-      > .home {
-        > img {
-          width: 100%;
-          height: 100%;
-        }
-      }
     }
 
     > .item {
@@ -286,9 +287,25 @@ export default {
       }
     }
 
+    > .home {
+      margin-top: auto;
+      width: 3rem;
+      height: 3rem;
+      > img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        transition: all .15s ease-out;
+      }
+      &:hover{
+        >img{
+          box-shadow: 0 0 0.8rem rgba(255, 255, 255, 0.5);
+        }
+      }
+    }
     ::v-deep .loading-button {
       background: #ac60ff;
-      margin: auto 0 1rem 0;
+      margin: 1rem 0;
 
       &:hover {
         background: #8c8e8d;
@@ -312,7 +329,7 @@ export default {
     > div{
       background: white;
       width: calc(100% - 4rem);
-      overflow-x: hidden;
+      overflow: hidden;
       margin: 1rem 1rem 1rem 3rem;
       border-radius: 0.6rem;
       box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
@@ -349,6 +366,36 @@ export default {
     >svg{
       width: 5rem;
       height: 5rem;
+    }
+  }
+  >.save-cache{
+    position: fixed;
+    z-index: $z-index-message;
+    background: #00d8bc;
+    color: black;
+    font-size: 0.95rem;
+    border-radius: 0.2rem;
+    box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.4);
+    padding: 0.3rem 0.8rem;
+    top: 0.8rem;
+    right: 0.8rem;
+    transform: translateY(calc(-100% - 1.6rem));
+    @keyframes save-cache-animate {
+      0%{
+        transform: translateY(calc(-100% - 1.6rem));
+      }
+      10%{
+        transform: translateY(0);
+      }
+      90%{
+        transform: translateY(0);
+      }
+      100%{
+        transform: translateY(calc(-100% - 1.6rem));
+      }
+    }
+    &[data-run]{
+      animation: save-cache-animate 3s linear;
     }
   }
 }

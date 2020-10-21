@@ -43,6 +43,7 @@ import LoadingImg from "@/components/LoadingImg";
 import SingleButton from "@/components/Button";
 import {getText, parseAjaxError, sortByTime} from "@/utils/utils";
 import {originPrefix} from "@/need";
+import {getCache, setCache} from "@/views/backend/storage";
 
 export default {
   name: "RecordDetail",
@@ -61,6 +62,8 @@ export default {
       },
       tempRecord: [],
       text: '',
+      cacheTimeout: null,
+      cacheInit: false,
       info: {},
       newInfo: {
         file: '',
@@ -79,27 +82,71 @@ export default {
       return this._gitUtil()
     }
   },
-  inject: ['_gitUtil'],
-  async mounted() {
-    await this.init()
+  inject: ['_gitUtil', 'showCacheFinish'],
+  mounted() {
+    this.init()
   },
   watch: {
-    async '$props.record' (){
-      await this.init()
+    '$props.record' (){
+      this.init()
+    },
+    info: {
+      deep: true,
+      handler (){
+        this.saveCache()
+      }
+    },
+    text: {
+      deep: true,
+      handler (){
+        this.saveCache()
+      }
+    },
+  },
+  beforeRouteLeave (to, from, next){
+    if (this.id !== 'new'){
+      if (confirm('确定离开?将会丢失修改')){
+        next()
+      }
+    }else{
+      next()
     }
   },
   methods: {
-    async init() {
-      this.info = JSON.parse(JSON.stringify(this.id === 'new' ? this.newInfo : this.record.find(v => v.file === this.id)||this.newInfo));
+    init() {
+      this.cacheInit = false;
+      const cache = getCache('new-record');
+      if (this.id === 'new' && cache){
+        this.info = JSON.parse(cache);
+      }else {
+        this.info = JSON.parse(JSON.stringify(this.id === 'new' ? this.newInfo : this.record.find(v => v.file === this.id) || this.newInfo));
+      }
+      this.$nextTick(()=>{
+        this.cacheInit = true;
+      })
       if (this.id !== 'new') {
-        let res = await getText(`${originPrefix}/record/${this.id}.txt`);
-        if (res[0]) {
-          this.text = res[1]
-        } else {
-          this.$message.error(parseAjaxError(res[1]))
-        }
+        getText(`${originPrefix}/record/${this.id}.txt`).then(res=>{
+          if (res[0]) {
+            this.text = res[1]
+          } else {
+            this.$message.error(parseAjaxError(res[1]))
+          }
+        })
+      }else{
+        this.text = getCache('new-record-text') || '';
       }
     },
+    saveCache (){
+      if (!this.cacheInit) return ;
+      if (this.id !== 'new') return;
+      if (this.cacheTimeout) clearTimeout(this.cacheTimeout);
+      this.cacheTimeout = setTimeout(()=>{
+        setCache('new-record', JSON.stringify(this.info));
+        setCache('new-record-text', this.text);
+        this.showCacheFinish()
+      }, 2000)
+    },
+    // ---- change ----
     delImg(idx) {
       this.info.images.splice(idx, 1)
     },

@@ -111,6 +111,7 @@ import LoadingImg from "@/components/LoadingImg";
 import {parseMarkdown} from "@/utils/parseMd";
 import {hljsAndInsertCopyBtn} from "@/utils/highlight";
 import siteConfig from "@/site-config";
+import {getCache, setCache} from "@/views/backend/storage";
 
 
 export default {
@@ -142,6 +143,8 @@ export default {
         b: false,
         state: ''
       },
+      cacheTimeout: null,
+      cacheInit: false,
       info: {},
       newInfo: {
         name: "编辑标题",
@@ -159,7 +162,39 @@ export default {
       return this.$route.params.id
     },
     htmlText() {
-      let html = parseMarkdown(this.mdText);
+      return parseMarkdown(this.mdText)
+    },
+    gitUtil (){
+      return this._gitUtil()
+    },
+    config (){
+      return this._config()
+    }
+  },
+  inject: ['_config', '_gitUtil', 'showCacheFinish'],
+  created() {
+    insertMdStyle()
+  },
+  async mounted() {
+    await this.init()
+  },
+  watch: {
+    async '$props.md'() {
+      await this.init()
+    },
+    info: {
+      deep: true,
+      handler (){
+        this.saveCache()
+      }
+    },
+    mdText: {
+      deep: true,
+      handler (){
+        this.saveCache()
+      }
+    },
+    htmlText (){
       this.$nextTick(()=>{
         let htmlEl = this.$refs.html;
         // hljs
@@ -167,11 +202,8 @@ export default {
           hljsAndInsertCopyBtn(el)
         })
         // anchor
-        let headList = htmlEl.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
-        headList.forEach(el => {
-          let before = document.createElement('span');
-          before.style.backgroundImage = `url("${originPrefix}/favicon.svg")`;
-          el.appendChild(before);
+        htmlEl.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').forEach(el => {
+          el.innerHTML = `<span style='background-image: url("${originPrefix}/favicon.svg")'></span>${el.innerHTML}`
         })
         // viewer
         htmlEl.querySelectorAll('img:not([alt=sticker])').forEach(el=>{
@@ -185,36 +217,37 @@ export default {
           svg.outerHTML = el.checked?checkedImg:unCheckedImg;
         })
       })
-      return html
-    },
-    gitUtil (){
-      return this._gitUtil()
-    },
-    config (){
-      return this._config()
     }
   },
-  inject: ['_config', '_gitUtil'],
-  created() {
-    insertMdStyle()
-  },
-  async mounted() {
-    await this.init()
-  },
-  watch: {
-    async '$props.md'() {
-      await this.init()
+  beforeRouteLeave (to, from, next){
+    if (this.id !== 'new'){
+      if (confirm('确定离开?将会丢失修改')){
+        next()
+      }
+    }else{
+      next()
     }
   },
   methods: {
     async init() {
+      this.cacheInit = false;
+      const cache = getCache('new-article');
+      if (this.id === 'new' && cache){
+        this.info = JSON.parse(cache);
+      }else{
+        this.info = JSON.parse(JSON.stringify(this.id === 'new' ? this.newInfo : this.md.find(v => v.file === this.id)||this.newInfo));
+      }
       // 初始化信息
-      this.info = JSON.parse(JSON.stringify(this.id === 'new' ? this.newInfo : this.md.find(v => v.file === this.id)||this.newInfo));
-      this.mdText = '';
+      this.$nextTick(()=>{
+        this.cacheInit = true;
+      })
+      let mdText = '';
       // 标题
       document.title = '后台-文章-' + this.id;
       if (this.$route.params.id !== 'new') {
         await this.getMdText()
+      }else{
+        mdText = getCache('new-article-md')||'';
       }
       if (!this.codeMirror) {
         this.codeMirror = new CodeMirror(this.$refs.textarea, {
@@ -234,7 +267,7 @@ export default {
           this.focusAt = this.codeMirror.getCursor();
         })
       }
-      this.codeMirror.setValue(this.mdText);
+      this.codeMirror.setValue(mdText);
     },
     async getMdText() {
       let res = await getText(`${originPrefix}/md/${this.id}/index.md`);
@@ -280,7 +313,17 @@ export default {
       document.removeEventListener('click', this.handleStickerDiv);
       this.showSticker = false;
     },
-
+    saveCache (){
+      if (!this.cacheInit) return ;
+      if (this.id !== 'new') return;
+      if (this.cacheTimeout) clearTimeout(this.cacheTimeout);
+      this.cacheTimeout = setTimeout(()=>{
+        setCache('new-article', JSON.stringify(this.info));
+        setCache('new-article-md', this.mdText);
+        this.showCacheFinish()
+      }, 2000)
+    },
+    // ----- change -------
     inputTitle(payload) {
       this.info.name = payload[1]
     },
@@ -655,6 +698,7 @@ export default {
       position: relative;
       margin: 0.5rem 0;
       >span{
+        cursor: pointer;
         >svg{
           width: 2rem;
           height: 2rem;
@@ -693,8 +737,8 @@ export default {
               align-items: flex-start;
 
               > span {
-                width: 3rem;
-                height: 3rem;
+                width: 3.6rem;
+                height: 3.6rem;
                 border: 1px solid #d8d8d8;
                 cursor: pointer;
                 background: white;
@@ -748,8 +792,8 @@ export default {
     }
     > .body{
       width: calc(100% - 2px);
-      max-height: 50rem;
-      min-height: 10rem;
+      max-height: 100vh;
+      min-height: 30rem;
       align-items: stretch;
       border: 1px solid #656565;
       > .markdown{
@@ -780,8 +824,8 @@ export default {
 
         > span{
           display: block;
-          width: calc(100% - 5.8rem);
-          padding: 2rem 1rem 2rem 2.8rem;
+          padding: 0.5rem 0.5rem 0.5rem 2.7rem;
+          width: calc(100% - 3.2rem);
         }
       }
     }
@@ -794,6 +838,16 @@ export default {
       >.cover{
         ::v-deep .loading-img{
           width: 100% !important;
+        }
+      }
+    }
+    >.text{
+      >.body{
+        >.html{
+          >span{
+            padding: 0.5rem;
+            width: calc(100% - 1rem);
+          }
         }
       }
     }

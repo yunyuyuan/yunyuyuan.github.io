@@ -40,15 +40,12 @@ export default {
     }
   },
   created() {
-    this.init()
+    this.info = JSON.parse(JSON.stringify(this.config));
   },
   inject: ['_config', '_gitUtil'],
   methods: {
-    init (){
-      this.info = JSON.parse(JSON.stringify(this.config))
-    },
     input(payload) {
-      this.info[payload[0]] = payload[1]
+      this.info[payload[0]] = payload[1];
     },
     changeBg (v){
       this.info.backgroundImg = v;

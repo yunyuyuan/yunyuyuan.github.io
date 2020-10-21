@@ -33,7 +33,7 @@
         <tbody>
         <tr v-for="item in reverseList" :key="item.file">
           <router-link tag="td" class="cover" :to="'/article/'+item.file">
-            <loading-img :src="item.cover || selfImage" :size="[-1, 8]"/>
+              <loading-img :src="item.cover || selfImage" :size="[-1, 8]"/>
           </router-link>
           <td class="title"><span>{{ item.name }}</span></td>
           <td class="summary"><span>{{ item.summary }}</span></td>
