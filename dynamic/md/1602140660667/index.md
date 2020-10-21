@@ -45,4 +45,4 @@ function choice(list){
 - [x] 路由history模式
 - [ ] 日/夜间模式,字体可调
 - [x] 在线发布release
-- [] 未写完存草稿到localStorage
+- [x] 未写完存草稿到localStorage
