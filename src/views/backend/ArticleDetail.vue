@@ -714,7 +714,7 @@ export default {
         overflow: hidden;
         transition: height .1s linear;
         &.active{
-          height: 30vh;
+          height: 50vh;
           border: 1px solid #ababab;
           box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.4);
         }

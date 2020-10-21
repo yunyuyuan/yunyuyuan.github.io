@@ -290,7 +290,7 @@ export default {
         overflow: hidden;
         transition: height .1s linear;
         &.active{
-          height: 30vh;
+          height: 50vh;
           border: 1px solid #ababab;
           box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.4);
         }
@@ -507,6 +507,12 @@ export default {
       >.inner{
         width: 95%;
         height: 70%;
+        >.utils{
+          >.sticker{
+            left: 0;
+            width: 100%;
+          }
+        }
       }
     }
   }
