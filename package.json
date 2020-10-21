@@ -12,6 +12,7 @@
     "vue": "^2.6.11"
   },
   "devDependencies": {
+    "@babel/plugin-transform-named-capturing-groups-regex": "^7.12.1",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
@@ -37,7 +38,8 @@
     "text-loader": "^0.0.1",
     "v-viewer": "^1.5.1",
     "vue-router": "^3.4.3",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "xregexp": "^4.3.0"
   },
   "eslintConfig": {
     "root": true,

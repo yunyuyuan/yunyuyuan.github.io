@@ -8,20 +8,21 @@
 
 <script>
 import {loadFinish} from "@/utils/utils";
+const siteConfig = require( '@/site-config');
 
 import AnimateRotate from "@/views/about/AnimateRotate";
 import AnimateGlitch from "@/views/about/AnimateGlitch";
 import AnimateRainbow from "@/views/about/AnimateRainbow";
 import AnimateFlow from "@/views/about/AnimateFlow";
 import AnimateRun from "@/views/about/AnimateRun";
-const comps = [AnimateRun, AnimateFlow, AnimateRainbow, AnimateGlitch, AnimateRotate]
+const comps = [AnimateRun, AnimateFlow, AnimateRainbow, AnimateGlitch, AnimateRotate];
 
 export default {
   name: "index",
   data (){
     return {
       comps: comps,
-      text: 'simple code,simple life',
+      text: siteConfig.corner,
       idx: Math.floor(Math.random()*comps.length)
     }
   },

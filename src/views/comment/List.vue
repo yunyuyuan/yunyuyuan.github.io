@@ -69,7 +69,7 @@ import {
 } from "@/views/comment/utils";
 import WriteComment from "@/views/comment/Write";
 import {parseAjaxError} from "@/utils/utils";
-import siteConfig from '@/site-config'
+const siteConfig = require( '@/site-config')
 import Pagination from "@/components/Pagination";
 import {parseMarkdown} from "@/utils/parseMd";
 import {hljsAndInsertCopyBtn} from "@/utils/highlight";
@@ -148,7 +148,7 @@ export default {
         this.$nextTick(() => {
           if (!this.$refs.list) return ;
           this.$refs.list.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
-            el.innerText = el.innerText.replaceAll('&lt;', '<').replaceAll('&gt;', '>');
+            el.innerText = el.innerText.replace(/&lt;/g, '<').replaceAll('&gt;', '>');
             hljsAndInsertCopyBtn(el);
           })
           this.$refs.list.querySelectorAll('img:not([alt=sticker])').forEach(el=>{
@@ -160,7 +160,7 @@ export default {
       }
     },
     calcMdToHtml(text, isReply) {
-      text = text.replaceAll('<', '&lt;').replace(/(?<!^|\n)>/g, '&gt;')
+      text = text.replace(/</g, '&lt;').replace(/(?<!^|\n)>/g, '&gt;')
       if (isReply) {
         let matcher = text.match(/^@(\S+)([\s\S]*)/);
         if (matcher) {

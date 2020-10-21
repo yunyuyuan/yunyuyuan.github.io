@@ -35,7 +35,6 @@ import NotFound from '@/views/404/index'
 import Viewer from 'v-viewer'
 
 import Vue from 'vue';
-import siteConfig from '@/site-config'
 import {routeInfo} from "@/route";
 import {getText, parseAjaxError} from "@/utils/utils";
 import {originPrefix} from "@/need";
@@ -53,7 +52,6 @@ export default {
   components: {Loading, Message, TheHead, TheFooter, NotFound},
   data() {
     return {
-      siteConfig,
       config: {},
       comp: null,
 
@@ -94,6 +92,8 @@ export default {
   async created() {
     const route = routeInfo();
     document.title = route.title;
+    document.head.querySelector('meta[name=keywords]').setAttribute('content', route.keywords);
+    document.head.querySelector('meta[name=description]').setAttribute('description', route.keywords);
 
     this.showHead = route.name !== 'backend';
     switch (route.name){
@@ -363,6 +363,7 @@ table{
 @include media{
   ::-webkit-scrollbar{
     width: 0;
+    height: 0;
   }
 }
 </style>

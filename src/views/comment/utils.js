@@ -1,5 +1,5 @@
 import axios from 'axios';
-import siteConfig from '@/site-config';
+const siteConfig = require( '@/site-config');
 import {parseAjaxError} from "@/utils/utils";
 export const tokenKey = 'comment-token';
 

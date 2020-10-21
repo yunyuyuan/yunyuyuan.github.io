@@ -13,6 +13,7 @@
       margin: 0.8rem 0;
       color: rgb(255, 82, 24);
       font-size: 0.8rem/$size + 0.8rem;
+      position: relative;
 
       &:hover {
         text-decoration: underline;
@@ -28,7 +29,7 @@
       }
       @media screen and (max-width: 768px){
         >span{
-          position: unset;
+          position: relative;
           transform: translateX(-0.4rem);
         }
       }

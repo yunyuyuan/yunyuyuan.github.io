@@ -40,6 +40,7 @@ export default {
       opacity: 0;
       height: 100%;
     }100%{
+      opacity: 0;
       height: 0;
      }
   }

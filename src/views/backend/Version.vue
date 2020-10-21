@@ -62,7 +62,7 @@ export default {
     newTag (){
       let max = 0;
       this.tags.forEach(v=>{
-        max = Math.max(max, parseInt(v.ref.replace(/^.*?v([\d.]*)$/, '$1').replaceAll('.', '')));
+        max = Math.max(max, parseInt(v.ref.replace(/^.*?v([\d.]*)$/, '$1').replace(/\./g, '')));
       })
       max = (max+1).toString();
       return 'v'+(new Array(3-max.length).fill('0').join('')+max).split('').join('.')

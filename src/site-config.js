@@ -5,5 +5,6 @@ module.exports = {
     email: '326178275@qq.com',
     cdn: `https://cdn.jsdelivr.net/gh/${name}/${name}.github.io@latest`,
     timeStamp: new Date().getTime(),
-    avatar: 'favicon.svg'
+    avatar: 'favicon.svg',
+    corner: 'Simple code,Simple life'
 }

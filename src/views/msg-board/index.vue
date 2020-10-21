@@ -2,7 +2,7 @@
   <div class="msg-board" flex>
     <div class="head" flex>
       <svg-icon :name="'comments'"/>
-      <span>留言板</span>
+      <h1>留言板</h1>
     </div>
     <the-comment :title="'MSG-BOARD'"/>
   </div>
@@ -44,7 +44,7 @@ export default {
       width: 2.4rem;
       height: 2.4rem;
     }
-    > span{
+    > h1{
       font-size: 1.15rem;
       margin-left: 1rem;
       color: white;

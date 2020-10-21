@@ -503,16 +503,18 @@ export default {
     }
   }
   @include media{
+    >.inner{
+      > .utils{
+        > .sticker{
+          left: 0;
+          width: 100%;
+        }
+      }
+    }
     >.upload-img{
       >.inner{
         width: 95%;
         height: 70%;
-        >.utils{
-          >.sticker{
-            left: 0;
-            width: 100%;
-          }
-        }
       }
     }
   }

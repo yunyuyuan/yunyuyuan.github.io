@@ -60,7 +60,6 @@ export default {
     this.token = localStorage.getItem(tokenKey);
     if (this.token) {
       await this.doLogin(false);
-      await getRepoId();
     }
   },
   methods: {
@@ -86,6 +85,7 @@ export default {
           url: data.url,
           nick: data.login,
         }
+        await getRepoId();
       } else {
         removeToken();
         if (remind) {

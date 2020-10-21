@@ -32,7 +32,7 @@
 <script>
 import FloatInput from "@/components/FloatInput";
 import SingleButton from "@/components/Button";
-import siteConfig from '@/site-config'
+const siteConfig = require( '@/site-config')
 import {GithubUtils} from "@/utils/githubApi";
 
 export default {
@@ -105,7 +105,6 @@ export default {
       }
     }
     > .body{
-      flex-direction: column;
       width: 100%;
       margin: 0.8rem 0;
       justify-content: center;
@@ -115,7 +114,6 @@ export default {
       }
       > .err{
         margin-left: 1rem;
-        height: 0;
         overflow: hidden;
         &.show{
           height: unset;

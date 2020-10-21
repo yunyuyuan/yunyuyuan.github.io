@@ -47,6 +47,7 @@ import TheComment from "@/views/comment/index";
 
 import qrcode from "qrcode";
 import {routeInfo} from "@/route";
+import siteConfig from "@/site-config";
 
 export default {
   name: "Detail",
@@ -74,6 +75,7 @@ export default {
           return i
         }
       }
+      return {}
     },
     body() {
       return document.querySelector('section.body')
@@ -95,6 +97,7 @@ export default {
   async mounted() {
     await this.getHtml();
     document.title = '文章-' + this.info.name;
+    document.head.querySelector('meta[name=description]').setAttribute('description', `${siteConfig.owner}的博客文章-${this.info.name}`);
     this.body.addEventListener('scroll', this.moveAside);
     loadFinish();
   },
@@ -380,8 +383,8 @@ export default {
         > .info{
         }
         > .--markdown{
-          padding: 1.5rem 0.5rem 1.5rem 0.5rem;
-          width: calc(100% - 1rem);
+          padding: 1.5rem 0.5rem 1.5rem 0.5rem !important;
+          width: calc(100% - 1rem) !important;
         }
       }
       > ::v-deep .comment{

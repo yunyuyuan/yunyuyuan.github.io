@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "xregexp": "^4.3.0"
+  }
+}

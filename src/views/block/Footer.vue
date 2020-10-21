@@ -56,6 +56,7 @@ footer{
   height: $footer-height;
   box-shadow: 0 0 1rem #020202;
   z-index: $z-index-footer;
+  flex-shrink: 0;
   >.favicon {
     margin: 0 1.6rem;
     height: 3.5rem;

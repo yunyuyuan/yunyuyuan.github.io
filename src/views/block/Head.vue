@@ -4,22 +4,22 @@
       <a class="favicon" href="/">
         <img :src="selfImage"/>
       </a>
-      <a class="txt" href="/simple-code-simple-life" flex title="简单代码，简单生活">
-        Simple Code,Simple Life
-      </a>
+      <a class="txt" href="/simple-code-simple-life" flex title="简单代码，简单生活">{{text}}</a>
     </div>
   </section>
 </template>
 
 <script>
 import Headroom from "headroom.js";
-import selfImage from '@/image/i.png'
+import selfImage from '@/image/i.png';
+const siteConfig = require( '@/site-config');
 
 export default {
   name: "TheHead",
   data() {
     return {
       selfImage,
+      text: siteConfig.corner
     }
   },
   mounted() {
