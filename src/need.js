@@ -11,4 +11,4 @@ import '@/assets/style/source-code-pro.css'
 import '@/assets/style/write-font.css'
 import 'viewerjs/dist/viewer.css'
 
-document.head.querySelector('link[rel=icon]').href = originPrefix+'/favicon.svg?stamp='+siteConfig.timeStamp
+document.head.querySelector('link[rel=icon]').href = `${originPrefix}/${siteConfig.avatar}?stamp=${siteConfig.timeStamp}`;

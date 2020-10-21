@@ -203,7 +203,7 @@ export default {
         })
         // anchor
         htmlEl.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').forEach(el => {
-          el.innerHTML = `<span style='background-image: url("${originPrefix}/favicon.svg")'></span>${el.innerHTML}`
+          el.innerHTML = `<span style='background-image: url("${originPrefix}/${siteConfig.avatar}")'></span>${el.innerHTML}`
         })
         // viewer
         htmlEl.querySelectorAll('img:not([alt=sticker])').forEach(el=>{
@@ -245,7 +245,12 @@ export default {
       // 标题
       document.title = '后台-文章-' + this.id;
       if (this.$route.params.id !== 'new') {
-        await this.getMdText()
+        let res = await getText(`${originPrefix}/md/${this.id}/index.md`);
+        if (res[0]) {
+          mdText = res[1];
+        } else {
+          this.$message.error(parseAjaxError(res[1]))
+        }
       }else{
         mdText = getCache('new-article-md')||'';
       }
@@ -268,14 +273,6 @@ export default {
         })
       }
       this.codeMirror.setValue(mdText);
-    },
-    async getMdText() {
-      let res = await getText(`${originPrefix}/md/${this.id}/index.md`);
-      if (res[0]) {
-        this.mdText = res[1];
-      } else {
-        this.$message.error(parseAjaxError(res[1]))
-      }
     },
     enableSticker(e) {
       if (this.showSticker) {
