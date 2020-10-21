@@ -1,4 +1,4 @@
-<h3 id="__markdown_header_id_githubpage">github page的局限<span style="background-image: url(&quot;https://blog.halberd.cn/dynamic/favicon.svg&quot;);"></span></h3>
+<h3 id="__markdown_header_id_githubpage"><span style="background-image: url(&quot;https://blog.halberd.cn/dynamic/favicon.svg&quot;)"></span>github page的局限</h3>
 <p>本站是由<a target="_blank" href="https://github.io">github page</a>托管的，但是正常情况下它有几个缺点：</p>
 <ul>
 <li>网速贼慢，或者不翻墙压根无法访问</li>
@@ -6,9 +6,9 @@
 <li>静态网站没办法自身更新</li>
 </ul>
 <blockquote>
-  <p>接下来依次展示我的三个小技巧了<img alt="sticker" src="https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/yellow-face/59.png?ran=1603202675767"></p>
+  <p>接下来依次展示我的三个小技巧了<img alt="sticker" src="https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/yellow-face/59.png?ran=1603272112759"></p>
 </blockquote>
-<h4 id="__markdown_header_id_jsdelivrcdn">jsdelivr非常🐂🍺的CDN<span style="background-image: url(&quot;https://blog.halberd.cn/dynamic/favicon.svg&quot;);"></span></h4>
+<h4 id="__markdown_header_id_jsdelivrcdn"><span style="background-image: url(&quot;https://blog.halberd.cn/dynamic/favicon.svg&quot;)"></span>jsdelivr非常🐂🍺的CDN</h4>
 <p>第一个问题，当然是最大的问题: <strong>访问github page非常非常非常慢</strong>，至于有多慢就得自己试试，由于已经解决了该问题，此站访问很快。</p>
 <blockquote>
   <p>本节的主角是<a target="_blank" href="https://www.jsdelivr.com/">jsdelivr</a>，它是一个免费的优质cdn网站，提供npm，github等cdn加速</p>
@@ -32,7 +32,7 @@
 </ol>
 <pre><span>javascript</span><code class="javascript language-javascript hljs"><span class="hljs-keyword">const</span> baseDynamicUrl = process.env.NODE_ENV === <span class="hljs-string">'development'</span>?<span class="hljs-string">''</span>:(<span class="hljs-string">`https://cdn.jsdelivr.net/gh/<span class="hljs-subst">${name}</span>/<span class="hljs-subst">${name}</span>.github.io@latest/<span class="hljs-subst">${your directory}</span>`</span>)
 </code></pre>
-<h4 id="__markdown_header_id_404htmlapp">使用404.html作为app<span style="background-image: url(&quot;https://blog.halberd.cn/dynamic/favicon.svg&quot;);"></span></h4>
+<h4 id="__markdown_header_id_404htmlapp"><span style="background-image: url(&quot;https://blog.halberd.cn/dynamic/favicon.svg&quot;)"></span>使用404.html作为app</h4>
 <p>这是一个基于<a target="_blank" href="https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/creating-a-custom-404-page-for-your-github-pages-site">github.io的404</a>的骚操作。</p>
 <blockquote>
   <p>思路是把<code>404.html</code>作为app，不写任何<code>index.html</code>以及<code>README.md</code>，让静态网站无论收到什么请求都<em>404</em>，然后手动写路由识别。下面介绍需要的步骤</p>
@@ -128,11 +128,11 @@
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span>
 </code></pre>
 <hr>
-<p>这样在打包完成后就只有一个<code>404.html</code>，所有请求都会转到这里，然后由js去决定加载哪个页面，这操作够<img alt="sticker" src="https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/aru/79.png?ran=1603202675767">吧。</p>
-<h4 id="__markdown_header_id_">静态网站自我更新<span style="background-image: url(&quot;https://blog.halberd.cn/dynamic/favicon.svg&quot;);"></span></h4>
+<p>这样在打包完成后就只有一个<code>404.html</code>，所有请求都会转到这里，然后由js去决定加载哪个页面，这操作够<img alt="sticker" src="https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/aru/79.png?ran=1603272112759">吧。</p>
+<h4 id="__markdown_header_id_"><span style="background-image: url(&quot;https://blog.halberd.cn/dynamic/favicon.svg&quot;)"></span>静态网站自我更新</h4>
 <blockquote>
-  <p>这个没啥介绍的，只能说github牛逼<img alt="sticker" src="https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/yellow-face/52.png?ran=1603202675767">，此站的自我更新基于<a target="_blank" href="https://developer.github.com/">github rest api</a>。
-  这里的<code>自我更新</code>指的是使用静态网站本身更新网站，实在想不到别的术语了<img alt="sticker" src="https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/aru/62.png?ran=1603202675767"></p>
+  <p>这个没啥介绍的，只能说github牛逼<img alt="sticker" src="https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/yellow-face/52.png?ran=1603272112759">，此站的自我更新基于<a target="_blank" href="https://developer.github.com/">github rest api</a>。
+  这里的<code>自我更新</code>指的是使用静态网站本身更新网站，实在想不到别的术语了<img alt="sticker" src="https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/aru/62.png?ran=1603272112759"></p>
 </blockquote>
 <hr>
 <p>就这么多了，本文结束!</p>
