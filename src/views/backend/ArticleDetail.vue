@@ -412,7 +412,7 @@ export default {
           }, this.saving);
           if (res[0]) {
             this.$message.success('上传成功!');
-            await this.$router.push('/article')
+            window.location.reload()
           } else {
             this.$message.error(parseAjaxError(res[1]))
           }
