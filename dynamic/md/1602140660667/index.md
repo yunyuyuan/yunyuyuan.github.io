@@ -30,7 +30,7 @@
 ![img](https://s2.ax1x.com/2020/01/28/1KcLeU.png)
 
 指定大小的图片
-![30% x null](https://s2.ax1x.com/2020/01/28/1KcLeU.png)
+![img](https://s2.ax1x.com/2020/01/28/1KcLeU.png =30%x*)
 
 一段代码
 ```javascript
