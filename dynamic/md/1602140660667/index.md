@@ -1,11 +1,11 @@
 ## 简述
 
 很早就有这个想法了:写一个静态博客。正好我租的服务器快过期了，也不想续费因为基本用不上(贫穷![sticker](yellow-face/27))，挂个blog在上面甚是浪费。
-于是着手写了这个静态博客。仅有一些我所认为的基础功能。日后慢慢完善吧！
+于是着手写了这个静态博客，仅有一些我所认为的基础功能。日后慢慢完善吧！
 
 ## 技术栈
 
-> 此博客所用的技术栈其实只有vue,毕竟vue这个巨人它的肩膀已经足够高。  
+> 此博客所用的技术栈其实只有vue,毕竟vue这个巨人它的肩膀已经足够高。
 > 本站除了域名之外,其他的内容全部免费(白嫖党狂喜![sticker](yellow-face/56)),下面简述下大大小小的致谢与Power by：
 
 * 托管在#[github.io](https://github.io)上
@@ -30,7 +30,7 @@
 ![img](https://s2.ax1x.com/2020/01/28/1KcLeU.png)
 
 指定大小的图片
-![30% x ](https://s2.ax1x.com/2020/01/28/1KcLeU.png)
+![30% x null](https://s2.ax1x.com/2020/01/28/1KcLeU.png)
 
 一段代码
 ```javascript
@@ -41,8 +41,19 @@ function choice(list){
 
 任务列表
 - [x] img-viewer
-- [ ] about页面
 - [x] 路由history模式
-- [ ] 日/夜间模式,字体可调
 - [x] 在线发布release
 - [x] 未写完存草稿到localStorage
+- [ ] about页面
+- [ ] 日/夜间模式,字体可调
+- [ ] safari和firefox不支持正则分组
+
+--一个field--
+一些内容![sticker](aru/52)
+还能插`代码块`哦
+```golang
+type blog struct{
+	info interface{}
+}
+```
+-- --
