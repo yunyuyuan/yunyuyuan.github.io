@@ -10,14 +10,11 @@
 
 <script>
 import TheComment from "@/views/comment/index";
-import {insertMdStyle, loadFinish} from "@/utils/utils";
+import { loadFinish} from "@/utils/utils";
 
 export default {
   name: "index",
   components: {TheComment},
-  created() {
-    insertMdStyle()
-  },
   mounted() {
     loadFinish()
   }

@@ -47,10 +47,6 @@ export function sortByTime(lis) {
     })
 }
 
-export function insertMdStyle (){
-    document.head.querySelector('#markdown-stylesheet').href = `${originPrefix}/markdown.css?ran=${new Date().getTime()}`
-}
-
 export function loadFinish (){
     document.querySelector('#loading').setAttribute('hide', '');
 }

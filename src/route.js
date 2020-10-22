@@ -2,11 +2,19 @@ function routeInfo (){
     // 去掉最后的 '/'
     let pathname = window.location.pathname.replace(/^(.+?)\/*$/, '$1');
     for (let i of routes){
-        let regexp = i.path.replace(/\//g, '\\/').replace(/\\\/:(\w+)/g, '\\/(?<$1>[^/]+)');
+        const paramNames = [];
+        let regexp = i.path.replace(/\/:(\w+)/g, (a, b)=>{
+            paramNames.push(b);
+            return '/([^/]+)'
+        });
         let matcher = pathname.match( new RegExp(`^${regexp}$`));
         if (matcher){
+            const params = {};
+            for (let idx=1;idx<=paramNames.length;idx++){
+                params[paramNames[idx-1]] = matcher[idx];
+            }
             return {
-                params: matcher.groups||{},
+                params: params||{},
                 ...i
             }
         }

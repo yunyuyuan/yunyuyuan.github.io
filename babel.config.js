@@ -7,6 +7,5 @@ module.exports = {
         "injectH": false
       }
     ]
-  ],
-  plugins: ["@babel/plugin-transform-named-capturing-groups-regex"]
+  ]
 }

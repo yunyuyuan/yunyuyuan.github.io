@@ -3,7 +3,7 @@
     <div class="inner" flex>
       <div class="textarea" ref="textarea" :style="{height: textareaHeight}"></div>
       <div class="utils" flex>
-        <div class="sticker" ref="sticker" :class="{active: showSticker}" flex>
+        <div class="sticker" ref="sticker" :class="{active: showSticker}" flex v-if="config.sticker">
           <div class="content">
             <div class="inner" :style="{width: `${config.sticker.length}00%`, left: `${stickerSlideNow*-100}%`}" flex>
               <div v-for="item in config.sticker" :style="{width: `${100/config.sticker.length}%`}" flex>
@@ -197,7 +197,7 @@ export default {
         this.$message.warning('请先点选择输入框!');
         return
       }
-      this.codeMirror.replaceRange(`![sticker](${folder}/${idx})`, this.focusAt);
+      this.codeMirror.replaceRange(`![sticker](${cdnDynamicUrl}/sticker/${folder}/${idx}.png?ran=${siteConfig.timeStamp})`, this.focusAt);
       document.removeEventListener('click', this.handleStickerDiv);
       this.showSticker = false;
     },

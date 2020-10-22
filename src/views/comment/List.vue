@@ -160,7 +160,7 @@ export default {
       }
     },
     calcMdToHtml(text, isReply) {
-      text = text.replace(/</g, '&lt;').replace(/(?<!^|\n)>/g, '&gt;')
+      text = text.replace(/</g, '&lt;').replace(/(?!^|(?:\n\s*))>/g, '&gt;')
       if (isReply) {
         let matcher = text.match(/^@(\S+)([\s\S]*)/);
         if (matcher) {

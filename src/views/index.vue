@@ -96,6 +96,15 @@ export default {
     document.head.querySelector('meta[name=description]').setAttribute('description', route.keywords);
 
     this.showHead = route.name !== 'backend';
+    if (['articleDetail', 'msgBoard', 'backend'].indexOf(route.name) !== -1) {
+      // 加载markdown.css
+      fetch(`${originPrefix}/markdown.css?ran=${new Date().getTime()}`).then(res=>{
+        res.text().then(text=>{
+          document.head.querySelector('#markdown-stylesheet').innerHTML = text;
+        })
+      })
+    }
+
     switch (route.name){
       case 'index':
         this.routeNow = 'home';

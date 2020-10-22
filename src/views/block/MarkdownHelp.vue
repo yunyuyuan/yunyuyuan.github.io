@@ -23,9 +23,7 @@ export default {
   data (){
     return {
       guide: [
-        ['![sticker](aru/10)', 'aru表情包第10个表情'],
         ['#[google](https://google.com)', 'target=_blank的链接'],
-        ['![width x height](url)', '链接为url,width和height为指定值的图片(null代表未指定,可用%)'],
       ]
     }
   }

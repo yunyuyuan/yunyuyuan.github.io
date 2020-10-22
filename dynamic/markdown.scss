@@ -1,5 +1,5 @@
 // 别删除 .--markdown，修改它包裹的内容
-.--markdown {
+.--markdown{
   width: 100%;
   display: block;
   word-break: break-word;
@@ -14,11 +14,10 @@
       color: rgb(255, 82, 24);
       font-size: 0.8rem/$size + 0.8rem;
       position: relative;
-
-      &:hover {
+      &:hover{
         text-decoration: underline;
       }
-      >span{
+      > span{
         background-size: 100% 100%;
         display: block;
         width: 1.8rem;
@@ -28,7 +27,7 @@
         transform: translateX(calc(-100% - 0.4rem));
       }
       @media screen and (max-width: 768px){
-        >span{
+        > span{
           position: relative;
           transform: translateX(-0.4rem);
         }
@@ -58,32 +57,24 @@
       background: #9dfffa;
     }
   }
-
-  img {
-    display: block;
+  img{
+    display: inline-block;
     width: 80%;
-    margin: 1rem auto;
+    margin: 1rem;
     object-fit: contain;
     &:not([alt=sticker]){
       box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.5);
     }
-
-    &[alt=sticker] {
+    &[alt=sticker]{
       display: inline-block;
       width: 1.6rem;
       height: 1.6rem;
       margin: 0 0.3rem -0.2rem 0.3rem;
     }
-  }
-  li.task-list-item{
-    position: relative;
-    > svg{
-      position: absolute;
-      top: 0.25rem;
-      left: 0;
-      transform: translateX(calc(-100% - 0.4rem));
-      width: 1.4rem;
-      height: 1.4rem;
+    &[center]{
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
   strong{
@@ -101,56 +92,103 @@
     background: rgb(239, 239, 239);
     border-radius: 0 0.5rem 0.5rem 0;
   }
-  table {
+  fieldset{
+    width: calc(96% - 2rem);
+    margin: 2rem 2% 0.5rem 2%;
+    padding: 1.2rem 1rem 0.6rem 1rem;
+    position: relative;
+    box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.5);
+    transition: all .15s ease-out;
+    &:hover{
+      box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+    }
+    &:before{
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      z-index: 1;
+      width: calc(100% + 4px);
+      height: calc(100% + 4px);
+      content: '';
+      display: block;
+      background: linear-gradient(to right bottom, red, blue);
+    }
+    &:after{
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      content: '';
+      display: block;
+      background: white;
+    }
+    *{
+      z-index: 3;
+      position: relative;
+    }
+    >legend{
+      position: absolute;
+      font-size: 0.9rem;
+      line-height: 1rem;
+      top: -1rem;
+      left: 1rem;
+      display: block;
+      background: linear-gradient(45deg, #cc2500, #1000ff);
+      border-radius: 0.4rem;
+      box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.4);
+      color: white;
+      padding: 0.4rem 0.8rem;
+    }
+  }
+  table{
     width: 90%;
     margin: 1rem auto;
-
-    tr {
-      td {
+    tr{
+      td{
       }
     }
-
-    thead {
+    thead{
     }
-
-    tbody {
+    tbody{
       td{
         text-align: center;
       }
     }
   }
-
   ul{
-    > li:not(.task-list-item)::marker{
-      color: #00c561;
-      font-weight: bold;
-      font-size: 1.5rem;
+    > li:not(.task-list-item){
     }
   }
-
   ol{
-    > li::marker{
-      font-size: 1em;
-      color: #0032ff;
-      font-weight: bold;
+    > li{
     }
   }
-
   ul, ol{
     padding: 0 0 0 1.5rem;
-
-    > li:before {
-      position: absolute;
-      left: -2rem;
+    list-style: none;
+    > li{
+      position: relative;
+      margin: 0.5rem 0 0.5rem 0.2rem;
+      &.task-list-item{
+        position: relative;
+        > svg{
+          position: absolute;
+          top: 0.3rem;
+          left: 0;
+          transform: translateX(calc(-100% - 0.4rem));
+          width: 1.4rem;
+          height: 1.4rem;
+        }
+      }
+      &:before{
+        position: absolute;
+        left: -2rem;
+      }
     }
   }
-
-  li {
-    position: relative;
-    margin: 0.5rem 0 0.5rem 0.2rem;
-  }
-
-  code {
+  code{
     font-family: "Source Code Pro", serif;
     &:not(.hljs){
       background: rgb(210, 210, 210);
@@ -159,18 +197,15 @@
       margin: 0 0.2rem;
     }
   }
-
-  pre {
+  pre{
     position: relative;
     margin: 0.5rem 0;
-
     &:hover{
-      >span{
+      > span{
         display: flex;
       }
     }
-
-    >span{
+    > span{
       display: none;
       align-items: center;
       text-align: center;
@@ -195,8 +230,7 @@
         display: none !important;
       }
     }
-
-    > code.hljs {
+    > code.hljs{
       display: block;
       overflow: visible;
       overflow-x: auto;
@@ -207,60 +241,47 @@
       font-size: 0.9rem;
       line-height: 1.4rem;
       position: relative;
-      &, .hljs-subst {
+      &, .hljs-subst{
         color: rgb(222, 222, 222)
       }
-
-      .hljs-comment {
+      .hljs-comment{
         color: rgb(136, 136, 136)
       }
-
-      .hljs-keyword, .hljs-attribute, .hljs-selector-tag, .hljs-meta-keyword, .hljs-doctag, .hljs-name {
+      .hljs-keyword, .hljs-attribute, .hljs-selector-tag, .hljs-meta-keyword, .hljs-doctag, .hljs-name{
         font-weight: bold;
         color: rgb(255, 123, 60);
       }
-
-      .hljs-type, .hljs-string, .hljs-selector-id, .hljs-selector-class, .hljs-quote, .hljs-template-tag, .hljs-deletion {
+      .hljs-type, .hljs-string, .hljs-selector-id, .hljs-selector-class, .hljs-quote, .hljs-template-tag, .hljs-deletion{
         color: rgb(126, 197, 85)
       }
-
-      .hljs-number {
+      .hljs-number{
         color: rgb(90, 161, 255);
       }
-
-      .hljs-title, .hljs-section {
+      .hljs-title, .hljs-section{
         color: rgb(255, 198, 109);
         font-weight: bold
       }
-
-      .hljs-regexp, .hljs-symbol, .hljs-variable, .hljs-template-variable, .hljs-link, .hljs-selector-attr, .hljs-selector-pseudo {
+      .hljs-regexp, .hljs-symbol, .hljs-variable, .hljs-template-variable, .hljs-link, .hljs-selector-attr, .hljs-selector-pseudo{
         color: rgb(255, 225, 62);
       }
-
-      .hljs-literal {
+      .hljs-literal{
         color: rgb(120, 169, 96)
       }
-
-      .hljs-built_in, .hljs-bullet, .hljs-code, .hljs-addition {
+      .hljs-built_in, .hljs-bullet, .hljs-code, .hljs-addition{
         color: rgb(231, 134, 255);
       }
-
-      .hljs-meta {
+      .hljs-meta{
         color: rgb(241, 235, 51)
       }
-
-      .hljs-meta-string {
+      .hljs-meta-string{
         color: rgb(77, 153, 191)
       }
-
-      .hljs-emphasis {
+      .hljs-emphasis{
         font-style: italic
       }
-
-      .hljs-strong {
+      .hljs-strong{
         font-weight: bold
       }
-
     }
   }
 }

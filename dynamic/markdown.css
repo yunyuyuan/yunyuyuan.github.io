@@ -196,9 +196,9 @@
   background: #9dfffa;
 }
 .--markdown img {
-  display: block;
+  display: inline-block;
   width: 80%;
-  margin: 1rem auto;
+  margin: 1rem;
   object-fit: contain;
 }
 .--markdown img:not([alt=sticker]) {
@@ -210,16 +210,10 @@
   height: 1.6rem;
   margin: 0 0.3rem -0.2rem 0.3rem;
 }
-.--markdown li.task-list-item {
-  position: relative;
-}
-.--markdown li.task-list-item > svg {
-  position: absolute;
-  top: 0.25rem;
-  left: 0;
-  transform: translateX(calc(-100% - 0.4rem));
-  width: 1.4rem;
-  height: 1.4rem;
+.--markdown img[center] {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 .--markdown strong {
   margin: 0 0.3rem;
@@ -236,6 +230,56 @@
   background: #efefef;
   border-radius: 0 0.5rem 0.5rem 0;
 }
+.--markdown fieldset {
+  width: calc(96% - 2rem);
+  margin: 2rem 2% 0.5rem 2%;
+  padding: 1.2rem 1rem 0.6rem 1rem;
+  position: relative;
+  box-shadow: 0 0 0.1rem rgba(0, 0, 0, 0.5);
+  transition: all 0.15s ease-out;
+}
+.--markdown fieldset:hover {
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+}
+.--markdown fieldset:before {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  z-index: 1;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  content: "";
+  display: block;
+  background: linear-gradient(to right bottom, red, blue);
+}
+.--markdown fieldset:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  content: "";
+  display: block;
+  background: white;
+}
+.--markdown fieldset * {
+  z-index: 3;
+  position: relative;
+}
+.--markdown fieldset > legend {
+  position: absolute;
+  font-size: 0.9rem;
+  line-height: 1rem;
+  top: -1rem;
+  left: 1rem;
+  display: block;
+  background: linear-gradient(45deg, #cc2500, #1000ff);
+  border-radius: 0.4rem;
+  box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.4);
+  color: white;
+  padding: 0.4rem 0.8rem;
+}
 .--markdown table {
   width: 90%;
   margin: 1rem auto;
@@ -243,26 +287,28 @@
 .--markdown table tbody td {
   text-align: center;
 }
-.--markdown ul > li:not(.task-list-item)::marker {
-  color: #00c561;
-  font-weight: bold;
-  font-size: 1.5rem;
-}
-.--markdown ol > li::marker {
-  font-size: 1em;
-  color: #0032ff;
-  font-weight: bold;
-}
 .--markdown ul, .--markdown ol {
   padding: 0 0 0 1.5rem;
+  list-style: none;
+}
+.--markdown ul > li, .--markdown ol > li {
+  position: relative;
+  margin: 0.5rem 0 0.5rem 0.2rem;
+}
+.--markdown ul > li.task-list-item, .--markdown ol > li.task-list-item {
+  position: relative;
+}
+.--markdown ul > li.task-list-item > svg, .--markdown ol > li.task-list-item > svg {
+  position: absolute;
+  top: 0.3rem;
+  left: 0;
+  transform: translateX(calc(-100% - 0.4rem));
+  width: 1.4rem;
+  height: 1.4rem;
 }
 .--markdown ul > li:before, .--markdown ol > li:before {
   position: absolute;
   left: -2rem;
-}
-.--markdown li {
-  position: relative;
-  margin: 0.5rem 0 0.5rem 0.2rem;
 }
 .--markdown code {
   font-family: "Source Code Pro", serif;

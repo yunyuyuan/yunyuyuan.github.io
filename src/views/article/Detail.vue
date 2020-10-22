@@ -3,7 +3,7 @@
     <div class="detail">
       <div class="content" flex>
         <aside class="info" :style="{transform: `translateY(${asideTop}px)`}" ref="aside" flex>
-          <div :class="{'active': asideActive}" flex>
+          <div :class="asideActive===null?'':(asideActive?'active':'deactive')" flex>
             <div class="anchors" flex>
               <span class="anchor" :class="{active: item.active}" v-for="item in anchors"
                     @click="toAnchor(item.el)">{{ item.text }}</span>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import {getText, insertMdStyle, loadFinish} from "@/utils/utils";
+import {getText, loadFinish} from "@/utils/utils";
 import {originPrefix} from "@/need";
 import TheComment from "@/views/comment/index";
 
@@ -57,7 +57,7 @@ export default {
       md: [],
       html: '',
       anchors: [],
-      asideActive: false,
+      asideActive: null,
       asideTop: 0,
       animationHandle: undefined,
       qrcode: '',
@@ -89,7 +89,6 @@ export default {
     if (res[0]) {
       this.md = JSON.parse(res[1])
     }
-    insertMdStyle();
     qrcode.toDataURL(location.href, (err, url) => {
       this.qrcode = url
     })
@@ -198,12 +197,34 @@ export default {
         > div{
           max-height: calc(100vh - 11rem);
           flex-direction: column;
-          &.active > .anchors{
-            width: 12rem;
+          width: 0;
+          transition: all .15s ease-out;
+          @keyframes to-hide{
+            0%{
+              opacity: 1;
+            }
+            100%{
+              opacity: 0;
+              height: 0;
+              display: none;
+              margin: 0;
+              padding: 0;
+            }
           }
-          &.active .tail{
-            overflow: unset;
-            width: 6rem;
+          &.active{
+            width: 12rem;
+            > .anchors{
+              width: 100%;
+            }
+            > .tail{
+              overflow: unset;
+              width: 6rem;
+            }
+          }
+          &.deactive{
+            >.anchors, >.tail{
+              animation: to-hide .15s ease-out forwards;
+            }
           }
           > .anchors, > .tail{
             width: 0;
@@ -223,6 +244,7 @@ export default {
               transition: all .15s linear;
               cursor: pointer;
               @include text-overflow(1);
+              word-break: keep-all;
               display: block;
               position: relative;
               width: 100%;

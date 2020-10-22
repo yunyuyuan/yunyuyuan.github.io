@@ -88,7 +88,7 @@
 
 <script>
 import {cdnDynamicUrl, originPrefix} from "@/need";
-import {getText, insertMdStyle, parseAjaxError, sortByTime} from "@/utils/utils";
+import {getText, parseAjaxError, sortByTime} from "@/utils/utils";
 import checkedImg from "!!text-loader!@/icons/svg/checked.svg";
 import unCheckedImg from "!!text-loader!@/icons/svg/unchecked.svg";
 
@@ -172,9 +172,6 @@ export default {
     }
   },
   inject: ['_config', '_gitUtil', 'showCacheFinish'],
-  created() {
-    insertMdStyle()
-  },
   async mounted() {
     await this.init()
   },
@@ -306,7 +303,7 @@ export default {
         this.$message.warning('请先点选择输入框!');
         return
       }
-      this.codeMirror.replaceRange(`![sticker](${folder}/${idx})`, this.focusAt);
+      this.codeMirror.replaceRange(`![sticker](${cdnDynamicUrl}/sticker/${folder}/${idx}.png?ran=${siteConfig.timeStamp})`, this.focusAt);
       document.removeEventListener('click', this.handleStickerDiv);
       this.showSticker = false;
     },
