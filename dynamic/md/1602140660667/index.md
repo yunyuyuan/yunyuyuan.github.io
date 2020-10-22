@@ -1,12 +1,12 @@
 ## 简述
 
-很早就有这个想法了:写一个静态博客。正好我租的服务器快过期了，也不想续费因为基本用不上(贫穷![sticker](yellow-face/27))，挂个blog在上面甚是浪费。
+很早就有这个想法了:写一个静态博客。正好我租的服务器快过期了，也不想续费因为基本用不上(贫穷![sticker](https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/yellow-face/27.png?ran=1603380419730))，挂个blog在上面甚是浪费。
 于是着手写了这个静态博客，仅有一些我所认为的基础功能。日后慢慢完善吧！
 
 ## 技术栈
 
 > 此博客所用的技术栈其实只有vue,毕竟vue这个巨人它的肩膀已经足够高。
-> 本站除了域名之外,其他的内容全部免费(白嫖党狂喜![sticker](yellow-face/56)),下面简述下大大小小的致谢与Power by：
+> 本站除了域名之外,其他的内容全部免费(白嫖党狂喜![sticker](https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/aru/55.png?ran=1603380419730)),下面简述下大大小小的致谢与Power by：
 
 * 托管在#[github.io](https://github.io)上
 * 由#[vue](https://vuejs.org)全家桶强力驱动
@@ -49,7 +49,7 @@ function choice(list){
 - [ ] safari和firefox不支持正则分组
 
 --一个field--
-一些内容![sticker](aru/52)
+一些内容
 还能插`代码块`哦
 ```golang
 type blog struct{
