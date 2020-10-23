@@ -199,7 +199,7 @@
   box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.5);
 }
 .--markdown img[alt][alt=sticker] {
-  display: inline-block;
+  display: block;
   width: 1.6rem;
   height: 1.6rem;
   margin: 0 0.3rem -0.2rem 0.3rem;

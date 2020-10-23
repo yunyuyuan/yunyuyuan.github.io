@@ -19,7 +19,7 @@ const
         type: 'lang',
         regex: /(?:^|[^\\])!\[(.*?) x (.*?)]\((.*?)\)/g,
         replace: (a, b, c, d) => {
-            return `<img alt="dimension img" style="${b !== '*' ? `width: ${b} !important;` : ''}${c !== '*' ? `height: ${c} !important;` : ''}margin: 1rem;" src="${d}"/>`
+            return `<img alt="dimension img" style="${b !== '*' ? `width: ${b} !important;` : ''}${c !== '*' ? `height: ${c} !important;` : ''}margin: 1rem;display: inline-block" src="${d}"/>`
         }
     },
     colorTextExtension = {
@@ -77,7 +77,7 @@ export function processMdHtml (el){
         })
     })
     // viewer
-    el.querySelectorAll('img:not([alt=sticker])').forEach(el=>{
+    el.querySelectorAll('img[alt]:not([alt=sticker])').forEach(el=>{
       el.setAttribute('data-viewer', '')
     })
     // task
