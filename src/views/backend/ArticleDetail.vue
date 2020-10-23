@@ -56,7 +56,7 @@
         <span @click="enableSticker" title="表情" :class="{active: showSticker}" flex>
           <svg-icon :name="'cmt-sticker'"/>
         </span>
-        <div class="sticker" ref="sticker" :class="{active: showSticker}" flex>
+        <div class="sticker" ref="sticker" :class="{active: showSticker}" flex v-if="config.sticker">
           <div class="content">
             <div class="inner" :style="{width: `${config.sticker.length}00%`, left: `${stickerSlideNow*-100}%`}" flex>
               <div v-for="item in config.sticker" :style="{width: `${100/config.sticker.length}%`}" flex>

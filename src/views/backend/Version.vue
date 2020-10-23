@@ -74,6 +74,8 @@ export default {
   inject: ['_gitUtil'],
   methods: {
     async getTag (){
+      this.tags = [];
+      this.inited = false;
       if (this.gitUtil) {
         let res = await this.gitUtil.getTag();
         if (res[0]){
@@ -97,8 +99,6 @@ export default {
         let res = await this.gitUtil.createRelease(this.newTag);
         if (res[0]) {
           this.$message.success('创建成功!');
-          this.tags = [];
-          this.inited = false;
           this.getTag();
         } else {
           this.$message.error(parseAjaxError(res[1]))
@@ -134,7 +134,7 @@ export default {
         let res = await this.gitUtil.deleteTag(delList, this.deletingTag);
         if (res[0]){
           this.$message.success('删除成功');
-          await this.getTag();
+          this.getTag();
         }else{
           this.$message.error(parseAjaxError(res[1]))
         }
@@ -177,6 +177,7 @@ export default {
       width: 15rem;
       background: linear-gradient(to right, red, blue);
       padding: 1rem 1.8rem;
+      white-space: normal;
       &:hover{
         background: linear-gradient(to right, blue, red);
       }

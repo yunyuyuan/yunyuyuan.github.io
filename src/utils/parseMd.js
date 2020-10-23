@@ -70,7 +70,7 @@ export function processMdHtml (el){
     })
     // ol
     el.querySelectorAll('ol').forEach(el=>{
-        let start = +(el.getAttribute('start')||0)+1;
+        let start = +(el.getAttribute('start')||1);
         el.children.forEach(sub=>{
             sub.setAttribute('data-count', start);
             start ++;
@@ -83,7 +83,6 @@ export function processMdHtml (el){
     // task
     el.querySelectorAll('input[type=checkbox]').forEach(el=>{
         let span = document.createElement('img');
-        console.log(checkImg)
         span.src = el.checked?checkImg:uncheckImg;
         el.parentElement.insertBefore(span, el);
         el.remove();
