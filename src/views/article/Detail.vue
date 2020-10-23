@@ -48,7 +48,7 @@ import TheComment from "@/views/comment/index";
 import qrcode from "qrcode";
 import {routeInfo} from "@/route";
 import siteConfig from "@/site-config";
-import {insertCopyBtn} from "@/utils/highlight";
+import {addCopyEvent} from "@/utils/highlight";
 
 export default {
   name: "Detail",
@@ -124,8 +124,8 @@ export default {
             };
           })
           // code copyBtn
-          this.$refs.markdown.querySelectorAll('pre>code.hljs').forEach(el=>{
-            insertCopyBtn(el);
+          this.$refs.markdown.querySelectorAll('pre>span').forEach(el=>{
+            addCopyEvent(el, el.nextElementSibling.classList[0], el.nextElementSibling.innerText);
           })
           // 监听滚动到anchor
           this.body.onscroll = () => {
@@ -392,7 +392,7 @@ export default {
         width: calc(100% - 6.4rem);
         transition: all .15s ease-out;
         &.show-aside{
-          width: calc(100% - 15rem);
+          width: calc(100% - 18.4rem);
         }
       }
     }

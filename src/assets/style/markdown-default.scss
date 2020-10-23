@@ -1,8 +1,10 @@
+// 别删除 .--markdown，修改它包裹的内容
 .--markdown{
   width: 100%;
   display: block;
   word-break: break-word;
   line-height: 2rem;
+  font-size: 0.88rem;
   @each $size in 1, 2, 3, 4, 5, 6{
     h#{$size}{
       cursor: pointer;
@@ -39,7 +41,6 @@
     margin: 1rem 0;
   }
   p{
-    font-size: 0.95rem;
     white-space: pre-line;
   }
   a[href]{
@@ -169,12 +170,12 @@
     list-style: none;
     > li{
       position: relative;
-      margin: 0.5rem 0 0.5rem 0.2rem;
+      margin: 0.4rem 0 0.4rem 0.2rem;
       &.task-list-item{
         position: relative;
         > svg{
           position: absolute;
-          top: 0.3rem;
+          top: 0.2rem;
           left: 0;
           transform: translateX(calc(-100% - 0.4rem));
           width: 1.4rem;
@@ -237,8 +238,8 @@
       border-radius: 0.3rem;
       background: rgba(43, 43, 43, 0.95);
       max-height: 100vh;
-      font-size: 0.9rem;
-      line-height: 1.4rem;
+      font-size: 0.8rem;
+      line-height: 1.3rem;
       position: relative;
       &, .hljs-subst{
         color: rgb(222, 222, 222)
