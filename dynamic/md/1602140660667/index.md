@@ -46,7 +46,7 @@ function choice(list){
 - [x] 未写完存草稿到localStorage
 - [ ] about页面
 - [ ] 日/夜间模式,字体可调
-- [ ] safari和firefox不支持正则分组
+- [x] safari和firefox不支持正则分组
 
 --一个field--
 一些内容
