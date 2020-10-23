@@ -1,7 +1,7 @@
 <template>
   <footer flex>
     <a href="/backend" class="favicon" flex title="后台管理">
-      <svg-icon :name="'halberd'"/>
+      <img :src="`${originPrefix}/${siteConfig.avatar}?stamp=${siteConfig.timeStamp}`"/>
     </a>
     <div class="social-media" flex>
       <a v-for="k in links" :key="k" target="_blank" :href="config[k]" :title="k" flex>
@@ -16,12 +16,16 @@
 </template>
 
 <script>
-import selfImage from '@/image/i.png'
+import selfImage from '@/image/i.png';
+import {originPrefix} from "@/need";
+import siteConfig from '@/site-config'
 
 export default {
   name: "Footer",
   data() {
     return {
+      originPrefix,
+      siteConfig,
       selfImage,
       links: ['github', 'bilibili', 'email']
     }
@@ -70,7 +74,7 @@ footer{
       background: white;
       animation: shine 1s ease-out infinite alternate;
     }
-    > svg{
+    > img{
       height: 90%;
       width: 90%;
     }
