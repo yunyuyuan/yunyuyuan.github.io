@@ -56,6 +56,7 @@ export default {
   > span {
     font-size: 0.9em;
     margin-left: 0.6em;
+    word-break: keep-all;
   }
 }
 </style>

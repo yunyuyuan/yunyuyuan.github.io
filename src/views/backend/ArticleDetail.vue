@@ -195,7 +195,7 @@ export default {
       this.$nextTick(()=>{
         let htmlEl = this.$refs.html;
         // hljs
-        htmlEl.querySelectorAll('pre>code').forEach(el=>{
+        htmlEl.querySelectorAll('pre>code.hljs').forEach(el=>{
           hljsAndInsertCopyBtn(el)
         })
         // anchor

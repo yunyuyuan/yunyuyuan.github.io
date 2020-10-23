@@ -1,6 +1,11 @@
 import hljs from "highlight.js";
 
 export function hljsAndInsertCopyBtn (el){
+    insertCopyBtn(el);
+    hljs.highlightBlock(el);
+}
+
+export function insertCopyBtn (el){
     let sourceCode = el.innerText;
     let btn = document.createElement('span');
     btn.innerText = el.classList[0];
@@ -17,5 +22,4 @@ export function hljsAndInsertCopyBtn (el){
         btn.innerText = '复制成功'
     }
     el.parentElement.insertBefore(btn, el);
-    hljs.highlightBlock(el);
 }

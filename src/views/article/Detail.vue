@@ -48,6 +48,7 @@ import TheComment from "@/views/comment/index";
 import qrcode from "qrcode";
 import {routeInfo} from "@/route";
 import siteConfig from "@/site-config";
+import {insertCopyBtn} from "@/utils/highlight";
 
 export default {
   name: "Detail",
@@ -121,6 +122,10 @@ export default {
             el.onclick = () => {
               this.toAnchor(el)
             };
+          })
+          // code copyBtn
+          this.$refs.markdown.querySelectorAll('pre>code.hljs').forEach(el=>{
+            insertCopyBtn(el);
           })
           // 监听滚动到anchor
           this.body.onscroll = () => {

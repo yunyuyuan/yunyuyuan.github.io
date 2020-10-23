@@ -131,7 +131,7 @@ export default {
     html() {
       // hljs
       this.$nextTick(()=>{{
-        this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
+        this.$refs.markdown.querySelectorAll('pre>code.hljs').forEach(el => {
           hljsAndInsertCopyBtn(el);
         })
         this.$refs.markdown.querySelectorAll('img:not([alt=sticker])').forEach(el => {

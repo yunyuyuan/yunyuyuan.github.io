@@ -147,6 +147,7 @@ export default {
         }
         this.$nextTick(() => {
           if (!this.$refs.list) return ;
+          // 把还没有highlight的code转义
           this.$refs.list.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
             el.innerText = el.innerText.replace(/&lt;/g, '<').replaceAll('&gt;', '>');
             hljsAndInsertCopyBtn(el);

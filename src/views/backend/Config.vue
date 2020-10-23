@@ -39,8 +39,14 @@ export default {
       return this._gitUtil()
     }
   },
-  created() {
-    this.info = JSON.parse(JSON.stringify(this.config));
+  watch: {
+    config: {
+      immediate: true,
+      deep: true,
+      handler (){
+        this.info = JSON.parse(JSON.stringify(this.config));
+      }
+    }
   },
   inject: ['_config', '_gitUtil'],
   methods: {

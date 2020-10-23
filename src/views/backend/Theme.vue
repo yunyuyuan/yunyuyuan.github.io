@@ -84,7 +84,7 @@ export default {
   mounted() {
     this.init()
     // hljs
-    this.$refs.markdown.querySelectorAll('pre>code').forEach(el => {
+    this.$refs.markdown.querySelectorAll('pre>code.hljs').forEach(el => {
       hljsAndInsertCopyBtn(el);
     });
   },
