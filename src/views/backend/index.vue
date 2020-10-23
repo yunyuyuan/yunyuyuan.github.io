@@ -101,7 +101,7 @@ export default {
   data() {
     return {
       selfImage,
-      showMenu: true,
+      showMenu: (localStorage.getItem('show-menu')||'true')==='true',
       showLogin: false,
       updating: false,
       gitUtil: null,
@@ -156,7 +156,8 @@ export default {
   },
   methods: {
     toggleMenu() {
-      this.showMenu = !this.showMenu
+      this.showMenu = !this.showMenu;
+      localStorage.setItem('show-menu', this.showMenu.toString());
     },
     initGitUtil (gitUtil){
       this.gitUtil = gitUtil
