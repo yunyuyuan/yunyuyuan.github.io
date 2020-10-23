@@ -3,7 +3,7 @@
   width: 100%;
   display: block;
   word-break: break-word;
-  line-height: 2rem;
+  line-height: 1.8rem;
   font-size: 0.88rem;
   @each $size in 1, 2, 3, 4, 5, 6{
     h#{$size}{
@@ -18,8 +18,7 @@
       &:hover{
         text-decoration: underline;
       }
-      > span{
-        background-size: 100% 100%;
+      > img{
         display: block;
         width: 1.8rem;
         height: 1.8rem;
@@ -57,10 +56,10 @@
       background: #9dfffa;
     }
   }
-  img{
+  img[alt]{
     display: inline-block;
     width: 80%;
-    margin: 1rem;
+    margin: 1rem auto;
     object-fit: contain;
     &:not([alt=sticker]){
       box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.5);
@@ -159,32 +158,45 @@
   }
   ul{
     > li:not(.task-list-item){
+      >img:first-child:not(alt){
+        width: 1.4rem;
+        height: 1.4rem;
+        position: absolute;
+        top: 0.2rem;
+        left: -1.6rem;
+      }
     }
   }
   ol{
     > li{
+      &:before{
+        content: attr(data-count)".";
+        color: #1b00ff;
+        position: absolute;
+        left: -1.2rem;
+        top: 0;
+        font-size: 1.1rem;
+        font-weight: bold;
+      }
     }
   }
   ul, ol{
-    padding: 0 0 0 1.5rem;
+    padding: 0 0 0 1.8rem;
     list-style: none;
     > li{
       position: relative;
       margin: 0.4rem 0 0.4rem 0.2rem;
       &.task-list-item{
         position: relative;
-        > svg{
+        > img{
           position: absolute;
           top: 0.2rem;
           left: 0;
           transform: translateX(calc(-100% - 0.4rem));
           width: 1.4rem;
           height: 1.4rem;
+          flex-shrink: 0;
         }
-      }
-      &:before{
-        position: absolute;
-        left: -2rem;
       }
     }
   }
@@ -220,7 +232,7 @@
       padding: 0.2rem 0.4rem;
       color: #b5b5b5;
       height: 1rem;
-      z-index: 1;
+      z-index: 5;
       font-family: 'Source Code Pro', serif;
       &:hover{
         background: #ff5500;

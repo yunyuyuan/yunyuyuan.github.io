@@ -89,8 +89,6 @@
 <script>
 import {cdnDynamicUrl, originPrefix} from "@/need";
 import {getText, parseAjaxError, sortByTime} from "@/utils/utils";
-import checkedImg from "!!text-loader!@/icons/svg/checked.svg";
-import unCheckedImg from "!!text-loader!@/icons/svg/unchecked.svg";
 
 import FloatInput from "@/components/FloatInput";
 import LoadingButton from "@/components/LoadingButton";
@@ -108,7 +106,7 @@ import '@/assets/style/code-mirror/dracula-markdown.scss';
 import Resizer from "@/components/Resizer";
 import MarkdownHelp from "@/views/block/MarkdownHelp";
 import LoadingImg from "@/components/LoadingImg";
-import {parseMarkdown} from "@/utils/parseMd";
+import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
 import {hljsAndInsertCopyBtn} from "@/utils/highlight";
 import siteConfig from "@/site-config";
 import {getCache, setCache} from "@/views/backend/storage";
@@ -193,26 +191,7 @@ export default {
     },
     htmlText (){
       this.$nextTick(()=>{
-        let htmlEl = this.$refs.html;
-        // hljs
-        htmlEl.querySelectorAll('pre>code.hljs').forEach(el=>{
-          hljsAndInsertCopyBtn(el)
-        })
-        // anchor
-        htmlEl.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').forEach(el => {
-          el.innerHTML = `<span style='background-image: url("${originPrefix}/${siteConfig.avatar}")'></span>${el.innerHTML}`
-        })
-        // viewer
-        htmlEl.querySelectorAll('img:not([alt=sticker])').forEach(el=>{
-          el.setAttribute('data-viewer', '')
-        })
-        // task
-        htmlEl.querySelectorAll('input[type=checkbox]').forEach(el=>{
-          let svg = document.createElement('svg');
-          el.parentElement.insertBefore(svg, el);
-          el.remove();
-          svg.outerHTML = el.checked?checkedImg:unCheckedImg;
-        })
+        processMdHtml(this.$refs.html)
       })
     }
   },
@@ -368,7 +347,7 @@ export default {
       if (this.saving.b) return;
       if (this.gitUtil) {
         const md = this.mdText,
-            html = this.$refs.html.innerHTML;
+            html = this.htmlText;
         let info = this.info;
         if (!info.name || !info.summary || !info.tags.length || !info.cover) {
           return this.$message.warning('标题,简介,标签和封面均不能为空!')

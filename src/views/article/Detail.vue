@@ -48,7 +48,7 @@ import TheComment from "@/views/comment/index";
 import qrcode from "qrcode";
 import {routeInfo} from "@/route";
 import siteConfig from "@/site-config";
-import {addCopyEvent} from "@/utils/highlight";
+import {processMdHtml} from "@/utils/parseMd";
 
 export default {
   name: "Detail",
@@ -110,7 +110,8 @@ export default {
       if (res[0]) {
         this.html = res[1];
         this.$nextTick(() => {
-          // 取出anchor
+          processMdHtml(this.$refs.markdown);
+          // 取出anchor为侧栏
           this.anchors = [];
           let headList = this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
           headList.forEach(el => {
@@ -122,10 +123,6 @@ export default {
             el.onclick = () => {
               this.toAnchor(el)
             };
-          })
-          // code copyBtn
-          this.$refs.markdown.querySelectorAll('pre>span').forEach(el=>{
-            addCopyEvent(el, el.nextElementSibling.classList[0], el.nextElementSibling.innerText);
           })
           // 监听滚动到anchor
           this.body.onscroll = () => {
