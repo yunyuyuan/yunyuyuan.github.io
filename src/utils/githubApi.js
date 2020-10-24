@@ -1,7 +1,6 @@
 import Octokat from "octokat";
 import Sass from "sass.js";
 import {getText, stringToB64} from "@/utils/utils";
-import {originPrefix} from "@/need";
 
 const dynamicFolder = 'dynamic';
 
@@ -221,12 +220,12 @@ export class GithubUtils {
     async createRelease(name, dict) {
         return new Promise(async resolve => {
             dict.state = '获取404-temp.html';
-            let res = await getText(`${dynamicFolder}/404-temp.html`);
+            let res = await getText(`404-temp.html`);
             if (!res[0]) {
                 resolve([false, res[1]])
             }
             dict.state = '复制404-temp.html到404.html';
-            res = await this.updateSingleFile(`${dynamicFolder}/404.html`, res[1]);
+            res = await this.updateSingleFile(`404.html`, res[1]);
             if (!res[0]) {
                 resolve([false, res[1]])
             }
