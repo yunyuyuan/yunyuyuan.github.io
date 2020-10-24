@@ -55,8 +55,9 @@ const siteConfig = require( '@/site-config')
 const routes = [
     {
         path: '/',
-        name: 'index',
+        name: 'home',
         title: '主页',
+        comp: ()=>import('@/views/home/index'),
         keywords: `静态博客 ${siteConfig.owner}的个人博客 主页`,
         description: `${siteConfig.owner}的个人博客-${siteConfig.corner}`
     },
@@ -64,6 +65,7 @@ const routes = [
         path: '/article',
         name: 'article',
         title: '文章列表',
+        comp: ()=>import('@/views/article/List'),
         keywords: `静态博客 ${siteConfig.owner}的个人博客 文章列表 博文`,
         description: `${siteConfig.owner}的个人博客-博客文章列表`
     },
@@ -71,6 +73,7 @@ const routes = [
         path: '/article/:id',
         name: 'articleDetail',
         title: '文章详情',
+        comp: ()=>import('@/views/article/Detail'),
         keywords: `静态博客 ${siteConfig.owner}的个人博客 文章详情`,
         description: `${siteConfig.owner}的个人博客-博客文章详情`
     },
@@ -78,6 +81,7 @@ const routes = [
         path: '/record',
         name: 'record',
         title: '记录列表',
+        comp: ()=>import('@/views/record/index'),
         keywords: `静态博客 ${siteConfig.owner}的个人博客 生活记录`,
         description: `${siteConfig.owner}的个人博客-个人生活记录`
     },
@@ -85,6 +89,7 @@ const routes = [
         path: '/backend',
         name: 'backend',
         title: '后台管理',
+        comp: ()=>import('@/views/backend/index'),
         keywords: `静态博客 ${siteConfig.owner}的个人博客 后端管理`,
         description: `${siteConfig.owner}的个人博客-后端管理`
     },
@@ -92,6 +97,7 @@ const routes = [
         path: '/msg-board',
         name: 'msgBoard',
         title: '留言板',
+        comp: ()=>import('@/views/msg-board/index'),
         keywords: `静态博客 ${siteConfig.owner}的个人博客 留言板`,
         description: `${siteConfig.owner}的个人博客-留言板`
     },
@@ -99,6 +105,7 @@ const routes = [
         path: '/simple-code-simple-life',
         name: 'about',
         title: '简单代码-简单生活',
+        comp: ()=>import('@/views/about/index'),
         keywords: `静态博客 ${siteConfig.owner}的个人博客 关于`,
         description: `${siteConfig.owner}的个人博客-关于`
     },

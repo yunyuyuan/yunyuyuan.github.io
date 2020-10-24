@@ -138,7 +138,7 @@ export default {
 
       > span {
         padding: 1rem;
-        background: rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.6);
         word-break: break-all;
         font-size: 1.1rem;
         white-space: pre-line;
@@ -169,6 +169,15 @@ export default {
         }
       }
     }
+  }
+}
+</style>
+
+<style lang="scss">
+header.the-head{
+  background: transparent !important;
+  .favicon{
+    display: none !important;
   }
 }
 </style>

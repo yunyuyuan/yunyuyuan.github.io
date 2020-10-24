@@ -1,12 +1,12 @@
 <template>
-  <section class="the-head">
+  <header class="the-head">
     <div class="body" @mouseenter="toggle(true)" @mouseleave="toggle(false)" flex>
       <a class="favicon" href="/">
         <img :src="selfImage"/>
       </a>
       <a class="txt" href="/simple-code-simple-life" flex title="简单代码，简单生活">{{text}}</a>
     </div>
-  </section>
+  </header>
 </template>
 
 <script>
@@ -50,9 +50,6 @@ export default {
   z-index: $z-index-head;
   &.headroom--unpinned{
     background: rgba(0, 0, 0, 0.6);
-  }
-  &:hover{
-    background: rgba(0, 0, 0, 0.3);
   }
   &.show-bg{
     background: transparent !important;

@@ -2,7 +2,7 @@
   <div class="record">
     <div class="list" flex>
       <div class="item" v-for="item in pagedList" :key="item.file" @click="activeInfo=item">
-        <a class="time">{{ item.time | time(true) }}</a>
+        <time>{{ item.time | time(true) }}</time>
         <div class="img" flex>
           <loading-img v-for="i in item.images.slice(0, 4)" :src="i"/>
         </div>
@@ -60,14 +60,14 @@ export default {
 
 .record{
   width: 90%;
-  max-width: 80rem;
   > .list{
     flex-wrap: wrap;
     width: 100%;
     margin: 1rem 0;
+    align-items: flex-start;
     > .item{
       padding: 0.6rem 1rem;
-      height: 8rem;
+      height: 11rem;
       overflow: hidden;
       position: relative;
       transition: height .15s linear;
@@ -75,14 +75,13 @@ export default {
       border-radius: 0.2rem;
       background: white;
       cursor: pointer;
-      margin-bottom: 4rem;
+      margin: 0 1rem 4rem 1rem;
       &:hover{
-        height: 11rem;
-        > .time{
+        > time{
           opacity: 1;
         }
       }
-      > .time{
+      > time{
         opacity: 0;
         background: rgba(0, 0, 0, 0.4);
         padding: 0.3rem 1rem;

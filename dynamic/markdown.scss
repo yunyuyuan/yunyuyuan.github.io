@@ -27,7 +27,7 @@
         transform: translateX(calc(-100% - 0.4rem));
       }
       @media screen and (max-width: 768px){
-        > span{
+        > img{
           position: relative;
           transform: translateX(-0.4rem);
         }
@@ -57,7 +57,7 @@
     }
   }
   img[alt]{
-    display: inline-block;
+    display: block;
     width: 80%;
     margin: 1rem auto;
     object-fit: contain;
@@ -65,10 +65,10 @@
       box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.5);
     }
     &[alt=sticker]{
-      display: block;
+      display: inline-block;
       width: 1.6rem;
       height: 1.6rem;
-      margin: 0 0.3rem -0.2rem 0.3rem;
+      margin: 0 0.2rem -0.2rem 0.2rem;
     }
     &[center]{
       display: block;
@@ -227,7 +227,7 @@
       background: transparent;
       border: none;
       cursor: pointer;
-      font-size: 0.5rem;
+      font-size: 0.7rem;
       border-radius: 0.16rem;
       padding: 0.2rem 0.4rem;
       color: #b5b5b5;

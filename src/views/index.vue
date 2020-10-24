@@ -1,13 +1,23 @@
 <template>
   <div id="index">
-<!--  放在最前面防止 mounted() 时<loading/>还不存在  -->
+    <!--  放在最前面防止 mounted() 时<loading/>还不存在  -->
     <loading :class="configLoaded"/>
 
-    <NotFound v-if="routeNow===''"/>
-    <img class="bg" v-else-if="config.backgroundImg==='img'||(config.backgroundImg==='random'&& rand)" :src="images[routeNow]" alt="bg"/>
-    <div class="bg" :style="{background: bgColor}" v-else>
-      <div :style="waveStyle" class="wave"></div>
-      <div :style="waveStyle" class="wave"></div>
+    <NotFound v-if="routeNow===null"/>
+    <img class="bg" v-else-if="isBgImg" :src="images[routeNow]" alt="bg"/>
+    <div class="bg" v-else>
+      <div id="particles-bg"></div>
+      <svg id="comet-bg" width="100%" height="100%" preserveAspectRatio="none">
+        <defs>
+          <radialGradient id="comet-gradient" cx="0" cy=".5" r="0.5">
+            <stop offset="0%" stop-color="rgba(255,255,255,0)"></stop>
+            <stop offset="100%" stop-color="rgba(255,255,255,.8)"></stop>
+          </radialGradient>
+        </defs>
+        <g v-for="i in comets" :transform="`rotate(${i.rotate})`">
+          <ellipse class="item comet-a" :style="{animationDelay: `${i.delay}s`,animationDuration: `${i.duration}s`}" fill="url(#comet-gradient)" :cx="0" :cy="0" :rx="i.width" :ry="i.height"></ellipse>
+        </g>
+      </svg>
     </div>
     <the-head :class="{'show-bg': showBg}" v-if="showHead" @toggle="toggleShowBg"/>
     <section :class="{body: true, 'show-head': showHead, 'show-bg': showBg, 'mask-bg': config.backgroundImg}" flex>
@@ -25,7 +35,6 @@ import ArticleDetailImage from '@/image/articleDetail.jpg';
 import msgBoardImage from '@/image/msgBoard.jpg';
 import recordImage from '@/image/record.jpg';
 import aboutImage from '@/image/about.jpg';
-import waveSvg from '@/assets/wave.svg'
 
 import TheHead from "@/views/block/Head";
 import TheFooter from "@/views/block/Footer";
@@ -42,7 +51,7 @@ import {originPrefix} from "@/need";
 Vue.use(Viewer)
 
 Viewer.setDefaults({
-  filter (img){
+  filter(img) {
     return img.hasAttribute('data-viewer')
   }
 })
@@ -73,20 +82,33 @@ export default {
   },
   provide() {
     return {
-      _config: () => this.computeConfig
+      _config: () => this.computeConfig,
     }
   },
   computed: {
-    rand (){
-      return Math.floor(Math.random()*10)%2
+    isBgImg() {
+      return this.config.backgroundImg === 'img' || (this.config.backgroundImg === 'random' && this.rand)
     },
-    waveStyle (){
-      return {
-        background: `url(${waveSvg}) repeat-x`
-      }
+    rand() {
+      return Math.random() > 0.5
     },
-    computeConfig (){
+    computeConfig() {
       return this.config
+    },
+    comets (){
+      const randCount = 3+Math.floor(Math.random()*5),
+          list = [];
+      for (let i=0;i<randCount;i++){
+        list.push({
+          rotate: 10+Math.ceil(Math.random()*70),
+          pos: [Math.floor(101*Math.random()), Math.floor(101*Math.random())],
+          width: 50+100*Math.random(),
+          height: 0.2+Math.random()*2,
+          duration: 4+Math.random()*3,
+          delay: i*2+Math.random()*3
+        })
+      }
+      return list;
     }
   },
   async created() {
@@ -96,58 +118,61 @@ export default {
     document.head.querySelector('meta[name=description]').setAttribute('description', route.keywords);
 
     this.showHead = route.name !== 'backend';
+    this.routeNow = route.name;
+    this.comp = route.comp || (() => import('@/views/404/index'));
+
     if (['articleDetail', 'msgBoard', 'backend'].indexOf(route.name) !== -1) {
       // 加载markdown.css
-      fetch(`${originPrefix}/markdown.css?ran=${new Date().getTime()}`).then(res=>{
-        res.text().then(text=>{
+      fetch(`${originPrefix}/markdown.css?ran=${new Date().getTime()}`).then(res => {
+        res.text().then(text => {
           document.head.querySelector('#markdown-stylesheet').innerHTML = text;
         })
       })
-    }
-
-    switch (route.name){
-      case 'index':
-        this.routeNow = 'home';
-        this.bgColor = 'linear-gradient(45deg, #ff7e10 0%, #3c2fff 80%, #00c7ff)';
-        this.comp = ()=>import('@/views/home/index')
-        break;
-      case 'article':
-        this.routeNow = 'article';
-        this.bgColor = 'linear-gradient(135deg, rgb(16, 112, 255) 0%, rgb(13, 220, 186) 60%, rgb(255, 235, 0))';
-        this.comp = ()=>import('@/views/article/List')
-        break;
-      case 'articleDetail':
-        this.routeNow = 'articleDetail';
-        this.bgColor = 'linear-gradient(135deg, rgb(16, 112, 255) 0%, rgb(13, 220,186) 60%, rgb(255, 235, 0))';
-        this.comp = ()=>import('@/views/article/Detail')
-        break;
-      case 'record':
-        this.routeNow = 'record';
-        this.bgColor = 'linear-gradient(45deg, rgb(255, 16, 204) 0%, rgb(47, 245, 255) 80%, rgb(0, 255, 67))';
-        this.comp = ()=>import('@/views/record/index')
-        break;
-      case 'msgBoard':
-        this.routeNow = 'msgBoard';
-        this.bgColor = 'linear-gradient(135deg, rgb(31, 16, 255) 0%, rgb(255, 47, 220) 80%, rgb(255, 165, 0))';
-        this.comp = ()=>import('@/views/msg-board/index')
-        break;
-      case 'backend':
-        this.routeNow = 'backend';
-        this.bgColor = 'linear-gradient(45deg, rgb(255, 159, 16) 0%, rgb(0, 185, 255) 80%, rgb(214, 117, 255))';
-        this.comp = ()=>import('@/views/backend/index')
-        break;
-      case 'about':
-        this.routeNow = 'about';
-        this.bgColor = 'linear-gradient(45deg, rgb(255, 97, 74) 0%, rgb(129, 255, 185) 80%, rgb(189, 167, 255))';
-        this.comp = ()=>import('@/views/about/index')
-        break
-      default:
-        this.routeNow = ''
     }
   },
   async mounted() {
     Vue.prototype.$message = this.$refs.message;
     await this.updateConfig();
+    this.$nextTick(() => {
+      if (!this.isBgImg) {
+        //particle
+        const tsparticles = () => import('tsparticles');
+        tsparticles().then(({particlesJS}) => {
+          particlesJS('particles-bg', {
+            particles: {
+              number: {value: 100, density: {enable: true, value_area: 800}},
+              color: {value: "#ffffff"},
+              shape: {
+                type: "circle",
+                stroke: {width: 0, color: "#000000"},
+                polygon: {nb_sides: 5},
+              },
+              opacity: {
+                value: 1,
+                random: true,
+                anim: {enable: true, speed: 1, opacity_min: 0, sync: false}
+              },
+              size: {
+                value: 3,
+                random: true,
+                anim: {enable: false, speed: 4, size_min: 0.3, sync: false}
+              },
+              move: {
+                enable: true,
+                speed: 1,
+                direction: 'none',
+                random: true,
+                straight: false,
+                out_mode: 'out',
+                bounce: false,
+                attract: {enable: false, rotateX: 600, rotateY: 600}
+              }
+            },
+            retina_detect: true
+          });
+        })
+      }
+    })
     this.configLoaded = 'config-loaded'
   },
   methods: {
@@ -155,9 +180,9 @@ export default {
       this.showBg = b
     },
     async updateConfig(config) {
-      if (config){
+      if (config) {
         this.config = config
-      }else {
+      } else {
         // 获取config
         let res = await getText(`${originPrefix}/json/config.json`);
         if (res[0]) {
@@ -173,12 +198,10 @@ export default {
 
 <style scoped lang="scss">
 @import "src/assets/style/public";
-
-#index {
+#index{
   height: 100%;
   width: 100%;
   position: relative;
-
   > .bg{
     position: absolute;
     object-fit: cover;
@@ -186,40 +209,42 @@ export default {
     height: 100%;
     z-index: $z-index-bg;
     overflow: hidden;
-    >.wave {
+    @at-root #particles-bg{
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, #16161e, #3a2e49);
+    }
+    @at-root #comet-bg{
       position: absolute;
-      bottom: 0;
-      width: 6400px;
-      height: 198px;
-      animation: wave 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) infinite;
-      transform: translate3d(0, 0, 0);
-    }
-
-    .wave:nth-of-type(2) {
-      bottom: 0;
-      animation: wave 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) -.125s infinite, swell 7s ease -1.25s infinite;
-      opacity: 1;
-    }
-
-    @keyframes wave {
-      0% {
-        margin-left: 0;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      .item{
+        transform-origin: center center;
+        animation-name: comet;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        opacity: 0;
       }
-      100% {
-        margin-left: -1600px;
-      }
-    }
-
-    @keyframes swell {
-      0%, 100% {
-        transform: translate3d(0,-25px,0);
-      }
-      50% {
-        transform: translate3d(0,5px,0);
+      @keyframes comet{
+        0%,
+        40%{
+          transform: translateX(0);
+          opacity: 0;
+        }
+        50%{
+          opacity: 1;
+        }
+        60%,
+        100%{
+          transform: translateX(100vmax);
+          opacity: 0;
+        }
       }
     }
   }
-
   > .body{
     position: fixed;
     left: 0;
@@ -261,17 +286,15 @@ html, body{
     -ms-user-select: none;
   }
 }
-* {
+*{
   margin: 0;
   padding: 0;
 }
-
-*[flex] {
+*[flex]{
   display: flex;
   align-items: center;
 }
-
-*[is-dialog] {
+*[is-dialog]{
   position: fixed;
   top: 0;
   left: 0;
@@ -280,18 +303,16 @@ html, body{
   z-index: $z-index-dialog;
   background: rgba(0, 0, 0, 0.4);
   justify-content: space-around;
-
-  &, > .inner {
+  &, > .inner{
     display: flex;
     align-items: center;
   }
-
-  > .inner {
-      background: white;
-      border-radius: 1rem;
-      flex-direction: column;
-      box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.4);
-      border: 1px solid #939393;
+  > .inner{
+    background: white;
+    border-radius: 1rem;
+    flex-direction: column;
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.4);
+    border: 1px solid #939393;
   }
 }
 *[write-font]{
@@ -300,8 +321,7 @@ html, body{
 *[data-viewer]{
   cursor: zoom-in;
 }
-
-input, textarea, select, button {
+input, textarea, select, button{
   outline: none;
   resize: none;
   font-family: "Source Code Pro", serif;
@@ -311,7 +331,6 @@ table{
   box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
   tr{
     td{
-
     }
   }
   thead{
@@ -350,24 +369,24 @@ table{
   }
 }
 ::-webkit-scrollbar{
-    width: 0.5rem;
-    height: 0.5rem;
+  width: 0.5rem;
+  height: 0.5rem;
 }
 ::-webkit-scrollbar-corner,
 ::-webkit-scrollbar-button{
-    display: none;
+  display: none;
 }
 ::-webkit-scrollbar-thumb{
-    border-radius: 0.5rem;
-    background: #404040;
-    border: 1px solid #828282;
+  border-radius: 0.5rem;
+  background: #404040;
+  border: 1px solid #828282;
 }
 ::-webkit-scrollbar-thumb:hover{
-    background: #323232
+  background: #323232
 }
 ::-webkit-scrollbar-track{
-    border-radius: 0.5rem;
-    background: transparent;
+  border-radius: 0.5rem;
+  background: transparent;
 }
 @include media{
   ::-webkit-scrollbar{

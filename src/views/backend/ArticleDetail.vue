@@ -234,7 +234,7 @@ export default {
         this.codeMirror = new CodeMirror(this.$refs.textarea, {
           indentUnit: 2,
           tabSize: 2,
-          theme: 'dracula',
+          theme: 'light',
           lineNumbers: true,
           line: true,
           mode: 'markdown',

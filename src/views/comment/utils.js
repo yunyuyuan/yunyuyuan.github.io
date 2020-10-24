@@ -4,7 +4,7 @@ import {parseAjaxError} from "@/utils/utils";
 export const tokenKey = 'comment-token';
 
 let owner = siteConfig.owner,
-    repo = `${owner}.github.io`,
+    repo = siteConfig.repo,
     repoId = '',
     // this token just can read public information
     publicToken = 'token ' + (['5', '66b4e73893d07b79dbcc3e36f86acc309e78b2d'].join('')),

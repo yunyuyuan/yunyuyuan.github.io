@@ -50,6 +50,7 @@ import LoadingImg from "@/components/LoadingImg";
 import Pagination from "@/components/Pagination";
 import {getText, loadFinish} from "@/utils/utils";
 import {originPrefix} from "@/need";
+import {queryMap} from "@/route";
 
 export default {
   name: "List",
@@ -99,7 +100,13 @@ export default {
   async mounted() {
     let res = await getText(`${originPrefix}/json/md.json`);
     if (res[0]) {
-      this.md = JSON.parse(res[1])
+      this.md = JSON.parse(res[1]);
+      const tag = queryMap()['search-tag'];
+      if (tag) {
+        if (this.md.find(v => v.tags.indexOf(tag) !== -1)) {
+          this.searchTags = [tag]
+        }
+      }
     }
     loadFinish();
   },
@@ -148,6 +155,9 @@ export default {
       &.active{
         background: rgba(255, 255, 255, 0.4);
         box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
+        >input{
+          color: black;
+        }
       }
       > input{
         width: 15rem;
@@ -156,6 +166,7 @@ export default {
         border: none;
         padding-left: 0.5rem;
         background: transparent;
+        color: #d6d6d6;
       }
       > span{
         justify-content: center;
@@ -249,11 +260,16 @@ export default {
         > .info{
           height: 100%;
           width: 100%;
-          box-shadow: 0 0 0.5rem #171717;
+          box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.6);
           text-decoration: none;
           color: black;
           border-radius: 0 0.5rem 0.5rem 0;
-          background: white;
+          background: linear-gradient(45deg, white, rgb(255, 255, 255, 0.9));
+          transition: box-shadow .15s ease-out;
+          &:hover{
+            background: white;
+            box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.8);
+          }
           ::v-deep .loading-img{
             display: flex;
             align-items: center;
@@ -297,8 +313,7 @@ export default {
                 box-shadow: 0 0 0.2rem #00000078;
                 color: white;
                 &:hover{
-                  background: #444444;
-                  color: white;
+                    box-shadow: 0 .15rem 0.4rem #00000078;
                 }
               }
             }

@@ -27,6 +27,9 @@ export default {
   },
   computed: {
     pages() {
+      if (this.itemCount===0){
+        return []
+      }
       let i = 1,
           list = [this.pageNow],
           pageCount = Math.ceil(this.itemCount / this.perCount);

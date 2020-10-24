@@ -24,6 +24,8 @@ export default {
     return {
       guide: [
         ['#[google](https://google.com)', 'target=_blank的链接'],
+        ['![30% x *](imgurl)', '宽为30%未设高度的img'],
+        ['--title--\ncontent\n-- --', 'field'],
       ]
     }
   }
@@ -49,6 +51,7 @@ export default {
         > a, > b {
           font-size: 1rem;
           color: #0066d8;
+          white-space: pre;
         }
 
         > b {

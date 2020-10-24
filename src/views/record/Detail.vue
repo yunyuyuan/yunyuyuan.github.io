@@ -8,7 +8,8 @@
       <div class="loading" v-if="text===''" flex>
         <svg-icon :name="'loading'"/>
       </div>
-      <span v-else write-font>{{ text }}</span>
+      <span v-else write-font>
+        <time>{{info.time|time(false)}}</time>{{ text }}</span>
     </div>
   </div>
 </template>
@@ -90,6 +91,17 @@ export default {
       white-space: pre-wrap;
       padding-top: 0.8rem;
       font-weight: bold;
+      position: relative;
+      >time{
+        position: absolute;
+        right: 0;
+        top: -0.5rem;
+        background: white;
+        font-size: 0.85rem;
+        font-family: "Source Code Pro",serif;
+        line-height: 1rem;
+        color: #ff3b00;
+      }
     }
     >a{
       display: none;

@@ -14,11 +14,13 @@ hr 分割线
 __strong 强调__
 *em 斜体*
 _em 斜体_
+_(blue: 蓝色字体)_
+~~删除~~
 
 > blockquote
 > > 嵌套
 
-一段文字`code`, [指向github的a标签](https://github.com)，表情img[alt=sticker]![sticker](aru/1)呵呵
+一段文字`code`, [指向github的a标签](https://github.com), #[指向github的外链](https://github.com)，表情img[alt=sticker]![sticker](aru/1)呵呵
 
 ul
 * 呵呵
@@ -40,9 +42,11 @@ table
 | 1  | 小明  |  18 |
 | 2  | 小张  |  21 |
 
-图片 img
+图片
 ![img](https://s2.ax1x.com/2020/01/22/1AD3zn.jpg)
 
+指定大小30%x*
+![30% x *](https://s2.ax1x.com/2020/01/22/1AD3zn.jpg)
 
 - [x] 已完成
 - [ ] 未完成
@@ -54,3 +58,12 @@ async function doSometiong (a){
     return console.log(a.toString().length+1)
 } 
 ```
+
+--一个field--
+哈哈`可以插块级元素`
+```css
+body{
+    width: unset;
+}
+```
+-- --

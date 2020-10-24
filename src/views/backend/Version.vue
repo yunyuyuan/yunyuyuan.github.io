@@ -177,7 +177,7 @@ export default {
       width: 15rem;
       background: linear-gradient(to right, red, blue);
       padding: 1rem 1.8rem;
-      white-space: normal;
+      white-space: pre;
       &:hover{
         background: linear-gradient(to right, blue, red);
       }

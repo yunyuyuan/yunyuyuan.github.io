@@ -5,11 +5,6 @@ import uncheckImg from '!!file-loader!@/icons/svg/unchecked.svg'
 import markerImg from '!!file-loader!@/icons/svg/marker.svg'
 
 const
-    delExtension = {
-        type: 'lang',
-        regex: /(?:^|[^\\])~~(.*?)~~/g,
-        replace: '<del>$1</del>'
-    },
     linkExtension = {
         type: 'lang',
         regex: /(?:^|[^\\])#\[(.*?)]\((.*?)\)/g,
@@ -25,9 +20,7 @@ const
     colorTextExtension = {
         type: 'lang',
         regex: /(?:^|[^\\])-\(([#a-zA-Z0-9]+): (.*?)\)-/g,
-        replace: (a, b, c)=>{
-            return `<span style="color: ${b}">${converter.makeHtml(c)}</span>`
-        }
+        replace: `<span style="color: $1">$2</span>`
     },
     fieldExtension = {
         type: 'lang',
@@ -43,11 +36,12 @@ const options = {
     prefixHeaderId: '__markdown_header_id_',
     tables: true,
     tasklists: true,
-    backslashEscapesHTMLTags: true
+    backslashEscapesHTMLTags: true,
+    strikethrough: true
 }
 const converter = new showdown.Converter({
     ...options,
-    extensions: [delExtension, linkExtension, dimensionExtension, colorTextExtension, fieldExtension]
+    extensions: [linkExtension, dimensionExtension, colorTextExtension, fieldExtension]
 });
 
 export function parseMarkdown(text) {

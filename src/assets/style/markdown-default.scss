@@ -27,7 +27,7 @@
         transform: translateX(calc(-100% - 0.4rem));
       }
       @media screen and (max-width: 768px){
-        > span{
+        > img{
           position: relative;
           transform: translateX(-0.4rem);
         }
@@ -68,7 +68,7 @@
       display: inline-block;
       width: 1.6rem;
       height: 1.6rem;
-      margin: 0 0.3rem -0.2rem 0.3rem;
+      margin: 0 0.2rem -0.2rem 0.2rem;
     }
     &[center]{
       display: block;
@@ -227,7 +227,7 @@
       background: transparent;
       border: none;
       cursor: pointer;
-      font-size: 0.5rem;
+      font-size: 0.7rem;
       border-radius: 0.16rem;
       padding: 0.2rem 0.4rem;
       color: #b5b5b5;

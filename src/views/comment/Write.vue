@@ -4,7 +4,7 @@
       <div class="textarea" ref="textarea" :style="{height: textareaHeight}"></div>
       <div class="utils" flex>
         <div class="sticker" ref="sticker" :class="{active: showSticker}" flex v-if="config.sticker">
-          <div class="content">
+          <div class="content" flex>
             <div class="inner" :style="{width: `${config.sticker.length}00%`, left: `${stickerSlideNow*-100}%`}" flex>
               <div v-for="item in config.sticker" :style="{width: `${100/config.sticker.length}%`}" flex>
                 <span v-for="idx in item.count" @click="addSticker(item.folder, idx)" flex>
@@ -296,13 +296,15 @@ export default {
         }
         >.content{
           width: 100%;
+          height: calc(100% - 1.5rem);
           overflow: hidden;
-          flex-grow: 1;
+          align-items: flex-start;
           >.inner{
             border-radius: inherit;
             height: 100%;
             transition: all .1s linear;
             position: relative;
+            flex-shrink: 0;
             >div {
               height: 100%;
               overflow-y: auto;

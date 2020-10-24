@@ -70,7 +70,7 @@ export default {
       this.$emit('gitUtil', new GithubUtils(
           this.token,
           siteConfig.owner,
-          `${siteConfig.owner}.github.io`,
+          siteConfig.repo,
           {
             name: siteConfig.owner,
             email: siteConfig.email

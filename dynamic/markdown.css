@@ -27,7 +27,7 @@
   transform: translateX(calc(-100% - 0.4rem));
 }
 @media screen and (max-width: 768px) {
-  .--markdown h1 > span {
+  .--markdown h1 > img {
     position: relative;
     transform: translateX(-0.4rem);
   }
@@ -54,7 +54,7 @@
   transform: translateX(calc(-100% - 0.4rem));
 }
 @media screen and (max-width: 768px) {
-  .--markdown h2 > span {
+  .--markdown h2 > img {
     position: relative;
     transform: translateX(-0.4rem);
   }
@@ -81,7 +81,7 @@
   transform: translateX(calc(-100% - 0.4rem));
 }
 @media screen and (max-width: 768px) {
-  .--markdown h3 > span {
+  .--markdown h3 > img {
     position: relative;
     transform: translateX(-0.4rem);
   }
@@ -108,7 +108,7 @@
   transform: translateX(calc(-100% - 0.4rem));
 }
 @media screen and (max-width: 768px) {
-  .--markdown h4 > span {
+  .--markdown h4 > img {
     position: relative;
     transform: translateX(-0.4rem);
   }
@@ -135,7 +135,7 @@
   transform: translateX(calc(-100% - 0.4rem));
 }
 @media screen and (max-width: 768px) {
-  .--markdown h5 > span {
+  .--markdown h5 > img {
     position: relative;
     transform: translateX(-0.4rem);
   }
@@ -162,7 +162,7 @@
   transform: translateX(calc(-100% - 0.4rem));
 }
 @media screen and (max-width: 768px) {
-  .--markdown h6 > span {
+  .--markdown h6 > img {
     position: relative;
     transform: translateX(-0.4rem);
   }
@@ -190,7 +190,7 @@
   background: #9dfffa;
 }
 .--markdown img[alt] {
-  display: inline-block;
+  display: block;
   width: 80%;
   margin: 1rem auto;
   object-fit: contain;
@@ -199,10 +199,10 @@
   box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.5);
 }
 .--markdown img[alt][alt=sticker] {
-  display: block;
+  display: inline-block;
   width: 1.6rem;
   height: 1.6rem;
-  margin: 0 0.3rem -0.2rem 0.3rem;
+  margin: 0 0.2rem -0.2rem 0.2rem;
 }
 .--markdown img[alt][center] {
   display: block;
@@ -343,7 +343,7 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 0.5rem;
+  font-size: 0.7rem;
   border-radius: 0.16rem;
   padding: 0.2rem 0.4rem;
   color: #b5b5b5;

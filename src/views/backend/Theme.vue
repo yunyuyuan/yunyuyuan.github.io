@@ -24,7 +24,7 @@
             <span>效果</span>
           </span>
           <div ref="markdown">
-            <span class="--markdown" v-html="html"></span>
+            <span class="--markdown" ref="html" v-html="html"></span>
           </div>
         </div>
       </div>
@@ -53,7 +53,7 @@ import '@/assets/style/code-mirror/dracula-code.scss';
 
 import defaultMarkdownStyle from '!!text-loader!@/assets/style/markdown-default.scss'
 import Resizer from "@/components/Resizer";
-import {parseMarkdown} from "@/utils/parseMd";
+import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
 import {hljsAndInsertCopyBtn} from "@/utils/highlight";
 
 export default {
@@ -83,10 +83,9 @@ export default {
   inject: ['_gitUtil'],
   mounted() {
     this.init()
-    // hljs
-    this.$refs.markdown.querySelectorAll('pre>code.hljs').forEach(el => {
-      hljsAndInsertCopyBtn(el);
-    });
+    this.$nextTick(()=>{
+      processMdHtml(this.$refs.html)
+    })
   },
   watch: {
     $route() {
@@ -99,7 +98,7 @@ export default {
           style.remove()
         }
       }
-    },
+    }
   },
   methods: {
     init() {
@@ -297,8 +296,8 @@ export default {
 
           > span {
             display: block;
-            padding: 0.4rem;
-            width: calc(100% - 0.8rem) !important;
+            padding: 0.4rem 0.4rem 0.4rem 2.2rem;
+            width: calc(100% - 2.4rem) !important;
           }
         }
       }
@@ -307,6 +306,18 @@ export default {
   @include media{
     width: 99% !important;
     margin-left: 0.5% !important;
+    >.body{
+      >.edit{
+        >.right{
+          >div{
+            >span{
+              padding: 0.4rem;
+              width: calc(100% - 0.8rem) !important;
+            }
+          }
+        }
+      }
+    }
   }
 }
 </style>

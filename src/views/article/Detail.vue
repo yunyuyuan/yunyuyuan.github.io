@@ -1,6 +1,10 @@
 <template>
   <div class="article">
     <div class="detail">
+      <div class="head" flex>
+        <h1>{{info.name}}
+        <time>{{info.time|time(false)}}</time></h1>
+      </div>
       <div class="content" flex>
         <aside class="info" :style="{transform: `translateY(${asideTop}px)`}" ref="aside" flex>
           <div :class="asideActive===null?'':(asideActive?'active':'deactive')" flex>
@@ -25,6 +29,13 @@
               <a class="back" href="/article" title="返回文章列表">
                 <svg-icon :name="'back'"/>
               </a>
+            </div>
+            <div class="info">
+              <div class="tags" flex>
+                <svg-icon :name="'tag'"/>
+                <a v-for="tag in info.tags||[]":style="{background: $options.filters.color(tag)}" :href="`/article?search-tag=${tag}`" :title="`查看标签${tag}`">{{tag}}</a>
+              </div>
+              <b>最后修改<time>{{info.modify|time(false)}}</time></b>
             </div>
           </div>
           <span class="toggle-aside" :class="{active: asideActive}" @click="asideActive = !asideActive" flex
@@ -143,8 +154,9 @@ export default {
       }
     },
     moveAside() {
-      if (this.$refs.markdown.scrollHeight - this.body.scrollTop > this.$refs.aside.scrollHeight) {
-        this.asideTop = this.body.scrollTop
+      const top = this.body.scrollTop-this.$refs.markdown.parentElement.offsetTop;
+      if (this.$refs.markdown.scrollHeight - top > this.$refs.aside.scrollHeight&&top>0) {
+        this.asideTop = top
       }
     },
     toAnchor(el) {
@@ -154,7 +166,7 @@ export default {
             duration = 1000,
             count = fps * duration / 1000,
             body = this.body;
-        let interval = el.getBoundingClientRect().top - markdown.getBoundingClientRect().top + 16,
+        let interval = el.getBoundingClientRect().top - markdown.getBoundingClientRect().top + markdown.parentElement.offsetTop,
             scrollNow = body.scrollTop,
             step = (interval - scrollNow) / count;
         if (this.animationHandle) clearInterval(this.animationHandle);
@@ -175,6 +187,7 @@ export default {
 
 <style scoped lang="scss">
 @import "src/assets/style/public";
+
 .article{
   width: 100%;
   min-height: 100%;
@@ -183,6 +196,34 @@ export default {
   >.detail{
     width: 100%;
     min-height: 100%;
+    >.head{
+      width: 100%;
+      max-width: 70rem;
+      margin: 2rem auto 3rem auto;
+      justify-content: center;
+      >h1{
+        background: white;
+        border-radius: .2rem;
+        padding: .7rem 2.5rem;
+        box-shadow: .3rem .3rem .5rem rgb(0, 0, 0);
+        position: relative;
+        min-width: 60%;
+        text-align: center;
+        >time{
+          content: attr(data-time);
+          position: absolute;
+          right: 0;
+          bottom: -0.5rem;
+          transform: translateY(100%);
+          font-size: 0.75rem;
+          border-radius: .15rem;
+          background: rgba(0, 0, 0, 0.3);
+          padding: .2rem .8rem;
+          color: white;
+          font-weight: normal;
+        }
+      }
+    }
     > .content{
       min-width: 50rem;
       max-width: 75rem;
@@ -197,7 +238,7 @@ export default {
         align-items: self-start;
         z-index: 1;
         > div{
-          max-height: calc(100vh - 11rem);
+          max-height: 100vh;
           flex-direction: column;
           width: 0;
           transition: all .15s ease-out;
@@ -214,7 +255,8 @@ export default {
             }
           }
           &.active{
-            width: 12rem;
+            width: 11.5rem;
+            margin-left: .5rem;
             > .anchors{
               width: 100%;
             }
@@ -222,13 +264,17 @@ export default {
               overflow: unset;
               width: 6rem;
             }
+            > .info{
+              overflow: unset;
+              width: 100%;
+            }
           }
           &.deactive{
-            >.anchors, >.tail{
+            >*{
               animation: to-hide .15s ease-out forwards;
             }
           }
-          > .anchors, > .tail{
+          > *{
             width: 0;
             flex-direction: column;
             background: white;
@@ -236,6 +282,7 @@ export default {
             box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.4);
             transition: all .15s ease-out;
             overflow: hidden;
+            flex-shrink: 0;
           }
           > .anchors{
             padding: 0.5rem 0;
@@ -340,6 +387,44 @@ export default {
                 height: 2rem;
                 fill: #f08080;
                 transition: fill .15s linear;
+              }
+            }
+          }
+          >.info{
+            margin-top: 1rem;
+            >.tags{
+              flex-wrap: wrap;
+              margin: 0.6rem;
+              >svg{
+                width: 1.6rem;
+                height: 1.6rem;
+                margin-right: 1rem;
+              }
+              >a{
+                color: white;
+                padding: .15rem .5rem;
+                text-decoration: none;
+                font-size: .8rem;
+                margin: .4rem;
+                border-radius: .15rem;
+                box-shadow: 0 0 .1rem rgba(0, 0, 0, 0.5);
+                transition: all .15s linear;
+                &:hover{
+                  box-shadow: 0 .2rem .4rem rgba(0, 0, 0, 0.5);
+                }
+              }
+            }
+            >b{
+              font-size: 0.75rem;
+              margin: 1rem 0.5rem;
+              display: block;
+              font-weight: normal;
+              >time{
+                font-size: 0.8rem;
+                font-weight: normal;
+                word-break: keep-all;
+                white-space: nowrap;
+                color: #0e5d00;
               }
             }
           }

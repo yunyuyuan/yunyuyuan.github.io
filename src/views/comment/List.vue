@@ -1,6 +1,9 @@
 <template>
   <div class="list" flex>
-    <div ref="list" class="items" flex>
+    <div class="empty" v-if="items.length===0">
+      <span>无人问津<svg-icon :name="'grass'"/>暂无评论</span>
+    </div>
+    <div ref="list" class="items" flex v-else>
       <div class="item" v-for="item in items" :key="item.id" flex>
         <a class="avatar" target="_blank" :href="item.site">
           <img :src="item.avatar"/>
@@ -244,6 +247,16 @@ export default {
   padding-top: 2rem;
   border-top: 2px solid gray;
   flex-direction: column;
+  >.empty{
+    font-size: 0.95rem;
+    >span{
+      > svg{
+        width: 2.5rem;
+        height: 2.5rem;
+        margin: 0 1rem;
+      }
+    }
+  }
   > .items{
     width: 90%;
     flex-direction: column;
