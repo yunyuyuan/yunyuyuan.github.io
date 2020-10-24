@@ -24,7 +24,7 @@
             <span>效果</span>
           </span>
           <div ref="markdown">
-            <span class="--markdown" ref="html" v-html="html"></span>
+            <span class="--markdown" ref="html" v-html="html" v-viewer></span>
           </div>
         </div>
       </div>

@@ -139,7 +139,7 @@ export default {
           this.body.onscroll = () => {
             let last = {};
             for (let el of headList) {
-              if (last && el.getBoundingClientRect().top > document.querySelector('section.the-head').scrollHeight) {
+              if (last && el.getBoundingClientRect().top > document.querySelector('header.the-head').scrollHeight) {
                 break
               }
               last = el;

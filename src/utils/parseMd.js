@@ -3,6 +3,8 @@ import anchorImg from '!!file-loader!@/icons/svg/anchor.svg'
 import checkImg from '!!file-loader!@/icons/svg/checked.svg'
 import uncheckImg from '!!file-loader!@/icons/svg/unchecked.svg'
 import markerImg from '!!file-loader!@/icons/svg/marker.svg'
+import siteConfig from '@/site-config'
+import {cdnDynamicUrl} from "@/need";
 
 const
     linkExtension = {
@@ -24,8 +26,8 @@ const
     },
     fieldExtension = {
         type: 'lang',
-        filter (text, converter){
-            return text.replace(/(?:^|\n)--(.*?)--\n([\s\S]+)\n-- --/g, (a, b, c)=>{
+        filter(text, converter) {
+            return text.replace(/(?:^|\n)--(.*?)--\n([\s\S]+)\n-- --/g, (a, b, c) => {
                 return `<fieldset><legend>${b}</legend>${converter.makeHtml(c)}</fieldset>`
             })
         },
@@ -49,35 +51,44 @@ export function parseMarkdown(text) {
 }
 
 // 二次处理html
-export function processMdHtml (el){
+export function processMdHtml(el) {
+    // sticker
+    el.querySelectorAll('img[alt=sticker]').forEach(el => {
+        const src = el.getAttribute('src');
+        el.src = `${cdnDynamicUrl}/sticker/${src.replace(/^(.*?)\/\d*$/, '$1')}/${src.replace(/.*?\/(\d*)$/, '$1')}.png?ran=${siteConfig.timeStamp}`
+    })
     // hljs
-    el.querySelectorAll('pre>code:not(.hljs)').forEach(el=>{
-      hljsAndInsertCopyBtn(el)
+    el.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
+        hljsAndInsertCopyBtn(el)
     })
     // anchor
     el.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').forEach(el => {
-      el.innerHTML = `<img src="${anchorImg}"/>${el.innerHTML}`
+        el.innerHTML = `<img src="${anchorImg}"/>${el.innerHTML}`
     })
     // ul
-    el.querySelectorAll('ul>li:not(.task-list-item)').forEach(el=>{
-      el.innerHTML = `<img src="${markerImg}"/>${el.innerHTML}`
-    })
+    function rescueUl (el){
+        el.querySelectorAll('ul>li:not(.task-list-item)').forEach(el => {
+            el.innerHTML = `<img src="${markerImg}"/>${el.innerHTML}`;
+            rescueUl(el);
+        })
+    }
+    rescueUl(el);
     // ol
-    el.querySelectorAll('ol').forEach(el=>{
-        let start = +(el.getAttribute('start')||1);
-        el.children.forEach(sub=>{
+    el.querySelectorAll('ol').forEach(el => {
+        let start = +(el.getAttribute('start') || 1);
+        el.children.forEach(sub => {
             sub.setAttribute('data-count', start);
-            start ++;
+            start++;
         })
     })
     // viewer
-    el.querySelectorAll('img[alt]:not([alt=sticker])').forEach(el=>{
-      el.setAttribute('data-viewer', '')
+    el.querySelectorAll('img[alt]:not([alt=sticker])').forEach(el => {
+        el.setAttribute('data-viewer', '')
     })
     // task
-    el.querySelectorAll('input[type=checkbox]').forEach(el=>{
+    el.querySelectorAll('input[type=checkbox]').forEach(el => {
         let span = document.createElement('img');
-        span.src = el.checked?checkImg:uncheckImg;
+        span.src = el.checked ? checkImg : uncheckImg;
         el.parentElement.insertBefore(span, el);
         el.remove();
     })

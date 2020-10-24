@@ -2,7 +2,7 @@ const siteConfig = require( '@/site-config')
 
 const isDev = process.env.NODE_ENV === 'development';
 export const
-    cdnDynamicUrl = siteConfig.cdn+'/dynamic',
+    cdnDynamicUrl = isDev?'':(siteConfig.cdn+'/dynamic'),
     originPrefix = location.origin + (isDev?'':'/dynamic');
 
 import '@/icons'

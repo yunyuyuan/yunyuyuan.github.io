@@ -282,7 +282,7 @@ export default {
         this.$message.warning('请先点选择输入框!');
         return
       }
-      this.codeMirror.replaceRange(`![sticker](${cdnDynamicUrl}/sticker/${folder}/${idx}.png?ran=${siteConfig.timeStamp})`, this.focusAt);
+      this.codeMirror.replaceRange(`![sticker](${folder}/${idx})`, this.focusAt);
       document.removeEventListener('click', this.handleStickerDiv);
       this.showSticker = false;
     },
