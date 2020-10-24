@@ -1,7 +1,8 @@
 <template>
   <div class="version">
     <div class="new" flex>
-      <loading-button :class="{disabled: !inited}" :loading="creating" :text="'创建新版本: '+newTag" :icon="'version'" :size="1.6" @click.native="createRelease"/>
+      <loading-button :class="{disabled: !inited}" :loading="creating.b" :text="'创建新版本: '+newTag" :icon="'version'" :size="1.6" @click.native="createRelease"/>
+      <span v-if="creating.state">{{creating.state}}</span>
     </div>
     <div class="tags">
       <div class="operate" flex>
@@ -44,7 +45,10 @@ export default {
   data (){
     return {
       inited: false,
-      creating: false,
+      creating: {
+        b: false,
+        state: ''
+      },
       deletingTag: {
         b: false,
         state: ''
@@ -93,17 +97,23 @@ export default {
       }
     },
     async createRelease() {
-      if (this.creating || !this.inited) return
+      if (this.creating.b || !this.inited) return
       if (this.gitUtil) {
-        this.creating = true
-        let res = await this.gitUtil.createRelease(this.newTag);
+        this.creating = {
+          b: true,
+          state: '正在创建release'
+        }
+        let res = await this.gitUtil.createRelease(this.newTag, this.creating);
         if (res[0]) {
           this.$message.success('创建成功!');
           this.getTag();
         } else {
           this.$message.error(parseAjaxError(res[1]))
         }
-        this.creating = false;
+        this.creating = {
+          b: false,
+          state: ''
+        }
       } else {
         this.$message.warning('请先登录!');
         this.$emit('login')
@@ -173,18 +183,21 @@ export default {
     padding-bottom: 0.5rem;
     border-bottom: 1px solid black;
     justify-content: center;
+    flex-direction: column;
     ::v-deep .loading-button{
       width: 15rem;
       background: linear-gradient(to right, red, blue);
       padding: 1rem 1.8rem;
       white-space: pre;
-      &:hover{
-        background: linear-gradient(to right, blue, red);
-      }
       &.loading, &.disabled{
         cursor: not-allowed;
         background: gray;
       }
+    }
+    >span{
+      color: red;
+      margin: 0.5rem 0;
+      font-size: 0.85rem;
     }
   }
   >.tags{

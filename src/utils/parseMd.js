@@ -53,7 +53,8 @@ export function parseMarkdown(text) {
 // 二次处理html
 export function processMdHtml(el) {
     // sticker
-    el.querySelectorAll('img[alt=sticker]').forEach(el => {
+    el.querySelectorAll('img[alt=sticker]:not([parsed])').forEach(el => {
+        el.setAttribute('parsed', '');
         const src = el.getAttribute('src');
         el.src = `${cdnDynamicUrl}/sticker/${src.replace(/^(.*?)\/\d*$/, '$1')}/${src.replace(/.*?\/(\d*)$/, '$1')}.png?ran=${siteConfig.timeStamp}`
     })
@@ -62,19 +63,22 @@ export function processMdHtml(el) {
         hljsAndInsertCopyBtn(el)
     })
     // anchor
-    el.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').forEach(el => {
+    el.querySelectorAll('h1[id]:not([parsed]), h2[id]:not([parsed]), h3[id]:not([parsed]), h4[id]:not([parsed]), h5[id]:not([parsed]), h6[id]:not([parsed])').forEach(el => {
+        el.setAttribute('parsed', '');
         el.innerHTML = `<img src="${anchorImg}"/>${el.innerHTML}`
     })
     // ul
     function rescueUl (el){
-        el.querySelectorAll('ul>li:not(.task-list-item)').forEach(el => {
+        el.querySelectorAll('ul>li:not(.task-list-item):not([parsed])').forEach(el => {
+            el.setAttribute('parsed', '');
             el.innerHTML = `<img src="${markerImg}"/>${el.innerHTML}`;
             rescueUl(el);
         })
     }
     rescueUl(el);
     // ol
-    el.querySelectorAll('ol').forEach(el => {
+    el.querySelectorAll('ol:not([parsed])').forEach(el => {
+        el.setAttribute('parsed', '');
         let start = +(el.getAttribute('start') || 1);
         el.children.forEach(sub => {
             sub.setAttribute('data-count', start);
@@ -82,7 +86,7 @@ export function processMdHtml(el) {
         })
     })
     // viewer
-    el.querySelectorAll('img[alt]:not([alt=sticker])').forEach(el => {
+    el.querySelectorAll('img[alt]:not([alt=sticker]):not([data-viewer])').forEach(el => {
         el.setAttribute('data-viewer', '')
     })
     // task

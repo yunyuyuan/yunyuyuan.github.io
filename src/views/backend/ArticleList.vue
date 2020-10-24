@@ -249,10 +249,6 @@ export default {
       margin: 0 1rem 0 0;
       background: linear-gradient(to right, red, blue);
       padding: 0.6rem 1.2rem;
-      box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
-      &:hover{
-        background: linear-gradient(to left, red, blue);
-      }
       > svg{
         width: 1.4rem;
         height: 1.4rem;

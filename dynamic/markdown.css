@@ -215,6 +215,9 @@
 .--markdown em {
   margin: 0 0.3rem;
 }
+.--markdown del {
+  text-decoration-color: red;
+}
 .--markdown blockquote {
   line-height: 1.8rem;
   position: relative;

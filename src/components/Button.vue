@@ -32,6 +32,9 @@ export default {
   justify-content: center;
   box-shadow: 0 0 0.3em rgba(0, 0, 0, 0.3);
 
+  &:hover{
+  box-shadow: 0 0.15rem 0.3em rgba(0, 0, 0, 0.6);
+  }
   &[disabled] {
     cursor: not-allowed;
     background: gray !important;

@@ -41,6 +41,7 @@ export default {
 
   &:hover {
     background: #8c8e8d;
+    box-shadow: 0 0.2rem 0.4em rgba(0, 0, 0, 0.6)
   }
 
   &.loading {

@@ -1,6 +1,8 @@
 import Octokat from "octokat";
 import Sass from "sass.js";
-import {stringToB64} from "@/utils/utils";
+import {getText, stringToB64} from "@/utils/utils";
+import {originPrefix} from "@/need";
+
 const dynamicFolder = 'dynamic';
 
 // github
@@ -16,11 +18,15 @@ export class GithubUtils {
 
     async updateJsonFile(path, json) {
         path = `${dynamicFolder}/json/${path}`;
+        return this.updateSingleFile(path, JSON.stringify(json, null, 4));
+    }
+
+    async updateSingleFile(path, content) {
         return new Promise(resolve => {
             this.repos.contents(path).fetch().then(res => {
                 return this.repos.contents(path).add({
-                    message: `更新${path}`,
-                    content: stringToB64(JSON.stringify(json, null, 4)),
+                    message: `更新:${path}`,
+                    content: stringToB64(content),
                     sha: res.sha,
                     committer: this.committer
                 }).then(res => {
@@ -86,7 +92,10 @@ export class GithubUtils {
             let treeItems = [];
             for (let item of files) {
                 dict.state = `创建blob:${item.folder.replace(/^.*\/([^/]*)$/, '$1')}`;
-                let res = await this.repos.git.blobs.create({content: stringToB64(item.content), encoding: 'base64'}).catch(err => {
+                let res = await this.repos.git.blobs.create({
+                    content: stringToB64(item.content),
+                    encoding: 'base64'
+                }).catch(err => {
                     resolve([false, err])
                 });
                 treeItems.push({
@@ -175,8 +184,8 @@ export class GithubUtils {
                                 });
                             }
                         }
-                    }else{
-                        if (folders.indexOf(i.path.replace('.txt', '')) !== -1){
+                    } else {
+                        if (folders.indexOf(i.path.replace('.txt', '')) !== -1) {
                             dic.state = `删除 ${i.path}`;
                             await repo.contents(`${dynamicFolder}/${what}/${i.path}`).remove({
                                 sha: i.sha,
@@ -194,7 +203,7 @@ export class GithubUtils {
         })
     }
 
-    async getTag (){
+    async getTag() {
         return new Promise(async resolve => {
             // 获取master的commit sha
             let res = await this.repos.git.refs('heads/master').fetch().catch(err => {
@@ -204,31 +213,43 @@ export class GithubUtils {
             res = await this.repos.git.refs.tags('').fetch().catch(err => {
                 resolve([false, err])
             });
-            res.items.forEach(v=>v.last=v.object.sha===last)
+            res.items.forEach(v => v.last = v.object.sha === last)
             resolve([true, res.items])
         })
     }
 
-    async createRelease (name){
+    async createRelease(name, dict) {
         return new Promise(async resolve => {
-            // 获取master的commit sha
-            let res = await this.repos.git.refs('heads/master').fetch().catch(err => {
+            dict.state = '获取404-temp.html';
+            let res = await getText(`${dynamicFolder}/404-temp.html`);
+            if (!res[0]) {
+                resolve([false, res[1]])
+            }
+            dict.state = '复制404-temp.html到404.html';
+            res = await this.updateSingleFile(`${dynamicFolder}/404.html`, res[1]);
+            if (!res[0]) {
+                resolve([false, res[1]])
+            }
+            dict.state = '获取master的commit sha';
+            res = await this.repos.git.refs('heads/master').fetch().catch(err => {
                 resolve([false, err])
             });
+            dict.state = '创建refs';
             await this.repos.git.refs.create({
                 ref: 'refs/tags/' + name,
                 sha: res.object.sha
             }).catch(err => {
                 resolve([false, err])
             });
+            dict.state = '创建release成功!';
             resolve([true])
         })
     }
 
-    async deleteTag (lis, dic){
+    async deleteTag(lis, dic) {
         return new Promise(async resolve => {
             for (const tag of lis) {
-                dic.state = '删除:'+tag;
+                dic.state = '删除:' + tag;
                 await this.repos.git(tag).remove().catch(err => {
                     resolve([false, err])
                 });
