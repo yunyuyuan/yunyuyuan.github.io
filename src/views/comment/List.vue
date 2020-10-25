@@ -223,6 +223,7 @@ export default {
       this.submitting = false;
     },
     async closeComment(id) {
+      if (!confirm('确认删除?')) return;
       let res = await close_deleteComment('close', id);
       if (logError.call(this, res, '删除成功!', '删除失败')) {
         setTimeout(async () => {
@@ -231,6 +232,7 @@ export default {
       }
     },
     async deleteReply(id) {
+      if (!confirm('确认删除?')) return;
       let res = await deleteReply(id);
       if (logError.call(this, res, '删除成功!', '删除失败')) {
 
