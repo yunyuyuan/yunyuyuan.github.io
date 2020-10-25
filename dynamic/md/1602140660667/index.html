@@ -1,67 +1,34 @@
 <h2 id="__markdown_header_id_">简述</h2>
-<p>很早就有这个想法了:写一个静态博客。正好我租的服务器快过期了，也不想续费因为基本用不上(贫穷<img src="https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/yellow-face/27.png?ran=1603380419730" alt="sticker" />)，挂个blog在上面甚是浪费。
+<p>很早就有这个想法了:写一个静态博客。正好我租的服务器快过期了，也不想续费因为基本用不上(贫穷<img src="yellow-face/27" alt="sticker" />)，挂个blog在上面甚是浪费。
 于是着手写了这个静态博客，仅有一些我所认为的基础功能。日后慢慢完善吧！</p>
 <h2 id="__markdown_header_id_-1">技术栈</h2>
 <blockquote>
   <p>此博客所用的技术栈其实只有vue,毕竟vue这个巨人它的肩膀已经足够高。
-  本站除了域名之外,其他的内容全部免费(白嫖党狂喜<img src="https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/aru/55.png?ran=1603380419730" alt="sticker" />),下面简述下大大小小的致谢与Power by：</p>
+  本站除了域名之外,其他的内容全部免费(白嫖党狂喜<img src="aru/55" alt="sticker" />),下面简述下大大小小的致谢与Power by：</p>
 </blockquote>
 <ul>
-<li>托管<a target="_blank" href="https://github.io">github.io</a>上</li>
-<li><a target="_blank" href="https://vuejs.org">vue</a>全家桶强力驱动</li>
-<li><strong>99.9%</strong>的文件<a target="_blank" href="https://www.jsdelivr.com/">jsdelivr</a>的CDN加速</li>
-<li>动态更新api基<a target="_blank" href="https://developer.github.com/">github api</a></li>
+<li>托管在<a target="_blank" href="https://github.io">github.io</a>上</li>
+<li>由<a target="_blank" href="https://vuejs.org">vue</a>全家桶强力驱动</li>
+<li><strong>99.9%</strong>的文件由<a target="_blank" href="https://www.jsdelivr.com/">jsdelivr</a>的CDN加速</li>
+<li>动态更新api基于<a target="_blank" href="https://developer.github.com/">github api</a></li>
 </ul>
-<p><em>有序列表</em></p>
+<h2 id="__markdown_header_id_-2">基本使用</h2>
 <ol>
-<li>nothing</li>
-<li>呵呵</li>
+<li>git clone 仓库</li>
+<li>修改<code>src/site-config.js</code></li>
+<li><code>npm run build</code></li>
+<li>复制<code>404-temp.html</code>的内容到<code>404.html</code></li>
+<li><code>git add .</code>-&gt;<code>git commit -m init</code>-&gt;<code>git push</code></li>
+<li>进入github当前项目，创建一个release，版本号写<code>v0.0.1</code></li>
+<li>过一会访问网站</li>
+<li>have fun<img src="yellow-face/55" alt="sticker" /></li>
 </ol>
-<h2 id="__markdown_header_id_-2">其他</h2>
-<p>测试下表格</p>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>使用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>表情包</td>
-<td>哔哩哔哩,阿鲁</td>
-</tr>
-<tr>
-<td>图床</td>
-<td>路过图床</td>
-</tr>
-<tr>
-<td>开发工具</td>
-<td>pycharm</td>
-</tr>
-</tbody>
-</table>
-<p>整个图片
-<img src="https://s2.ax1x.com/2020/01/28/1KcLeU.png" alt="img" /></p>
-<p>指定大小的图片<img alt="dimension img" style="width: 30% !important;margin: 1rem;" src="https://s2.ax1x.com/2020/01/28/1KcLeU.png"/></p>
-<p>一段代码</p>
-<pre><code class="javascript language-javascript">function choice(list){
-    return list[parseInt(Math.random()*list.length)]
-}
-</code></pre>
-<p>任务列表</p>
+<h3 id="__markdown_header_id_-3">任务列表</h3>
 <ul>
 <li class="task-list-item" style="list-style-type: none;"><input type="checkbox" disabled style="margin: 0px 0.35em 0.25em -1.6em; vertical-align: middle;" checked> img-viewer</li>
 <li class="task-list-item" style="list-style-type: none;"><input type="checkbox" disabled style="margin: 0px 0.35em 0.25em -1.6em; vertical-align: middle;" checked> 路由history模式</li>
 <li class="task-list-item" style="list-style-type: none;"><input type="checkbox" disabled style="margin: 0px 0.35em 0.25em -1.6em; vertical-align: middle;" checked> 在线发布release</li>
 <li class="task-list-item" style="list-style-type: none;"><input type="checkbox" disabled style="margin: 0px 0.35em 0.25em -1.6em; vertical-align: middle;" checked> 未写完存草稿到localStorage</li>
 <li class="task-list-item" style="list-style-type: none;"><input type="checkbox" disabled style="margin: 0px 0.35em 0.25em -1.6em; vertical-align: middle;"> about页面</li>
-<li class="task-list-item" style="list-style-type: none;"><input type="checkbox" disabled style="margin: 0px 0.35em 0.25em -1.6em; vertical-align: middle;"> 日/夜间模式,字体可调</li>
 <li class="task-list-item" style="list-style-type: none;"><input type="checkbox" disabled style="margin: 0px 0.35em 0.25em -1.6em; vertical-align: middle;" checked> safari和firefox不支持正则分组</li>
 </ul>
-<fieldset><legend>一个field</legend><p>一些内容
-还能插<code>代码块</code>哦</p>
-<pre><code class="golang language-golang">type blog struct{
-    info interface{}
-}
-</code></pre></fieldset>
