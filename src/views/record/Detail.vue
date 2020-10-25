@@ -1,6 +1,6 @@
 <template>
   <div class="record-detail" v-if="info.hasOwnProperty('images')" is-dialog @click.self="$emit('close')">
-    <div class="inner">
+    <div class="inner" flex>
       <a @click="$emit('close')">关闭</a>
       <div class="image" flex v-viewer>
         <loading-img v-for="i in info.images" :src="i" :data-viewer="true"/>
@@ -9,6 +9,7 @@
         <svg-icon :name="'loading'"/>
       </div>
       <span v-else write-font>
+        <svg-icon :name="'text'"/>
         <time>{{info.time|time(false)}}</time>{{ text }}</span>
     </div>
   </div>
@@ -60,9 +61,12 @@ export default {
     width: 80%;
     height: 90%;
     overflow-y: auto;
+    flex-direction: column;
+    border-radius: 0;
     > .image{
       width: 100%;
       flex-wrap: wrap;
+      flex-shrink: 0;
       ::v-deep .loading-img{
         width: calc(50% - 0.2rem) !important;
         height: unset !important;
@@ -89,9 +93,18 @@ export default {
       font-size: 1.2rem;
       margin: 1rem 0 5rem 0;
       white-space: pre-wrap;
-      padding-top: 0.8rem;
+      padding-top: 1.5rem;
       font-weight: bold;
       position: relative;
+      >svg{
+        position: absolute;
+        width: 2rem;
+        height: 1.6rem;
+        top: -0.8rem;
+        left: 0.5rem;
+        padding: 0 0.2rem;
+        background: white;
+      }
       >time{
         position: absolute;
         right: 0;

@@ -101,8 +101,9 @@ export default {
     let res = await getText(`${originPrefix}/json/md.json`);
     if (res[0]) {
       this.md = JSON.parse(res[1]);
-      const tag = queryMap()['search-tag'];
+      let tag = queryMap()['search-tag'];
       if (tag) {
+        tag = decodeURIComponent(tag);
         if (this.md.find(v => v.tags.indexOf(tag) !== -1)) {
           this.searchTags = [tag]
         }
