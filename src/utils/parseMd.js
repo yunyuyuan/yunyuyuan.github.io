@@ -51,7 +51,7 @@ export function parseMarkdown(text) {
 }
 
 // 二次处理html
-export function processMdHtml(el) {
+export function processMdHtml(el, isComment) {
     // sticker
     el.querySelectorAll('img[alt=sticker]:not([parsed])').forEach(el => {
         el.setAttribute('parsed', '');
@@ -62,11 +62,13 @@ export function processMdHtml(el) {
     el.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
         hljsAndInsertCopyBtn(el)
     })
-    // anchor
-    el.querySelectorAll('h1[id]:not([parsed]), h2[id]:not([parsed]), h3[id]:not([parsed]), h4[id]:not([parsed]), h5[id]:not([parsed]), h6[id]:not([parsed])').forEach(el => {
-        el.setAttribute('parsed', '');
-        el.innerHTML = `<img src="${anchorImg}"/>${el.innerHTML}`
-    })
+    if (isComment){
+        // 评论没有anchor
+        el.querySelectorAll('h1[id]:not([parsed]), h2[id]:not([parsed]), h3[id]:not([parsed]), h4[id]:not([parsed]), h5[id]:not([parsed]), h6[id]:not([parsed])').forEach(el => {
+            el.setAttribute('parsed', '');
+            el.innerHTML = `<img src="${anchorImg}"/>${el.innerHTML}`
+        })
+    }
     // ul
     function rescueUl (el){
         el.querySelectorAll('ul>li:not(.task-list-item):not([parsed])').forEach(el => {

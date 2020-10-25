@@ -85,7 +85,7 @@ import '@/assets/style/code-mirror/codeMirror.scss';
 import '@/assets/style/code-mirror/light-markdown.scss';
 import '@/assets/style/code-mirror/dracula-markdown.scss';
 import LoadingImg from "@/components/LoadingImg";
-import {parseMarkdown} from "@/utils/parseMd";
+import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
 import {hljsAndInsertCopyBtn} from "@/utils/highlight";
 import siteConfig from "@/site-config";
 
@@ -129,19 +129,17 @@ export default {
   inject: ['_config'],
   computed: {
     html() {
-      // hljs
-      this.$nextTick(()=>{{
-        this.$refs.markdown.querySelectorAll('pre>code.hljs').forEach(el => {
-          hljsAndInsertCopyBtn(el);
-        })
-        this.$refs.markdown.querySelectorAll('img:not([alt=sticker])').forEach(el => {
-          el.setAttribute('data-viewer', '')
-        })
-      }})
       return parseMarkdown(this.comment);
     },
     config (){
       return this._config()
+    }
+  },
+  watch: {
+    html (){
+      this.$nextTick(()=>{
+        processMdHtml(this.$refs.markdown, true)
+      })
     }
   },
   created() {
@@ -211,7 +209,7 @@ export default {
     insertImg() {
       if (!this.imageUrl) return;
       if (!this.focusAt) {
-        this.$message.warning('请点选择输入框!');
+        this.$message.warning('请选择输入框!');
         return
       }
       this.codeMirror.replaceRange(`![common](${this.imageUrl})`, this.focusAt);

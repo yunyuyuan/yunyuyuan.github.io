@@ -84,6 +84,8 @@ export default {
       if (!this.id) return {};
       for (let i of this.md) {
         if (i.file === this.id) {
+          document.title = '文章-' + i.name;
+          document.head.querySelector('meta[name=description]').setAttribute('description', `${siteConfig.owner}的博客文章-${i.name}`);
           return i
         }
       }
@@ -107,8 +109,6 @@ export default {
   },
   async mounted() {
     await this.getHtml();
-    document.title = '文章-' + this.info.name;
-    document.head.querySelector('meta[name=description]').setAttribute('description', `${siteConfig.owner}的博客文章-${this.info.name}`);
     this.body.addEventListener('scroll', this.moveAside);
     loadFinish();
   },
