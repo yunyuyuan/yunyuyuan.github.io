@@ -310,6 +310,7 @@ export default {
               overflow-y: auto;
               flex-wrap: wrap;
               align-items: flex-start;
+              align-content: flex-start;
 
               > span {
                 width: 3.6rem;
@@ -318,7 +319,6 @@ export default {
                 cursor: pointer;
                 background: white;
                 justify-content: center;
-                align-content: flex-start;
 
                 &:hover {
                   background: #e6e6e6;
