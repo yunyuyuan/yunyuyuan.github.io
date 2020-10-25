@@ -163,8 +163,9 @@ export default {
       width: 95%;
       margin: 4rem 0 2rem 0;
       >.body{
+        width: 100%;
         >span{
-          width: calc(100% - 2rem);
+          max-width: calc(100% - 2rem);
           font-size: 1.2rem;
         }
       }
