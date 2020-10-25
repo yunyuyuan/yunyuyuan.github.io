@@ -135,6 +135,7 @@ export default {
     > .body {
       margin-top: 1rem;
       flex-direction: column;
+      width: 100%;
 
       > span {
         padding: 1rem;
@@ -142,7 +143,7 @@ export default {
         word-break: break-all;
         font-size: 1.1rem;
         white-space: pre-line;
-        width: 60%;
+        max-width: 60%;
       }
     }
   }
@@ -163,7 +164,6 @@ export default {
       width: 95%;
       margin: 4rem 0 2rem 0;
       >.body{
-        width: 100%;
         >span{
           max-width: calc(100% - 2rem);
           font-size: 1.2rem;
