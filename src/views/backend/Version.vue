@@ -8,8 +8,8 @@
       <div class="operate" flex>
         <a>{{deletingTag.state}}</a>
         <single-button class="del-btn" :text="'删除'" :deleting="deletingTag.b" @click.native="deleteTag"/>
-        <label class="checkbox" :class="{active: allSelected}" @click="changeSelectAll"></label>
-        <span>全选</span>
+        <span class="check-box" :class="{active: allSelected}" @click="changeSelectAll"></span>
+        <span class="txt">全选</span>
       </div>
       <div class="init-load" v-if="!inited" flex>
         <svg-icon :name="'loading'"/>
@@ -26,7 +26,7 @@
           <tr v-for="item in tags" :key="item.ref" :class="{last: item.last}" :title="item.last?'最新的版本':''">
             <th class="ref">{{item.ref.replace(/^.*?([^\/]*)$/, '$1')}}</th>
             <th class="sha">{{item.object.sha}}</th>
-            <th class="select"><label class="checkbox" :class="{active: item.selected}" @click="item.selected=!item.selected"></label></th>
+            <th class="select"><label class="check-box" :class="{active: item.selected}" @click="item.selected=!item.selected"></label></th>
           </tr>
         </tbody>
       </table>
@@ -166,17 +166,6 @@ export default {
 
 .version{
   min-height: calc(100% - 2rem);
-  label.checkbox{
-    display: block;
-    cursor: pointer;
-    width: 1.2rem;
-    height: 1.2rem;
-    border: 1px solid #a8a8a8;
-    border-radius: 0.2rem;
-    &.active{
-      background: #ff996a;
-    }
-  }
   >.new{
     width: 100%;
     margin: 0.5rem 0 0.5rem 0;
@@ -206,11 +195,12 @@ export default {
         font-size: 0.8rem;
         color: red;
       }
-      >label{
+      >.check-box{
         margin: 0 0.5rem 0 1.5rem;
       }
-      >span{
+      >.txt{
         margin-right: 0.5rem;
+        font-size: 0.9rem;
       }
     }
     >table{
@@ -230,7 +220,7 @@ export default {
           &:not(:last-of-type){
             border-right: 1px solid rgba(220, 220, 220);
           }
-          .checkbox{
+          .check-box{
             margin: 0 auto;
           }
           &.ref{

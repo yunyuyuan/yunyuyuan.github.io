@@ -1,15 +1,20 @@
 <template>
   <div class="record" flex>
     <div class="head" flex>
-      <div class="delete-state" v-if="deleting.bool" flex>
-        <svg-icon :name="'loading'"/>
-        <span>{{ deleting.state }}</span>
-      </div>
+      <label class="search">
+        <span>搜索</span>
+        <input v-model="search"/>
+      </label>
       <single-button class="select-" :active="selecting" :text="selecting?'取消':'选择'"
                      @click.native="selecting=!selecting"/>
-      <single-button v-if="selecting" class="del-btn" :deleting="deleting.b" :text="'删除'" @click.native="deleteSome"/>
-      <loading-button :text="selecting?'导出':'新建'" :icon="selecting?'download':'add'" class="new"
+      <loading-button :text="selecting?'导出':'新建'" :icon="selecting?'download':'add'" class="new" :class="{white: !selecting}"
                       @click.native="clickBtn"/>
+    </div>
+    <div class="delete" v-if="selecting" flex>
+      <a>{{deleting.state}}</a>
+      <single-button class="del-btn" :text="'删除'" :deleting="deleting.b" @click.native="deleteSome"/>
+      <span class="check-box" :class="{active: allSelected}" @click="changeSelectAll"></span>
+      <span class="txt">全选</span>
     </div>
     <div class="body">
       <div class="init-load" v-if="!inited" flex>
@@ -24,9 +29,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="item in record" :key="item.file">
+        <tr v-for="item in searchResult" :key="item.file">
           <router-link class="link" tag="td" :to="'/record/'+item.file">
-              <img :src="item.images[0]" alt="cover"/>
+            <img :src="item.images[0]" alt="cover"/>
           </router-link>
           <td>
             <span>{{ item.summary }}</span>
@@ -57,7 +62,7 @@ export default {
   props: {
     record: {
       type: Array,
-      default: ()=>[]
+      default: () => []
     },
     inited: {
       type: Boolean,
@@ -66,6 +71,7 @@ export default {
   },
   data() {
     return {
+      search: '',
       deleting: {
         b: false,
         state: ''
@@ -75,12 +81,35 @@ export default {
     }
   },
   computed: {
-    gitUtil (){
+    searchResult() {
+      if (this.search === '') return this.record;
+      let lis = [];
+      this.record.forEach(e => {
+        if (e.summary.search(this.search) !== -1) {
+          lis.push(e)
+        }
+      })
+      return lis
+    },
+    allSelected (){
+      return this.selectList.length===this.searchResult.length;
+    },
+    gitUtil() {
       return this._gitUtil()
     }
   },
   inject: ['_gitUtil'],
   methods: {
+    changeSelectAll (){
+      if (!this.allSelected) {
+        this.selectList = [];
+        this.searchResult.forEach(v => {
+          this.selectList.push(v.file);
+        })
+      }else{
+          this.selectList = [];
+      }
+    },
     toggleSelect(item) {
       let idx = this.selectList.indexOf(item);
       if (idx === -1) {
@@ -133,7 +162,7 @@ export default {
       }
     },
     async deleteItem(files) {
-      if (this.deleting.bool) return;
+      if (this.deleting.b) return;
       if (this.gitUtil) {
         if (confirm('确认删除?')) {
           let err = null;
@@ -190,28 +219,37 @@ export default {
   flex-direction: column;
   > .head{
     width: 100%;
-    margin: 1rem 0;
+      margin: 1rem 0 0.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid gray;
     justify-content: space-between;
-    > .delete-state{
+    flex-wrap: wrap;
+    > .search{
       margin-left: 1rem;
-      > svg{
-        width: 1.5rem;
-        height: 1.5rem;
-      }
       > span{
-        color: red;
-        font-size: 0.8rem;
-        margin-left: 0.6rem;
+        margin-right: 1rem;
+        font-size: 0.95rem;
+      }
+      > input{
+        padding: 0.2rem;
+        border-radius: 0.25em;
+        font-size: 0.88rem;
+        border: 1px solid gray;
+        width: 10rem;
       }
     }
     > ::v-deep .new{
       margin: 0 1rem 0 0;
-      background: linear-gradient(to right, #e02bd2, #4444ff);
       padding: 0.6rem 1.2rem;
+      background: linear-gradient(to right, #e02bd2, #4444ff);
+      &.white{
+        > svg{
+          fill: white;
+        }
+      }
       > svg{
         width: 1.4rem;
         height: 1.4rem;
-        fill: white;
       }
       > span{
         margin-left: 0.5rem;
@@ -222,6 +260,23 @@ export default {
     > .select-{
       margin: 0 1rem 0 auto;
       background: #00bb00;
+    }
+  }
+  >.delete{
+    justify-content: flex-end;
+    margin: 0.5rem 0;
+    width: 100%;
+    >a{
+      margin-right: 0.5rem;
+      font-size: 0.8rem;
+      color: red;
+    }
+    >.check-box{
+      margin: 0 0.5rem 0 1.5rem;
+    }
+    >.txt{
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
     }
   }
   > .body{
