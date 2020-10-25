@@ -194,7 +194,7 @@ export default {
     },
     addSticker(folder, idx) {
       if (!this.focusAt) {
-        this.$message.warning('请先点选择输入框!');
+        this.$message.warning('请先选择输入框!');
         return
       }
       this.codeMirror.replaceRange(`![sticker](${folder}/${idx})`, this.focusAt);
@@ -211,7 +211,7 @@ export default {
     insertImg() {
       if (!this.imageUrl) return;
       if (!this.focusAt) {
-        this.$message.warning('请先点选择输入框!');
+        this.$message.warning('请点选择输入框!');
         return
       }
       this.codeMirror.replaceRange(`![common](${this.imageUrl})`, this.focusAt);

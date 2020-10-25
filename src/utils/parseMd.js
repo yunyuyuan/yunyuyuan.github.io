@@ -9,26 +9,26 @@ import {cdnDynamicUrl} from "@/need";
 const
     linkExtension = {
         type: 'lang',
-        regex: /(?:^|[^\\])#\[(.*?)]\((.*?)\)/g,
-        replace: '<a target="_blank" href="$2">$1</a>'
+        regex: /(^|[^\\])#\[(.*?)]\((.*?)\)/g,
+        replace: '$1<a target="_blank" href="$3">$2</a>'
     },
     dimensionExtension = {
         type: 'lang',
-        regex: /(?:^|[^\\])!\[(.*?) x (.*?)]\((.*?)\)/g,
-        replace: (a, b, c, d) => {
-            return `<img alt="dimension img" style="${b !== '*' ? `width: ${b} !important;` : ''}${c !== '*' ? `height: ${c} !important;` : ''}margin: 1rem;display: inline-block" src="${d}"/>`
+        regex: /(^|[^\\])!\[(.*?) x (.*?)]\((.*?)\)/g,
+        replace: (a, b, c, d, e) => {
+            return `${b}<img alt="dimension img" style="${c !== '*' ? `width: ${c} !important;` : ''}${d !== '*' ? `height: ${d} !important;` : ''}margin: 1rem;display: inline-block" src="${e}"/>`
         }
     },
     colorTextExtension = {
         type: 'lang',
-        regex: /(?:^|[^\\])-\(([#a-zA-Z0-9]+): (.*?)\)-/g,
-        replace: `<span style="color: $1">$2</span>`
+        regex: /(^|[^\\])-\(([#a-zA-Z0-9]+): (.*?)\)-/g,
+        replace: `$1<span style="color: $2">$3</span>`
     },
     fieldExtension = {
         type: 'lang',
         filter(text, converter) {
-            return text.replace(/(?:^|\n)--(.*?)--\n([\s\S]+)\n-- --/g, (a, b, c) => {
-                return `<fieldset><legend>${b}</legend>${converter.makeHtml(c)}</fieldset>`
+            return text.replace(/(^|\n)--(.*?)--\n([\s\S]+)\n-- --/g, (a, b, c, d) => {
+                return `${b}<fieldset><legend>${c}</legend>${converter.makeHtml(d)}</fieldset>`
             })
         },
     }

@@ -5,8 +5,11 @@
         <svg-icon :name="'back'"/>
         <span>返回</span>
       </div>
-      <span class="state">{{ saving.state }}</span>
+      <single-button class="del-cache" :disabled="!hasCache" :text="'删除草稿'" :size="0.9" @click.native="delCache"/>
+      <single-button class="use-cache" :disabled="!hasCache" :text="'使用草稿'" :size="0.9" @click.native="useCache"/>
+      <single-button class="save-cache" :text="'保存草稿'" :size="0.9" @click.native="saveCache"/>
       <loading-button :loading="saving.b" :text="'上传'" :icon="'save'" @click.native="save"/>
+      <span class="state" v-if="saving.state">{{ saving.state }}</span>
     </div>
     <div class="time" flex>
       <span><span>创建:</span>{{ (info ? info.time : 0) | time(false) }}</span>
@@ -30,7 +33,7 @@
         </span>
       </div>
       <label class="text">
-        <span>文本:</span>
+        <p flex><svg-icon :name="'text'"/>文本:</p>
         <textarea v-model="text"></textarea>
       </label>
     </div>
@@ -43,7 +46,7 @@ import LoadingImg from "@/components/LoadingImg";
 import SingleButton from "@/components/Button";
 import {getText, parseAjaxError, sortByTime} from "@/utils/utils";
 import {originPrefix} from "@/need";
-import {getCache, setCache} from "@/views/backend/storage";
+import {delCache, getCache, setCache} from "@/views/backend/storage";
 
 export default {
   name: "RecordDetail",
@@ -52,6 +55,10 @@ export default {
     record: {
       type: Array,
       default: ()=>[]
+    },
+    inited: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -62,8 +69,7 @@ export default {
       },
       tempRecord: [],
       text: '',
-      cacheTimeout: null,
-      cacheInit: false,
+      hasCache: false,
       info: {},
       newInfo: {
         file: '',
@@ -82,48 +88,26 @@ export default {
       return this._gitUtil()
     }
   },
-  inject: ['_gitUtil', 'showCacheFinish'],
-  mounted() {
-    this.init()
-  },
+  inject: ['_gitUtil'],
   watch: {
-    '$props.record' (){
+    '$props.inited' (){
       this.init()
     },
-    info: {
-      deep: true,
-      handler (){
-        this.saveCache()
-      }
-    },
-    text: {
-      deep: true,
-      handler (){
-        this.saveCache()
-      }
-    },
   },
-  beforeRouteLeave (to, from, next){
-    if (this.id !== 'new'){
-      if (confirm('确定离开?将会丢失修改')){
-        next()
+  created() {
+    this.hasCache = getCache(`record-${this.id}`)!==null;
+  },
+  beforeRouteEnter (to, from, next){
+    next(vm=>{
+      if (vm.$props.inited) {
+        vm.init()
       }
-    }else{
-      next()
-    }
+    })
   },
   methods: {
     init() {
-      this.cacheInit = false;
-      const cache = getCache('new-record');
-      if (this.id === 'new' && cache){
-        this.info = JSON.parse(cache);
-      }else {
-        this.info = JSON.parse(JSON.stringify(this.id === 'new' ? this.newInfo : this.record.find(v => v.file === this.id) || this.newInfo));
-      }
-      this.$nextTick(()=>{
-        this.cacheInit = true;
-      })
+      console.log('init')
+      this.info = JSON.parse(JSON.stringify(this.id === 'new' ? this.newInfo : this.record.find(v => v.file === this.id) || this.newInfo));
       if (this.id !== 'new') {
         getText(`${originPrefix}/record/${this.id}.txt`).then(res=>{
           if (res[0]) {
@@ -133,18 +117,25 @@ export default {
           }
         })
       }else{
-        this.text = getCache('new-record-text') || '';
+        this.text = '';
       }
     },
+    delCache (){
+      delCache(`record-${this.id}`);
+      delCache(`record-${this.id}-text`);
+      this.$message.success('草稿已删除');
+      this.hasCache = false;
+    },
+    useCache (){
+      this.info = JSON.parse(getCache(`record-${this.id}`));
+      this.text = getCache(`record-${this.id}-text`);
+      this.$message.success('草稿已加载');
+    },
     saveCache (){
-      if (!this.cacheInit) return ;
-      if (this.id !== 'new') return;
-      if (this.cacheTimeout) clearTimeout(this.cacheTimeout);
-      this.cacheTimeout = setTimeout(()=>{
-        setCache('new-record', JSON.stringify(this.info));
-        setCache('new-record-text', this.text);
-        this.showCacheFinish()
-      }, 2000)
+      setCache(`record-${this.id}`, JSON.stringify(this.info));
+      setCache(`record-${this.id}-text`, this.mdText);
+      this.$message.success('草稿已保存');
+      this.hasCache = true;
     },
     // ---- change ----
     delImg(idx) {
@@ -209,7 +200,7 @@ export default {
         }
         this.saving = {
           b: false,
-          state: ''
+          state: '',
         }
       } else {
         this.$message.warning('请先登录!');
@@ -230,6 +221,7 @@ export default {
     justify-content: space-between;
     width: calc(100% - 0.5rem);
     padding: 0.2rem 0.2rem 0 0.2rem;
+    flex-wrap: wrap;
     > .back{
       cursor: pointer;
       padding: 0.4rem 0.8rem;
@@ -253,10 +245,16 @@ export default {
         margin-left: 0.5rem;
       }
     }
-    > .state{
-      color: red;
-      height: 1rem;
-      font-size: 0.8rem;
+    ::v-deep .single-button{
+      &.del-cache{
+        background: #ff1d1d;
+      }
+      &.use-cache{
+        background: #00da39;
+      }
+      &.save-cache{
+        background: #ff8000;
+      }
     }
     > ::v-deep .loading-button{
       padding: 0.4rem 0.8rem;
@@ -270,6 +268,13 @@ export default {
         background: gray;
         color: white;
       }
+    }
+    > .state{
+      width: 100%;
+      text-align: right;
+      color: red;
+      height: 1rem;
+      font-size: 0.8rem;
     }
   }
   > .time{
@@ -306,6 +311,9 @@ export default {
       > .item{
         flex-direction: column;
         margin: 0.6rem 1rem;
+        border: 1px solid #bfbfbf;
+        padding: 0.4rem;
+        border-radius: 0.2rem;
         > .bottom{
           margin-top: 0.5rem;
           > input{
@@ -319,13 +327,14 @@ export default {
         cursor: pointer;
         padding: 0.5rem;
         border-radius: 50%;
-        background: #ffc722;
+        background: #ff8822;
         justify-content: center;
         margin-left: 1rem;
         box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
+        transition: all .1s linear;
 
         &:hover{
-          background: #eab61f;
+          box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.6);
         }
 
         > svg{
@@ -337,11 +346,18 @@ export default {
     }
     > .text{
       width: 95%;
-      padding: 0 2.5%;
-      margin: 2rem 0;
+      padding: 1rem 2.5%;
+      margin: 1rem 0;
+      border-top: 2px dashed gray;
+      display: block;
       > p{
         font-size: 1.1rem;
         margin-bottom: 1rem;
+        >svg{
+          width: 1.8rem;
+          height: 1.8rem;
+          margin-right: 0.5rem;
+        }
       }
       > textarea{
         width: calc(100% - 0.6rem);

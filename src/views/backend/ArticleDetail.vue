@@ -5,10 +5,9 @@
         <svg-icon :name="'back'"/>
         <span>返回</span>
       </div>
-      <a @click="showGuide = true" flex>
-        <svg-icon :name="'info'"/>
-        markdown语法指南
-      </a>
+      <single-button class="del-cache" :disabled="!hasCache" :text="'删除草稿'" :size="0.9" @click.native="delCache"/>
+      <single-button class="use-cache" :disabled="!hasCache" :text="'使用草稿'" :size="0.9" @click.native="useCache"/>
+      <single-button class="save-cache" :text="'保存草稿'" :size="0.9" @click.native="saveCache"/>
       <loading-button :loading="saving.b" :text="'上传'" :icon="'save'" @click.native="save"/>
       <span class="state">{{ saving.state }}</span>
     </div>
@@ -55,6 +54,9 @@
       <div class="head" flex>
         <span @click="enableSticker" title="表情" :class="{active: showSticker}" flex>
           <svg-icon :name="'cmt-sticker'"/>
+        </span>
+        <span class="markdown-guide" @click="showGuide=true" title="markdown语法指南" flex>
+          <svg-icon :name="'markdown'"/>
         </span>
         <div class="sticker" ref="sticker" :class="{active: showSticker}" flex v-if="config.sticker">
           <div class="content">
@@ -107,18 +109,21 @@ import Resizer from "@/components/Resizer";
 import MarkdownHelp from "@/views/block/MarkdownHelp";
 import LoadingImg from "@/components/LoadingImg";
 import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
-import {hljsAndInsertCopyBtn} from "@/utils/highlight";
 import siteConfig from "@/site-config";
-import {getCache, setCache} from "@/views/backend/storage";
-
+import {delCache, getCache, setCache} from "@/views/backend/storage";
+import SingleButton from "@/components/Button";
 
 export default {
   name: "ArticleDetail",
-  components: {LoadingImg, MarkdownHelp, Resizer, LoadingButton, FloatInput},
+  components: {SingleButton, LoadingImg, MarkdownHelp, Resizer, LoadingButton, FloatInput},
   props: {
     md: {
       type: Array,
       default: ()=>[]
+    },
+    inited: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -141,8 +146,7 @@ export default {
         b: false,
         state: ''
       },
-      cacheTimeout: null,
-      cacheInit: false,
+      hasCache: false,
       info: {},
       newInfo: {
         name: "编辑标题",
@@ -167,27 +171,12 @@ export default {
     },
     config (){
       return this._config()
-    }
+    },
   },
-  inject: ['_config', '_gitUtil', 'showCacheFinish'],
-  async mounted() {
-    await this.init()
-  },
+  inject: ['_config', '_gitUtil'],
   watch: {
-    async '$props.md'() {
-      await this.init()
-    },
-    info: {
-      deep: true,
-      handler (){
-        this.saveCache()
-      }
-    },
-    mdText: {
-      deep: true,
-      handler (){
-        this.saveCache()
-      }
+    '$props.inited' (){
+      this.init()
     },
     htmlText (){
       this.$nextTick(()=>{
@@ -195,40 +184,32 @@ export default {
       })
     }
   },
-  beforeRouteLeave (to, from, next){
-    if (this.id !== 'new'){
-      if (confirm('确定离开?将会丢失修改')){
-        next()
+  beforeRouteEnter (to, from, next){
+    next(vm=>{
+      if (vm.$props.inited) {
+        vm.init()
       }
-    }else{
-      next()
-    }
+    })
+  },
+  created() {
+    this.hasCache = getCache(`article-${this.id}`)!==null;
   },
   methods: {
     async init() {
-      this.cacheInit = false;
-      const cache = getCache('new-article');
-      if (this.id === 'new' && cache){
-        this.info = JSON.parse(cache);
-      }else{
-        this.info = JSON.parse(JSON.stringify(this.id === 'new' ? this.newInfo : this.md.find(v => v.file === this.id)||this.newInfo));
-      }
+      this.info = JSON.parse(JSON.stringify(this.id === 'new' ? this.newInfo : this.md.find(v => v.file === this.id)||this.newInfo));
       // 初始化信息
-      this.$nextTick(()=>{
-        this.cacheInit = true;
-      })
-      let mdText = '';
+      let mdText = '写点什么吧';
       // 标题
-      document.title = '后台-文章-' + this.id;
-      if (this.$route.params.id !== 'new') {
+      if (this.id === 'new'){
+        document.title = '后台-文章-新建';
+      }else {
+        document.title = '后台-文章-' + this.id;
         let res = await getText(`${originPrefix}/md/${this.id}/index.md`);
         if (res[0]) {
           mdText = res[1];
         } else {
           this.$message.error(parseAjaxError(res[1]))
         }
-      }else{
-        mdText = getCache('new-article-md')||'';
       }
       if (!this.codeMirror) {
         this.codeMirror = new CodeMirror(this.$refs.textarea, {
@@ -279,22 +260,29 @@ export default {
     },
     addSticker (folder, idx){
       if (!this.focusAt) {
-        this.$message.warning('请先点选择输入框!');
+        this.$message.warning('请先选择输入框!');
         return
       }
       this.codeMirror.replaceRange(`![sticker](${folder}/${idx})`, this.focusAt);
       document.removeEventListener('click', this.handleStickerDiv);
       this.showSticker = false;
     },
+    delCache (){
+      delCache(`article-${this.id}`);
+      delCache(`article-${this.id}-text`);
+      this.$message.success('草稿已删除');
+      this.hasCache = false;
+    },
+    useCache (){
+      this.info = JSON.parse(getCache(`article-${this.id}`));
+      this.codeMirror.setValue(getCache(`article-${this.id}-text`));
+      this.$message.success('草稿已加载');
+    },
     saveCache (){
-      if (!this.cacheInit) return ;
-      if (this.id !== 'new') return;
-      if (this.cacheTimeout) clearTimeout(this.cacheTimeout);
-      this.cacheTimeout = setTimeout(()=>{
-        setCache('new-article', JSON.stringify(this.info));
-        setCache('new-article-md', this.mdText);
-        this.showCacheFinish()
-      }, 2000)
+      setCache(`article-${this.id}`, JSON.stringify(this.info));
+      setCache(`article-${this.id}-text`, this.mdText);
+      this.$message.success('草稿已保存');
+      this.hasCache = true;
     },
     // ----- change -------
     inputTitle(payload) {
@@ -346,8 +334,6 @@ export default {
     async save() {
       if (this.saving.b) return;
       if (this.gitUtil) {
-        const md = this.mdText,
-            html = this.htmlText;
         let info = this.info;
         if (!info.name || !info.summary || !info.tags.length || !info.cover) {
           return this.$message.warning('标题,简介,标签和封面均不能为空!')
@@ -383,8 +369,8 @@ export default {
           // 更新 md 和 html文件
           let res = await this.gitUtil.updateMd({
             folder: folderId,
-            md: md,
-            html: html
+            md: this.mdText,
+            html: this.htmlText
           }, this.saving);
           if (res[0]) {
             this.$message.success('上传成功!');
@@ -445,23 +431,15 @@ export default {
       }
     }
 
-    > a {
-      font-size: 0.9rem;
-      cursor: pointer;
-
-      &:hover {
-        color: #ff3c00;
-        text-decoration: underline;
-
-        > svg {
-          fill: #ff3c00;
-        }
+    ::v-deep .single-button{
+      &.del-cache{
+        background: #ff1d1d;
       }
-
-      > svg {
-        width: 1.2rem;
-        height: 1.2rem;
-        margin-right: 0.8rem;
+      &.use-cache{
+        background: #00da39;
+      }
+      &.save-cache{
+        background: #ff8000;
       }
     }
 
@@ -623,13 +601,14 @@ export default {
           cursor: pointer;
           padding: 0.5rem;
           border-radius: 50%;
-          background: #ffc722;
+          background: #ff8822;
           justify-content: center;
           margin-left: 1rem;
           box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
+          transition: all .1s linear;
 
-          &:hover {
-            background: #eab61f;
+          &:hover{
+            box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.6);
           }
 
           > svg {
@@ -667,15 +646,23 @@ export default {
     border-top: 1px dashed gray;
     > .head{
       width: 95%;
-      padding: 0.5rem 2.5%;
+      padding: 0.15rem 2.5%;
       position: relative;
       margin: 0.5rem 0;
       >span{
         cursor: pointer;
+        padding: 0.4rem;
+        border-radius: 0.2rem;
         >svg{
           width: 2rem;
           height: 2rem;
         }
+        &:hover{
+          background: #d8d8d8;
+        }
+      }
+      >.markdown-guide{
+        margin-left: auto;
       }
       > .sticker {
         width: 90%;

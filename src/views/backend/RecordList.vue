@@ -206,7 +206,7 @@ export default {
     }
     > ::v-deep .new{
       margin: 0 1rem 0 0;
-      background: linear-gradient(to right, red, blue);
+      background: linear-gradient(to right, #e02bd2, #4444ff);
       padding: 0.6rem 1.2rem;
       > svg{
         width: 1.4rem;

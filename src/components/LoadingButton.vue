@@ -35,18 +35,17 @@ export default {
   padding: 0.2em 0.8em;
   border-radius: 0.3em;
   cursor: pointer;
-  transition: all .1s linear;
+  transition: box-shadow .1s linear;
   background: #4a91ff;
   box-shadow: 0 0 0.4em rgba(0, 0, 0, 0.3);
 
-  &:hover {
-    background: #8c8e8d;
+  &:not(.loading):not(.disabled):hover {
     box-shadow: 0 0.2rem 0.4em rgba(0, 0, 0, 0.6)
   }
 
-  &.loading {
+  &.loading, &.disabled {
     cursor: not-allowed;
-    background: #8c8e8d;
+    background: #8c8e8d !important;
   }
 
   > svg {

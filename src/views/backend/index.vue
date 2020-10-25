@@ -30,7 +30,6 @@
         <router-view @login="showLogin = true"></router-view>
       </keep-alive>
     </div>
-    <span ref="cache" class="save-cache">草稿已保存</span>
   </div>
 </template>
 
@@ -141,18 +140,11 @@ export default {
   },
   provide() {
     return {
-      _gitUtil: () => this.computeGitUtil,
-      showCacheFinish: ()=>{
-        let span = this.$refs.cache;
-        span.setAttribute('data-run', '');
-      }
+      _gitUtil: () => this.computeGitUtil
     }
   },
   mounted() {
     loadFinish();
-    this.$refs.cache.addEventListener('animationend', ()=>{
-      this.$refs.cache.removeAttribute('data-run');
-    })
   },
   methods: {
     toggleMenu() {
@@ -367,36 +359,6 @@ export default {
     >svg{
       width: 5rem;
       height: 5rem;
-    }
-  }
-  >.save-cache{
-    position: fixed;
-    z-index: $z-index-message;
-    background: #00d8bc;
-    color: black;
-    font-size: 0.95rem;
-    border-radius: 0.2rem;
-    box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.4);
-    padding: 0.3rem 0.8rem;
-    top: 0.8rem;
-    right: 0.8rem;
-    transform: translateY(calc(-100% - 1.6rem));
-    @keyframes save-cache-animate {
-      0%{
-        transform: translateY(calc(-100% - 1.6rem));
-      }
-      10%{
-        transform: translateY(0);
-      }
-      90%{
-        transform: translateY(0);
-      }
-      100%{
-        transform: translateY(calc(-100% - 1.6rem));
-      }
-    }
-    &[data-run]{
-      animation: save-cache-animate 3s linear;
     }
   }
 }

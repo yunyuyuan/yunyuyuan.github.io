@@ -186,13 +186,9 @@ export default {
     flex-direction: column;
     ::v-deep .loading-button{
       width: 15rem;
-      background: linear-gradient(to right, red, blue);
       padding: 1rem 1.8rem;
       white-space: pre;
-      &.loading, &.disabled{
-        cursor: not-allowed;
-        background: gray;
-      }
+      background: linear-gradient(to right, #e02bd2, #4444ff);
     }
     >span{
       color: red;
