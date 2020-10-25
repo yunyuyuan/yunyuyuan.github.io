@@ -82,50 +82,43 @@ export class GithubUtils {
     // create commit
     async createCommit(files, message, dict) {
         return new Promise(async resolve => {
-            dict.state = '获取master的SHA';
-            let main = await this.repos.git.refs('heads/master').fetch().catch(err => {
-                resolve([false, err])
-            });
+            try {
+                dict.state = '获取master的SHA';
+                let main = await this.repos.git.refs('heads/master').fetch();
+                // 创建tree
+                let treeItems = [];
+                for (let item of files) {
+                    dict.state = `创建blob:${item.folder.replace(/^.*\/([^/]*)$/, '$1')}`;
+                    let res = await this.repos.git.blobs.create({
+                        content: stringToB64(item.content),
+                        encoding: 'base64'
+                    });
+                    treeItems.push({
+                        path: item.folder,
+                        sha: res.sha,
+                        mode: "100644",
+                        type: "blob"
+                    });
+                }
+                dict.state = '创建tree';
+                let tree = await this.repos.git.trees.create({
+                    tree: treeItems,
+                    base_tree: main.object.sha
+                });
 
-            // 创建tree
-            let treeItems = [];
-            for (let item of files) {
-                dict.state = `创建blob:${item.folder.replace(/^.*\/([^/]*)$/, '$1')}`;
-                let res = await this.repos.git.blobs.create({
-                    content: stringToB64(item.content),
-                    encoding: 'base64'
-                }).catch(err => {
-                    resolve([false, err])
+                // commit
+                dict.state = 'commit...';
+                let commit = await this.repos.git.commits.create({
+                    message: message,
+                    tree: tree.sha,
+                    parents: [main.object.sha]
                 });
-                treeItems.push({
-                    path: item.folder,
-                    sha: res.sha,
-                    mode: "100644",
-                    type: "blob"
-                });
+                dict.state = 'update...';
+                await main.update({sha: commit.sha});
+                resolve([tree])
+            }catch (err){
+                resolve([false, err])
             }
-            dict.state = '创建tree';
-            let tree = await this.repos.git.trees.create({
-                tree: treeItems,
-                base_tree: main.object.sha
-            }).catch(err => {
-                resolve([false, err])
-            });
-
-            // commit
-            dict.state = 'commit...';
-            let commit = await this.repos.git.commits.create({
-                message: message,
-                tree: tree.sha,
-                parents: [main.object.sha]
-            }).catch(err => {
-                resolve([false, err])
-            });
-            dict.state = 'update...';
-            await main.update({sha: commit.sha}).catch(err => {
-                resolve([false, err])
-            });
-            resolve([tree])
         })
     }
 
@@ -135,23 +128,17 @@ export class GithubUtils {
                 let repo = this.repos;
                 dic.state = '获取 commit sha';
                 // 先获取master的commit sha
-                let res = await repo.git.refs('heads/master').fetch().catch(err => {
-                    resolve([false, err])
-                });
+                let res = await repo.git.refs('heads/master').fetch();
                 dic.state = '获取 tree sha';
                 // 根据commit sha获取tree sha
-                res = await repo.git.commits(res.object.sha).fetch().catch(err => {
-                    resolve([false, err])
-                });
+                res = await repo.git.commits(res.object.sha).fetch();
                 // 根据tree sha递归获取sha
                 const mdPath = [dynamicFolder, what];
 
                 async function getMdSha(treeSha) {
                     if (mdPath.length) {
                         dic.state = `获取 ${mdPath[0]} sha`;
-                        res = await repo.git.trees(treeSha).fetch().catch(err => {
-                            resolve([false, err])
-                        });
+                        res = await repo.git.trees(treeSha).fetch();
                         for (let t of res.tree) {
                             if (t.type === 'tree' && t.path === mdPath[0]) {
                                 mdPath.splice(0, 1);
@@ -160,9 +147,7 @@ export class GithubUtils {
                         }
                     } else {
                         // 找到了
-                        return await repo.git.trees(treeSha).fetch().catch(err => {
-                            resolve([false, err])
-                        });
+                        return await repo.git.trees(treeSha).fetch();
                     }
                 }
 
@@ -170,16 +155,12 @@ export class GithubUtils {
                 for (let i of res.tree) {
                     if (i.type === 'tree') {
                         if (folders.indexOf(i.path) !== -1) {
-                            res = await repo.git.trees(i.sha).fetch().catch(err => {
-                                resolve([false, err])
-                            });
+                            res = await repo.git.trees(i.sha).fetch();
                             for (let j of res.tree) {
                                 dic.state = `删除 ${i.path}-${j.path}`;
                                 await repo.contents(`${dynamicFolder}/${what}/${i.path}/${j.path}`).remove({
                                     sha: j.sha,
                                     message: '删除'
-                                }).catch(err => {
-                                    resolve([false, err])
                                 });
                             }
                         }
@@ -189,8 +170,6 @@ export class GithubUtils {
                             await repo.contents(`${dynamicFolder}/${what}/${i.path}`).remove({
                                 sha: i.sha,
                                 message: '删除'
-                            }).catch(err => {
-                                resolve([false, err])
                             });
                         }
                     }
@@ -205,55 +184,54 @@ export class GithubUtils {
     async getTag() {
         return new Promise(async resolve => {
             // 获取master的commit sha
-            let res = await this.repos.git.refs('heads/master').fetch().catch(err => {
+            try {
+                let res = await this.repos.git.refs('heads/master').fetch();
+                let last = res.object.sha;
+                res = await this.repos.git.refs.tags('').fetch();
+                res.items.forEach(v => v.last = v.object.sha === last)
+                resolve([true, res.items])
+            }catch (err){
                 resolve([false, err])
-            });
-            let last = res.object.sha;
-            res = await this.repos.git.refs.tags('').fetch().catch(err => {
-                resolve([false, err])
-            });
-            res.items.forEach(v => v.last = v.object.sha === last)
-            resolve([true, res.items])
+            }
         })
     }
 
     async createRelease(name, dict) {
         return new Promise(async resolve => {
-            dict.state = '获取404-temp.html';
-            let res = await getText(`404-temp.html`);
-            if (!res[0]) {
-                resolve([false, res[1]])
-            }
-            dict.state = '复制404-temp.html到404.html';
-            res = await this.updateSingleFile(`404.html`, res[1]);
-            if (!res[0]) {
-                resolve([false, res[1]])
-            }
-            dict.state = '获取master的commit sha';
-            res = await this.repos.git.refs('heads/master').fetch().catch(err => {
+            try {
+                dict.state = '获取404-temp.html';
+                let res = await getText(`404-temp.html`);
+                if (!res[0]){
+                    return resolve([false, res[1]])
+                }
+                dict.state = '复制404-temp.html到404.html';
+                await this.updateSingleFile(`404.html`, res[1]);
+                dict.state = '获取master的commit sha';
+                res = await this.repos.git.refs('heads/master').fetch();
+                dict.state = '创建refs';
+                await this.repos.git.refs.create({
+                    ref: 'refs/tags/' + name,
+                    sha: res.object.sha
+                });
+                dict.state = '创建release成功!';
+                resolve([true])
+            }catch (err){
                 resolve([false, err])
-            });
-            dict.state = '创建refs';
-            await this.repos.git.refs.create({
-                ref: 'refs/tags/' + name,
-                sha: res.object.sha
-            }).catch(err => {
-                resolve([false, err])
-            });
-            dict.state = '创建release成功!';
-            resolve([true])
+            }
         })
     }
 
     async deleteTag(lis, dic) {
         return new Promise(async resolve => {
-            for (const tag of lis) {
-                dic.state = '删除:' + tag;
-                await this.repos.git(tag).remove().catch(err => {
-                    resolve([false, err])
-                });
+            try {
+                for (const tag of lis) {
+                    dic.state = '删除:' + tag;
+                    await this.repos.git(tag).remove();
+                }
+                resolve([true])
+            }catch (err){
+                resolve([false, err])
             }
-            resolve([true])
         })
     }
 }
