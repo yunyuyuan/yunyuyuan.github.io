@@ -62,7 +62,7 @@ export function processMdHtml(el, isComment) {
     el.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
         hljsAndInsertCopyBtn(el)
     })
-    if (isComment){
+    if (!isComment){
         // 评论没有anchor
         el.querySelectorAll('h1[id]:not([parsed]), h2[id]:not([parsed]), h3[id]:not([parsed]), h4[id]:not([parsed]), h5[id]:not([parsed]), h6[id]:not([parsed])').forEach(el => {
             el.setAttribute('parsed', '');
