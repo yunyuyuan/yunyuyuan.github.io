@@ -1,11 +1,11 @@
 ### github page的局限
-本站是由#[github page](https://github.io)托管的，但是正常情况下它有几个缺点：
+本站是由#[github page](https://github.io)托管的，它稳定且免费，但是正常情况下有几个缺点：
 
 * 网速贼慢，或者不翻墙压根无法访问
 * 无法使用vue router的history
 * 静态网站没办法自身更新
 
-> 接下来依次展示我的三个小技巧了!![sticker](https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/yellow-face/59.png?ran=1603380653948)
+> 接下来依次展示我的三个小技巧了!![sticker](yellow-face/59)
 
 #### jsdelivr非常🐂🍺的CDN
 第一个问题，当然是最大的问题: **访问github page非常非常非常慢**，至于有多慢就得自己试试，由于已经解决了该问题，此站访问很快。
@@ -30,7 +30,7 @@ module.exports = {
 ```javascript
 const baseDynamicUrl = process.env.NODE_ENV === 'development'?'':(`https://cdn.jsdelivr.net/gh/${name}/${name}.github.io@latest/${your directory}`)
 ```
--(red: 缺点：万一连404.html都无法访问呢![sticker](https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/aru/45.png?ran=1603380653948))-
+-(red: 缺点：万一连404.html都无法访问呢![sticker](aru/45))-
 
 #### 使用404.html作为app
 这是一个基于#[github.io的404](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/creating-a-custom-404-page-for-your-github-pages-site)的骚操作。
@@ -44,56 +44,106 @@ module.exports = {
     /* 如果是开发环境就正常打包
      * 如果是生产环境就打包index为404
     **/
-    indexPath: process.env.NODE_ENV?'index.html':'../404.html',
+    indexPath: process.env.NODE_ENV?'index.html':'../404-temp.html',
     ......
 }
 ```
 
 2. 手写路由识别，其实这里可以用vue router的history路由的，但当时我打算自己写一个简单的：
 ```js
-/**********
-  route.js
-***********/
+/********
+ * route.js
+********/
 
-// 获取路由变量
 function routeInfo (){
     // 去掉最后的 '/'
     let pathname = window.location.pathname.replace(/^(.+?)\/*$/, '$1');
     for (let i of routes){
-        let regexp = i.path.replace(/\/:(\w+)/g, '/(?<$1>[^/]+)');
-        let matcher = pathname.match(new RegExp(`^${regexp}$`));
+        const paramNames = [];
+        let regexp = i.path.replace(/\/:(\w+)/g, (a, b)=>{
+            paramNames.push(b);
+            return '/([^/]+)'
+        });
+        let matcher = pathname.match( new RegExp(`^${regexp}$`));
         if (matcher){
+            const params = {};
+            for (let idx=1;idx<=paramNames.length;idx++){
+                params[paramNames[idx-1]] = matcher[idx];
+            }
             return {
-                name: i.name,
-                params: matcher.groups||{},
-                title: i.title
+                params: params||{},
+                ...i
             }
         }
     }
     return {
         name: null,
         params: {},
-        title: '404'
+        title: '404',
+        keywords: `静态博客 ${siteConfig.owner}的个人博客 404`,
+        description: `${siteConfig.owner}的个人博客-${siteConfig.corner}`
     }
 }
+
+const siteConfig = require( '@/site-config')
 
 const routes = [
     {
         path: '/',
-        name: 'index',
+        name: 'home',
         title: '主页',
+        comp: ()=>import('@/views/home/index'),
+        keywords: `静态博客 ${siteConfig.owner}的个人博客 主页`,
+        description: `${siteConfig.owner}的个人博客-${siteConfig.corner}`
     },
     {
         path: '/article',
         name: 'article',
         title: '文章列表',
+        comp: ()=>import('@/views/article/List'),
+        keywords: `静态博客 ${siteConfig.owner}的个人博客 文章列表 博文`,
+        description: `${siteConfig.owner}的个人博客-博客文章列表`
     },
     {
         path: '/article/:id',
         name: 'articleDetail',
         title: '文章详情',
+        comp: ()=>import('@/views/article/Detail'),
+        keywords: `静态博客 ${siteConfig.owner}的个人博客 文章详情`,
+        description: `${siteConfig.owner}的个人博客-博客文章详情`
     },
-    ......
+    {
+        path: '/record',
+        name: 'record',
+        title: '记录列表',
+        comp: ()=>import('@/views/record/index'),
+        keywords: `静态博客 ${siteConfig.owner}的个人博客 生活记录`,
+        description: `${siteConfig.owner}的个人博客-个人生活记录`
+    },
+    {
+        path: '/backend',
+        name: 'backend',
+        title: '后台管理',
+        comp: ()=>import('@/views/backend/index'),
+        keywords: `静态博客 ${siteConfig.owner}的个人博客 后端管理`,
+        description: `${siteConfig.owner}的个人博客-后端管理`
+    },
+    {
+        path: '/msg-board',
+        name: 'msgBoard',
+        title: '留言板',
+        comp: ()=>import('@/views/msg-board/index'),
+        keywords: `静态博客 ${siteConfig.owner}的个人博客 留言板`,
+        description: `${siteConfig.owner}的个人博客-留言板`
+    },
+    {
+        path: '/simple-code-simple-life',
+        name: 'about',
+        title: '简单代码-简单生活',
+        comp: ()=>import('@/views/about/index'),
+        keywords: `静态博客 ${siteConfig.owner}的个人博客 关于`,
+        description: `${siteConfig.owner}的个人博客-关于`
+    },
 ]
 
 ```
@@ -110,34 +160,27 @@ export default {
   created(){
     const route = routeInfo();
     document.title = route.title;
+    document.head.querySelector('meta[name=keywords]').setAttribute('content', route.keywords);
+    document.head.querySelector('meta[name=description]').setAttribute('description', route.keywords);
 
-    // 判断路由位置
-    switch (route.name){
-      case 'index':
-        this.routeNow = 'home';
-        this.comp = ()=>import('@/views/home/index')
-        break;
-      case 'article':
-        this.routeNow = 'article';
-        this.comp = ()=>import('@/views/article/List');
-        bread;
-      ......
-    }
+    this.showHead = route.name !== 'backend';
+    this.routeNow = route.name;
+    this.comp = route.comp || (() => import('@/views/404/index'));
   }
 ......
 }
 </script>
 ```
 ---
-这样在打包完成后就只有一个`404.html`，所有请求都会转到这里，然后由js去决定加载哪个页面，这操作够![sticker](https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/aru/79.png?ran=1603380653948)吧。
+这样在打包完成后就只有一个`404-temp.html`，随后进网站的`backend>version`，发布一个新版本，即自动把404-temp复制到404。完成后访问网站就全部会被转到`404.html`，然后由js去决定加载哪个页面，这操作够![sticker](aru/79)吧。
 
--(red: 缺点：和SEO说拜拜![sticker](https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/yellow-face/48.png?ran=1603380653948)吧)-
+-(red: 缺点：和SEO说拜拜![sticker](yellow-face/48))-
 #### 静态网站自我更新
 
 > 这个没啥介绍的，只能说github牛逼，此站的自我更新基于#[github rest api](https://developer.github.com/)。
-> 这里的`自我更新`指的是使用静态网站本身更新网站，实在想不到别的术语了![sticker](https://cdn.jsdelivr.net/gh/yunyuyuan/yunyuyuan.github.io@latest/dynamic/sticker/yellow-face/45.png?ran=1603380653948)
+> 这里的`自我更新`指的是使用静态网站本身更新网站，实在想不到别的术语了![sticker](yellow-face/45)
 
--(red: 缺点：build代码并push后，必须迅速进backend发布版本(jsdelivr cdn更新之前)，否则只能进github发布，这其实也不算问题)-
+缺点：~~build代码并push后，必须迅速进backend发布版本(jsdelivr cdn更新之前)，否则只能进github发布，这其实也不算问题~~。-(red: 已解决，现在只需第一次时需要手动复制html)-
 
 ---
 
