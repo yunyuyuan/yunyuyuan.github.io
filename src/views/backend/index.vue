@@ -361,5 +361,13 @@ export default {
       height: 5rem;
     }
   }
+  @include media{
+    >.menu{
+      background: rgba(43, 43, 48, 0.75);
+    }
+    >.body{
+      width: 100%;
+    }
+  }
 }
 </style>

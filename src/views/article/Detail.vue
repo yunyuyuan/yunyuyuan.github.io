@@ -40,9 +40,8 @@
           </div>
           <span class="toggle-aside" :class="{active: asideActive}" @click="asideActive = !asideActive" flex
                 :title="`${asideActive?'关闭':'展开'}侧栏`">
-          <span class="top"></span>
-          <span class="bottom"></span>
-        </span>
+            <svg-icon :name="'arrow'"/>
+          </span>
         </aside>
         <span :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html" v-viewer></span>
       </div>
@@ -203,9 +202,9 @@ export default {
       justify-content: center;
       >h1{
         background: white;
-        border-radius: .2rem;
+        border-radius: 1rem/2.5rem;
         padding: .7rem 2.5rem;
-        box-shadow: .3rem .3rem .5rem rgb(0, 0, 0);
+        box-shadow: 0.3rem 0.3rem 0.5rem #6d6d6d;
         position: relative;
         min-width: 60%;
         text-align: center;
@@ -437,31 +436,16 @@ export default {
           position: relative;
           cursor: pointer;
           box-shadow: 0 0 1rem rgba(0, 0, 0, 0.4);
-          > span{
+          justify-content: center;
+          > svg{
             transition: all .2s ease-out;
-            position: absolute;
-            width: 50%;
-            height: 0.25rem;
-            background: black;
-            border-radius: 0.15rem;
-            margin: 0 25%;
-            &.top{
-              transform: rotate(45deg);
-              top: 30%;
-            }
-            &.bottom{
-              transform: rotate(-45deg);
-              bottom: 30%;
-            }
+            transform: rotate(0);
+            width: 1rem;
+            height: 1rem;
           }
           &.active{
-            > span{
-              &.top{
-                top: 45%;
-              }
-              &.bottom{
-                bottom: 45%;
-              }
+            > svg{
+              transform: rotate(180deg);
             }
           }
         }
