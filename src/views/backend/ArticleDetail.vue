@@ -677,7 +677,7 @@ export default {
         overflow: hidden;
         transition: height .1s linear;
         &.active{
-          height: 50vh;
+          height: 36vh;
           border: 1px solid #ababab;
           box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.4);
         }
@@ -737,6 +737,7 @@ export default {
             width: 4rem;
             border-right: 1px solid #b5b5b5;
             cursor: pointer;
+            color: black;
 
             &:not(.active):hover {
               background: #bababa;

@@ -1,14 +1,12 @@
 <template>
   <div id="index">
-    <!--  放在最前面防止 mounted() 时<loading/>还不存在  -->
     <loading :class="configLoaded"/>
-
     <NotFound v-if="routeNow===null"/>
     <img class="bg" v-else-if="isBgImg" :src="images[routeNow]" alt="bg"/>
     <div class="bg" v-else>
       <div id="particles-bg"></div>
       <div id="comet-bg">
-        <div class="comet" v-for="i in cometLen" :style="{top: `${100*Math.random()-50}%`,animationDelay: `${cometLen*Math.random()}s`,animationDuration: `${1.5+Math.random()*3}s`}"></div>
+        <div class="comet" v-for="i in randLen" :style="{left: `${50-Math.random()*100}px`,top: `${10+Math.random()*80}%`}"></div>
       </div>
     </div>
     <the-head :class="{'show-bg': showBg}" v-if="showHead" @toggle="toggleShowBg"/>
@@ -82,13 +80,13 @@ export default {
       return this.config.backgroundImg === 'img' || (this.config.backgroundImg === 'random' && this.rand)
     },
     rand() {
-      return Math.random() > 0.5
+      return Math.floor(Math.random()*10)%2===0
     },
     computeConfig() {
       return this.config
     },
-    cometLen (){
-      return 2+Math.floor(Math.random()*3)
+    randLen (){
+      return 3+Math.floor(Math.random()*5)
     }
   },
   async created() {
@@ -201,44 +199,81 @@ export default {
       width: 100%;
       height: 100%;
       display: block;
-      >.comet{
+      transform: rotateZ(45deg);
+      transform-origin: center center;
+      > .comet{
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 10rem;
-        height: 0.1rem;
-        background: linear-gradient(-45deg, #658eea, rgb(132, 132, 255, 0.18));
-        box-shadow: 0 0 0.5rem rgba(255, 255, 255, 0.4);
-        animation: comet-down 3s linear infinite;
-        opacity: 0;
+        height: 2px;
+        background: linear-gradient(-45deg, rgba(95, 145, 255, 1), rgba(0, 0, 255, 0));
+        border-radius: 999px;
+        filter: drop-shadow(0 0 6px rgba(105, 155, 255, 1));
+        animation: tail 5s ease-in-out infinite,
+        shooting 5s ease-in-out infinite;
         &:before, &:after{
+          content: '';
           position: absolute;
-          display: block;
-          right: -0.8rem;
-          top: 0;
-          content: "";
-          background: linear-gradient(-45deg, transparent, #7ea7ffa8, transparent);
-          width: 1.6rem;
-          height: 0.1rem;
+          top: calc(50% - 1px);
+          right: 0;
+          // width: 30px;
+          height: 2px;
+          background: linear-gradient(-45deg, rgba(0, 0, 255, 0), rgba(95, 145, 255, 1), rgba(0, 0, 255, 0));
+          transform: translateX(50%) rotateZ(45deg);
+          border-radius: 100%;
+          animation: shining 5s ease-in-out infinite;
         }
-        &:before{
-          transform: rotate(45deg);
+        &::after{
+          transform: translateX(50%) rotateZ(-45deg);
         }
-        &:after{
-          transform: rotate(-45deg);
+        @for $i from 1 through 8{
+          &:nth-child(#{$i}){
+            $delay: random(9999) + 0ms;
+            animation-delay: $delay;
+            &::before,
+            &::after{
+              animation-delay: $delay;
+            }
+          }
         }
       }
-      @keyframes comet-down {
+      @keyframes tail{
         0%{
-          transform: rotate(45deg) translateX(0);
-          opacity: 1;
+          width: 0;
         }
-        60%{
-          opacity: 1;
+        30%{
+          width: 100px;
         }
-        80%, 100%{
-          opacity: 0;
-          transform: rotate(45deg) translateX(100vmax);
+        100%{
+          width: 0;
+        }
+      }
+
+      @keyframes shining{
+        0%{
+          width: 0;
+        }
+        50%{
+          width: 30px;
+        }
+        100%{
+          width: 0;
+        }
+      }
+
+      @keyframes shooting{
+        0%{
+          transform: translateX(0);
+        }
+        100%{
+          transform: translateX(100vmax);
+        }
+      }
+
+      @keyframes sky{
+        0%{
+          transform: rotate(45deg);
+        }
+        100%{
+          transform: rotate(45 + 360deg);
         }
       }
     }

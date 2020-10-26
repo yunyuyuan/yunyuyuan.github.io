@@ -37,7 +37,7 @@
         <loading-button :icon="'save'" :loading="loading" :size="0.8" :text="'提交'" @click.native="submitComment"/>
       </div>
     </div>
-    <div class="preview" v-show="showPreview">
+    <div class="preview" v-if="showPreview">
       <span ref="markdown" class="--markdown" v-html="$el?html:'waiting'" v-viewer></span>
     </div>
     <div v-show="showUploadImg" class="upload-img" is-dialog @click.self="showUploadImg = false">
@@ -129,17 +129,13 @@ export default {
   inject: ['_config'],
   computed: {
     html() {
+      this.$nextTick(()=>{
+        processMdHtml(this.$refs.markdown, true)
+      })
       return parseMarkdown(this.comment);
     },
     config (){
       return this._config()
-    }
-  },
-  watch: {
-    html (){
-      this.$nextTick(()=>{
-        processMdHtml(this.$refs.markdown, true)
-      })
     }
   },
   created() {
@@ -288,7 +284,7 @@ export default {
         overflow: hidden;
         transition: height .1s linear;
         &.active{
-          height: 50vh;
+          height: 36vh;
           border: 1px solid #ababab;
           box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.4);
         }
@@ -351,6 +347,7 @@ export default {
             width: 4rem;
             border-right: 1px solid #b5b5b5;
             cursor: pointer;
+            color: black;
 
             &:not(.active):hover {
               background: #bababa;

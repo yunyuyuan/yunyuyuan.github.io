@@ -3,15 +3,22 @@
     <div class="empty" v-if="items.length===0">
       <span>无人问津<svg-icon :name="'grass'"/>暂无评论</span>
     </div>
-    <div ref="list" class="items" flex v-else>
-      <div class="item" v-for="item in items" :key="item.id" flex>
+    <div class="items" flex v-else>
+      <div v-if="loading" class="loading" flex>
+        <svg-icon :name="'loading'"/>
+      </div>
+      <div v-else class="item" v-for="item in items" :key="item.id" flex>
         <a class="avatar" target="_blank" :href="item.site">
-          <img :src="item.avatar"/>
+          <img :src="item.avatar" alt="avatar"/>
         </a>
         <div flex>
           <div class="body" flex>
             <div class="head" flex>
-              <a :href="item.site" target="_blank">{{ item.nick }}</a>
+              <span class="nick-name" :class="{owner: item.nick===siteConfig.owner,self: item.nick===login}" flex>
+                <a :href="item.site" target="_blank">{{ item.nick }}</a>
+                <span title="大boss"><svg-icon v-if="item.nick===siteConfig.owner" :name="'cmt-owner'"/></span>
+                <span title="我自己"><svg-icon v-if="item.nick===login" :name="'cmt-self'"/></span>
+              </span>
             </div>
             <div class="content">
               <span class="--markdown" v-html="calcMdToHtml(item.content, false)" v-viewer></span>
@@ -26,14 +33,21 @@
                              @cancel="replayItem = null" @submit="replayComment"/>
             </div>
           </div>
-          <div v-if="item.children.length" class="children">
-            <div v-for="child in item.children" class="child">
+          <div class="loading" v-if="item.loading" flex>
+            <svg-icon :name="'loading'"/>
+          </div>
+          <div v-else-if="item.children.length" class="children">
+            <div v-for="child in item.children" :key="child.id" class="child">
               <div class="content" flex>
                 <a :href="child.site" class="avatar" target="_blank">
-                  <img :src="child.avatar"/>
+                  <img :src="child.avatar" alt="avatar"/>
                 </a>
                 <div>
-                  <a :href="child.site" target="_blank">{{ child.nick }}</a>
+                  <span class="nick-name" :class="{owner: child.nick===siteConfig.owner,self: child.nick===login}" flex>
+                    <a :href="item.site" target="_blank">{{ child.nick }}</a>
+                    <span title="大boss"><svg-icon v-if="item.nick===siteConfig.owner" :name="'cmt-owner'"/></span>
+                    <span title="我自己"><svg-icon v-if="item.nick===login" :name="'cmt-self'"/></span>
+                  </span>
                   <span class="--markdown" v-html="calcMdToHtml(child.content, true)" v-viewer></span>
                 </div>
               </div>
@@ -41,13 +55,13 @@
                 <a class="time">{{ child.time | time(false) }}</a>
                 <span class="reply" @click="clickReply(item, child)">回复</span>
                 <span v-if="login===child.nick||login===siteConfig.owner" class="delete"
-                      @click="deleteReply(child.id)">删除</span>
+                      @click="deleteReply(child.id, item)">删除</span>
                 <write-comment v-if="replayItem === item && replyChild === child" :cancel="true"
                                :init-height="'100px'"
                                :loading="submitting" @cancel="replayItem = null" @submit="replayComment"/>
               </div>
             </div>
-            <div class="page" v-if="item.page.hasPreviousPage&&item.page.hasNextPage" flex>
+            <div class="page" v-if="item.page.hasPreviousPage||item.page.hasNextPage" flex>
               <span :disabled="!item.page.hasPreviousPage" class="left" flex
                     @click='toReply(!item.page.hasPreviousPage, item, `,before: "${item.page.startCursor}"`)'><svg-icon
                   :name="'right'"/></span>
@@ -74,7 +88,7 @@ import WriteComment from "@/views/comment/Write";
 import {parseAjaxError} from "@/utils/utils";
 const siteConfig = require( '@/site-config')
 import Pagination from "@/components/Pagination";
-import {parseMarkdown} from "@/utils/parseMd";
+import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
 import {hljsAndInsertCopyBtn} from "@/utils/highlight";
 
 export default {
@@ -102,6 +116,7 @@ export default {
       replyChild: null,
       submitting: false,
       updating: false,
+      loading: false,
     }
   },
   async mounted() {
@@ -109,6 +124,7 @@ export default {
   },
   methods: {
     async updatePage(cursor) {
+      this.loading = true;
       let res = await getPageComment({
         count: this.onePageItemsCount,
         title: this.title,
@@ -144,34 +160,40 @@ export default {
             content: e.body,
             identity: e.authorAssociation,
             children: children,
+            loading: false,
             thumbup: e.reactions.totalCount,
             page: e.comments.pageInfo
           });
         }
-        this.$nextTick(() => {
-          if (!this.$refs.list) return ;
-          // 把还没有highlight的code转义
-          this.$refs.list.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
-            el.innerText = el.innerText.replace(/&lt;/g, '<').replaceAll('&gt;', '>');
-            hljsAndInsertCopyBtn(el);
-          })
-          this.$refs.list.querySelectorAll('img:not([alt=sticker])').forEach(el=>{
-            el.setAttribute('data-viewer', '');
-          })
-        })
+        this.parseHtml()
       } else {
         this.$message.error(parseAjaxError(res[1]))
       }
+      this.loading = false;
     },
     calcMdToHtml(text, isReply) {
-      text = text.replace(/</g, '&lt;').replace(/(?!^|(?:\n\s*))>/g, '&gt;')
+      text = text.replace(/</g, '&lt;').replace(/(^|\s*)>/g, '$1&gt;');
+      const html = parseMarkdown(text.replace(/^@\w+ ([\s\S]*)$/, '$1'));
+      let reply = '';
       if (isReply) {
-        let matcher = text.match(/^@(\S+)([\s\S]*)/);
+        let matcher = text.match(/^@(\w+) /);
         if (matcher) {
-          text = `<span class="reply">回复<a target="_blank" href="https://gtihub.com/${matcher[1]}">@${matcher[1]}</a></span>` + matcher[2];
+          reply = `<span class="reply">回复<a class="nick-name" target="_blank" href="https://gtihub.com/${matcher[1]}">@${matcher[1]}</a></span>`;
         }
       }
-      return parseMarkdown(text)
+      return reply+html
+    },
+    parseHtml (){
+      this.$nextTick(()=>{
+        this.$el.querySelectorAll('span.--markdown:not([parsed])').forEach(el=>{
+          el.setAttribute('parsed', '');
+          el.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
+            el.innerText = el.innerText.replace(/&lt;/g, '<').replaceAll('&gt;', '>');
+            hljsAndInsertCopyBtn(el);
+          })
+          processMdHtml(el, true)
+        })
+      })
     },
     async turnCommentPage(p) {
       if (this.updating) return;
@@ -184,6 +206,7 @@ export default {
       if (cant) return
       if (this.updating) return;
       this.updating = true;
+      item.loading = true;
       let res = await getCommentChildren(item.id, this.onePageItemsCount, cursor);
       if (res[0]) {
         let data = res[1].data.data.node.comments;
@@ -201,7 +224,9 @@ export default {
             thumbup: c.reactions.totalCount,
           })
         })
+        this.parseHtml()
       }
+      item.loading = false;
       this.updating = false
     },
 
@@ -231,11 +256,11 @@ export default {
         }, 1000)
       }
     },
-    async deleteReply(id) {
+    async deleteReply(id, item) {
       if (!confirm('确认删除?')) return;
       let res = await deleteReply(id);
       if (logError.call(this, res, '删除成功!', '删除失败')) {
-
+          await this.toReply(false, item)
       }
     }
   }
@@ -249,6 +274,15 @@ export default {
   padding-top: 2rem;
   border-top: 2px solid gray;
   flex-direction: column;
+  .loading{
+    width: 100%;
+    margin: 2rem 0;
+    justify-content: center;
+    >svg{
+      width: 5rem;
+      height: 5rem;
+    }
+  }
   >.empty{
     font-size: 0.95rem;
     >span{
@@ -292,13 +326,8 @@ export default {
           > .head {
             width: 100%;
             justify-content: space-between;
-            padding: 0.4rem 0;
+            padding: 0.2rem 0 0.6rem 0;
 
-            > a {
-              font-size: 0.84rem;
-              color: black;
-              text-decoration: none;
-            }
           }
           > .content{
             width: 100%;
@@ -338,9 +367,6 @@ export default {
 
                 > a {
                   margin-right: 0.8rem;
-                  font-size: 0.84rem;
-                  text-decoration: none;
-                  color: #000000;
                 }
 
                 > span {
@@ -351,8 +377,6 @@ export default {
                     font-size: 0.84rem;
 
                     > a {
-                      text-decoration: none;
-                      color: #007bff;
                       margin-left: 0.3rem;
                     }
                   }
@@ -394,7 +418,28 @@ export default {
       }
     }
   }
-
+  span.nick-name{
+    > a{
+      font-size: 0.95rem;
+      color: #3d3d3d;
+      text-decoration: none;
+      font-weight: bold;
+      margin-right: 1rem;
+      &:hover{
+        color: blue;
+        text-decoration: underline;
+      }
+    }
+    > span{
+      width: 1.4rem;
+      height: 1.4rem;
+      margin-right: 0.6rem;
+      >svg{
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
   .page{
     margin-top: 0.5rem;
 
