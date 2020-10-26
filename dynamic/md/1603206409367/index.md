@@ -30,7 +30,7 @@ module.exports = {
 ```javascript
 const baseDynamicUrl = process.env.NODE_ENV === 'development'?'':(`https://cdn.jsdelivr.net/gh/${name}/${name}.github.io@latest/${your directory}`)
 ```
--(red: 缺点：万一连404.html都无法访问呢![sticker](aru/45))-
+-(red: 缺点：动态的内容，例如config或record.json这类数据依旧需要从github源站请求。而且，万一连404.html都无法访问呢![sticker](aru/45))-
 
 #### 使用404.html作为app
 这是一个基于#[github.io的404](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/creating-a-custom-404-page-for-your-github-pages-site)的骚操作。
@@ -60,6 +60,7 @@ function routeInfo (){
     let pathname = window.location.pathname.replace(/^(.+?)\/*$/, '$1');
     for (let i of routes){
         const paramNames = [];
+        // firefox，safari无法识别正则分组，要手动分组
         let regexp = i.path.replace(/\/:(\w+)/g, (a, b)=>{
             paramNames.push(b);
             return '/([^/]+)'
@@ -180,7 +181,7 @@ export default {
 > 这个没啥介绍的，只能说github牛逼，此站的自我更新基于#[github rest api](https://developer.github.com/)。
 > 这里的`自我更新`指的是使用静态网站本身更新网站，实在想不到别的术语了![sticker](yellow-face/45)
 
-缺点：~~build代码并push后，必须迅速进backend发布版本(jsdelivr cdn更新之前)，否则只能进github发布，这其实也不算问题~~。-(red: 已解决，现在只需第一次时需要手动复制html)-
+缺点：~~build代码并push后，必须迅速进backend发布版本(jsdelivr cdn更新之前)，否则只能进github发布，这其实也不算问题~~。-(red: 已解决，现在只需第一次手动复制html)-
 
 ---
 
