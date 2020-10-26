@@ -200,12 +200,22 @@ export class GithubUtils {
         return new Promise(async resolve => {
             try {
                 dict.state = '获取404-temp.html';
-                let res = await getText(`404-temp.html`);
+                let res = await getText('404-temp.html');
                 if (!res[0]){
                     return resolve([false, res[1]])
                 }
+                const temp = res[1];
+                dict.state = '获取404.html';
+                res = await getText('404.html');
+                if (!res[0]){
+                    return resolve([false, res[1]])
+                }
+                dict.state = '对比差异';
+                if (res[1] === temp){
+                    return resolve([false, 'github还未更新,等会再发布哦'])
+                }
                 dict.state = '复制404-temp.html到404.html';
-                await this.updateSingleFile(`404.html`, res[1]);
+                await this.updateSingleFile('404.html', temp);
                 dict.state = '获取master的commit sha';
                 res = await this.repos.git.refs('heads/master').fetch();
                 dict.state = '创建refs';

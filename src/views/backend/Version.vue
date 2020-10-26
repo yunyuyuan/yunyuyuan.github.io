@@ -1,5 +1,8 @@
 <template>
   <div class="version">
+    <span @click="showHelp=true">
+      <svg-icon :name="'info'"/>
+    </span>
     <div class="new" flex>
       <loading-button :class="{disabled: !inited}" :loading="creating.b" :text="'创建新版本: '+newTag" :icon="'version'" :size="1.6" @click.native="createRelease"/>
       <span v-if="creating.state">{{creating.state}}</span>
@@ -31,6 +34,11 @@
         </tbody>
       </table>
     </div>
+    <div v-show="showHelp" class="help" @click.self="showHelp=false" is-dialog>
+      <div class="inner">
+        <span v-html="help"></span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -44,6 +52,8 @@ export default {
   components: {SingleButton, LoadingButton},
   data (){
     return {
+      showHelp: false,
+      help: '<b>在修改代码并push后，需在此提交新版本。</b>\n\nGitHub和jsdelivr有短暂延迟。若长时间后依旧无法访问，请手动pull代码并检查404-temp.html和404.html是否相同。如果不同则需自己复制404-temp.html的内容到404.html并push带github。',
       inited: false,
       creating: {
         b: false,
@@ -166,6 +176,22 @@ export default {
 
 .version{
   min-height: calc(100% - 2rem);
+  position: relative;
+  >span{
+    cursor: pointer;
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+    &:hover{
+      >svg{
+        fill: red;
+      }
+    }
+    >svg{
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
   >.new{
     width: 100%;
     margin: 0.5rem 0 0.5rem 0;
@@ -235,6 +261,19 @@ export default {
             width: 15%;
           }
         }
+      }
+    }
+  }
+  >.help{
+    >.inner{
+      max-width: 90%;
+      >span{
+        display: block;
+        padding: 2rem 1rem;
+        font-size: 1rem;
+        white-space: pre-line;
+        word-break: break-word;
+        line-height: 1.5rem;
       }
     }
   }

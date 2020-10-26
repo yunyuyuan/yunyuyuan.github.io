@@ -7,17 +7,9 @@
     <img class="bg" v-else-if="isBgImg" :src="images[routeNow]" alt="bg"/>
     <div class="bg" v-else>
       <div id="particles-bg"></div>
-      <svg id="comet-bg" width="100%" height="100%" preserveAspectRatio="none">
-        <defs>
-          <radialGradient id="comet-gradient" cx="0" cy=".5" r="0.5">
-            <stop offset="0%" stop-color="rgba(255,255,255,0)"></stop>
-            <stop offset="100%" stop-color="rgba(255,255,255,.8)"></stop>
-          </radialGradient>
-        </defs>
-        <g v-for="i in comets" :transform="`rotate(${i.rotate})`">
-          <ellipse class="item comet-a" :style="{animationDelay: `${i.delay}s`,animationDuration: `${i.duration}s`}" fill="url(#comet-gradient)" :cx="0" :cy="0" :rx="i.width" :ry="i.height"></ellipse>
-        </g>
-      </svg>
+      <div id="comet-bg">
+        <div class="comet" v-for="i in cometLen" :style="{top: `${100*Math.random()-50}%`,animationDelay: `${cometLen*Math.random()}s`,animationDuration: `${1.5+Math.random()*3}s`}"></div>
+      </div>
     </div>
     <the-head :class="{'show-bg': showBg}" v-if="showHead" @toggle="toggleShowBg"/>
     <section :class="{body: true, 'show-head': showHead, 'show-bg': showBg, 'mask-bg': config.backgroundImg}" flex>
@@ -95,20 +87,8 @@ export default {
     computeConfig() {
       return this.config
     },
-    comets (){
-      const randCount = 3+Math.floor(Math.random()*5),
-          list = [];
-      for (let i=0;i<randCount;i++){
-        list.push({
-          rotate: 10+Math.ceil(Math.random()*70),
-          pos: [Math.floor(101*Math.random()), Math.floor(101*Math.random())],
-          width: 50+100*Math.random(),
-          height: 0.2+Math.random()*2,
-          duration: 4+Math.random()*3,
-          delay: i*2+Math.random()*3
-        })
-      }
-      return list;
+    cometLen (){
+      return 2+Math.floor(Math.random()*3)
     }
   },
   async created() {
@@ -221,26 +201,44 @@ export default {
       width: 100%;
       height: 100%;
       display: block;
-      .item{
-        transform-origin: center center;
-        animation-name: comet;
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
+      >.comet{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 10rem;
+        height: 0.1rem;
+        background: linear-gradient(-45deg, #658eea, rgb(132, 132, 255, 0.18));
+        box-shadow: 0 0 0.5rem rgba(255, 255, 255, 0.4);
+        animation: comet-down 3s linear infinite;
         opacity: 0;
-      }
-      @keyframes comet{
-        0%,
-        40%{
-          transform: translateX(0);
-          opacity: 0;
+        &:before, &:after{
+          position: absolute;
+          display: block;
+          right: -0.8rem;
+          top: 0;
+          content: "";
+          background: linear-gradient(-45deg, transparent, #7ea7ffa8, transparent);
+          width: 1.6rem;
+          height: 0.1rem;
         }
-        50%{
+        &:before{
+          transform: rotate(45deg);
+        }
+        &:after{
+          transform: rotate(-45deg);
+        }
+      }
+      @keyframes comet-down {
+        0%{
+          transform: rotate(45deg) translateX(0);
           opacity: 1;
         }
-        60%,
-        100%{
-          transform: translateX(100vmax);
+        60%{
+          opacity: 1;
+        }
+        80%, 100%{
           opacity: 0;
+          transform: rotate(45deg) translateX(100vmax);
         }
       }
     }
