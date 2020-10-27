@@ -14,13 +14,13 @@ let owner = siteConfig.owner,
     headers = {
         Authorization: ''
     },
-    http = function (data, notUsePublic) {
+    http = function (data, usePublic) {
         return new Promise(resolve => {
             axios({
                 url: 'https://api.github.com/graphql',
                 method: 'post',
                 data,
-                headers: notUsePublic?publicHeaders:headers
+                headers: usePublic?publicHeaders:headers
             }).then(res => {
                 resolve([true, res])
             }).catch(err => {
@@ -73,7 +73,7 @@ export async function getRepoId() {
   }
 }
 `
-    });
+    }, true);
     if (res[0]) {
         repoId = res[1].data.data.repository.id;
     }
@@ -157,7 +157,7 @@ export async function getPageComment({title, count, cursor}) {
     }
   }
 }`
-    })
+    }, true)
 }
 
 export async function getCommentChildren({id, count, cursor}) {
@@ -197,7 +197,7 @@ export async function getCommentChildren({id, count, cursor}) {
   }
 }
 `
-    })
+    }, true)
 }
 
 export async function createComment({title, body}) {
