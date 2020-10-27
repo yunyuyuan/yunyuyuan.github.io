@@ -28,7 +28,7 @@
               <span class="reply" @click="clickReply(item, null)">回复</span>
               <span v-if="login===item.nick||login===siteConfig.owner" class="delete"
                     @click="closeComment(item.id)">删除</span>
-              <span v-for="emoji in ['+1','-1']" class="react" :down="emoji==='-1'" :class="{active: item.reactions[emoji].has}" :title="emoji" @click="doReact(emoji, item, item.reactions[emoji].has)" flex>
+              <span v-for="emoji in ['+1','-1']" class="react" :down="emoji==='-1'" :class="{active: item.reactions[emoji].has && (login===item.nick)}" :title="emoji" @click="doReact(emoji, item, item.reactions[emoji].has && (login===item.nick))" flex>
                 <svg-icon :name="'thumb'"/>
                 <span v-if="item.reactions[emoji].count>0">{{item.reactions[emoji].count}}</span>
               </span>
@@ -60,7 +60,7 @@
                     <span class="reply" @click="clickReply(item, child)">回复</span>
                     <span v-if="login===child.nick||login===siteConfig.owner" class="delete"
                           @click="deleteReply(child.id, item)">删除</span>
-                    <span v-for="emoji in ['+1','-1']" class="react" :down="emoji==='-1'" :class="{active: child.reactions[emoji].has}" :title="emoji" @click="doReact(emoji, child, child.reactions[emoji].has)" flex>
+                    <span v-for="emoji in ['+1','-1']" class="react" :down="emoji==='-1'" :class="{active: child.reactions[emoji].has && (login===child.nick)}" :title="emoji" @click="doReact(emoji, child, child.reactions[emoji].has && (login===child.nick))" flex>
                       <svg-icon :name="'thumb'"/>
                       <span v-if="child.reactions[emoji].count>0">{{child.reactions[emoji].count}}</span>
                     </span>
@@ -304,6 +304,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "src/assets/style/public";
+
 .list{
   width: 100%;
   margin: 2rem 0 1rem 0;
@@ -374,7 +376,7 @@ export default {
           > .head {
             width: 100%;
             justify-content: space-between;
-            padding: 0.2rem 0 0.6rem 0;
+            padding: 0.6rem 0 0.2rem 0;
 
           }
           > .content{
@@ -524,6 +526,27 @@ export default {
           width: 100%;
           height: 0;
           animation: toggle-down-write .5s ease-out forwards;
+        }
+      }
+    }
+  }
+  @include media{
+    >.items{
+      width: 96%;
+      >.item{
+        position: relative;
+        >a.avatar{
+          position: absolute;
+        }
+        >div{
+          >.body{
+            >.head{
+              margin-left: 3.2rem;
+              margin-bottom: 0.5rem;
+              width: calc(100% - 3.2rem);
+              padding: 0.8rem 0 0 0;
+            }
+          }
         }
       }
     }
