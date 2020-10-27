@@ -1,11 +1,9 @@
 // 直接从站点上获取文件text
-import {originPrefix} from "@/need";
-
 export async function getText(path) {
     return new Promise(resolve => {
         fetch(path+'?ran='+new Date().getTime()).then(res => {
             res.text().then(res => {
-                resolve([true, res])
+                setTimeout(()=>resolve([true, res]), 1000)
             }).catch(err => {
                 resolve([false, err])
             })

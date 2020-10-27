@@ -115,42 +115,40 @@ export default {
     let res = await getText(`${originPrefix}/md/${this.id}/index.html`);
     if (res[0]) {
       this.html = res[1];
-      this.$nextTick(() => {
-        processMdHtml(this.$refs.markdown);
-        // 取出anchor为侧栏
-        this.anchors = [];
-        let headList = this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
-        headList.forEach(el => {
-          this.anchors.push({
-            el: el,
-            text: el.innerText,
-            active: false
-          });
-          el.onclick = () => {
-            this.toAnchor(el)
-          };
-        })
-        // 监听滚动到anchor
-        this.body.onscroll = () => {
-          let last = {};
-          for (let el of headList) {
-            if (last && el.getBoundingClientRect().top > document.querySelector('header.the-head').scrollHeight) {
-              break
-            }
-            last = el;
-          }
-          this.anchors.forEach(a => {
-            a.active = a.text === last.innerText;
-          })
-        }
-      })
     } else {
       this.$message.error(`获取文章失败: ${res[1]}`);
     }
     this.body.addEventListener('scroll', this.moveAside);
-    setTimeout(()=>{
-      this.loading = false;
-    }, 2000)
+    this.loading = false;
+    this.$nextTick(() => {
+      processMdHtml(this.$refs.markdown);
+      // 取出anchor为侧栏
+      this.anchors = [];
+      let headList = this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
+      headList.forEach(el => {
+        this.anchors.push({
+          el: el,
+          text: el.innerText,
+          active: false
+        });
+        el.onclick = () => {
+          this.toAnchor(el)
+        };
+      })
+      // 监听滚动到anchor
+      this.body.onscroll = () => {
+        let last = {};
+        for (let el of headList) {
+          if (last && el.getBoundingClientRect().top > document.querySelector('header.the-head').scrollHeight) {
+            break
+          }
+          last = el;
+        }
+        this.anchors.forEach(a => {
+          a.active = a.text === last.innerText;
+        })
+      }
+    })
   },
   beforeDestroy() {
     this.body.removeEventListener('scroll', this.moveAside)

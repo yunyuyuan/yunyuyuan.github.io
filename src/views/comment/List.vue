@@ -100,6 +100,7 @@ const siteConfig = require( '@/site-config')
 import Pagination from "@/components/Pagination";
 import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
 import {hljsAndInsertCopyBtn} from "@/utils/highlight";
+let doingReact = false;
 
 export default {
   name: "ListComment",
@@ -277,30 +278,27 @@ export default {
           await this.toReply(false, item)
       }
     },
-    doReact : (()=> {
-      let doing = false;
-      return async function (emoji, item, has) {
-        if (doing) return;
-        doing = true;
+    async doReact (emoji, item, has) {
+      if (doingReact) return;
+      doingReact = true;
+      item.reactions[emoji] = {
+        has: !has,
+        count: item.reactions[emoji].count + (has ? -1 : 1)
+      };
+      let res = await doReaction({
+        content: `THUMBS_${emoji === '-1' ? 'DOWN' : 'UP'}`,
+        id: item.id,
+        has: has
+      });
+      if (!res[0] || res[1].data.errors) {
         item.reactions[emoji] = {
-          has: !has,
-          count: item.reactions[emoji].count + (has ? -1 : 1)
+          has: has,
+          count: item.reactions[emoji].count + (has ? 1 : -1)
         };
-        let res = await doReaction({
-          content: `THUMBS_${emoji === '-1' ? 'DOWN' : 'UP'}`,
-          id: item.id,
-          has: has
-        });
-        if (!res[0] || res[1].data.errors) {
-          item.reactions[emoji] = {
-            has: has,
-            count: item.reactions[emoji].count + (has ? 1 : -1)
-          };
-          this.$message.error('出错了:' + (res[0] ? res[1].data.errors[0].message : parseAjaxError(res[1])))
-        }
-        doing = false;
+        this.$message.error('出错了:' + (res[0] ? res[1].data.errors[0].message : parseAjaxError(res[1])))
       }
-    })()
+      doingReact = false;
+    }
   }
 }
 </script>
