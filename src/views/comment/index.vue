@@ -11,7 +11,7 @@
         <single-button :size="0.9" :text="'生成token'" @click.native="genToken"/>
         <loading-button :icon="'account'" :loading="loging" :size="0.9" :text="'登录'" @click.native="doLogin(true)"/>
         <a ref="a"
-           :href="`https://github.com/settings/tokens/new?description=comment to ${name}&scopes=public_repo%2Cread%3Auser`"
+           :href="`https://github.com/settings/tokens/new?description=comment to ${name}&scopes=public_repo%2Cwrite:discussion`"
            target="_blank"></a>
       </div>
     </div>
@@ -148,8 +148,8 @@ export default {
     > .logined {
       > img {
         border-radius: 50%;
-        width: 2rem;
-        height: 2rem;
+        width: 2.8rem;
+        height: 2.8rem;
         object-fit: cover;
       }
 
@@ -159,6 +159,7 @@ export default {
         text-decoration: none;
 
         &:hover {
+          text-decoration: underline;
           color: #0040ff;
         }
       }

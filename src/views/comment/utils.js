@@ -8,20 +8,19 @@ let owner = siteConfig.owner,
     repo = siteConfig.repo,
     repoId = '',
     // this token just can read public information
-    publicToken = 'token ' + (['5', '66b4e73893d07b79dbcc3e36f86acc309e78b2d'].join('')),
-    headers = {
-        Authorization: publicToken
+    publicHeaders = {
+        Authorization: 'token ' + (['5', '66b4e73893d07b79dbcc3e36f86acc309e78b2d'].join(''))
     },
-    http = function (payload) {
+    headers = {
+        Authorization: ''
+    },
+    http = function (data, notUsePublic) {
         return new Promise(resolve => {
             axios({
                 url: 'https://api.github.com/graphql',
                 method: 'post',
-                ...payload,
-                headers: {
-                    ...(payload.headers || {}),
-                    ...headers
-                }
+                data,
+                headers: notUsePublic?publicHeaders:headers
             }).then(res => {
                 resolve([true, res])
             }).catch(err => {
@@ -67,7 +66,6 @@ export const getReactions = (item)=>{
 
 export async function getRepoId() {
     let res = await http({
-        data: {
             query:
                 `query {
   repository(name: "${repo}", owner: "${owner}") {
@@ -75,7 +73,6 @@ export async function getRepoId() {
   }
 }
 `
-        }
     });
     if (res[0]) {
         repoId = res[1].data.data.repository.id;
@@ -85,7 +82,6 @@ export async function getRepoId() {
 export async function getLoginInfo(token) {
     headers.Authorization = `token ${token}`;
     let res = await http({
-        data: {
             query:
                 `query {
     viewer {
@@ -94,10 +90,9 @@ export async function getLoginInfo(token) {
         url
     }
 }`
-        }
-    })
+    }, false)
     if (!res[0]) {
-        headers.Authorization = publicToken;
+        headers.Authorization = '';
     }
     return res;
 }
@@ -108,7 +103,6 @@ export function removeToken() {
 
 export async function getPageComment({title, count, cursor}) {
     return await http({
-        data: {
             query:
                 `{
   search(query: "${title}+in:title repo:${owner}/${repo} is:open", type: ISSUE, ${(cursor && cursor.indexOf(',after') === 0) || !cursor ? 'first' : 'last'}: ${count}${cursor || ''}) {
@@ -163,13 +157,11 @@ export async function getPageComment({title, count, cursor}) {
     }
   }
 }`
-        }
     })
 }
 
 export async function getCommentChildren({id, count, cursor}) {
     return await http({
-        data: {
             query:
                 `query {
   node(id: "${id}") {
@@ -205,13 +197,11 @@ export async function getCommentChildren({id, count, cursor}) {
   }
 }
 `
-        }
     })
 }
 
 export async function createComment({title, body}) {
     return await http({
-        data: {
             query:
                 `mutation {
   createIssue(input: {repositoryId: "${repoId}", title: "${title}", body: "${body}"}) {
@@ -220,13 +210,11 @@ export async function createComment({title, body}) {
     }
   }
 }`
-        }
-    })
+    }, false)
 }
 
 export async function closeOrDeleteComment(type, id) {
     return await http({
-        data: {
             query:
                 `mutation {
   ${type}Issue(input: {issueId: "${id}"}) {
@@ -234,13 +222,11 @@ export async function closeOrDeleteComment(type, id) {
   }
 }
 `
-        }
-    })
+    }, false)
 }
 
 export async function createReply({body, id}) {
     return await http({
-        data: {
             query:
                 `mutation {
   addComment(input: {body: "${body}", subjectId: "${id}"}) {
@@ -248,13 +234,11 @@ export async function createReply({body, id}) {
   }
 }
 `
-        }
-    })
+    }, false)
 }
 
 export async function deleteReply(id) {
     return await http({
-        data: {
             query:
                 `mutation {
   deleteIssueComment(input: {id: "${id}"}) {
@@ -262,13 +246,11 @@ export async function deleteReply(id) {
   }
 }
 `
-        }
-    })
+    }, false)
 }
 
 export async function doReaction({content, id, has}) {
     return await http({
-        data: {
             query:
                 `mutation {
   ${has?'remove':'add'}Reaction(input: {content: ${content}, subjectId: "${id}="}) {
@@ -278,6 +260,5 @@ export async function doReaction({content, id, has}) {
   }
 }
 `
-        }
-    })
+    }, false)
 }

@@ -11,6 +11,15 @@
         <span :class="{active: info.backgroundImg==='color'}" @click="changeBg('color')">彩色背景</span>
         <span :class="{active: info.backgroundImg==='random'}" @click="changeBg('random')">随机</span>
       </label>
+      <div class="friends" flex>
+        <div v-for="item in info.friends" :key="item.github" class="item" flex>
+          <float-input :name="'简介'" :value="item.summary" :id="item.github" :size="0.85" @input="friendsSummary"/>
+          <float-input :name="'github名字'" :value="item.github" :id="item.github" :size="0.85" @input="friendsGithub"/>
+          <float-input :name="'网站'" :value="item.site" :id="item.github" :size="0.85" @input="friendsSite"/>
+          <single-button class="del-btn" :text="'删除'" @click.native="friendsDel(item)"/>
+        </div>
+        <loading-button :loading="false" :icon="'add'" :text="'添加'" :size="1.1" @click.native="friendsNew"/>
+      </div>
     </div>
     <loading-button :loading="updating" :text="'上传'" :icon="'save'" @click.native="commitConfig"/>
   </div>
@@ -20,10 +29,11 @@
 import FloatInput from "@/components/FloatInput";
 import {parseAjaxError} from "@/utils/utils";
 import LoadingButton from "@/components/LoadingButton";
+import SingleButton from "@/components/Button";
 
 export default {
   name: "Config",
-  components: {LoadingButton, FloatInput},
+  components: {SingleButton, LoadingButton, FloatInput},
   data() {
     return {
       updating: false,
@@ -56,6 +66,29 @@ export default {
     changeBg (v){
       this.info.backgroundImg = v;
     },
+    friendsSummary ([id, text]){
+      this.info.friends.find(v=>v.github===id).summary = text;
+    },
+    friendsGithub ([id, text]){
+      if (this.info.friends.find(v=>v.github===text)) {
+        this.$message.warning('github不能重复')
+      }else {
+        this.info.friends.find(v => v.github === id).github = text;
+      }
+    },
+    friendsSite ([id, text]){
+      this.info.friends.find(v=>v.github===id).site = text;
+    },
+    friendsDel (item){
+      this.info.friends.splice(this.info.friends.indexOf(item), 1)
+    },
+    friendsNew (){
+      this.info.friends.push({
+        summary: '',
+        github: this.info.friends.length.toString(),
+        site: '',
+      })
+    },
     async commitConfig() {
       if (this.gitUtil) {
         this.updating = true;
@@ -64,6 +97,7 @@ export default {
           this.config[k] = this.info[k]
         }
         this.config.backgroundImg = this.info.backgroundImg;
+        this.config.friends = this.info.friends.slice();
         let res = await this.gitUtil.updateJsonFile(`config.json`, this.config);
         this.updating = false;
         if (res[0]) {
@@ -85,7 +119,7 @@ export default {
 
 .config{
   flex-direction: column;
-  margin: 2rem auto 0 auto !important;
+  margin: 2rem auto 1rem auto !important;
   width: 40rem !important;
   > .head{
     padding: 0.6rem 0;
@@ -138,6 +172,45 @@ export default {
           }
         }
       }
+    >.friends{
+      width: 95%;
+      flex-direction: column;
+      margin: 1rem 0;
+      padding: 1rem 0;
+      border-top: 1px solid #ff0000;
+      position: relative;
+      &:before{
+        content: '友情链接';
+        position: absolute;
+        font-size: 0.95rem;
+        line-height: 1rem;
+        top: -0.5rem;
+        left: 0.5rem;
+        background: white;
+      }
+      >.item{
+        margin: 0.8rem 0;
+        ::v-deep .float-input{
+          margin: 0 0.5rem;
+          flex-shrink: 1;
+          &:nth-child(1){
+            width: 35%;
+          }
+          &:nth-child(2){
+            width: 20%;
+          }
+          &:nth-child(3){
+            width: 30%;
+          }
+        }
+      }
+      ::v-deep > .loading-button{
+        background: #ff8100;
+        svg{
+          fill: white;
+        }
+      }
+    }
   }
   ::v-deep > .loading-button{
     margin: 1rem 0;
@@ -154,11 +227,13 @@ export default {
   }
   @include media{
     width: 99% !important;
-    .float-input {
-      width: 95% !important;
-    }
-    label{
-      width: 90% !important;
+    >.list{
+      .float-input {
+        width: 95% !important;
+      }
+      >label{
+        width: 90%;
+      }
     }
   }
 }

@@ -199,7 +199,7 @@ export default {
         this.$el.querySelectorAll('span.--markdown:not([parsed])').forEach(el=>{
           el.setAttribute('parsed', '');
           el.querySelectorAll('pre>code:not(.hljs)').forEach(el => {
-            el.innerText = el.innerText.replace(/&lt;/g, '<').replaceAll('&gt;', '>');
+            el.innerText = el.innerText.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
             hljsAndInsertCopyBtn(el);
           })
           processMdHtml(el, true)
@@ -364,6 +364,7 @@ export default {
         > .body {
           width: 100%;
           flex-direction: column;
+          overflow: hidden;
           &:hover{
             >.foot{
               color: black;
@@ -384,8 +385,7 @@ export default {
             flex-grow: 1;
             padding: 0.4rem 0 0.3rem 0;
             > span{
-              font-size: 0.95rem;
-              line-height: 1.5rem;
+              font-size: 0.88rem;
             }
           }
         }
@@ -428,6 +428,7 @@ export default {
               >div {
                 flex-direction: column;
                 width: 100%;
+                overflow: hidden;
                 > .text {
                   line-height: 1.5rem;
                   width: calc(100% - 0.5rem + 1px);
@@ -440,10 +441,10 @@ export default {
 
                   > span {
                     width: 100%;
-                    font-size: 0.95rem;
+                    font-size: 0.88rem;
 
                     ::v-deep span.reply {
-                      font-size: 0.84rem;
+                      font-size: 0.93rem;
 
                       > a {
                         margin-left: 0.3rem;
@@ -464,7 +465,9 @@ export default {
         flex-wrap: wrap;
         > .time{
           font-size: 0.7rem;
-          margin-right: 0.6rem;
+          margin-right: 0.4rem;
+          padding-right: 0.4rem;
+          border-right: 1px solid gray;
         }
 
         > span {
@@ -514,18 +517,8 @@ export default {
           }
         }
 
-        @keyframes toggle-down-write {
-          0%{
-            height: 0;
-          }
-          100%{
-            height: 10rem;
-          }
-        }
         > .write{
           width: 100%;
-          height: 0;
-          animation: toggle-down-write .5s ease-out forwards;
         }
       }
     }
@@ -553,7 +546,7 @@ export default {
   }
   span.nick-name{
     > a{
-      font-size: 1rem;
+      font-size: 0.96rem;
       color: #3d3d3d;
       text-decoration: none;
       font-weight: bold;

@@ -1,8 +1,26 @@
 <template>
-  <div class="about">
+  <div class="about" flex>
     <div class="text" @click="toggleComp">
       <component :is="randomComp" :text="text"/>
     </div>
+    <div class="content">
+        <p>我是一个无聊的人</p>
+        <div class="friends">
+          <p flex>
+            <svg-icon :name="'friends'"/>
+            友情链接
+          </p>
+          <div v-for="i in config.friends" flex>
+            <span>{{i.summary}}</span>
+            <a target="_blank" :href="`https://github.com/${i.github}`">
+              <svg-icon :name="'github'"/>
+            </a>
+            <a target="_blank" :href="i.site">
+              <svg-icon :name="'link'"/>
+            </a>
+          </div>
+        </div>
+      </div>
   </div>
 </template>
 
@@ -29,8 +47,12 @@ export default {
   computed: {
     randomComp (){
       return this.comps[this.idx]
+    },
+    config (){
+      return this._config()
     }
   },
+  inject: ['_config'],
   mounted() {
     loadFinish()
   },
@@ -46,13 +68,15 @@ export default {
 @import "src/assets/style/public";
 
 .about{
+  width: 100%;
+  flex-direction: column;
   >.text{
     background: white;
     padding: 0.5rem 1.5rem;
     border-radius: 0.2rem;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.4);
     margin: 2rem 0 1rem 0;
-    >.animate{
+    > .animate{
       padding: 1rem 0;
       flex-wrap: wrap;
     }
@@ -62,8 +86,69 @@ export default {
       white-space: pre-line;
     }
   }
+  >.content{
+    width: calc(80% - 4rem);
+    background: white;
+    border-radius: 0.4rem;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+    margin: 1rem 0;
+    padding: 2rem;
+    >p{
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+      text-decoration: line-through;
+    }
+    >.friends{
+      flex-direction: column;
+      >p{
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        color: #ff3c3c;
+        >svg{
+          width: 2.4rem;
+          height: 2.4rem;
+          margin-right: 1rem;
+        }
+      }
+      >div{
+        margin: 1.2rem 0;
+        &:before{
+          content: "";
+          width: 1rem;
+          height: 1rem;
+          border-radius: 0.3rem;
+          margin: 0 2rem;
+          background: #9100ff;
+          border: 1px solid gray;
+          box-shadow: 0 0 0.3rem rgb(81, 0, 255, 0.3);
+        }
+        >span{
+          font-size: 1rem;
+        }
+        >a{
+          margin-left: 0.8rem;
+          text-decoration: none;
+          width: 1.4rem;
+          height: 1.4rem;
+          &:hover{
+            >svg{
+              transform: scale(1.1);
+            }
+          }
+          >svg{
+            transition: all .15s ease-out;
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+  }
   @include media{
     width: 98%;
+    >.content{
+      width: calc(100% - 4rem);
+    }
   }
 }
 </style>
