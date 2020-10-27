@@ -1,9 +1,10 @@
 // 别删除 .--markdown，修改它包裹的内容
 .--markdown{
+  $line-height: 1.6rem;
   width: 100%;
   display: block;
   word-break: break-word;
-  line-height: 1.6rem;
+  line-height: $line-height;
   font-size: 0.88rem;
   @each $size in 1, 2, 3, 4, 5, 6{
     h#{$size}{
@@ -161,7 +162,7 @@
         width: 1.4rem;
         height: 1.4rem;
         position: absolute;
-        top: 0.2rem;
+        top: $line-height/2-0.7rem;
         left: -1.6rem;
       }
     }
@@ -176,6 +177,7 @@
         top: 0;
         font-size: 1.1rem;
         font-weight: bold;
+        line-height: $line-height;
       }
     }
   }
