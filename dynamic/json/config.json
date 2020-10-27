@@ -18,5 +18,11 @@
         }
     ],
     "backgroundImg": "random",
-    "friends": []
+    "friends": [
+        {
+            "summary": "我自己",
+            "github": "yunyuyuan",
+            "site": "htts://blog.halberd.cn"
+        }
+    ]
 }
