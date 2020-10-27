@@ -1,6 +1,6 @@
 <template>
   <div id="index">
-    <loading :class="configLoaded"/>
+    <loading/>
     <NotFound v-if="routeNow===null"/>
     <img class="bg" v-else-if="isBgImg" :src="images[routeNow]" alt="bg"/>
     <div class="bg" v-else>
@@ -51,7 +51,17 @@ export default {
   components: {Loading, Message, TheHead, TheFooter, NotFound},
   data() {
     return {
-      config: {},
+      config: {
+          name: "",
+          describe: "",
+          copyright: "",
+          github: "",
+          bilibili: "",
+          email: "",
+          sticker: [],
+          backgroundImg: "random",
+          friends: []
+      },
       comp: null,
 
       showHead: true,
@@ -67,7 +77,6 @@ export default {
         about: aboutImage,
       },
       routeNow: 'home',
-      configLoaded: ''
     }
   },
   provide() {
@@ -151,7 +160,6 @@ export default {
         })
       }
     })
-    this.configLoaded = 'config-loaded'
   },
   methods: {
     toggleShowBg(b) {

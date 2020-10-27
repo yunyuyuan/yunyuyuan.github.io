@@ -96,9 +96,7 @@ export default {
     },
     logout() {
       this.logined = false;
-      this.token = '';
-      localStorage.removeItem(tokenKey);
-      removeToken()
+      removeToken();
     },
     async submit(payload) {
       this.submitting = true;

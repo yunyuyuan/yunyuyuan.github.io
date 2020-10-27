@@ -16,18 +16,22 @@
             <div class="head" flex>
               <span class="nick-name" :class="{owner: item.nick===siteConfig.owner,self: item.nick===login}" flex>
                 <a :href="item.site" target="_blank">{{ item.nick }}</a>
-                <span title="大boss"><svg-icon v-if="item.nick===siteConfig.owner" :name="'cmt-owner'"/></span>
-                <span title="我自己"><svg-icon v-if="item.nick===login" :name="'cmt-self'"/></span>
+                <span title="大boss" v-if="item.nick===siteConfig.owner"><svg-icon :name="'cmt-owner'"/></span>
+                <span title="我自己" v-if="item.nick===login"><svg-icon :name="'cmt-self'"/></span>
               </span>
             </div>
             <div class="content">
               <span class="--markdown" v-html="calcMdToHtml(item.content, false)" v-viewer></span>
             </div>
-            <div class="foot">
+            <div class="foot" flex>
               <a class="time">{{ item.time | time(false) }}</a>
               <span class="reply" @click="clickReply(item, null)">回复</span>
               <span v-if="login===item.nick||login===siteConfig.owner" class="delete"
                     @click="closeComment(item.id)">删除</span>
+              <span v-for="emoji in ['+1','-1']" class="react" :down="emoji==='-1'" :class="{active: item.reactions[emoji].has}" :title="emoji" @click="doReact(emoji, item, item.reactions[emoji].has)" flex>
+                <svg-icon :name="'thumb'"/>
+                <span v-if="item.reactions[emoji].count>0">{{item.reactions[emoji].count}}</span>
+              </span>
               <write-comment v-if="replayItem === item && replyChild === null" :cancel="true"
                              :init-height="'100px'" :loading="submitting"
                              @cancel="replayItem = null" @submit="replayComment"/>
@@ -42,23 +46,29 @@
                 <a :href="child.site" class="avatar" target="_blank">
                   <img :src="child.avatar" alt="avatar"/>
                 </a>
-                <div>
-                  <span class="nick-name" :class="{owner: child.nick===siteConfig.owner,self: child.nick===login}" flex>
-                    <a :href="item.site" target="_blank">{{ child.nick }}</a>
-                    <span title="大boss"><svg-icon v-if="item.nick===siteConfig.owner" :name="'cmt-owner'"/></span>
-                    <span title="我自己"><svg-icon v-if="item.nick===login" :name="'cmt-self'"/></span>
-                  </span>
-                  <span class="--markdown" v-html="calcMdToHtml(child.content, true)" v-viewer></span>
+                <div flex>
+                  <div class="text">
+                    <span class="nick-name" :class="{owner: child.nick===siteConfig.owner,self: child.nick===login}" flex>
+                      <a :href="item.site" target="_blank">{{ child.nick }}</a>
+                      <span title="大boss" v-if="child.nick===siteConfig.owner"><svg-icon :name="'cmt-owner'"/></span>
+                      <span title="我自己" v-if="child.nick===login"><svg-icon :name="'cmt-self'"/></span>
+                    </span>
+                    <span class="--markdown" v-html="calcMdToHtml(child.content, true)" v-viewer></span>
+                  </div>
+                  <div class="foot" flex>
+                    <a class="time">{{ child.time | time(false) }}</a>
+                    <span class="reply" @click="clickReply(item, child)">回复</span>
+                    <span v-if="login===child.nick||login===siteConfig.owner" class="delete"
+                          @click="deleteReply(child.id, item)">删除</span>
+                    <span v-for="emoji in ['+1','-1']" class="react" :down="emoji==='-1'" :class="{active: child.reactions[emoji].has}" :title="emoji" @click="doReact(emoji, child, child.reactions[emoji].has)" flex>
+                      <svg-icon :name="'thumb'"/>
+                      <span v-if="child.reactions[emoji].count>0">{{child.reactions[emoji].count}}</span>
+                    </span>
+                    <write-comment v-if="replayItem === item && replyChild === child" :cancel="true"
+                                   :init-height="'100px'"
+                                   :loading="submitting" @cancel="replayItem = null" @submit="replayComment"/>
+                  </div>
                 </div>
-              </div>
-              <div class="foot">
-                <a class="time">{{ child.time | time(false) }}</a>
-                <span class="reply" @click="clickReply(item, child)">回复</span>
-                <span v-if="login===child.nick||login===siteConfig.owner" class="delete"
-                      @click="deleteReply(child.id, item)">删除</span>
-                <write-comment v-if="replayItem === item && replyChild === child" :cancel="true"
-                               :init-height="'100px'"
-                               :loading="submitting" @cancel="replayItem = null" @submit="replayComment"/>
               </div>
             </div>
             <div class="page" v-if="item.page.hasPreviousPage||item.page.hasNextPage" flex>
@@ -82,7 +92,7 @@ import {
   logError,
   getPageComment,
   createReply,
-  close_deleteComment, deleteReply, getCommentChildren
+  closeOrDeleteComment, deleteReply, getCommentChildren, getReactions, doReaction
 } from "@/views/comment/utils";
 import WriteComment from "@/views/comment/Write";
 import {parseAjaxError} from "@/utils/utils";
@@ -146,7 +156,7 @@ export default {
               time: c.createdAt,
               content: c.body,
               identity: c.authorAssociation,
-              thumbup: c.reactions.totalCount,
+              reactions: getReactions(c.reactionGroups)
             })
           })
           // 主体
@@ -161,15 +171,15 @@ export default {
             identity: e.authorAssociation,
             children: children,
             loading: false,
-            thumbup: e.reactions.totalCount,
-            page: e.comments.pageInfo
+            page: e.comments.pageInfo,
+            reactions: getReactions(e.reactionGroups)
           });
         }
-        this.parseHtml()
       } else {
         this.$message.error(parseAjaxError(res[1]))
       }
       this.loading = false;
+      this.parseHtml();
     },
     calcMdToHtml(text, isReply) {
       text = text.replace(/</g, '&lt;').replace(/(^|\s*)>/g, '$1&gt;');
@@ -178,7 +188,7 @@ export default {
       if (isReply) {
         let matcher = text.match(/^@(\w+) /);
         if (matcher) {
-          reply = `<span class="reply">回复<a class="nick-name" target="_blank" href="https://gtihub.com/${matcher[1]}">@${matcher[1]}</a></span>`;
+          reply = `<span class="reply">回复<a class="nick-name" target="_blank" href="https://gtihub.com/${matcher[1]}">@${matcher[1]}</a>:</span>`;
         }
       }
       return reply+html
@@ -207,7 +217,11 @@ export default {
       if (this.updating) return;
       this.updating = true;
       item.loading = true;
-      let res = await getCommentChildren(item.id, this.onePageItemsCount, cursor);
+      let res = await getCommentChildren({
+        id: item.id,
+        count: this.onePageItemsCount,
+        cursor: cursor
+      });
       if (res[0]) {
         let data = res[1].data.data.node.comments;
         item.page = data.pageInfo;
@@ -221,13 +235,13 @@ export default {
             time: c.createdAt,
             content: c.body,
             identity: c.authorAssociation,
-            thumbup: c.reactions.totalCount,
+            reactions: getReactions(c.reactionGroups)
           })
         })
-        this.parseHtml()
       }
       item.loading = false;
       this.updating = false
+      this.parseHtml();
     },
 
     clickReply(o, t) {
@@ -249,7 +263,7 @@ export default {
     },
     async closeComment(id) {
       if (!confirm('确认删除?')) return;
-      let res = await close_deleteComment('close', id);
+      let res = await closeOrDeleteComment('close', id);
       if (logError.call(this, res, '删除成功!', '删除失败')) {
         setTimeout(async () => {
           await this.updatePage()
@@ -262,7 +276,31 @@ export default {
       if (logError.call(this, res, '删除成功!', '删除失败')) {
           await this.toReply(false, item)
       }
-    }
+    },
+    doReact : (()=> {
+      let doing = false;
+      return async function (emoji, item, has) {
+        if (doing) return;
+        doing = true;
+        item.reactions[emoji] = {
+          has: !has,
+          count: item.reactions[emoji].count + (has ? -1 : 1)
+        };
+        let res = await doReaction({
+          content: `THUMBS_${emoji === '-1' ? 'DOWN' : 'UP'}`,
+          id: item.id,
+          has: has
+        });
+        if (!res[0] || res[1].data.errors) {
+          item.reactions[emoji] = {
+            has: has,
+            count: item.reactions[emoji].count + (has ? 1 : -1)
+          };
+          this.$message.error('出错了:' + (res[0] ? res[1].data.errors[0].message : parseAjaxError(res[1])))
+        }
+        doing = false;
+      }
+    })()
   }
 }
 </script>
@@ -298,7 +336,7 @@ export default {
     flex-direction: column;
 
     > .item {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.3);
       width: 100%;
       margin-bottom: 0.5rem;
       padding-bottom: 0.5rem;
@@ -312,6 +350,10 @@ export default {
           height: 2.4rem;
           border-radius: 50%;
           object-fit: cover;
+          transition: all .1s linear;
+          &:hover{
+            transform: scale(1.1);
+          }
         }
       }
 
@@ -322,6 +364,14 @@ export default {
         > .body {
           width: 100%;
           flex-direction: column;
+          &:hover{
+            >.foot{
+              color: black;
+            }
+            ~.children{
+              border-color: #ff2525;
+            }
+          }
 
           > .head {
             width: 100%;
@@ -342,42 +392,62 @@ export default {
         > .children{
           width: 100%;
           margin-top: 0.6rem;
-          border-top: 1px dotted rgba(0, 0, 0, 0.1);
+          border-top: 1px solid rgba(0, 0, 0, 0.3);
 
           > .child {
             padding-top: 0.3rem;
-            margin-top: 0.3rem;
+            margin-top: 0.8rem;
+            &:hover{
+              >.content >div{
+                >.text{
+                  border-color: #005eff;
+                }
+                >.foot {
+                  color: black;
+                }
+              }
+            }
 
             > .content {
               align-items: flex-start;
 
               > a {
-                margin-right: 0.8rem;
+                margin-right: 0.5rem;
 
                 > img {
-                  width: 1.6rem;
-                  height: 1.6rem;
+                  width: 1.8rem;
+                  height: 1.8rem;
                   border-radius: 50%;
                   object-fit: cover;
+                  transition: all .1s linear;
+                  &:hover{
+                    transform: scale(1.1);
+                  }
                 }
               }
-              > div {
-                line-height: 1.5rem;
+              >div {
+                flex-direction: column;
                 width: 100%;
+                > .text {
+                  line-height: 1.5rem;
+                  width: calc(100% - 0.5rem + 1px);
+                  border-left: 1px dashed rgba(0, 0, 0, 0.2);
+                  padding-left: 0.5rem;
 
-                > a {
-                  margin-right: 0.8rem;
-                }
+                  > a {
+                    margin-right: 0.8rem;
+                  }
 
-                > span {
-                  width: 100%;
-                  font-size: 0.95rem;
+                  > span {
+                    width: 100%;
+                    font-size: 0.95rem;
 
-                  ::v-deep span.reply {
-                    font-size: 0.84rem;
+                    ::v-deep span.reply {
+                      font-size: 0.84rem;
 
-                    > a {
-                      margin-left: 0.3rem;
+                      > a {
+                        margin-left: 0.3rem;
+                      }
                     }
                   }
                 }
@@ -390,6 +460,8 @@ export default {
         width: 100%;
         color: gray;
         margin-top: 0.6rem;
+        transition: all .1s linear;
+        flex-wrap: wrap;
         > .time{
           font-size: 0.7rem;
           margin-right: 0.6rem;
@@ -401,6 +473,36 @@ export default {
 
           &:hover {
             color: #ff1616;
+            >svg{
+              fill: red !important;
+            }
+            >span{
+              color: red !important;
+            }
+          }
+          &.react{
+            margin-left: 1rem;
+            &[down]{
+              >svg{
+                transform: rotate(180deg);
+              }
+            }
+            &.active{
+              >svg{
+                fill: #ff3c00;
+              }
+              >span{
+                color: #ff3c00;
+              }
+            }
+            >svg{
+              width: .95rem;
+              height: .95rem;
+            }
+            >span{
+              font-size: 0.85rem;
+              margin-left: 0.3rem;
+            }
           }
 
           &.close {
@@ -412,15 +514,25 @@ export default {
           }
         }
 
+        @keyframes toggle-down-write {
+          0%{
+            height: 0;
+          }
+          100%{
+            height: 10rem;
+          }
+        }
         > .write{
           width: 100%;
+          height: 0;
+          animation: toggle-down-write .5s ease-out forwards;
         }
       }
     }
   }
   span.nick-name{
     > a{
-      font-size: 0.95rem;
+      font-size: 1rem;
       color: #3d3d3d;
       text-decoration: none;
       font-weight: bold;
@@ -434,7 +546,13 @@ export default {
       width: 1.4rem;
       height: 1.4rem;
       margin-right: 0.6rem;
+      &:hover{
+        >svg{
+          transform: scale(1.2);
+        }
+      }
       >svg{
+        transition: all .15s linear;
         width: 100%;
         height: 100%;
       }

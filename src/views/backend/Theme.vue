@@ -111,7 +111,7 @@ export default {
           line: true,
           mode: 'sass',
           matchTags: {bothTags: true},
-          matchBrackets: true
+          matchBrackets: true,
         });
         this.codeMirror.on('change', () => {
           this.scss = this.codeMirror.getValue();

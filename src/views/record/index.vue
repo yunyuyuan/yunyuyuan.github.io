@@ -1,6 +1,9 @@
 <template>
   <div class="record">
-    <div class="list" flex>
+    <div v-if="loading" class="loading" flex>
+      <svg-icon :name="'loading'"/>
+    </div>
+    <div v-else class="list" flex>
       <div class="item" v-for="item in pagedList" :key="item.file" @click="activeInfo=item">
         <time>{{ item.time | time(true) }}</time>
         <div class="img" flex>
@@ -27,6 +30,7 @@ export default {
   data() {
     return {
       record: [],
+      loading: true,
       pageNow: 1,
       perCount: 20,
       activeInfo: {},
@@ -43,6 +47,7 @@ export default {
     if (res[0]){
       this.record = JSON.parse(res[1])
     }
+    this.loading = false
   },
   methods: {
     turnPage(p) {
@@ -60,6 +65,15 @@ export default {
 
 .record{
   width: 90%;
+  >.loading{
+    width: 100%;
+    margin: 3rem 0;
+    justify-content: center;
+    >svg{
+      width: 5rem;
+      height: 5rem;
+    }
+  }
   > .list{
     flex-wrap: wrap;
     width: 100%;

@@ -1,6 +1,7 @@
 import axios from 'axios';
-const siteConfig = require( '@/site-config');
 import {parseAjaxError} from "@/utils/utils";
+
+const siteConfig = require('@/site-config');
 export const tokenKey = 'comment-token';
 
 let owner = siteConfig.owner,
@@ -44,6 +45,24 @@ export const logError = function (res, suc, err) {
     }
 }
 
+export const getReactions = (item)=>{
+    const reactions = {};
+    item.forEach(i=>{
+        if (i.content === 'THUMBS_UP'){
+            reactions['+1'] = {
+                has: i.viewerHasReacted,
+                count: i.users.totalCount,
+            }
+        }else if (i.content === 'THUMBS_DOWN'){
+            reactions['-1'] = {
+                has: i.viewerHasReacted,
+                count: i.users.totalCount,
+            }
+        }
+    });
+    return reactions
+}
+
 // ======================== methods ============================
 
 export async function getRepoId() {
@@ -85,15 +104,14 @@ export async function getLoginInfo(token) {
 
 export function removeToken() {
     headers.Authorization = '';
-    localStorage.removeItem(tokenKey)
 }
 
-export async function getPageComment(payload) {
+export async function getPageComment({title, count, cursor}) {
     return await http({
         data: {
             query:
                 `{
-  search(query: "${payload.title}+in:title repo:${owner}/${repo} is:open", type: ISSUE, ${(payload.cursor && payload.cursor.indexOf(',after') === 0) || !payload.cursor ? 'first' : 'last'}: ${payload.count}${payload.cursor || ''}) {
+  search(query: "${title}+in:title repo:${owner}/${repo} is:open", type: ISSUE, ${(cursor && cursor.indexOf(',after') === 0) || !cursor ? 'first' : 'last'}: ${count}${cursor || ''}) {
     issueCount
     nodes {
       ... on Issue {
@@ -103,14 +121,18 @@ export async function getPageComment(payload) {
           url
         }
         body
-        number
         createdAt
+        number
         id
         authorAssociation
-        reactions(first: 0, content: THUMBS_UP) {
-          totalCount
+        reactionGroups {
+          viewerHasReacted
+          users {
+            totalCount
+          }
+          content
         }
-        comments(first: ${payload.count}) {
+        comments(first: ${count}) {
           totalCount
           nodes {
             author {
@@ -122,8 +144,12 @@ export async function getPageComment(payload) {
             body
             createdAt
             id
-            reactions(first: 0, content: THUMBS_UP) {
-              totalCount
+            reactionGroups {
+              viewerHasReacted
+              content
+              users {
+                totalCount
+              }
             }
           }
           pageInfo {
@@ -135,19 +161,13 @@ export async function getPageComment(payload) {
         }
       }
     }
-    pageInfo {
-            hasNextPage
-            endCursor
-            hasPreviousPage
-            startCursor
-    }
   }
 }`
         }
     })
 }
 
-export async function getCommentChildren(id, count, cursor) {
+export async function getCommentChildren({id, count, cursor}) {
     return await http({
         data: {
             query:
@@ -166,8 +186,12 @@ export async function getCommentChildren(id, count, cursor) {
             body
             createdAt
             id
-            reactions(first: 0, content: THUMBS_UP) {
-              totalCount
+            reactionGroups {
+              viewerHasReacted
+              content
+              users {
+                totalCount
+              }
             }
           }
           pageInfo {
@@ -185,12 +209,12 @@ export async function getCommentChildren(id, count, cursor) {
     })
 }
 
-export async function createComment(payload) {
+export async function createComment({title, body}) {
     return await http({
         data: {
             query:
                 `mutation {
-  createIssue(input: {repositoryId: "${repoId}", title: "${payload.title}", body: "${payload.body}"}) {
+  createIssue(input: {repositoryId: "${repoId}", title: "${title}", body: "${body}"}) {
     issue {
       id
     }
@@ -200,7 +224,7 @@ export async function createComment(payload) {
     })
 }
 
-export async function close_deleteComment(type, id) {
+export async function closeOrDeleteComment(type, id) {
     return await http({
         data: {
             query:
@@ -214,12 +238,12 @@ export async function close_deleteComment(type, id) {
     })
 }
 
-export async function createReply(payload) {
+export async function createReply({body, id}) {
     return await http({
         data: {
             query:
                 `mutation {
-  addComment(input: {body: "${payload.body}", subjectId: "${payload.id}"}) {
+  addComment(input: {body: "${body}", subjectId: "${id}"}) {
     clientMutationId
   }
 }
@@ -235,6 +259,22 @@ export async function deleteReply(id) {
                 `mutation {
   deleteIssueComment(input: {id: "${id}"}) {
     clientMutationId
+  }
+}
+`
+        }
+    })
+}
+
+export async function doReaction({content, id, has}) {
+    return await http({
+        data: {
+            query:
+                `mutation {
+  ${has?'remove':'add'}Reaction(input: {content: ${content}, subjectId: "${id}="}) {
+    subject {
+      id
+    }
   }
 }
 `

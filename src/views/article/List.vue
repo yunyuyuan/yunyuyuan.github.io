@@ -16,7 +16,10 @@
         </span>
       </span>
       </div>
-      <div class="blog">
+      <div class="loading" v-if="loading" flex>
+        <svg-icon :name="'loading'"/>
+      </div>
+      <div class="blog" v-else>
         <div v-for="item in this.pagedList" :key="item.file" class="item"
              flex>
           <div class="time">
@@ -58,6 +61,7 @@ export default {
   data() {
     return {
       md: [],
+      loading: true,
       search: '',
       searchFocus: false,
       searchTags: [],
@@ -98,6 +102,7 @@ export default {
     }
   },
   async mounted() {
+    loadFinish();
     let res = await getText(`${originPrefix}/json/md.json`);
     if (res[0]) {
       this.md = JSON.parse(res[1]);
@@ -109,7 +114,7 @@ export default {
         }
       }
     }
-    loadFinish();
+    this.loading = false;
   },
   methods: {
     toggleInputFocus(b) {
@@ -134,18 +139,21 @@ export default {
 
 <style scoped lang="scss">
 @import "src/assets/style/public";
-.article{
+
+.article {
   width: 100%;
   min-height: 100%;
   position: relative;
   flex-shrink: 0;
-  > .list{
+
+  > .list {
     width: 100%;
     height: 100%;
     flex-shrink: 0;
     flex-direction: column;
     overflow-y: auto;
-    > .search{
+
+    > .search {
       border-radius: 1rem;
       border: 1px solid #787878;
       background: rgba(0, 0, 0, 0.2);
@@ -153,14 +161,17 @@ export default {
       box-shadow: 0 0 0.5rem #d2d2d2;
       transition: all .1s linear;
       margin: 1rem 0;
-      &.active{
+
+      &.active {
         background: rgba(255, 255, 255, 0.4);
         box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
-        >input{
+
+        > input {
           color: black;
         }
       }
-      > input{
+
+      > input {
         width: 15rem;
         height: 100%;
         font-size: 0.9rem;
@@ -169,20 +180,24 @@ export default {
         background: transparent;
         color: #d6d6d6;
       }
-      > span{
+
+      > span {
         justify-content: center;
-        > svg{
+
+        > svg {
           width: 1.2rem;
           height: 1.2rem;
           margin-right: 0.3rem;
         }
       }
     }
-    > .tags{
+
+    > .tags {
       transition: all .15s linear;
       width: 80%;
       flex-wrap: wrap;
-      > span{
+
+      > span {
         padding: 0.5rem 1.3rem;
         cursor: pointer;
         transition: all .1s linear;
@@ -193,7 +208,8 @@ export default {
         box-shadow: 0 0 0.4rem #000000a1;
         color: white;
         position: relative;
-        > span{
+
+        > span {
           position: absolute;
           top: 0;
           left: 0;
@@ -204,30 +220,44 @@ export default {
           display: none;
           align-items: center;
           justify-content: center;
-          > svg{
+
+          > svg {
             width: 1.4rem;
           }
         }
-        &:hover{
-          > span{
+
+        &:hover {
+          > span {
             display: flex;
           }
         }
       }
     }
-    > .blog{
+    >.loading{
+      width: 100%;
+      margin: 3rem 0;
+      justify-content: center;
+      >svg{
+        width: 5rem;
+        height: 5rem;
+      }
+    }
+
+    > .blog {
       width: 100%;
       margin: 1rem 0;
       flex-grow: 1;
       overflow-x: auto;
-      > .item{
+
+      > .item {
         width: 60rem;
         height: 10rem;
         padding: 1rem 0;
         overflow: hidden;
         margin: 0 auto;
-        > .time{
-          > span{
+
+        > .time {
+          > span {
             background: rgba(0, 0, 0, 0.4);
             color: white;
             padding: 0.4rem 0.8rem;
@@ -237,19 +267,22 @@ export default {
             white-space: nowrap;
           }
         }
-        > .mid{
+
+        > .mid {
           justify-content: center;
           height: calc(100% + 2rem);
           padding: 0 1rem;
           margin: 0 0.3rem;
           position: relative;
-          > .line{
+
+          > .line {
             width: 100%;
             height: 0.1rem;
             background: black;
             position: absolute;
           }
-          > .circle{
+
+          > .circle {
             width: 1rem;
             height: 1rem;
             border-radius: 50%;
@@ -258,7 +291,8 @@ export default {
             z-index: 1;
           }
         }
-        > .info{
+
+        > .info {
           height: 100%;
           width: 100%;
           box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.6);
@@ -267,44 +301,52 @@ export default {
           border-radius: 0 0.5rem 0.5rem 0;
           background: linear-gradient(45deg, white, rgb(255, 255, 255, 0.9));
           transition: box-shadow .15s ease-out;
-          &:hover{
+
+          &:hover {
             background: white;
             box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.8);
           }
-          ::v-deep .loading-img{
+
+          ::v-deep .loading-img {
             display: flex;
             align-items: center;
-            img{
+
+            img {
               object-fit: contain;
               background: white;
             }
           }
-          > div{
+
+          > div {
             height: 100%;
             width: 100%;
             border-radius: 0 0.5rem 0.5rem 0;
             flex-direction: column;
             box-shadow: 0 0 0.4rem rgba(128, 128, 128, 0.59) inset;
-            > b{
+
+            > b {
               font-size: 1.2rem;
               @include text-overflow(2);
               margin: 0.5rem 0;
               line-height: 1.5rem;
               text-align: center;
             }
-            > span{
+
+            > span {
               font-size: 0.88rem;
               color: #686868;
               line-height: 1.2rem;
               @include text-overflow(3);
               text-align: center;
             }
-            > .tags{
+
+            > .tags {
               width: 100%;
               height: 2rem;
               justify-content: flex-end;
               margin-top: auto;
-              > span{
+
+              > span {
                 font-size: 0.8rem;
                 line-height: 1rem;
                 border-radius: 0.1rem;
@@ -313,8 +355,9 @@ export default {
                 transition: all .15s linear;
                 box-shadow: 0 0 0.2rem #00000078;
                 color: white;
-                &:hover{
-                    box-shadow: 0 .15rem 0.4rem #00000078;
+
+                &:hover {
+                  box-shadow: 0 .15rem 0.4rem #00000078;
                 }
               }
             }
@@ -322,14 +365,17 @@ export default {
         }
       }
     }
-    @include media{
-      > .blog{
-        > .item{
+
+    @include media {
+      > .blog {
+        > .item {
           width: 98%;
-          > .time{
+
+          > .time {
             display: none;
           }
-          > .mid{
+
+          > .mid {
             display: none;
           }
         }

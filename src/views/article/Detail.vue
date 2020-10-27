@@ -43,7 +43,10 @@
             <svg-icon :name="'arrow'"/>
           </span>
         </aside>
-        <span :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html" v-viewer></span>
+        <div v-if="loading" class="loading" flex>
+          <svg-icon :name="'loading'"/>
+        </div>
+        <span v-else :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html" v-viewer></span>
       </div>
       <the-comment v-if="this.info" :title="this.info.file"/>
     </div>
@@ -66,6 +69,7 @@ export default {
   data() {
     return {
       md: [],
+      loading: true,
       html: '',
       anchors: [],
       asideActive: null,
@@ -107,51 +111,51 @@ export default {
     })
   },
   async mounted() {
-    await this.getHtml();
-    this.body.addEventListener('scroll', this.moveAside);
     loadFinish();
+    let res = await getText(`${originPrefix}/md/${this.id}/index.html`);
+    if (res[0]) {
+      this.html = res[1];
+      this.$nextTick(() => {
+        processMdHtml(this.$refs.markdown);
+        // 取出anchor为侧栏
+        this.anchors = [];
+        let headList = this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
+        headList.forEach(el => {
+          this.anchors.push({
+            el: el,
+            text: el.innerText,
+            active: false
+          });
+          el.onclick = () => {
+            this.toAnchor(el)
+          };
+        })
+        // 监听滚动到anchor
+        this.body.onscroll = () => {
+          let last = {};
+          for (let el of headList) {
+            if (last && el.getBoundingClientRect().top > document.querySelector('header.the-head').scrollHeight) {
+              break
+            }
+            last = el;
+          }
+          this.anchors.forEach(a => {
+            a.active = a.text === last.innerText;
+          })
+        }
+      })
+    } else {
+      this.$message.error(`获取文章失败: ${res[1]}`);
+    }
+    this.body.addEventListener('scroll', this.moveAside);
+    setTimeout(()=>{
+      this.loading = false;
+    }, 2000)
   },
   beforeDestroy() {
     this.body.removeEventListener('scroll', this.moveAside)
   },
   methods: {
-    async getHtml() {
-      let res = await getText(`${originPrefix}/md/${this.id}/index.html`);
-      if (res[0]) {
-        this.html = res[1];
-        this.$nextTick(() => {
-          processMdHtml(this.$refs.markdown);
-          // 取出anchor为侧栏
-          this.anchors = [];
-          let headList = this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
-          headList.forEach(el => {
-            this.anchors.push({
-              el: el,
-              text: el.innerText,
-              active: false
-            });
-            el.onclick = () => {
-              this.toAnchor(el)
-            };
-          })
-          // 监听滚动到anchor
-          this.body.onscroll = () => {
-            let last = {};
-            for (let el of headList) {
-              if (last && el.getBoundingClientRect().top > document.querySelector('header.the-head').scrollHeight) {
-                break
-              }
-              last = el;
-            }
-            this.anchors.forEach(a => {
-              a.active = a.text === last.innerText;
-            })
-          }
-        })
-      } else {
-        this.$message.error(`获取文章失败: ${res[1]}`);
-      }
-    },
     moveAside() {
       const top = this.body.scrollTop-this.$refs.markdown.parentElement.offsetTop;
       if (this.$refs.markdown.scrollHeight - top > this.$refs.aside.scrollHeight&&top>0) {
@@ -450,15 +454,25 @@ export default {
           }
         }
       }
-      > .--markdown{
+      >.loading, > .--markdown{
+        background: white;
         border-radius: 0.6rem;
         box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.4);
-        background: white;
-        padding: 1.5rem 1rem 1.5rem 3.4rem;
         width: calc(100% - 6.4rem);
         transition: all .15s ease-out;
+        padding: 1.5rem 1rem 1.5rem 3.4rem;
         &.show-aside{
           width: calc(100% - 18.4rem);
+        }
+      }
+      >.loading{
+        justify-content: center;
+        padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+        width: calc(100% - 1rem);
+        >svg{
+          margin: 3rem 0;
+          width: 5rem;
+          height: 5rem;
         }
       }
     }

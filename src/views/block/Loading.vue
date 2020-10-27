@@ -67,7 +67,7 @@ export default {
       height: 0;
     }
   }
-  &.config-loaded[hide]{
+  &[hide]{
     animation: hide-loading .4s ease-out forwards;
   }
   &.dark{

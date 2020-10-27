@@ -220,7 +220,7 @@ export default {
           line: true,
           mode: 'markdown',
           matchTags: {bothTags: true},
-          matchBrackets: true
+          matchBrackets: true,
         });
         this.codeMirror.on('change', () => {
           this.mdText = this.codeMirror.getValue()

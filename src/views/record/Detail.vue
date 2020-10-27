@@ -5,7 +5,7 @@
       <div class="image" flex v-viewer>
         <loading-img v-for="i in info.images" :src="i" :data-viewer="true"/>
       </div>
-      <div class="loading" v-if="text===''" flex>
+      <div class="loading" v-if="loading" flex>
         <svg-icon :name="'loading'"/>
       </div>
       <span v-else write-font>
@@ -31,12 +31,14 @@ export default {
   },
   data() {
     return {
+      loading: false,
       text: ''
     }
   },
   watch: {
     async info() {
       if (!this.info.file) return;
+      this.loading = true;
       let res = await getText(`${originPrefix}/record/${this.info.file}.txt`);
       if (res[0]) {
         this.text = res[1]
@@ -44,6 +46,7 @@ export default {
         this.$message.error(parseAjaxError(res[1]))
         this.text = ''
       }
+      this.loading = false;
     }
   },
   mounted() {
@@ -82,9 +85,10 @@ export default {
     >.loading{
       width: 100%;
       justify-content: center;
+      margin: 3rem 0;
       >svg{
-        height: 3rem;
-        width: 3rem;
+        height: 5rem;
+        width: 5rem;
       }
     }
     > span{
