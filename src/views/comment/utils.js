@@ -12,7 +12,7 @@ let owner = siteConfig.owner,
         Authorization: 'token ' + (['5', '66b4e73893d07b79dbcc3e36f86acc309e78b2d'].join(''))
     },
     headers = {
-        Authorization: ''
+        Authorization: 'token'
     },
     http = function (data, usePublic) {
         return new Promise(resolve => {
