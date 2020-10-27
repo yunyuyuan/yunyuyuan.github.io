@@ -28,7 +28,7 @@
               <span class="reply" @click="clickReply(item, null)">回复</span>
               <span v-if="login===item.nick||login===siteConfig.owner" class="delete"
                     @click="closeComment(item.id)">删除</span>
-              <span v-for="emoji in ['+1','-1']" class="react" :down="emoji==='-1'" :class="{active: item.reactions[emoji].has && (login===item.nick)}" :title="emoji" @click="doReact(emoji, item, item.reactions[emoji].has && (login===item.nick))" flex>
+              <span v-for="emoji in ['+1','-1']" class="react" :down="emoji==='-1'" :class="{active: item.reactions[emoji].has && login}" :title="emoji" @click="doReact(emoji, item, item.reactions[emoji].has && login)" flex>
                 <svg-icon :name="'thumb'"/>
                 <span v-if="item.reactions[emoji].count>0">{{item.reactions[emoji].count}}</span>
               </span>
@@ -60,7 +60,7 @@
                     <span class="reply" @click="clickReply(item, child)">回复</span>
                     <span v-if="login===child.nick||login===siteConfig.owner" class="delete"
                           @click="deleteReply(child.id, item)">删除</span>
-                    <span v-for="emoji in ['+1','-1']" class="react" :down="emoji==='-1'" :class="{active: child.reactions[emoji].has && (login===child.nick)}" :title="emoji" @click="doReact(emoji, child, child.reactions[emoji].has && (login===child.nick))" flex>
+                    <span v-for="emoji in ['+1','-1']" class="react" :down="emoji==='-1'" :class="{active: child.reactions[emoji].has && login}" :title="emoji" @click="doReact(emoji, child, child.reactions[emoji].has && login)" flex>
                       <svg-icon :name="'thumb'"/>
                       <span v-if="child.reactions[emoji].count>0">{{child.reactions[emoji].count}}</span>
                     </span>
