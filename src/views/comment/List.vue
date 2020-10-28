@@ -220,7 +220,7 @@ export default {
       item.loading = true;
       let res = await getCommentChildren({
         id: item.id,
-        count: this.onePageItemsCount,
+        count: this.onePageItemsCount/2,
         cursor: cursor
       });
       if (res[0]) {
@@ -535,6 +535,7 @@ export default {
         }
         >div{
           >.body{
+            width: 100%;
             >.head{
               margin-left: 3.2rem;
               margin-bottom: 0.5rem;
