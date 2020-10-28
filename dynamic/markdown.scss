@@ -216,6 +216,7 @@
     background: rgba(43, 43, 43, 0.95);
     display: flex;
     flex-direction: column;
+    padding: 0 0 0.5rem 0;
     &:hover{
       > span{
         opacity: 1;
@@ -293,7 +294,10 @@
         font-weight: bold
       }
     }
-    @media screen and (max-width: 768px) {
+  }
+  @media screen and (max-width: 768px) {
+    >pre{
+      padding: 0.5rem 0;
       > span {
         display: none !important;
       }

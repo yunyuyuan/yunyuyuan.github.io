@@ -332,6 +332,7 @@
   background: rgba(43, 43, 43, 0.95);
   display: flex;
   flex-direction: column;
+  padding: 0 0 0.5rem 0;
 }
 .--markdown pre:hover > span {
   opacity: 1;
@@ -360,7 +361,7 @@
   display: block;
   overflow: visible;
   overflow-x: auto;
-  padding: 0.4rem 0.8rem;
+  padding: 0 0.8rem;
   border-radius: 0 0 0.3rem 0.3rem;
   background: transparent;
   max-height: 100vh;
@@ -409,7 +410,10 @@
   font-weight: bold;
 }
 @media screen and (max-width: 768px) {
-  .--markdown pre > span {
+  .--markdown > pre {
+    padding: 0.5rem 0;
+  }
+  .--markdown > pre > span {
     display: none !important;
   }
 }

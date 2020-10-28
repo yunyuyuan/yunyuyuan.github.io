@@ -46,7 +46,7 @@ export function genRss (items){
     const channel = createEl('channel', '');
     channel.appendChild(createEl('title', `${siteConfig.owner}的博客`))
     channel.appendChild(createEl('link', origin))
-    channel.appendChild(createEl('description', `${siteConfig.owner}的博文Rs<>s`))
+    channel.appendChild(createEl('description', `${siteConfig.owner}的博文Rss`))
     channel.appendChild(createEl('category', siteConfig.rss.categories))
     channel.appendChild(createEl('lastBuildDate', parseDate(new Date().getTime(), false)));
     channel.appendChild(createEl('language', 'zh-cn'))

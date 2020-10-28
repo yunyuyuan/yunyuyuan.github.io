@@ -1,6 +1,6 @@
 <template>
   <div class="float-input">
-    <component :is="isArea?'textarea':'input'" :style="{height: `${(isArea?5:2)*size}rem`, fontSize: `${0.95*size}rem`}" :value="value" :class="{inputed: text!==''}"
+    <component spellcheck="false" :is="isArea?'textarea':'input'" :style="{height: `${(isArea?5:2)*size}rem`, fontSize: `${0.95*size}rem`}" :value="value" :class="{inputed: text!==''}"
                :id="`float-input-${_uid}`" @input="input">{{value}}</component>
     <label :style="{lineHeight: `${2*size}rem`, fontSize: `${1.4*size}rem`}" :for="`login-${_uid}`">{{ name }}</label>
     <div class="bar"></div>
