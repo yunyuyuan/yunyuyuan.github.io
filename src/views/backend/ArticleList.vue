@@ -213,7 +213,7 @@ export default {
             if (res[0]) {
               // 更新rss
               this.deleting.state = '更新 RSS';
-              let res = await this.gitUtil.updateSingleFile('rss.xml', genRss(newMdList));
+              let res = await this.gitUtil.updateSingleFile('dynamic/rss.xml', genRss(newMdList));
               if (res[1]){
                 this.$message.success('删除成功!');
                 this.$emit('refresh')

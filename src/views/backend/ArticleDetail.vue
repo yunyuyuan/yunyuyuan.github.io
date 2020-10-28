@@ -376,7 +376,7 @@ export default {
           if (res[0]) {
             // 更新rss
             this.saving.state = '更新 RSS';
-            let res = await this.gitUtil.updateSingleFile('rss.xml', genRss(this.md));
+            let res = await this.gitUtil.updateSingleFile('dynamic/rss.xml', genRss(this.md));
             if (res[1]){
               this.$message.success('上传成功!');
               window.location.reload()
