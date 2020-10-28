@@ -534,8 +534,8 @@ export default {
           position: absolute;
         }
         >div{
+          width: 100%;
           >.body{
-            width: 100%;
             >.head{
               margin-left: 3.2rem;
               margin-bottom: 0.5rem;
