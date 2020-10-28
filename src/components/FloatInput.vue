@@ -16,7 +16,6 @@ export default {
       default: ''
     },
     id: {
-      type: String,
       default: ''
     },
     value: {

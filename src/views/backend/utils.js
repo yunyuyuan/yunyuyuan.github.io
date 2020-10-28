@@ -17,16 +17,36 @@ export function delCache (key){
 const siteConfig = require( '@/site-config')
 
 export function genRss (items){
+    items = items.slice(0, siteConfig.rss.count)
     const origin = location.origin;
-    const xmlString = "<root></root>";
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
-    const rss = createEl('rss', '', {version: '2.0'});
+
+    const xml = new DOMParser().parseFromString('<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"></rss>', "application/xml");
+
+    function escapeXml (s){
+        return s.toString().replace(/&/g, '&amp;')
+               .replace(/</g, '&lt;')
+               .replace(/>/g, '&gt;')
+               .replace(/"/g, '&quot;')
+               .replace(/'/g, '&apos;');
+    }
+    function createEl (tag, html, attrs){
+        const el = xml.createElement(tag);
+        if (html) {
+            el.innerHTML = escapeXml(html);
+        }
+        if (attrs){
+            for (const k in attrs){
+                el.setAttribute(k, escapeXml(attrs[k]));
+            }
+        }
+        return el;
+    }
+    const rss = xml.getElementsByTagName('rss')[0];
 
     const channel = createEl('channel', '');
     channel.appendChild(createEl('title', `${siteConfig.owner}的博客`))
     channel.appendChild(createEl('link', origin))
-    channel.appendChild(createEl('description', `${siteConfig.owner}的博文Rss`))
+    channel.appendChild(createEl('description', `${siteConfig.owner}的博文Rs<>s`))
     channel.appendChild(createEl('category', siteConfig.rss.categories))
     channel.appendChild(createEl('lastBuildDate', parseDate(new Date().getTime(), false)));
     channel.appendChild(createEl('language', 'zh-cn'))
@@ -44,18 +64,5 @@ export function genRss (items){
     }
 
     rss.appendChild(channel);
-    return rss.outerHTML;
-}
-
-function createEl (tag, html, attrs){
-    const el = document.createElement(tag);
-    if (html) {
-        el.innerHTML = html;
-    }
-    if (attrs){
-        for (const k in attrs){
-            el.setAttribute(k, attrs[k]);
-        }
-    }
-    return el;
+    return new XMLSerializer().serializeToString(xml);
 }

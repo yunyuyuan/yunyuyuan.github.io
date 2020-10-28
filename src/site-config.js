@@ -10,6 +10,7 @@ module.exports = {
     avatar: 'favicon.svg',
     corner: 'Simple code,Simple life',
     rss: {
-        categories: 'Blog/Web development'
+        categories: 'Blog/Web development',
+        count: 20
     }
 }

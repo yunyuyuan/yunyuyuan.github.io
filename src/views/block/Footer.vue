@@ -10,7 +10,11 @@
     </div>
     <div class="copyright" flex>
       <span>Copyright (c) {{ config.copyright }} <b write-font>{{ config.name }}</b><b> | {{ domain }}</b></span>
-      <span>All right reserved</span>
+      <span flex>All right reserved
+        <a :href="`${isDev?'':'/dynamic'}/rss.xml`" target="_blank" title="rss订阅">
+          <svg-icon :name="'rss'"/>
+        </a>
+      </span>
     </div>
   </footer>
 </template>
@@ -26,6 +30,7 @@ export default {
     return {
       originPrefix,
       siteConfig,
+      isDev: process.env.NODE_ENV==='development',
       selfImage,
       links: ['github', 'bilibili', 'email']
     }
@@ -109,6 +114,33 @@ footer{
 
         > b {
           color: #ddd;
+        }
+        >a{
+          text-decoration: none;
+          margin-left: 1rem;
+          width: 1.5rem;
+          height: 1.5rem;
+          @keyframes spinning-rotate{
+            0%{
+              transform: rotate(0);
+            }
+            70%{
+              transform: rotate(360deg);
+            }
+            80%,90%{
+              transform: rotate(390deg);
+            }
+            100%{
+              transform: rotate(360deg);
+            }
+          }
+          &:hover{
+            animation: spinning-rotate .5s linear;
+          }
+          >svg{
+            width: 100%;
+            height: 100%;
+          }
         }
       }
   }

@@ -12,10 +12,10 @@
         <span :class="{active: info.backgroundImg==='random'}" @click="changeBg('random')">随机</span>
       </label>
       <div class="friends" flex>
-        <div v-for="item in info.friends" :key="item" class="item" flex>
-          <float-input :name="'简介'" :value="item.summary" :id="item.github" :size="0.85" @input="friendsSummary"/>
-          <float-input :name="'github名字'" :value="item.github" :id="item.github" :size="0.85" @input="friendsGithub"/>
-          <float-input :name="'网站'" :value="item.site" :id="item.github" :size="0.85" @input="friendsSite"/>
+        <div v-for="item in info.friends" :key="item.id" class="item" flex>
+          <float-input :name="'简介'" :value="item.summary" :id="item.id" :size="0.85" @input="friendsSummary"/>
+          <float-input :name="'github名字'" :value="item.github" :id="item.id" :size="0.85" @input="friendsGithub"/>
+          <float-input :name="'网站'" :value="item.site" :id="item.id" :size="0.85" @input="friendsSite"/>
           <single-button class="del-btn" :text="'删除'" @click.native="friendsDel(item)"/>
         </div>
         <loading-button :loading="false" :icon="'add'" :text="'添加'" :size="1.1" @click.native="friendsNew"/>
@@ -55,6 +55,9 @@ export default {
       deep: true,
       handler (){
         this.info = JSON.parse(JSON.stringify(this.config));
+        this.info.friends.forEach((v,idx)=>{
+          v.id = idx
+        })
       }
     }
   },
@@ -67,13 +70,13 @@ export default {
       this.info.backgroundImg = v;
     },
     friendsSummary ([id, text]){
-      this.info.friends.find(v=>v.github===id).summary = text;
+      this.info.friends.find(v=>v.id===id).summary = text;
     },
     friendsGithub ([id, text]){
-      this.info.friends.find(v => v.github === id).github = text;
+      this.info.friends.find(v => v.id === id).github = text;
     },
     friendsSite ([id, text]){
-      this.info.friends.find(v=>v.github===id).site = text;
+      this.info.friends.find(v=>v.id===id).site = text;
     },
     friendsDel (item){
       this.info.friends.splice(this.info.friends.indexOf(item), 1)
@@ -83,6 +86,7 @@ export default {
         summary: '',
         github: '',
         site: '',
+        id: Math.max(...this.info.friends.map(v=>v.id))+1
       })
     },
     async commitConfig() {
@@ -93,7 +97,15 @@ export default {
           this.config[k] = this.info[k]
         }
         this.config.backgroundImg = this.info.backgroundImg;
-        this.config.friends = this.info.friends.slice();
+        this.config.friends = this.info.friends.map(v=>{
+          const item = {};
+          for (const k in v){
+            if (k !== 'id'){
+              item[k] = v[k]
+            }
+          }
+          return item
+        });
         let res = await this.gitUtil.updateJsonFile(`config.json`, this.config);
         this.updating = false;
         if (res[0]) {

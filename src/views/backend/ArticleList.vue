@@ -189,8 +189,6 @@ export default {
       }
     },
     async removeMd(files) {
-      console.log(genRss(this.md))
-      return
       if (this.deleting.b) return;
       if (this.gitUtil) {
         if (confirm('确认删除?')) {
