@@ -18,6 +18,9 @@ const siteConfig = require( '@/site-config')
 
 export function genRss (items){
     const origin = location.origin;
+    const xmlString = "<root></root>";
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
     const rss = createEl('rss', '', {version: '2.0'});
 
     const channel = createEl('channel', '');
