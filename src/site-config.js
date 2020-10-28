@@ -8,5 +8,8 @@ module.exports = {
     cdn: `https://cdn.jsdelivr.net/gh/${name}/${repo}@latest`,
     timeStamp: new Date().getTime(),
     avatar: 'favicon.svg',
-    corner: 'Simple code,Simple life'
+    corner: 'Simple code,Simple life',
+    rss: {
+        categories: 'Blog/Web development'
+    }
 }

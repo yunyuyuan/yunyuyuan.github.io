@@ -75,6 +75,7 @@ import jszip from "jszip";
 import {originPrefix} from "@/need";
 import * as fileSaver from "file-saver";
 import LoadingImg from "@/components/LoadingImg";
+import {genRss} from "@/views/backend/utils";
 
 export default {
   name: "ArticleList",
@@ -210,11 +211,15 @@ export default {
             // 删除文件夹
             res = await this.gitUtil.removeSome(files, this.deleting, 'md');
             if (res[0]) {
-              this.$message.success('删除成功!');
-              this.$store.commit('updateJson', {
-                key: 'md',
-                json: newMdList
-              });
+              // 更新rss
+              this.deleting.state = '更新 RSS';
+              let res = await this.gitUtil.updateSingleFile('rss.xml', genRss(newMdList));
+              if (res[1]){
+                this.$message.success('删除成功!');
+                this.$emit('refresh')
+              } else {
+                err = res[1];
+              }
             } else {
               err = res[1];
             }

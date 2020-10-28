@@ -6,7 +6,7 @@
     <div class="bg" v-else>
       <div id="particles-bg"></div>
       <div id="comet-bg">
-        <div class="comet" v-for="i in randLen" :style="{left: `${50-Math.random()*100}px`,top: `${10+Math.random()*80}%`}"></div>
+        <div class="comet" v-for="i in randLen" :style="{left: `${50-Math.random()*100}px`,top: `${10+Math.random()*80}%`,animationDelay: `${Math.random()*5}s`,animationDuration: `${3+Math.random()*4}s`}"></div>
       </div>
     </div>
     <the-head :class="{'show-bg': showBg}" v-if="showHead" @toggle="toggleShowBg"/>
@@ -95,7 +95,7 @@ export default {
       return this.config
     },
     randLen (){
-      return 3+Math.floor(Math.random()*5)
+      return 3+Math.floor(Math.random()*4)
     }
   },
   async created() {
@@ -215,8 +215,9 @@ export default {
         background: linear-gradient(-45deg, rgba(95, 145, 255, 1), rgba(0, 0, 255, 0));
         border-radius: 999px;
         filter: drop-shadow(0 0 6px rgba(105, 155, 255, 1));
-        animation: tail 5s ease-in-out infinite,
-        shooting 5s ease-in-out infinite;
+        animation-name: tail, shooting;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
         &:before, &:after{
           content: '';
           position: absolute;
@@ -227,20 +228,14 @@ export default {
           background: linear-gradient(-45deg, rgba(0, 0, 255, 0), rgba(95, 145, 255, 1), rgba(0, 0, 255, 0));
           transform: translateX(50%) rotateZ(45deg);
           border-radius: 100%;
-          animation: shining 5s ease-in-out infinite;
+          animation-name: shining;
+          animation-timing-function: inherit;
+          animation-iteration-count: infinite;
+          animation-duration: inherit;
+          animation-delay: inherit;
         }
-        &::after{
+        &:after{
           transform: translateX(50%) rotateZ(-45deg);
-        }
-        @for $i from 1 through 8{
-          &:nth-child(#{$i}){
-            $delay: random(9999) + 0ms;
-            animation-delay: $delay;
-            &::before,
-            &::after{
-              animation-delay: $delay;
-            }
-          }
         }
       }
       @keyframes tail{

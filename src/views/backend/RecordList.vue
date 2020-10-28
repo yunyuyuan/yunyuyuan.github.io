@@ -185,10 +185,7 @@ export default {
             res = await this.gitUtil.removeSome(files, this.deleting, 'record');
             if (res[0]) {
               this.$message.success('删除成功!');
-              this.$store.commit('updateJson', {
-                key: 'record',
-                json: newRecordList
-              });
+              this.$emit('refresh')
             } else {
               err = res[1];
             }

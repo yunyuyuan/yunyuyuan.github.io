@@ -12,7 +12,7 @@
         <span :class="{active: info.backgroundImg==='random'}" @click="changeBg('random')">随机</span>
       </label>
       <div class="friends" flex>
-        <div v-for="item in info.friends" :key="item.github" class="item" flex>
+        <div v-for="item in info.friends" :key="item" class="item" flex>
           <float-input :name="'简介'" :value="item.summary" :id="item.github" :size="0.85" @input="friendsSummary"/>
           <float-input :name="'github名字'" :value="item.github" :id="item.github" :size="0.85" @input="friendsGithub"/>
           <float-input :name="'网站'" :value="item.site" :id="item.github" :size="0.85" @input="friendsSite"/>
@@ -70,11 +70,7 @@ export default {
       this.info.friends.find(v=>v.github===id).summary = text;
     },
     friendsGithub ([id, text]){
-      if (this.info.friends.find(v=>v.github===text)) {
-        this.$message.warning('github不能重复')
-      }else {
-        this.info.friends.find(v => v.github === id).github = text;
-      }
+      this.info.friends.find(v => v.github === id).github = text;
     },
     friendsSite ([id, text]){
       this.info.friends.find(v=>v.github===id).site = text;
@@ -85,7 +81,7 @@ export default {
     friendsNew (){
       this.info.friends.push({
         summary: '',
-        github: this.info.friends.length.toString(),
+        github: '',
         site: '',
       })
     },

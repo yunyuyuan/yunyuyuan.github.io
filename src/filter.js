@@ -2,9 +2,11 @@ import Vue from 'vue';
 import dayjs from "dayjs";
 import md5 from 'md5';
 
-Vue.filter('time', function (value, isShort) {
+Vue.filter('time', parseDate)
+
+export function parseDate (value, isShort){
     return new dayjs(value).format(`YYYY-MM-DD${!isShort ? ' HH:mm:ss' : ''}`)
-})
+}
 
 const colorList = [
     '#ff1616', '#ac00d7',

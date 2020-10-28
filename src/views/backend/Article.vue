@@ -1,5 +1,5 @@
 <template>
-  <router-view :md="md" :inited="inited"></router-view>
+  <router-view :md="md" :inited="inited" @refresh="getMd"></router-view>
 </template>
 
 <script>
@@ -15,12 +15,18 @@ export default {
     }
   },
   async created() {
-    let res = await getText(`${originPrefix}/json/md.json`);
-    if (res[0]){
-      this.md = JSON.parse(res[1])
-    }
-    this.inited = true
+    await this.getMd()
   },
+  methods: {
+    async getMd() {
+      this.inited = false;
+      let res = await getText(`${originPrefix}/json/md.json`);
+      if (res[0]) {
+        this.md = JSON.parse(res[1])
+      }
+      this.inited = true
+    }
+  }
 }
 </script>
 

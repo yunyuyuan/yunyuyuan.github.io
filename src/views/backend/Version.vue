@@ -53,7 +53,7 @@ export default {
   data (){
     return {
       showHelp: false,
-      help: '<b>在修改代码并push后，需在此提交新版本。</b>\n\nGitHub和jsdelivr有短暂延迟。若长时间后依旧无法访问，请手动pull代码并检查404-temp.html和404.html是否相同。如果不同则需自己复制404-temp.html的内容到404.html并push带github。',
+      help: '<b>在修改代码并push后，需在此提交新版本。</b>\n\nGitHub和jsdelivr有短暂延迟。若长时间后依旧无法访问，请手动pull代码并检查404-temp.html和404.html是否相同。如果不同则需自己复制404-temp.html的内容到404.html并push到github。',
       inited: false,
       creating: {
         b: false,

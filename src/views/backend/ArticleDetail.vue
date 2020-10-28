@@ -110,7 +110,7 @@ import MarkdownHelp from "@/views/block/MarkdownHelp";
 import LoadingImg from "@/components/LoadingImg";
 import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
 import siteConfig from "@/site-config";
-import {delCache, getCache, setCache} from "@/views/backend/storage";
+import {delCache, genRss, getCache, setCache} from "@/views/backend/utils";
 import SingleButton from "@/components/Button";
 
 export default {
@@ -334,7 +334,8 @@ export default {
     async save() {
       if (this.saving.b) return;
       if (this.gitUtil) {
-        let info = this.info;
+        let err = null,
+            info = this.info;
         if (!info.name || !info.summary || !info.tags.length || !info.cover) {
           return this.$message.warning('标题,简介,标签和封面均不能为空!')
         }
@@ -373,13 +374,23 @@ export default {
             html: this.htmlText
           }, this.saving);
           if (res[0]) {
-            this.$message.success('上传成功!');
-            window.location.reload()
+            // 更新rss
+            this.saving.state = '更新 RSS';
+            let res = await this.gitUtil.updateSingleFile('rss.xml', genRss(this.md));
+            if (res[1]){
+              this.$message.success('上传成功!');
+              window.location.reload()
+            } else {
+              err = res[1];
+            }
           } else {
-            this.$message.error(parseAjaxError(res[1]))
+            err = res[1];
           }
         } else {
-          this.$message.error(parseAjaxError(res[1]))
+          err = res[1];
+        }
+        if (err){
+          this.$message.error(parseAjaxError(err))
         }
         this.saving = {
           b: false,
