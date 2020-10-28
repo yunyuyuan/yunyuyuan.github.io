@@ -19,7 +19,7 @@
 3. `npm run build`
 4. 复制`404-temp.html`的内容到`404.html`
 5. `git add .`->`git commit -m init`->`git push`
-6. 进入github当前项目，创建一个release，版本号写`v0.0.1`
+6. 进入github当前项目，创建一个tag，版本号写`v0.0.1`
 7. 过一会访问网站
 8. have fun![sticker](yellow-face/55)
 
@@ -32,3 +32,5 @@
 - [x] 未写完存草稿到localStorage
 - [ ] about页面
 - [x] safari和firefox不支持正则分组
+- [ ] RSS
+- [x] 评论功能完善
