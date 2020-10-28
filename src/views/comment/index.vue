@@ -120,6 +120,7 @@ export default {
   background: white;
   flex-direction: column;
   padding: 1rem 0;
+  flex-shrink: 0;
 
   > .token {
     width: 100%;

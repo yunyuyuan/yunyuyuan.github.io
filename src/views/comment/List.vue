@@ -29,7 +29,7 @@
               <span v-if="login===item.nick||login===siteConfig.owner" class="delete"
                     @click="closeComment(item.id)">删除</span>
               <span v-for="emoji in ['+1','-1']" class="react" :down="emoji==='-1'" :class="{active: item.reactions[emoji].has && login}" :title="emoji" @click="doReact(emoji, item, item.reactions[emoji].has && login)" flex>
-                <svg-icon :name="'thumb'"/>
+                <svg-icon :name="item.doing?'loading':'thumb'"/>
                 <span v-if="item.reactions[emoji].count>0">{{item.reactions[emoji].count}}</span>
               </span>
               <write-comment v-if="replayItem === item && replyChild === null" :cancel="true"
@@ -61,7 +61,7 @@
                     <span v-if="login===child.nick||login===siteConfig.owner" class="delete"
                           @click="deleteReply(child.id, item)">删除</span>
                     <span v-for="emoji in ['+1','-1']" class="react" :down="emoji==='-1'" :class="{active: child.reactions[emoji].has && login}" :title="emoji" @click="doReact(emoji, child, child.reactions[emoji].has && login)" flex>
-                      <svg-icon :name="'thumb'"/>
+                      <svg-icon :name="child.doing?'loading':'thumb'"/>
                       <span v-if="child.reactions[emoji].count>0">{{child.reactions[emoji].count}}</span>
                     </span>
                     <write-comment v-if="replayItem === item && replyChild === child" :cancel="true"
@@ -281,6 +281,7 @@ export default {
     async doReact (emoji, item, has) {
       if (doingReact) return;
       doingReact = true;
+      item.doing = true;
       item.reactions[emoji] = {
         has: !has,
         count: item.reactions[emoji].count + (has ? -1 : 1)
@@ -298,6 +299,7 @@ export default {
         this.$message.error('出错了:' + (res[0] ? res[1].data.errors[0].message : parseAjaxError(res[1])))
       }
       doingReact = false;
+      item.doing = false;
     }
   }
 }
