@@ -19,9 +19,6 @@ const siteConfig = require( '@/site-config')
 export function genRss (items){
     items = items.slice(0, siteConfig.rss.count)
     const origin = location.origin;
-
-    const xml = new DOMParser().parseFromString('<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"></rss>', "application/xml");
-
     function escapeXml (s){
         return s.toString().replace(/&/g, '&amp;')
                .replace(/</g, '&lt;')
@@ -41,6 +38,8 @@ export function genRss (items){
         }
         return el;
     }
+
+    const xml = new DOMParser().parseFromString('<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"></rss>', "application/xml");
     const rss = xml.getElementsByTagName('rss')[0];
 
     const channel = createEl('channel', '');
@@ -56,7 +55,11 @@ export function genRss (items){
         item.appendChild(createEl('author', siteConfig.owner));
         item.appendChild(createEl('title', i.name));
         item.appendChild(createEl('link', origin+'/article/'+i.file));
-        item.appendChild(createEl('description', i.summary));
+        item.appendChild(createEl('description', `
+            <h3><b>${item.name}</b></h3>
+            <span style="display: block">${item.summary}</span>
+            <img src="${item.cover}" alt=""/>
+        `));
         item.appendChild(createEl('pubDate', parseDate(i.modifyTime, false)));
         item.appendChild(createEl('guid', i.time));
 

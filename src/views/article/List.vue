@@ -314,6 +314,7 @@ export default {
             img {
               object-fit: contain;
               background: white;
+              border: none !important;
             }
           }
 

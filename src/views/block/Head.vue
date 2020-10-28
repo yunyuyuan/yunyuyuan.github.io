@@ -48,6 +48,7 @@ export default {
   background: rgba(0, 0, 0, 0.1);
   transition: all .15s linear;
   z-index: $z-index-head;
+  box-shadow: 0 0 0.5rem rgba(255, 255, 255, 0.2);
   &.headroom--unpinned{
     background: rgba(0, 0, 0, 0.6);
   }
