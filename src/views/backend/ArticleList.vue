@@ -16,6 +16,9 @@
       <span class="check-box" :class="{active: allSelected}" @click="changeSelectAll"></span>
       <span class="txt">全选</span>
     </div>
+    <div class="delete" v-else-if="deleting.b" flex>
+      <a>{{deleting.state}}</a>
+    </div>
     <div class="list" flex>
       <div class="init-load" v-if="!inited" flex>
         <svg-icon :name="'loading'"/>
