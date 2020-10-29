@@ -421,13 +421,13 @@ export default {
       cursor: pointer;
       padding: 0.4rem 0.8rem;
       border-radius: 0.2rem;
-      box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
+      box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
       justify-content: center;
       background: #ff8595;
       transition: all .15s linear;
 
       &:hover {
-        background: #ee647e;
+        box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.5);
       }
 
       > svg {
@@ -446,7 +446,7 @@ export default {
         background: #ff1d1d;
       }
       &.use-cache{
-        background: #00da39;
+        background: #7d45ff;
       }
       &.save-cache{
         background: #ff8000;

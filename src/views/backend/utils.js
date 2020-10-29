@@ -35,8 +35,8 @@ export function genRss (items){
     }
     function createEl (tag, html, notEscape){
         const el = xml.createElement(tag);
-        html = html.toString()
         if (html) {
+            html = html.toString()
             el.innerHTML = notEscape?html:escapeXml(html);
         }
         return el;
