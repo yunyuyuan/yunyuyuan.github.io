@@ -713,6 +713,7 @@ export default {
                 border: 1px solid #d8d8d8;
                 cursor: pointer;
                 background: white;
+                justify-content: center;
 
                 &:hover {
                   background: #e6e6e6;
