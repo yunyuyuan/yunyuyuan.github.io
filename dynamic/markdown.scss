@@ -191,7 +191,7 @@
         position: relative;
         > img{
           position: absolute;
-          top: 0.2rem;
+          top: $line-height/2-0.7rem;
           left: 0;
           transform: translateX(calc(-100% - 0.4rem));
           width: 1.4rem;

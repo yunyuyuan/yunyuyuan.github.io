@@ -310,7 +310,7 @@
 }
 .--markdown ul > li.task-list-item > img, .--markdown ol > li.task-list-item > img {
   position: absolute;
-  top: 0.2rem;
+  top: 0.1rem;
   left: 0;
   transform: translateX(calc(-100% - 0.4rem));
   width: 1.4rem;
