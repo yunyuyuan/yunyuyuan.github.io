@@ -26,15 +26,10 @@ export function genRss (items){
                .replace(/"/g, '&quot;')
                .replace(/'/g, '&apos;');
     }
-    function createEl (tag, html, attrs){
+    function createEl (tag, html, notEscape){
         const el = xml.createElement(tag);
         if (html) {
-            el.innerHTML = escapeXml(html);
-        }
-        if (attrs){
-            for (const k in attrs){
-                el.setAttribute(k, escapeXml(attrs[k]));
-            }
+            el.innerHTML = notEscape?html:escapeXml(html);
         }
         return el;
     }
@@ -59,7 +54,7 @@ export function genRss (items){
             <h3><b>${i.name}</b></h3>
             <span style="display: block">${i.summary}</span>
             <img src="${i.cover}" alt=""/>
-        `));
+        `, true));
         item.appendChild(createEl('pubDate', parseDate(i.modifyTime, false)));
         item.appendChild(createEl('guid', i.time));
 
