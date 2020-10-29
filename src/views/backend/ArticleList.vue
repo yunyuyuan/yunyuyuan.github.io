@@ -167,15 +167,11 @@ export default {
           let txt = await res.text();
           zip.file('md.json', txt);
           for (let item of this.selectList) {
-            const file = item.file,
-                  name = this.md.find(v=>v.file===file).name;
-            for (let extend of ['md', 'html']) {
-              this.deleting.state = `下载:${file}/index.${extend}`;
-              let zipFolder = zip.folder(`${name}-${file}`)
-              res = await fetch(`${originPrefix}/md/${file}/index.${extend}?ran=${ranTime}`);
-              txt = await res.text();
-              zipFolder.file(`index.${extend}`, txt);
-            }
+            const file = item.file;
+            this.deleting.state = `下载:${file}.md`;
+            res = await fetch(`${originPrefix}/md/${file}.md?ran=${ranTime}`);
+            txt = await res.text();
+            zip.file(`${file}.md`, txt);
           }
           this.deleting.state = `正在压缩...`;
           let content = await zip.generateAsync({type: "blob"});

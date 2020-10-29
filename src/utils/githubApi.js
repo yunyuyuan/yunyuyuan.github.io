@@ -42,14 +42,10 @@ export class GithubUtils {
     async updateMd(payload, dict) {
         return await this.createCommit([
             {
-                folder: `${dynamicFolder}/md/${payload.folder}/index.md`,
+                folder: `${dynamicFolder}/md/${payload.file}.md`,
                 content: payload.md
-            },
-            {
-                folder: `${dynamicFolder}/md/${payload.folder}/index.html`,
-                content: payload.html
             }
-        ], `更新 md-${payload.folder}`, dict)
+        ], `更新 md-${payload.file}`, dict)
     };
 
     async updateRecord(payload, dict) {
@@ -153,25 +149,12 @@ export class GithubUtils {
 
                 res = await getMdSha(res.tree.sha);
                 for (let i of res.tree) {
-                    if (i.type === 'tree') {
-                        if (folders.indexOf(i.path) !== -1) {
-                            res = await repo.git.trees(i.sha).fetch();
-                            for (let j of res.tree) {
-                                dic.state = `删除 ${i.path}-${j.path}`;
-                                await repo.contents(`${dynamicFolder}/${what}/${i.path}/${j.path}`).remove({
-                                    sha: j.sha,
-                                    message: '删除'
-                                });
-                            }
-                        }
-                    } else {
-                        if (folders.indexOf(i.path.replace('.txt', '')) !== -1) {
-                            dic.state = `删除 ${i.path}`;
-                            await repo.contents(`${dynamicFolder}/${what}/${i.path}`).remove({
-                                sha: i.sha,
-                                message: '删除'
-                            });
-                        }
+                    if (folders.indexOf(i.path.replace('.txt', '').replace('.md', '')) !== -1) {
+                        dic.state = `删除 ${i.path}`;
+                        await repo.contents(`${dynamicFolder}/${what}/${i.path}`).remove({
+                            sha: i.sha,
+                            message: '删除'
+                        });
                     }
                 }
                 resolve([true])

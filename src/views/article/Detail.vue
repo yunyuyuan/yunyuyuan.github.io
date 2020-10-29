@@ -61,7 +61,7 @@ import TheComment from "@/views/comment/index";
 import qrcode from "qrcode";
 import {routeInfo} from "@/route";
 import siteConfig from "@/site-config";
-import {processMdHtml} from "@/utils/parseMd";
+import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
 
 export default {
   name: "Detail",
@@ -112,19 +112,20 @@ export default {
   },
   async mounted() {
     loadFinish();
-    let res = await getText(`${originPrefix}/md/${this.id}/index.html`);
+    let res = await getText(`${originPrefix}/md/${this.id}.md`);
     if (res[0]) {
-      this.html = res[1];
+      this.html = parseMarkdown(res[1]);
     } else {
       this.$message.error(`获取文章失败: ${res[1]}`);
     }
     this.body.addEventListener('scroll', this.moveAside);
     this.loading = false;
     this.$nextTick(() => {
-      processMdHtml(this.$refs.markdown);
+      const el = this.$refs.markdown;
+      processMdHtml(el);
       // 取出anchor为侧栏
       this.anchors = [];
-      let headList = this.$refs.markdown.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
+      let headList = el.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
       headList.forEach(el => {
         this.anchors.push({
           el: el,
@@ -155,8 +156,9 @@ export default {
   },
   methods: {
     moveAside() {
-      const top = this.body.scrollTop-this.$refs.markdown.parentElement.offsetTop;
-      if (this.$refs.markdown.scrollHeight - top > this.$refs.aside.scrollHeight&&top>0) {
+      const markdown = this.$refs.markdown;
+      const top = this.body.scrollTop-markdown.parentElement.offsetTop;
+      if (markdown.scrollHeight - top > this.$refs.aside.scrollHeight&&top>0) {
         this.asideTop = top
       }
     },
@@ -243,6 +245,8 @@ export default {
           flex-direction: column;
           width: 0;
           transition: all .15s ease-out;
+          opacity: 0;
+          height: 0;
           @keyframes to-hide{
             0%{
               opacity: 1;
@@ -258,6 +262,8 @@ export default {
           &.active{
             width: 11.5rem;
             margin-left: .5rem;
+            opacity: 1;
+            height: unset;
             > .anchors{
               width: 100%;
             }

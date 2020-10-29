@@ -204,7 +204,7 @@ export default {
         document.title = '后台-文章-新建';
       }else {
         document.title = '后台-文章-' + this.id;
-        let res = await getText(`${originPrefix}/md/${this.id}/index.md`);
+        let res = await getText(`${originPrefix}/md/${this.id}.md`);
         if (res[0]) {
           mdText = res[1];
         } else {
@@ -343,16 +343,16 @@ export default {
           b: true,
           state: '保存中...'
         };
-        let folderId = new Date().getTime();
-        info.modifyTime = folderId;
+        let fileId = new Date().getTime();
+        info.modifyTime = fileId;
         if (this.id !== 'new') {
-          // 不改folder
-          folderId = this.id;
+          // 不改file
+          fileId = this.id;
         } else {
           // 添加
           // md +1
-          info.file = folderId.toString();
-          info.time = folderId;
+          info.file = fileId.toString();
+          info.time = fileId;
           this.md.push(JSON.parse(JSON.stringify(info)));
         }
         // 执行更新
@@ -369,9 +369,8 @@ export default {
         if (res[0]) {
           // 更新 md 和 html文件
           let res = await this.gitUtil.updateMd({
-            folder: folderId,
-            md: this.mdText,
-            html: this.htmlText
+            file: fileId,
+            md: this.mdText
           }, this.saving);
           if (res[0]) {
             // 更新rss
