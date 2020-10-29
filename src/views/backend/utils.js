@@ -17,10 +17,17 @@ export function delCache (key){
 const siteConfig = require( '@/site-config')
 
 export function genRss (items){
+    if (siteConfig.rss.timeBy==='update'){
+        const temp = items.slice();
+        temp.sort((a, b)=>{
+            return a.modifyTime>b.modifyTime?-1:1
+        });
+        items = temp
+    }
     items = items.slice(0, siteConfig.rss.count)
     const origin = location.origin;
     function escapeXml (s){
-        return s.toString().replace(/&/g, '&amp;')
+        return s.replace(/&/g, '&amp;')
                .replace(/</g, '&lt;')
                .replace(/>/g, '&gt;')
                .replace(/"/g, '&quot;')
@@ -28,6 +35,7 @@ export function genRss (items){
     }
     function createEl (tag, html, notEscape){
         const el = xml.createElement(tag);
+        html = html.toString()
         if (html) {
             el.innerHTML = notEscape?html:escapeXml(html);
         }
@@ -38,9 +46,10 @@ export function genRss (items){
     const rss = xml.getElementsByTagName('rss')[0];
 
     const channel = createEl('channel', '');
-    channel.appendChild(createEl('title', `${siteConfig.owner}的博客`))
+    channel.appendChild(createEl('title', siteConfig.rss.title))
     channel.appendChild(createEl('link', origin))
-    channel.appendChild(createEl('description', `${siteConfig.owner}的博文Rss`))
+    channel.appendChild(createEl('description', siteConfig.rss.description))
+    channel.appendChild(createEl('ttl', siteConfig.rss.ttl))
     channel.appendChild(createEl('category', siteConfig.rss.categories))
     channel.appendChild(createEl('lastBuildDate', parseDate(new Date().getTime(), false)));
     channel.appendChild(createEl('language', 'zh-cn'))
@@ -55,7 +64,8 @@ export function genRss (items){
             <span style="display: block">${i.summary}</span>
             <img src="${i.cover}" alt=""/>
         `, true));
-        item.appendChild(createEl('pubDate', parseDate(i.modifyTime, false)));
+        item.appendChild(createEl('category', i.tags.join('/')))
+        item.appendChild(createEl('pubDate', parseDate((siteConfig.rss.timeBy==='create'?i.time:i.modifyTime), false)));
         item.appendChild(createEl('guid', i.time));
 
         channel.appendChild(item);
