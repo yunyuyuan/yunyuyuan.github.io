@@ -56,9 +56,9 @@ export function genRss (items){
         item.appendChild(createEl('title', i.name));
         item.appendChild(createEl('link', origin+'/article/'+i.file));
         item.appendChild(createEl('description', `
-            <h3><b>${item.name}</b></h3>
-            <span style="display: block">${item.summary}</span>
-            <img src="${item.cover}" alt=""/>
+            <h3><b>${i.name}</b></h3>
+            <span style="display: block">${i.summary}</span>
+            <img src="${i.cover}" alt=""/>
         `));
         item.appendChild(createEl('pubDate', parseDate(i.modifyTime, false)));
         item.appendChild(createEl('guid', i.time));

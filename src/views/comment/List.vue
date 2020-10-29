@@ -314,6 +314,7 @@ export default {
   padding-top: 2rem;
   border-top: 2px solid gray;
   flex-direction: column;
+  flex-shrink: 0;
   .loading{
     width: 100%;
     margin: 2rem 0;
