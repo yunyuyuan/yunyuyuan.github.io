@@ -166,8 +166,7 @@ export default {
           let res = await fetch(`${originPrefix}/json/md.json?ran=${ranTime}`);
           let txt = await res.text();
           zip.file('md.json', txt);
-          for (let item of this.selectList) {
-            const file = item.file;
+          for (let file of this.selectList) {
             this.deleting.state = `下载:${file}.md`;
             res = await fetch(`${originPrefix}/md/${file}.md?ran=${ranTime}`);
             txt = await res.text();
