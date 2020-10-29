@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>yunyuyuan的博客</title><link>https://blog.halberd.cn</link><description>yunyuyuan的博文Rss</description><category>Blog/Web development</category><lastBuildDate>2020-10-29 14:39:42</lastBuildDate><language>zh-cn</language><item><author>yunyuyuan</author><title>论vue-cli项目如何优雅的托管在github page上</title><link>https://blog.halberd.cn/article/1603206409367</link><description>
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>yunyuyuan的博客</title><link>https://blog.halberd.cn</link><description>yunyuyuan的博文Rss</description><category>Blog/Web development</category><lastBuildDate>2020-10-29 16:13:47</lastBuildDate><language>zh-cn</language><item><author>yunyuyuan</author><title>论vue-cli项目如何优雅的托管在github page上</title><link>https://blog.halberd.cn/article/1603206409367</link><description>
             <h3><b>论vue-cli项目如何优雅的托管在github page上</b></h3>
             <span style="display: block">简谈我最近尝试的一些静态网站骚操作</span>
             <img src="https://s1.ax1x.com/2020/10/20/BpxBvQ.png" alt=""/>
@@ -6,4 +6,4 @@
             <h3><b>关于此站建设</b></h3>
             <span style="display: block">第一篇文章，就谈谈本站的建设过程吧!</span>
             <img src="https://s1.ax1x.com/2020/10/08/0wH4oR.jpg" alt=""/>
-        </description><pubDate>2020-10-29 14:39:36</pubDate><guid>1602140660667</guid></item></channel></rss>
+        </description><pubDate>2020-10-29 16:13:40</pubDate><guid>1602140660667</guid></item></channel></rss>
