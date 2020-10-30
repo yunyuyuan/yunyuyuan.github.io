@@ -19,6 +19,7 @@ export default {
   },
   computed: {
     getName() {
+      import(`@/icons/svg/${this.name}.svg`)
       return `#icon-${this.name}`
     },
     calcFill() {
