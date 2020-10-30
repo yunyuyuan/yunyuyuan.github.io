@@ -29,6 +29,7 @@ export default {
   max-width: 60rem;
   margin: 1rem 0;
   flex-direction: column;
+  flex-shrink: 0;
   > .head{
     width: 100%;
     margin-bottom: 1rem;
