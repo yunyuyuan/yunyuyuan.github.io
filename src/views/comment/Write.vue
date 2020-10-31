@@ -2,8 +2,10 @@
   <div class="write" flex>
     <div class="inner" flex>
       <div class="textarea" ref="textarea" :style="{height: textareaHeight}"></div>
-      <div class="utils" flex>
-        <div class="sticker" ref="sticker" :class="{active: showSticker}" flex v-if="config.sticker">
+      <div class="utils" ref="utils" flex>
+        <div class="sticker" data-id="sticker" ref="sticker" :class="{active: showSticker}"
+             :style="{top: stickerPos[0]||'unset', left: stickerPos[1], width: stickerPos[2], bottom: stickerPos[3]||'unset'}"
+             flex v-if="config.sticker">
           <div class="content" flex>
             <div class="inner" :style="{width: `${config.sticker.length}00%`, left: `${stickerSlideNow*-100}%`}" flex>
               <div v-for="item in config.sticker" :style="{width: `${100/config.sticker.length}%`}" flex>
@@ -86,7 +88,6 @@ import '@/assets/style/code-mirror/light-markdown.scss';
 import '@/assets/style/code-mirror/dracula-markdown.scss';
 import LoadingImg from "@/components/LoadingImg";
 import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
-import {hljsAndInsertCopyBtn} from "@/utils/highlight";
 import siteConfig from "@/site-config";
 
 export default {
@@ -117,6 +118,7 @@ export default {
       imageUrl: '',
       showPreview: false,
       stickerSlideNow: 0,
+      stickerPos: [0, 0],
       codeMirror: null,
       focusAt: 0,
       textareaHeight: '0',
@@ -129,12 +131,12 @@ export default {
   inject: ['_config'],
   computed: {
     html() {
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         processMdHtml(this.$refs.markdown, true)
       })
       return parseMarkdown(this.comment);
     },
-    config (){
+    config() {
       return this._config()
     }
   },
@@ -161,13 +163,27 @@ export default {
   methods: {
     enableSticker(e) {
       if (this.showSticker) {
-        document.removeEventListener('click', this.handleStickerDiv)
+        document.removeEventListener('click', this.handleStickerDiv);
+        document.querySelector('section.body').removeEventListener('scroll', this.listenScroll);
         this.showSticker = false;
         return
       }
       this.showSticker = true;
       e.stopPropagation();
+      document.querySelector('section.body').addEventListener('scroll', this.listenScroll);
+      this.listenScroll();
       document.addEventListener('click', this.handleStickerDiv)
+    },
+    listenScroll(){
+      const rect = this.$refs.utils.getBoundingClientRect(),
+          height = window.innerHeight;
+      this.stickerPos = [rect.top + rect.height, rect.left + 'px', rect.width + 'px', false];
+      if ((height - this.stickerPos[0]) < height * 0.36) {
+        this.stickerPos[0] = false;
+        this.stickerPos[3] = height - rect.top + 'px';
+      } else {
+        this.stickerPos[0] += 'px'
+      }
     },
     handleStickerDiv(e) {
       let vue_ = this,
@@ -178,6 +194,7 @@ export default {
           target = target.parentElement;
           if (!target) {
             document.removeEventListener('click', this.handleStickerDiv);
+            document.querySelector('section.body').removeEventListener('scroll', this.listenScroll);
             vue_.showSticker = false;
             break;
           }
@@ -242,12 +259,11 @@ export default {
 
 <style scoped lang="scss">
 @import "src/assets/style/public";
-
-.write {
+.write{
   flex-direction: column;
   width: 80%;
   border-radius: 0.4rem;
-  >.inner{
+  > .inner{
     width: calc(100% - 2px);
     flex-direction: column;
     border: 1px solid #a5a5a5;
@@ -256,124 +272,33 @@ export default {
     &:hover{
       border-color: #ff3700;
     }
-    >.textarea{
+    > .textarea{
       border-radius: 0.4rem 0.4rem 0 0;
-      >::v-deep .CodeMirror{
+      > ::v-deep .CodeMirror{
         width: 100%;
         height: 100%;
         border-radius: inherit;
         font-size: 0.85rem;
       }
     }
-    >.utils {
+    > .utils{
       justify-content: flex-end;
       padding: 0.1rem;
       border-top: 1px dashed gray;
-      position: relative;
-
-      > .sticker {
-        width: 90%;
-        position: absolute;
-        left: 5%;
-        bottom: 105%;
-        border-radius: 0.2rem;
-        height: 0;
-        background: white;
-        flex-direction: column;
-        z-index: 10;
-        overflow: hidden;
-        transition: height .1s linear;
-        &.active{
-          height: 36vh;
-          border: 1px solid #ababab;
-          box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.4);
-        }
-        >.content{
-          width: 100%;
-          height: calc(100% - 1.5rem);
-          overflow: hidden;
-          align-items: flex-start;
-          >.inner{
-            border-radius: inherit;
-            height: 100%;
-            transition: all .1s linear;
-            position: relative;
-            flex-shrink: 0;
-            >div {
-              height: 100%;
-              overflow-y: auto;
-              flex-wrap: wrap;
-              align-items: flex-start;
-              align-content: flex-start;
-
-              > span {
-                width: 3.6rem;
-                height: 3.6rem;
-                border: 1px solid #d8d8d8;
-                cursor: pointer;
-                background: white;
-                justify-content: center;
-
-                &:hover {
-                  background: #e6e6e6;
-
-                  > img {
-                    transform: scale(1.1);
-                  }
-                }
-
-                > img {
-                  transition: transform .1s ease-out;
-                  width: 70%;
-                  height: 70%;
-                  object-fit: contain;
-                }
-              }
-            }
-          }
-        }
-
-        > .switch {
-          width: 100%;
-          height: 1.5rem;
-          flex-shrink: 0;
-          border-top: 1px solid #676767;
-          background: #ececec;
-
-          > span {
-            height: 100%;
-            font-size: 0.8rem;
-            justify-content: center;
-            width: 4rem;
-            border-right: 1px solid #b5b5b5;
-            cursor: pointer;
-            color: black;
-
-            &:not(.active):hover {
-              background: #bababa;
-            }
-
-            &.active {
-              background: #333333;
-              color: white;
-            }
-          }
-        }
-      }
-      >.md{
+      > .md{
         cursor: pointer;
         margin: 0 auto 0 0.5rem;
         &:hover{
-          >svg{
+          > svg{
             fill: #a100ff
           }
         }
-        >svg{
+        > svg{
           width: 1.5rem;
           height: 1.5rem;
         }
       }
-      >span{
+      > span{
         cursor: pointer;
         margin: 0 0.3rem;
         border-radius: 0.2rem;
@@ -385,7 +310,7 @@ export default {
         &:not(.active):hover{
           background: #cbcbcb;
         }
-        >svg{
+        > svg{
           width: 1.6rem;
           height: 1.6rem;
         }
@@ -399,19 +324,16 @@ export default {
         background: #505050;
       }
     }
-    >.submit {
+    > .submit{
       padding: 0.2rem 0;
       justify-content: flex-end;
-
-      > .loading-button, > .single-button {
+      > .loading-button, > .single-button{
         margin-right: 1rem;
         flex-shrink: 0;
       }
-
-      > .single-button {
+      > .single-button{
         background: #ff5858;
-
-        &:hover {
+        &:hover{
           background: gray;
         }
       }
@@ -427,37 +349,31 @@ export default {
       width: calc(100% - 1rem);
     }
   }
-  > .upload-img {
+  > .upload-img{
     flex-direction: column;
-
-    > .inner {
+    > .inner{
       width: 80%;
       height: 80%;
       flex-direction: column;
-
-      > .help {
+      > .help{
         width: 100%;
         overflow-y: auto;
-
-        > p {
+        > p{
           width: 100%;
           text-align: center;
           font-size: 1.2rem;
           margin: 0.6rem 0;
           color: black;
         }
-
-        > b {
+        > b{
           font-size: 0.9rem;
           color: red;
         }
-
-        > div {
+        > div{
           width: 95%;
           border: 1px solid;
           margin: 0.5rem auto;
           flex-direction: column;
-
           > a{
             font-size: 1.1rem;
             color: #ff6600;
@@ -466,7 +382,6 @@ export default {
             margin-top: 0.5rem;
             border: 2px dashed red;
           }
-
           ::v-deep .loading-img{
             width: 90% !important;
             margin: 0.8rem auto;
@@ -477,7 +392,6 @@ export default {
           }
         }
       }
-
       > .submit{
         padding: 1rem 0 0.5rem 0;
         width: 100%;
@@ -500,7 +414,7 @@ export default {
     }
   }
   @include media{
-    >.inner{
+    > .inner{
       > .utils{
         > .sticker{
           left: 0;
@@ -508,10 +422,91 @@ export default {
         }
       }
     }
-    >.upload-img{
-      >.inner{
+    > .upload-img{
+      > .inner{
         width: 95%;
         height: 70%;
+      }
+    }
+  }
+}
+</style>
+<style lang="scss">
+@import "src/assets/style/public";
+div.sticker[data-id=sticker]{
+  position: fixed;
+  z-index: $z-index-dialog;
+  border-radius: 0.2rem;
+  height: 0;
+  background: white;
+  flex-direction: column;
+  overflow: hidden;
+  transition: height .1s linear;
+  &.active{
+    height: 36vh;
+    border: 1px solid #ababab;
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.4);
+  }
+  > .content{
+    width: 100%;
+    height: calc(100% - 1.5rem);
+    overflow: hidden;
+    align-items: flex-start;
+    > .inner{
+      border-radius: inherit;
+      height: 100%;
+      transition: all .1s linear;
+      position: relative;
+      flex-shrink: 0;
+      > div{
+        height: 100%;
+        overflow-y: auto;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        align-content: flex-start;
+        > span{
+          width: 3.6rem;
+          height: 3.6rem;
+          border: 1px solid #d8d8d8;
+          cursor: pointer;
+          background: white;
+          justify-content: center;
+          &:hover{
+            background: #e6e6e6;
+            > img{
+              transform: scale(1.1);
+            }
+          }
+          > img{
+            transition: transform .1s ease-out;
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+          }
+        }
+      }
+    }
+  }
+  > .switch{
+    width: 100%;
+    height: 1.5rem;
+    flex-shrink: 0;
+    border-top: 1px solid #676767;
+    background: #ececec;
+    > span{
+      height: 100%;
+      font-size: 0.8rem;
+      justify-content: center;
+      width: 4rem;
+      border-right: 1px solid #b5b5b5;
+      cursor: pointer;
+      color: black;
+      &:not(.active):hover{
+        background: #bababa;
+      }
+      &.active{
+        background: #333333;
+        color: white;
       }
     }
   }

@@ -9,7 +9,7 @@
         <aside class="info" :style="{transform: `translateY(${asideTop}px)`}" ref="aside" flex>
           <div :class="asideActive===null?'':(asideActive?'active':'deactive')" flex>
             <div class="anchors" flex>
-              <span class="anchor" :class="{active: item.active}" v-for="item in anchors"
+              <span class="anchor" :class="{active: item.active, small: item.small}" v-for="item in anchors"
                     @click="toAnchor(item.el)">{{ item.text }}</span>
             </div>
             <div class="tail" flex>
@@ -130,7 +130,8 @@ export default {
         this.anchors.push({
           el: el,
           text: el.innerText,
-          active: false
+          active: false,
+          small: ['h4', 'h5', 'h6'].indexOf(el.tagName.toLowerCase())!==-1
         });
         el.onclick = () => {
           this.toAnchor(el)
@@ -158,7 +159,7 @@ export default {
     moveAside() {
       const markdown = this.$refs.markdown;
       const top = this.body.scrollTop-markdown.parentElement.offsetTop;
-      if (markdown.scrollHeight - top > this.$refs.aside.scrollHeight&&top>0) {
+      if (markdown.scrollHeight - top > this.$refs.aside.clientHeight&&top>0) {
         this.asideTop = top
       }
     },
@@ -237,11 +238,11 @@ export default {
         position: absolute;
         left: 0;
         top: 0;
-        transition: all .1s ease-out;
         align-items: self-start;
         z-index: 1;
+        max-height: calc(100vh - #{$head-height});
         > div{
-          max-height: 100vh;
+          max-height: calc(100vh - #{$head-height});
           flex-direction: column;
           width: 0;
           transition: all .15s ease-out;
@@ -263,7 +264,7 @@ export default {
             width: 11.5rem;
             margin-left: .5rem;
             opacity: 1;
-            height: unset;
+            height: 100%;
             > .anchors{
               width: 100%;
             }
@@ -293,18 +294,23 @@ export default {
           }
           > .anchors{
             padding: 0.5rem 0;
+            overflow-y: auto;
+            flex-shrink: 1;
             > span{
               margin: 0.4rem 0;
-              padding: 0.4rem 0;
-              font-size: 0.85rem;
+              padding: 0.4rem 0 0.4rem 0.36rem;
+              font-size: 0.9rem;
               transition: all .15s linear;
               cursor: pointer;
-              @include text-overflow(1);
-              word-break: keep-all;
               display: block;
               position: relative;
-              width: 100%;
-              text-align: center;
+              width: calc(100% - 0.2rem);
+              flex-shrink: 0;
+              &.small{
+                font-size: 0.75rem;
+                padding-left: 1rem;
+                width: calc(100% - 1rem);
+              }
               &:after, &:before{
                 position: absolute;
                 content: '';
@@ -316,18 +322,18 @@ export default {
               }
               &:after{
                 bottom: 0;
-                left: 10%;
+                left: 0;
               }
               &:before{
                 top: 0;
-                right: 10%;
+                right: 0;
               }
               &:hover:not(.active):after, &:hover:not(.active):before{
                 background: blue;
-                width: 80%;
+                width: 100%;
               }
               &.active{
-                transform: scale(1.2);
+                font-size: 1rem;
                 font-weight: bold;
                 color: red;
               }

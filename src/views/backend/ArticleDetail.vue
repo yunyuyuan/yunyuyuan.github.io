@@ -678,7 +678,8 @@ export default {
         width: 90%;
         position: absolute;
         left: 5%;
-        top: 105%;
+        top: -5%;
+        transform: translateY(-100%);
         border-radius: 0.2rem;
         height: 0;
         background: white;
