@@ -333,14 +333,10 @@
   display: flex;
   flex-direction: column;
 }
-.--markdown pre:hover > span {
-  opacity: 1;
-}
 .--markdown pre > span {
   display: inline-flex;
   align-items: center;
   text-align: center;
-  opacity: 0;
   background: transparent;
   border: none;
   cursor: pointer;
