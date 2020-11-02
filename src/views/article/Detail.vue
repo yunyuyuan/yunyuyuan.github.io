@@ -33,9 +33,9 @@
             <div class="info">
               <div class="tags" flex>
                 <svg-icon :name="'tag'"/>
-                <a v-for="tag in info.tags||[]":style="{background: $options.filters.color(tag)}" :href="`/article?search-tag=${tag}`" :title="`查看标签${tag}`">{{tag}}</a>
+                <a v-for="tag in info.tags||[]" :style="{background: $options.filters.color(tag)}" :href="`/article?search-tag=${tag}`" :title="`查看标签${tag}`">{{tag}}</a>
               </div>
-              <b>最后修改<time>{{info.modify|time(false)}}</time></b>
+              <b>最后修改<time>{{info.modifyTime|time(false)}}</time></b>
             </div>
           </div>
           <span class="toggle-aside" :class="{active: asideActive}" @click="asideActive = !asideActive" flex

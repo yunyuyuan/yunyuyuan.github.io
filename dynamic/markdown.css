@@ -348,7 +348,7 @@
   margin-left: auto;
   font-family: "Source Code Pro", serif;
 }
-.--markdown pre > span:hover {
+.--markdown pre:hover > span {
   background: #ff5500;
   color: white;
 }
