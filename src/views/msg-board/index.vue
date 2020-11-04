@@ -4,7 +4,7 @@
       <svg-icon :name="'comments'"/>
       <h1>留言板</h1>
     </div>
-    <the-comment :title="'MSG-BOARD'"/>
+    <the-comment :title="'msg-board'"/>
   </div>
 </template>
 

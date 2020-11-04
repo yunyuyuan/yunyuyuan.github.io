@@ -9,7 +9,7 @@
       <div v-else class="login" flex>
         <float-input :name="'token'" :size="0.9" :value="token||''" @input="inputToken"/>
         <single-button :size="0.9" :text="'生成token'" @click.native="genToken"/>
-        <loading-button :icon="'account'" :loading="loging" :size="0.9" :text="'登录'" @click.native="doLogin(true)"/>
+        <loading-button :icon="'account'" :loading="loging" :size="0.9" :class="{disabled: token===''}" :text="'登录'" @click.native="doLogin(true)"/>
         <a ref="a"
            :href="`https://github.com/settings/tokens/new?description=comment to ${name}&scopes=public_repo%2Cwrite:discussion`"
            target="_blank"></a>
@@ -70,7 +70,7 @@ export default {
       this.$refs.a.click()
     },
     async doLogin(remind) {
-      if (this.loging) return;
+      if (this.loging || !this.token) return;
       this.loging = true;
       let res = await getLoginInfo(this.token);
       if (res[0]) {

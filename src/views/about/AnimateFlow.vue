@@ -36,12 +36,12 @@ export default {
       box-sizing: border-box;
       content: attr(data-shadow);
       position: absolute;
-      top: .2rem;
-      left: .2rem;
+      top: 3.2px;
+      left: 3.2px;
       z-index: 0;
       text-shadow: none;
       white-space: normal;
-      letter-spacing: 0.2rem;
+      letter-spacing: 3.2px;
       background-image: linear-gradient(
               45deg,
               transparent 45%,
@@ -49,7 +49,7 @@ export default {
               #a600ff 55%,
               transparent 0
       );
-      background-size: .2rem .2rem;
+      background-size: 3.2px 3.2px;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
 

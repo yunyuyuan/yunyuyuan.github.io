@@ -119,7 +119,6 @@ export default {
     return {
       siteConfig,
       onePageItemsCount: 8,
-      pageInfo: {},
       pageNow: 1,
       itemCount: 0,
       items: [],
@@ -184,13 +183,16 @@ export default {
     },
     calcMdToHtml(text, isReply) {
       text = text.replace(/</g, '&lt;').replace(/(^|\s*)>/g, '$1&gt;');
-      const html = parseMarkdown(text.replace(/^@\w+ ([\s\S]*)$/, '$1'));
+      let html;
       let reply = '';
       if (isReply) {
+        html = parseMarkdown(text.replace(/^@\w+ ([\s\S]*)$/, '$1'));
         let matcher = text.match(/^@(\w+) /);
         if (matcher) {
           reply = `<span class="reply">回复<a class="nick-name" target="_blank" href="https://gtihub.com/${matcher[1]}">@${matcher[1]}</a>:</span>`;
         }
+      }else{
+        html = parseMarkdown(text)
       }
       return reply+html
     },

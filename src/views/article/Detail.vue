@@ -229,7 +229,6 @@ export default {
       }
     }
     > .content{
-      min-width: 50rem;
       max-width: 75rem;
       margin: 1rem auto;
       position: relative;

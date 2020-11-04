@@ -8,6 +8,13 @@
         <svg-icon :name="k"/>
       </a>
     </div>
+    <div class="adjust">
+      <div class="font-size" flex>
+        <single-button :text="'A-'" :disabled="fontSize<=5" :size="0.9" @click.native="changeFont(fontSize<=5, -1)"/>
+        <span>{{fontSize}}</span>
+        <single-button :text="'A+'" :disabled="fontSize>=25" :size="0.9" @click.native="changeFont(fontSize>=25, 1)"/>
+      </div>
+    </div>
     <div class="copyright" flex>
       <span>Copyright (c) {{ config.copyright }} <b write-font>{{ config.name }}</b><b> | {{ domain }}</b></span>
       <span flex>All right reserved
@@ -23,16 +30,19 @@
 import selfImage from '@/image/i.png';
 import {originPrefix} from "@/need";
 import siteConfig from '@/site-config'
+import SingleButton from "@/components/Button";
 
 export default {
   name: "Footer",
+  components: {SingleButton},
   data() {
     return {
       originPrefix,
       siteConfig,
       isDev: process.env.NODE_ENV==='development',
       selfImage,
-      links: ['github', 'bilibili', 'email']
+      links: ['github', 'bilibili', 'email'],
+      fontSize: 0
     }
   },
   computed: {
@@ -43,7 +53,20 @@ export default {
       return this._config()
     }
   },
-  inject: ['_config']
+  inject: ['_config'],
+  created() {
+    const fontSize = +localStorage.getItem('font-size');
+    this.fontSize = fontSize || +getComputedStyle(document.documentElement).fontSize.replace('px', '');
+  },
+  methods: {
+    changeFont (cant, delta){
+      if (!cant){
+        this.fontSize += delta;
+        localStorage.setItem('font-size', this.fontSize.toString());
+        document.documentElement.style.fontSize = this.fontSize + 'px';
+      }
+    }
+  }
 }
 </script>
 
@@ -85,6 +108,7 @@ footer{
     }
   }
   > .social-media{
+    margin-right: auto;
     > a{
       margin: 0 0.8rem;
       background: white;
@@ -99,6 +123,18 @@ footer{
       > svg{
         width: 1.4rem;
         height: 1.4rem;
+      }
+    }
+  }
+  >.adjust{
+    margin: auto;
+    >.font-size{
+      >.single-button{
+        background: black;
+      }
+      >span{
+        margin: 0 0.5rem;
+        color: white;
       }
     }
   }

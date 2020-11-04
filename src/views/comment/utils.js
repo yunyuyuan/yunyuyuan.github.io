@@ -14,13 +14,17 @@ let owner = siteConfig.owner,
     headers = {
         Authorization: 'token'
     },
-    http = function (data, usePublic) {
+    http = function (data, usePublic, manualToken) {
         return new Promise(resolve => {
             axios({
                 url: 'https://api.github.com/graphql',
                 method: 'post',
                 data,
-                headers: usePublic?publicHeaders:headers
+                headers: manualToken?{
+                        Authorization: 'token '+manualToken
+                    }
+                    :
+                    (usePublic?publicHeaders:headers)
             }).then(res => {
                 resolve([true, res])
             }).catch(err => {
@@ -101,11 +105,13 @@ export function removeToken() {
     headers.Authorization = '';
 }
 
+const commentPrefix = 'COMMENT-'
+
 export async function getPageComment({title, count, cursor}) {
     return await http({
             query:
                 `{
-  search(query: "${title}+in:title repo:${owner}/${repo} is:open", type: ISSUE, ${(cursor && cursor.indexOf(',after') === 0) || !cursor ? 'first' : 'last'}: ${count}${cursor || ''}) {
+  search(query: "${commentPrefix}${title}+in:title repo:${owner}/${repo} is:open", type: ISSUE, ${((cursor && (cursor.search(',after') === 0)) || !cursor) ? 'first' : 'last'}: ${count}${cursor || ''}) {
     issueCount
     nodes {
       ... on Issue {
@@ -122,8 +128,8 @@ export async function getPageComment({title, count, cursor}) {
         reactionGroups {
           viewerHasReacted
           users {
-            totalCount
-          }
+            totalCountEnvironment
+          }Environment
           content
         }
         comments(first: ${count}) {
@@ -153,6 +159,32 @@ export async function getPageComment({title, count, cursor}) {
             startCursor
           }
         }
+      }
+    }
+  }
+}`
+    }, true)
+}
+
+export async function getPageCommentForBackend({state, title, count, cursor}) {
+    return await http({
+        query:
+            `{
+  search(query: "${commentPrefix}${title}+in:title repo:${owner}/${repo}${state?` is:${state}`:''}", type: ISSUE, ${((cursor && (cursor.search(',after') === 0)) || !cursor) ? 'first' : 'last'}: ${count}${cursor || ''}) {
+    issueCount
+    nodes {
+      ... on Issue {
+        author {
+          avatarUrl
+          login
+          url
+        }
+        body
+        number
+        id
+        title
+        state
+        authorAssociation
       }
     }
   }
@@ -204,7 +236,7 @@ export async function createComment({title, body}) {
     return await http({
             query:
                 `mutation {
-  createIssue(input: {repositoryId: "${repoId}", title: "${title}", body: "${body}"}) {
+  createIssue(input: {repositoryId: "${repoId}", title: "${commentPrefix}${title}", body: "${body}"}) {
     issue {
       id
     }
@@ -213,7 +245,7 @@ export async function createComment({title, body}) {
     }, false)
 }
 
-export async function closeOrDeleteComment(type, id) {
+export async function closeOrDeleteComment(type, id, token) {
     return await http({
             query:
                 `mutation {
@@ -222,7 +254,7 @@ export async function closeOrDeleteComment(type, id) {
   }
 }
 `
-    }, false)
+    }, false, token)
 }
 
 export async function createReply({body, id}) {

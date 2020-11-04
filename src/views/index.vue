@@ -6,7 +6,8 @@
     <div class="bg" v-else>
       <div id="particles-bg"></div>
       <div id="comet-bg">
-        <div class="comet" v-for="i in randLen" :style="{left: `${50-Math.random()*100}px`,top: `${10+Math.random()*80}%`,animationDelay: `${Math.random()*5}s`,animationDuration: `${3+Math.random()*4}s`}"></div>
+        <div class="comet" v-for="i in randLen"
+             :style="{left: `${50-Math.random()*100}px`,top: `${10+Math.random()*80}%`,animationDelay: `${Math.random()*5}s`,animationDuration: `${3+Math.random()*4}s`}"></div>
       </div>
     </div>
     <the-head :class="{'show-bg': showBg}" v-if="showHead" @toggle="toggleShowBg"/>
@@ -52,15 +53,15 @@ export default {
   data() {
     return {
       config: {
-          name: "",
-          describe: "",
-          copyright: "",
-          github: "",
-          bilibili: "",
-          email: "",
-          sticker: [],
-          backgroundImg: "random",
-          friends: []
+        name: "",
+        describe: "",
+        copyright: "",
+        github: "",
+        bilibili: "",
+        email: "",
+        sticker: [],
+        backgroundImg: "random",
+        friends: []
       },
       comp: null,
 
@@ -89,13 +90,13 @@ export default {
       return this.config.backgroundImg === 'img' || (this.config.backgroundImg === 'random' && this.rand)
     },
     rand() {
-      return Math.floor(Math.random()*10)%2===0
+      return Math.floor(Math.random() * 10) % 2 === 0
     },
     computeConfig() {
       return this.config
     },
-    randLen (){
-      return 3+Math.floor(Math.random()*4)
+    randLen() {
+      return 3 + Math.floor(Math.random() * 4)
     }
   },
   async created() {
@@ -118,48 +119,50 @@ export default {
     }
   },
   async mounted() {
+    const fontSize = localStorage.getItem('font-size');
+    if (fontSize) {
+      document.documentElement.style.fontSize = fontSize + 'px';
+    }
     Vue.prototype.$message = this.$refs.message;
     await this.updateConfig();
-    this.$nextTick(() => {
-      if (!this.isBgImg) {
-        //particle
-        const tsparticles = () => import('tsparticles');
-        tsparticles().then(({particlesJS}) => {
-          particlesJS('particles-bg', {
-            particles: {
-              number: {value: 100, density: {enable: true, value_area: 800}},
-              color: {value: "#ffffff"},
-              shape: {
-                type: "circle",
-                stroke: {width: 0, color: "#000000"},
-                polygon: {nb_sides: 5},
-              },
-              opacity: {
-                value: 1,
-                random: true,
-                anim: {enable: true, speed: 1, opacity_min: 0, sync: false}
-              },
-              size: {
-                value: 3,
-                random: true,
-                anim: {enable: false, speed: 4, size_min: 0.3, sync: false}
-              },
-              move: {
-                enable: true,
-                speed: 1,
-                direction: 'none',
-                random: true,
-                straight: false,
-                out_mode: 'out',
-                bounce: false,
-                attract: {enable: false, rotateX: 600, rotateY: 600}
-              }
+    if (!this.isBgImg) {
+      //particle
+      const tsparticles = () => import('tsparticles');
+      tsparticles().then(({particlesJS}) => {
+        particlesJS('particles-bg', {
+          particles: {
+            number: {value: 100, density: {enable: true, value_area: 800}},
+            color: {value: "#ffffff"},
+            shape: {
+              type: "circle",
+              stroke: {width: 0, color: "#000000"},
+              polygon: {nb_sides: 5},
             },
-            retina_detect: true
-          });
-        })
-      }
-    })
+            opacity: {
+              value: 1,
+              random: true,
+              anim: {enable: true, speed: 1, opacity_min: 0, sync: false}
+            },
+            size: {
+              value: 3,
+              random: true,
+              anim: {enable: false, speed: 4, size_min: 0.3, sync: false}
+            },
+            move: {
+              enable: true,
+              speed: 1,
+              direction: 'none',
+              random: true,
+              straight: false,
+              out_mode: 'out',
+              bounce: false,
+              attract: {enable: false, rotateX: 600, rotateY: 600}
+            }
+          },
+          retina_detect: true
+        });
+      })
+    }
   },
   methods: {
     toggleShowBg(b) {
@@ -184,23 +187,25 @@ export default {
 
 <style scoped lang="scss">
 @import "src/assets/style/public";
-#index{
+
+#index {
   height: 100%;
   width: 100%;
   position: relative;
-  > .bg{
+
+  > .bg {
     position: absolute;
     object-fit: cover;
     width: 100%;
     height: 100%;
     z-index: $z-index-bg;
     overflow: hidden;
-    @at-root #particles-bg{
+    @at-root #particles-bg {
       width: 100%;
       height: 100%;
       background: linear-gradient(to bottom, #16161e, #3a2e49);
     }
-    @at-root #comet-bg{
+    @at-root #comet-bg {
       position: absolute;
       left: 0;
       top: 0;
@@ -209,7 +214,7 @@ export default {
       display: block;
       transform: rotateZ(45deg);
       transform-origin: center center;
-      > .comet{
+      > .comet {
         position: absolute;
         height: 2px;
         background: linear-gradient(-45deg, rgba(95, 145, 255, 1), rgba(0, 0, 255, 0));
@@ -218,7 +223,8 @@ export default {
         animation-name: tail, shooting;
         animation-timing-function: ease-in-out;
         animation-iteration-count: infinite;
-        &:before, &:after{
+
+        &:before, &:after {
           content: '';
           position: absolute;
           top: calc(50% - 1px);
@@ -234,54 +240,57 @@ export default {
           animation-duration: inherit;
           animation-delay: inherit;
         }
-        &:after{
+
+        &:after {
           transform: translateX(50%) rotateZ(-45deg);
         }
       }
-      @keyframes tail{
-        0%{
+
+      @keyframes tail {
+        0% {
           width: 0;
         }
-        30%{
+        30% {
           width: 100px;
         }
-        100%{
+        100% {
           width: 0;
         }
       }
 
-      @keyframes shining{
-        0%{
+      @keyframes shining {
+        0% {
           width: 0;
         }
-        50%{
+        50% {
           width: 30px;
         }
-        100%{
+        100% {
           width: 0;
         }
       }
 
-      @keyframes shooting{
-        0%{
+      @keyframes shooting {
+        0% {
           transform: translateX(0);
         }
-        100%{
+        100% {
           transform: translateX(100vmax);
         }
       }
 
-      @keyframes sky{
-        0%{
+      @keyframes sky {
+        0% {
           transform: rotate(45deg);
         }
-        100%{
+        100% {
           transform: rotate(45 + 360deg);
         }
       }
     }
   }
-  > .body{
+
+  > .body {
     position: fixed;
     left: 0;
     top: 0;
@@ -292,14 +301,17 @@ export default {
     flex-direction: column;
     transition: opacity .2s linear;
     opacity: 1;
-    &.show-bg{
+
+    &.show-bg {
       opacity: 0;
     }
-    &.show-head{
+
+    &.show-head {
       padding-top: $head-height;
       height: calc(100% - #{$head-height});
     }
-    &.mask-bg{
+
+    &.mask-bg {
       background: rgba(0, 0, 0, 0.1);
     }
   }
@@ -308,29 +320,31 @@ export default {
 
 <style lang="scss">
 @import "src/assets/style/public";
-html, body{
+
+html, body {
   width: 100%;
   height: 100%;
   font-size: 16px;
-  @include media{
-    font-size: 14px;
-  }
-  &[unselectable]{
+
+  &[unselectable] {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
     -ms-user-select: none;
   }
 }
-*{
+
+* {
   margin: 0;
   padding: 0;
 }
-*[flex]{
+
+*[flex] {
   display: flex;
   align-items: center;
 }
-*[is-dialog]{
+
+*[is-dialog] {
   position: fixed;
   top: 0;
   left: 0;
@@ -339,11 +353,13 @@ html, body{
   z-index: $z-index-dialog;
   background: rgba(0, 0, 0, 0.4);
   justify-content: space-around;
-  &, > .inner{
+
+  &, > .inner {
     display: flex;
     align-items: center;
   }
-  > .inner{
+
+  > .inner {
     background: white;
     border-radius: 1rem;
     flex-direction: column;
@@ -351,81 +367,104 @@ html, body{
     border: 1px solid #939393;
   }
 }
-*[write-font]{
+
+*[write-font] {
   font-family: "write-font", serif;
 }
-*[data-viewer]{
+
+*[data-viewer] {
   cursor: zoom-in;
 }
-input, textarea, select, button{
+
+input, textarea, select, button {
   outline: none;
   resize: none;
   font-family: "Source Code Pro", serif;
 }
-table{
+
+table {
   border-collapse: collapse;
   box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
-  tr{
-    td{
+
+  tr {
+    td {
     }
   }
-  thead{
+
+  thead {
     background: #2b2b2b;
     border-bottom: 2px solid #9f9f9f;
-    td, th{
+
+    td, th {
       padding: 0.5rem 0;
       color: white;
       font-size: 1.06rem;
       text-align: center;
-      &:not(:last-of-type){
+
+      &:not(:last-of-type) {
         border-right: 1px solid #d2d2d2;
       }
     }
   }
-  tbody{
-    tr{
-      &:not(:last-of-type){
+
+  tbody {
+    tr {
+      &:not(:last-of-type) {
         border-bottom: 1px solid #d2d2d2;
       }
+
       background: white;
       transition: all .1s linear;
-      &:nth-child(even){
+
+      &:nth-child(even) {
         background: #f5f5f5;
       }
-      &:hover{
+
+      &:hover {
         background: #ebfffc;
       }
-      td{
+
+      td {
         padding: 0.4rem 0;
-        &:not(:last-of-type){
+
+        &:not(:last-of-type) {
           border-right: 1px solid #d2d2d2;
         }
       }
     }
   }
 }
-::-webkit-scrollbar{
-  width: 0.5rem;
-  height: 0.5rem;
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
+
 ::-webkit-scrollbar-corner,
-::-webkit-scrollbar-button{
+::-webkit-scrollbar-button {
   display: none;
 }
-::-webkit-scrollbar-thumb{
-  border-radius: 0.5rem;
+
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
   background: #404040;
   border: 1px solid #828282;
 }
-::-webkit-scrollbar-thumb:hover{
+
+::-webkit-scrollbar-thumb:hover {
   background: #323232
 }
-::-webkit-scrollbar-track{
-  border-radius: 0.5rem;
+
+::-webkit-scrollbar-track {
+  border-radius: 8px;
   background: transparent;
 }
-@include media{
-  ::-webkit-scrollbar{
+
+@include media {
+  html, body {
+    font-size: 14px;
+  }
+  ::-webkit-scrollbar {
     width: 0;
     height: 0;
   }

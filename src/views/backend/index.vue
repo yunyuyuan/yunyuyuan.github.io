@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import Login from "./Login";
+import Login from "./utils/Login";
 import {getText, loadFinish, parseAjaxError} from "@/utils/utils";
 import LoadingButton from "@/components/LoadingButton";
 import {originPrefix} from "@/need";
@@ -57,43 +57,47 @@ export default {
       },
       {
         path: '/config',
-        component: ()=>import('@/views/backend/Config')
+        component: ()=>import('@/views/backend/config/Config')
       },
       {
         path: '/article',
-        component: ()=>import('@/views/backend/Article'),
+        component: ()=>import('@/views/backend/article/Article'),
         children: [
           {
             path: '',
-            component: ()=>import('@/views/backend/ArticleList'),
+            component: ()=>import('@/views/backend/article/ArticleList'),
           },
           {
             path: ':id',
-            component: ()=>import('@/views/backend/ArticleDetail'),
+            component: ()=>import('@/views/backend/article/ArticleDetail'),
           }
         ]
       },
       {
         path: '/record',
-        component: ()=>import('@/views/backend/Record'),
+        component: ()=>import('@/views/backend/record/Record'),
         children: [
           {
             path: '',
-            component: ()=>import('@/views/backend/RecordList'),
+            component: ()=>import('@/views/backend/record/RecordList'),
           },
           {
             path: ':id',
-            component: ()=>import('@/views/backend/RecordDetail'),
+            component: ()=>import('@/views/backend/record/RecordDetail'),
           }
         ]
       },
       {
+        path: '/comments',
+        component: ()=>import('@/views/backend/comment/Comment')
+      },
+      {
         path: '/theme',
-        component: ()=>import('@/views/backend/Theme')
+        component: ()=>import('@/views/backend/theme/Theme')
       },
       {
         path: '/version',
-        component: ()=>import('@/views/backend/Version')
+        component: ()=>import('@/views/backend/version/Version')
       }
     ]
   }),
@@ -104,6 +108,7 @@ export default {
       showLogin: false,
       updating: false,
       gitUtil: null,
+      token: '',
       menu: [
         {
           name: '配置',
@@ -130,17 +135,26 @@ export default {
           pathName: '/version',
           icon: 'version'
         },
+        {
+          name: '评论',
+          pathName: '/comments',
+          icon: 'comments'
+        },
       ]
     }
   },
   computed: {
     computeGitUtil (){
       return this.gitUtil
+    },
+    computeToken (){
+      return this.token
     }
   },
   provide() {
     return {
-      _gitUtil: () => this.computeGitUtil
+      _gitUtil: () => this.computeGitUtil,
+      _token: () => this.computeToken
     }
   },
   mounted() {
@@ -151,8 +165,9 @@ export default {
       this.showMenu = !this.showMenu;
       localStorage.setItem('show-menu', this.showMenu.toString());
     },
-    initGitUtil (gitUtil){
-      this.gitUtil = gitUtil
+    initGitUtil ({instance, token}){
+      this.gitUtil = instance;
+      this.token = token
     },
     async loginFinish(withUpdate) {
       this.showLogin = false;
@@ -344,11 +359,7 @@ export default {
     background: #ff344f;
     width: 2.4rem;
     margin: 0 0.5rem;
-    &[deleting]{
-      background: #727272;
-      cursor: not-allowed;
-    }
-    &:not([deleting]):hover{
+    &:not(.disabled):hover{
       background: #f1314a;
     }
   }

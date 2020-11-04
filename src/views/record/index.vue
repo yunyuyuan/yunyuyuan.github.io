@@ -67,10 +67,10 @@ export default {
   width: 90%;
   >.loading{
     width: 100%;
-    margin: 3rem 0;
+    margin: 48px 0;
     justify-content: center;
     >svg{
-      width: 5rem;
+      width: 90px;
       height: 5rem;
     }
   }
