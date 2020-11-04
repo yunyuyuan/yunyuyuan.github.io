@@ -127,10 +127,10 @@ export async function getPageComment({title, count, cursor}) {
         authorAssociation
         reactionGroups {
           viewerHasReacted
-          users {
-            totalCountEnvironment
-          }Environment
           content
+          users {
+            totalCount
+          }
         }
         comments(first: ${count}) {
           totalCount

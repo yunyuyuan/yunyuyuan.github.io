@@ -138,7 +138,7 @@ export default {
       let res = await getPageComment({
         count: this.onePageItemsCount,
         title: this.title,
-        cursor: cursor
+        cursor
       });
       if (res[0]) {
         let data = res[1].data.data.search;
