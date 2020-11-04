@@ -38,7 +38,7 @@ export default {
     return {
       updating: false,
       info: {},
-      keys: ["name", "describe", "copyright", "github", "bilibili", "email"],
+      keys: ["name", "describe", "copyright", "github", "email"],
     }
   },
   computed: {

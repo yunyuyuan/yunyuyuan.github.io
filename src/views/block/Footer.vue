@@ -3,7 +3,7 @@
     <a href="/backend" class="favicon" flex title="后台管理">
       <img :src="`${originPrefix}/${siteConfig.avatar}?stamp=${siteConfig.timeStamp}`"/>
     </a>
-    <div class="social-media" flex>
+    <div class="link" flex>
       <a v-for="k in links" :key="k" target="_blank" :href="config[k]" :title="k" flex>
         <svg-icon :name="k"/>
       </a>
@@ -41,7 +41,7 @@ export default {
       siteConfig,
       isDev: process.env.NODE_ENV==='development',
       selfImage,
-      links: ['github', 'bilibili', 'email'],
+      links: ['github', 'email'],
       fontSize: 0
     }
   },
@@ -107,7 +107,7 @@ footer{
       width: 90%;
     }
   }
-  > .social-media{
+  > .link{
     margin-right: auto;
     > a{
       margin: 0 0.8rem;

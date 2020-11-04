@@ -57,7 +57,6 @@ export default {
         describe: "",
         copyright: "",
         github: "",
-        bilibili: "",
         email: "",
         sticker: [],
         backgroundImg: "random",
