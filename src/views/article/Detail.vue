@@ -15,9 +15,9 @@
             <div class="tail" flex>
               <div class="share" flex title="二维码">
                 <div class="qr">
-                <span flex>
-                  <svg-icon :name="'qr'"/>
-                </span>
+                  <span flex>
+                    <svg-icon :name="'qr'"/>
+                  </span>
                   <div flex>
                     <div class="load" v-if="!qrcode">
                       <svg-icon :name="'loading'"/>
@@ -346,17 +346,17 @@ export default {
               margin-bottom: 1rem;
               > .qr{
                 position: relative;
+                &:hover{
+                  > div{
+                    height: 10rem;
+                    width: 10rem;
+                  }
+                }
                 > span{
                   cursor: pointer;
                   > svg{
                     width: 2rem;
                     height: 2rem;
-                  }
-                  &:hover{
-                    ~ div{
-                      height: 10rem;
-                      width: 10rem;
-                    }
                   }
                 }
                 > div{

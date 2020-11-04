@@ -34,7 +34,7 @@
             <td>
               <div flex>
                 <img :src="item.avatar" alt="avatar"/>
-                <span>{{item.nick}}</span>
+                <a target="_blank" :href="`https://github.com/${item.nick}`">{{item.nick}}</a>
               </div>
             </td>
             <td>
@@ -227,8 +227,13 @@ export default {
             width: 1.6rem;
             height: 1.6rem;
           }
-          >span{
+          >a{
             font-size: 0.95rem;
+            text-decoration: none;
+            color: black;
+            &:hover{
+              color: #001aff;
+            }
           }
         }
         &:nth-child(2){
