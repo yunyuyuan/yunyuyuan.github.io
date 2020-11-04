@@ -378,6 +378,10 @@ export default {
     }
     >.body{
       width: 100%;
+      >div{
+        width: 99% !important;
+        margin-left: 0.5% !important;
+      }
     }
   }
 }

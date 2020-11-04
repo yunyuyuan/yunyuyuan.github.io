@@ -212,8 +212,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../../../assets/style/public";
-
 .record-detail{
   flex-direction: column;
   > .operate{
@@ -366,10 +364,6 @@ export default {
         padding: 0.3rem;
       }
     }
-  }
-  @include media{
-    width: 99% !important;
-    margin-left: 0.5% !important;
   }
 }
 </style>

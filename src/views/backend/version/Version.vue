@@ -172,8 +172,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../../../assets/style/public";
-
 .version{
   min-height: calc(100% - 2rem);
   position: relative;
@@ -276,10 +274,6 @@ export default {
         line-height: 1.5rem;
       }
     }
-  }
-  @include media{
-    width: 99% !important;
-    margin-left: 0.5% !important;
   }
 }
 </style>

@@ -313,9 +313,5 @@ export default {
       }
     }
   }
-  @include media{
-    width: 99% !important;
-    margin-left: 0.5% !important;
-  }
 }
 </style>

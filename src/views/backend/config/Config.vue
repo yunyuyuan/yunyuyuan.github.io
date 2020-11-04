@@ -234,7 +234,6 @@ export default {
     }
   }
   @include media{
-    width: 99% !important;
     >.list{
       .float-input {
         width: 95% !important;
