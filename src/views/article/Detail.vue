@@ -48,7 +48,7 @@
         </div>
         <span v-else :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html" v-viewer></span>
       </div>
-      <the-comment v-if="this.info" :title="this.info.file"/>
+      <the-comment v-if="this.info.file" :title="this.info.file"/>
     </div>
   </div>
 </template>
