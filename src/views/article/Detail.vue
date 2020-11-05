@@ -214,6 +214,7 @@ export default {
         position: relative;
         min-width: 60%;
         text-align: center;
+        font-size: 1.5rem;
         >time{
           content: attr(data-time);
           position: absolute;
