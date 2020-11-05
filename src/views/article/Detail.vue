@@ -10,7 +10,7 @@
           <div :class="asideActive===null?'':(asideActive?'active':'deactive')" flex>
             <div class="anchors" flex>
               <span class="anchor" :class="{active: item.active, small: item.small}" v-for="item in anchors"
-                    @click="toAnchor(item.el)">{{ item.text }}</span>
+                    @click="toAnchor(item.el)" flex><span></span>{{ item.text }}</span>
             </div>
             <div class="tail" flex>
               <div class="share" flex title="二维码">
@@ -125,7 +125,8 @@ export default {
       processMdHtml(el);
       // 取出anchor为侧栏
       this.anchors = [];
-      let headList = el.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
+      const headList = el.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
+      const mainAnchor = el.querySelectorAll('h1[id], h2[id], h3[id]');
       headList.forEach(el => {
         this.anchors.push({
           el: el,
@@ -140,7 +141,7 @@ export default {
       // 监听滚动到anchor
       this.body.onscroll = () => {
         let last = {};
-        for (let el of headList) {
+        for (let el of mainAnchor) {
           if (last && el.getBoundingClientRect().top > document.querySelector('header.the-head').scrollHeight) {
             break
           }
@@ -301,14 +302,26 @@ export default {
               font-size: 0.9rem;
               transition: all .15s linear;
               cursor: pointer;
-              display: block;
               position: relative;
               width: calc(100% - 0.2rem);
               flex-shrink: 0;
+              color: black;
               &.small{
-                font-size: 0.75rem;
-                padding-left: 1rem;
-                width: calc(100% - 1rem);
+                color: rgba(20, 20, 20);
+                font-size: .75rem;
+                >span {
+                  margin-left: .8rem;
+                  background: white;
+                }
+              }
+              >span{
+                width: .55rem;
+                height: .55rem;
+                border: 2px solid gray;
+                background: gray;
+                border-radius: 50%;
+                flex-shrink: 0;
+                margin-right: .3rem;
               }
               &:after, &:before{
                 position: absolute;
@@ -334,7 +347,12 @@ export default {
               &.active{
                 font-size: 1rem;
                 font-weight: bold;
-                color: red;
+                >span{
+                  background: #00ffe1;
+                }
+                &.small{
+                  font-size: .85rem;
+                }
               }
             }
           }

@@ -227,13 +227,8 @@ export default {
             width: 1.6rem;
             height: 1.6rem;
           }
-          >a{
+          >span{
             font-size: 0.95rem;
-            text-decoration: none;
-            color: black;
-            &:hover{
-              color: #001aff;
-            }
           }
         }
         &:nth-child(2){
@@ -243,6 +238,14 @@ export default {
             >img{
               width: 2.5rem;
               height: 2.5rem;
+            }
+            >a{
+              font-size: .85rem;
+              text-decoration: none;
+              color: black;
+              &:hover{
+                color: #001aff;
+              }
             }
           }
         }
