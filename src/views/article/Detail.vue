@@ -126,7 +126,6 @@ export default {
       // 取出anchor为侧栏
       this.anchors = [];
       const headList = el.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
-      const mainAnchor = el.querySelectorAll('h1[id], h2[id], h3[id]');
       headList.forEach(el => {
         this.anchors.push({
           el: el,
@@ -141,7 +140,7 @@ export default {
       // 监听滚动到anchor
       this.body.onscroll = () => {
         let last = {};
-        for (let el of mainAnchor) {
+        for (let el of headList) {
           if (last && el.getBoundingClientRect().top > document.querySelector('header.the-head').scrollHeight) {
             break
           }
@@ -298,8 +297,8 @@ export default {
             overflow-y: auto;
             flex-shrink: 1;
             > span{
-              margin: 0.4rem 0;
-              padding: 0.4rem 0 0.4rem 0.36rem;
+              margin: 0.3rem 0;
+              padding: 0.2rem 0 0.4rem 0.36rem;
               font-size: 0.9rem;
               transition: all .15s linear;
               cursor: pointer;
@@ -310,14 +309,15 @@ export default {
               &.small{
                 color: rgba(20, 20, 20);
                 font-size: .75rem;
+                margin: 0.2rem 0;
                 >span {
                   margin-left: .8rem;
                   background: white;
                 }
               }
               >span{
-                width: .55rem;
-                height: .55rem;
+                width: .45rem;
+                height: .45rem;
                 border: 2px solid gray;
                 background: gray;
                 border-radius: 50%;
@@ -348,9 +348,6 @@ export default {
               &.active{
                 font-size: 1rem;
                 font-weight: bold;
-                >span{
-                  background: #00ffe1;
-                }
                 &.small{
                   font-size: .85rem;
                 }
