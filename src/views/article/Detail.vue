@@ -298,7 +298,7 @@ export default {
             flex-shrink: 1;
             > span{
               margin: 0.3rem 0;
-              padding: 0.2rem 0 0.4rem 0.36rem;
+              padding: 0.2rem 0 0.2rem 0.2rem;
               font-size: 0.9rem;
               transition: all .15s linear;
               cursor: pointer;
