@@ -25,7 +25,7 @@
             <th>操作</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody v-viewer>
           <tr v-for="item in list" :key="item.id">
             <td>
               <svg-icon :name="item.state.toLowerCase()==='open'?'checked':'unchecked'"/>

@@ -34,7 +34,7 @@
         <tbody>
         <tr v-for="item in searchResult" :key="item.file">
           <router-link class="link" tag="td" :to="'/record/'+item.file">
-            <img :src="item.images[0]" alt="cover"/>
+            <loading-img :src="item.images[0]" :size="[-1,-1]"/>
           </router-link>
           <td>
             <span>{{ item.summary }}</span>
@@ -58,10 +58,11 @@ import {parseAjaxError, sortByTime} from "@/utils/utils";
 import jszip from "jszip";
 import {originPrefix} from "@/need";
 import * as fileSaver from "file-saver";
+import LoadingImg from "@/components/LoadingImg";
 
 export default {
   name: "RecordList",
-  components: {LoadingButton, SingleButton},
+  components: {LoadingImg, LoadingButton, SingleButton},
   props: {
     record: {
       type: Array,
@@ -298,9 +299,12 @@ export default {
             &.link{
               cursor: pointer;
             }
-            img{
+            .loading-img{
               width: 100%;
-              object-fit: contain;
+              img{
+                width: 100%;
+                object-fit: contain;
+              }
             }
             > span{
               @include text-overflow(4);
