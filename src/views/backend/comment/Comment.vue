@@ -29,7 +29,7 @@
           <tr v-for="item in list" :key="item.id">
             <td>
               <svg-icon :name="item.state.toLowerCase()==='open'?'checked':'unchecked'"/>
-              <span>{{item.title}}</span>
+              <a :href="calcHref(item.title)">{{item.title}}</a>
             </td>
             <td>
               <div flex>
@@ -127,6 +127,14 @@ export default {
           processMdHtml(el, true)
         })
       })
+    },
+    calcHref (title){
+      const tail = title.replace(/^COMMENT-/, '');
+      if (tail === 'msg-board'){
+        return '/msg-board'
+      }else{
+        return '/article/'+tail
+      }
     },
     async turnPage(p) {
       await this.doSearch(`,after: "${btoa(`cursor:${(p-1)*this.onePageItemsCount}`)}"`);
@@ -227,7 +235,7 @@ export default {
             width: 1.6rem;
             height: 1.6rem;
           }
-          >span{
+          >a{
             font-size: 0.95rem;
           }
         }
