@@ -92,6 +92,10 @@ export default {
         component: ()=>import('@/views/backend/comment/Comment')
       },
       {
+        path: '/dashboard',
+        component: ()=>import('@/views/backend/dashboard/Dashboard')
+      },
+      {
         path: '/theme',
         component: ()=>import('@/views/backend/theme/Theme')
       },
@@ -134,6 +138,11 @@ export default {
           name: '版本',
           pathName: '/version',
           icon: 'version'
+        },
+        {
+          name: '面板',
+          pathName: '/dashboard',
+          icon: 'dashboard'
         },
         {
           name: '评论',
