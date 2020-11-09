@@ -20,7 +20,7 @@
         <svg-icon :name="'loading'"/>
       </div>
       <div class="blog" v-else>
-        <div v-for="item in this.pagedList" :key="item.file" class="item"
+        <div v-for="(item, idx) in this.pagedList" :key="item.file" class="item"
              flex>
           <div class="time">
             <span>{{ item.time | time(true) }}</span>
@@ -35,9 +35,13 @@
               <b>{{ item.name }}</b>
               <span>{{ item.summary }}</span>
               <div class="tags" flex>
-              <span v-for="tag in item.tags" @click.prevent.stop="addTag(tag)"
-                    :style="{background: $options.filters.color(tag)}"
-                    :title="`搜索-${tag}`">{{ tag }}</span>
+                <span class="tag" v-for="tag in item.tags" @click.prevent.stop="addTag(tag)"
+                      :style="{background: $options.filters.color(tag)}"
+                      :title="`搜索-${tag}`">{{ tag }}</span>
+                <span class="comment" flex>
+                  <svg-icon :name="'comments'"/>
+                  {{commentNumList[idx]}}
+                </span>
               </div>
             </div>
           </a>
@@ -54,6 +58,7 @@ import Pagination from "@/components/Pagination";
 import {getText, loadFinish} from "@/utils/utils";
 import {originPrefix} from "@/need";
 import {queryMap} from "@/route";
+import {getCommentNum} from "@/views/comment/utils";
 
 export default {
   name: "List",
@@ -67,7 +72,7 @@ export default {
       searchTags: [],
       pageNow: 1,
       perCount: 8,
-      promise: null
+      commentNumList: []
     }
   },
   computed: {
@@ -97,8 +102,16 @@ export default {
   },
   watch: {
     resultList() {
-      // 重置pageNoe
+      // 重置pageNow
       this.pageNow = 1;
+    },
+    pagedList (){
+      // 评论数
+      this.pagedList.forEach((e, idx)=>{
+        getCommentNum(e.file).then(res=>{
+          this.commentNumList.splice(idx, 0, res[0]?res[1].data.data.search.issueCount:0)
+        })
+      })
     }
   },
   async mounted() {
@@ -347,7 +360,7 @@ export default {
               justify-content: flex-end;
               margin-top: auto;
 
-              > span {
+              > .tag {
                 font-size: 0.8rem;
                 line-height: 1rem;
                 border-radius: 0.1rem;
@@ -356,10 +369,22 @@ export default {
                 transition: all .15s linear;
                 box-shadow: 0 0 0.2rem #00000078;
                 color: white;
-
+                &:first-of-type{
+                  margin-left: 1rem;
+                }
                 &:hover {
                   box-shadow: 0 .15rem 0.4rem #00000078;
                 }
+              }
+              >.comment{
+                >svg{
+                  width: 1rem;
+                  height: 1rem;
+                  margin: 0 .3rem 0 .6rem;
+                }
+                font-size: .85rem;
+                margin-right: .8rem;
+                margin-left: auto;
               }
             }
           }
