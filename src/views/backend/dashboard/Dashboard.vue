@@ -1,10 +1,13 @@
 <template>
   <div class="dashboard">
-
+    <div class="row article">
+      <the-article/>
+    </div>
   </div>
 </template>
 
 <script>
+import Article from "@/views/backend/dashboard/article";
 /**
  * @data
  * 1. 文章发布
@@ -14,12 +17,38 @@
  * 5. 代码成就
  */
 export default {
-  name: "Dashboard"
+  name: "Dashboard",
+  components: {TheArticle: Article},
+  data (){
+    return {
+      md: [],
+      mdInited: '',
+      record: [],
+      recordInited: '',
+      option: {},
+    }
+  },
+  computed: {
+
+  },
+  created() {
+  },
+  mounted() {
+  },
+  methods: {
+
+  },
 }
 </script>
 
 <style scoped lang="scss">
 .dashboard{
   min-height: 90%;
+  >.row{
+    width: 90%;
+    margin: 2rem 5%;
+    display: flex;
+    align-items: center;
+  }
 }
 </style>
