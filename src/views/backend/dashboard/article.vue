@@ -17,6 +17,7 @@
         </select>
       </label>
     </template>
+    <div class="echarts"></div>
   </div>
 </template>
 
@@ -35,6 +36,8 @@ import {getText} from "@/utils/utils";
 import {originPrefix} from "@/need";
 import {getCommentNum} from "@/views/comment/utils";
 
+const isPhone = window.innerWidth < 768;
+
 export default {
   name: "the-article",
   data (){
@@ -47,19 +50,21 @@ export default {
 
       option: {
         title: {
-          left: 'center',
-          text: '博文'
+          left: isPhone?'10%':'center',
+          text: '博文统计'
         },
         dataZoom: [{
           type: 'inside'
         }, {
           show: true,
+          bottom: '0'
         }],
         toolbox: {
           feature: {}
         },
         xAxis: [{
           name: '创建时间',
+          nameLocation: 'center',
           data: []
         }],
         yAxis: [{
@@ -109,6 +114,8 @@ export default {
         this.md = JSON.parse(res[1]).reverse();
         // 评论
         const promises = [];
+        const echartsContainer = this.$el.querySelector('div.echarts');
+        let count = 0;
         this.md.forEach(e => {
           e.commentNum = 0;
           promises.push(getCommentNum(e.file).then(res => {
@@ -116,23 +123,26 @@ export default {
             this.changeXBy()
             this.changeYBy()
             this.doUpdate()
+          }).finally(()=>{
+            count ++;
+            if (count === promises.length){
+              this.inited = res[0]
+            }
           }))
         })
-        Promise.any(promises).finally(()=>{
-          this.inited = res[0]
-        })
-        this.myChart = echarts.init(this.$el, null, {
+        this.myChart = echarts.init(echartsContainer, null, {
           renderer: 'svg',
           width: 'auto',
           height: 'auto'
         });
-        window.addEventListener('resize', ()=>{
+        const resize = () => {
           this.myChart.resize({
-            width: this.$el.clientWidth,
-            height: this.$el.clientHeight
+            width: echartsContainer.clientWidth,
+            height: echartsContainer.clientHeight
           })
-        });
-        this.myChart.on('')
+        }
+        resize()
+        window.addEventListener('resize', resize);
         this.myChart.setOption(this.option);
       }else {
         this.inited = res[0]
@@ -221,6 +231,11 @@ export default {
         margin-right: 0.5rem;
       }
     }
+  }
+  >.echarts{
+    height: calc(100% - 1rem);
+    margin: 0.3rem 0 0.7rem 0;
+    width: 100%;
   }
 }
 </style>
