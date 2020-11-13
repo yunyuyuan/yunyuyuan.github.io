@@ -3,11 +3,16 @@
     <div class="row article">
       <the-article/>
     </div>
+    <div class="row comment">
+      <the-comment/>
+    </div>
   </div>
 </template>
 
 <script>
 import Article from "@/views/backend/dashboard/article";
+import Comment from "@/views/backend/dashboard/comment";
+
 /**
  * @data
  * 1. 文章发布
@@ -18,7 +23,7 @@ import Article from "@/views/backend/dashboard/article";
  */
 export default {
   name: "Dashboard",
-  components: {TheArticle: Article},
+  components: {TheArticle: Article, TheComment: Comment},
   data (){
     return {
       md: [],

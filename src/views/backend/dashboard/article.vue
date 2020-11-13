@@ -29,7 +29,6 @@ import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/dataZoom'
 import 'echarts/lib/component/dataZoomInside'
-import 'echarts/lib/component/toolbox'
 import 'echarts/lib/chart/line'
 
 import {getText} from "@/utils/utils";
@@ -59,9 +58,6 @@ export default {
           show: true,
           bottom: '0'
         }],
-        toolbox: {
-          feature: {}
-        },
         xAxis: [{
           name: '创建时间',
           nameLocation: 'center',
@@ -108,7 +104,7 @@ export default {
       }
     }
   },
-  created() {
+  mounted() {
     getText(`${originPrefix}/json/md.json`).then(res => {
       if (res[0]) {
         this.md = JSON.parse(res[1]).reverse();

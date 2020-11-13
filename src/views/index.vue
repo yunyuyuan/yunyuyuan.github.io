@@ -118,6 +118,7 @@ export default {
     }
   },
   async mounted() {
+    console.log("代码改变世界=.=")
     const fontSize = localStorage.getItem('font-size');
     if (fontSize) {
       document.documentElement.style.fontSize = fontSize + 'px';

@@ -166,11 +166,12 @@ export async function getPageComment({title, count, cursor}) {
     }, true)
 }
 
-export async function getCommentNum(title) {
+export async function getCommentNum(title, state) {
+    state = state||'open'
     return await http({
         query:
             `{
-  search(query: "${commentPrefix}${title}+in:title repo:${owner}/${repo} is:open", type: ISSUE, first: 0) {
+  search(query: "${commentPrefix}${title}+in:title repo:${owner}/${repo} is:${state}", type: ISSUE, first: 0) {
     issueCount
     }
 }
