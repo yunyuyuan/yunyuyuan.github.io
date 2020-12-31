@@ -63,9 +63,14 @@ import {routeInfo} from "@/route";
 import siteConfig from "@/site-config";
 import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
 
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+Vue.use(VueRouter);
+
 export default {
   name: "Detail",
   components: {TheComment},
+  router: new VueRouter(),
   data() {
     return {
       md: [],
@@ -101,18 +106,23 @@ export default {
       return encodeURI(location.hash.replace(/^#/, ''))
     }
   },
-  async created() {
-    let res = await getText(`${originPrefix}/json/md.json`);
-    if (res[0]) {
-      this.md = JSON.parse(res[1])
+  watch: {
+    $route (){
+      this.goAnchor()
     }
+  },
+  async created() {
     qrcode.toDataURL(location.href, (err, url) => {
       this.qrcode = url
     })
+    const res = await getText(`${originPrefix}/json/md.json`);
+    if (res[0]) {
+      this.md = JSON.parse(res[1]);
+    }
   },
   async mounted() {
     loadFinish();
-    let res = await getText(`${originPrefix}/md/${this.id}.md`);
+    const res = await getText(`${originPrefix}/md/${this.id}.md`);
     if (res[0]) {
       this.html = parseMarkdown(res[1]);
     } else {
@@ -150,6 +160,10 @@ export default {
           a.active = a.text === last.innerText;
         })
       }
+      // 锚点
+      if (this.$route.path) {
+        this.goAnchor()
+      }
     })
   },
   beforeDestroy() {
@@ -164,7 +178,11 @@ export default {
       }
     },
     toAnchor(el) {
-      let markdown = this.$refs.markdown;
+      this.$router.replace(el.id);
+    },
+    goAnchor (){
+      const el = document.getElementById(this.$route.path.substr(1));
+      const markdown = this.$refs.markdown;
       if (el) {
         let fps = 60,
             duration = 1000,
