@@ -131,7 +131,7 @@ export default {
       tsparticles().then(({particlesJS}) => {
         particlesJS('particles-bg', {
           particles: {
-            number: {value: 100, density: {enable: true, value_area: 800}},
+            number: {value: 36, density: {enable: true, value_area: 800}},
             color: {value: "#ffffff"},
             shape: {
               type: "circle",
