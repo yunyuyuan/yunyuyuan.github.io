@@ -90,7 +90,7 @@ export default {
     },
     info() {
       if (!this.id) return {};
-      for (let i of this.md) {
+      for (const i of this.md) {
         if (i.file === this.id) {
           document.title = '文章-' + i.name;
           document.head.querySelector('meta[name=description]').setAttribute('description', `${siteConfig.owner}的博客文章-${i.name}`);
@@ -150,7 +150,7 @@ export default {
       // 监听滚动到anchor
       this.body.onscroll = () => {
         let last = {};
-        for (let el of headList) {
+        for (const el of headList) {
           if (last && el.getBoundingClientRect().top > document.querySelector('header.the-head').scrollHeight) {
             break
           }
@@ -184,11 +184,11 @@ export default {
       const el = document.getElementById(this.$route.path.substr(1));
       const markdown = this.$refs.markdown;
       if (el) {
-        let fps = 60,
+        const fps = 60,
             duration = 1000,
-            count = fps * duration / 1000,
             body = this.body;
-        let interval = el.getBoundingClientRect().top - markdown.getBoundingClientRect().top + markdown.parentElement.offsetTop,
+        let count = fps * duration / 1000,
+            interval = el.getBoundingClientRect().top - markdown.getBoundingClientRect().top + markdown.parentElement.offsetTop,
             scrollNow = body.scrollTop,
             step = (interval - scrollNow) / count;
         if (this.animationHandle) clearInterval(this.animationHandle);

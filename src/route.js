@@ -1,13 +1,13 @@
 function routeInfo (){
     // 去掉最后的 '/'
-    let pathname = window.location.pathname.replace(/^(.+?)\/*$/, '$1');
-    for (let i of routes){
+    const pathname = window.location.pathname.replace(/^(.+?)\/*$/, '$1');
+    for (const i of routes){
         const paramNames = [];
-        let regexp = i.path.replace(/\/:(\w+)/g, (a, b)=>{
+        const regexp = i.path.replace(/\/:(\w+)/g, (a, b)=>{
             paramNames.push(b);
             return '/([^/]+)'
         });
-        let matcher = pathname.match( new RegExp(`^${regexp}$`));
+        const matcher = pathname.match( new RegExp(`^${regexp}$`));
         if (matcher){
             const params = {};
             for (let idx=1;idx<=paramNames.length;idx++){
@@ -33,8 +33,8 @@ function queryMap (){
         map = {},
         matcher = search.match(/[?&]([^=]*)=([^&]*)/g);
     if (matcher) {
-        for (let i of matcher) {
-            let key = i.replace(/[?&]([^=]*)=([^&]*)/, '$1'),
+        for (const i of matcher) {
+            const key = i.replace(/[?&]([^=]*)=([^&]*)/, '$1'),
                 val = i.replace(/[?&]([^=]*)=([^&]*)/, '$2');
             if (Object.keys(map).indexOf(key) !== -1) {
                 if (typeof map[key] == 'string') {

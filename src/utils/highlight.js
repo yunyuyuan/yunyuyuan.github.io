@@ -1,7 +1,7 @@
 import hljs from "highlight.js";
 
 export function hljsAndInsertCopyBtn (el){
-    let btn = document.createElement('span');
+    const btn = document.createElement('span');
     addCopyEvent(el.parentElement, btn, el.classList[0], el.innerText);
     el.parentElement.insertBefore(btn, el);
     hljs.highlightBlock(el);
@@ -12,7 +12,7 @@ export function addCopyEvent (pre, btn, lang, code){
     pre.onmouseenter = ()=>{btn.innerText = '复制'}
     pre.onmouseleave = ()=>{btn.innerText = lang}
     btn.onclick = ()=>{
-        let textArea = document.createElement("textarea");
+        const textArea = document.createElement("textarea");
         textArea.style.maxHeight = '0';
         textArea.value = code;
         document.body.appendChild(textArea);

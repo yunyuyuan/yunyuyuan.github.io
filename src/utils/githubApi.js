@@ -80,12 +80,12 @@ export class GithubUtils {
         return new Promise(async resolve => {
             try {
                 dict.state = '获取master的SHA';
-                let main = await this.repos.git.refs('heads/master').fetch();
+                const main = await this.repos.git.refs('heads/master').fetch();
                 // 创建tree
-                let treeItems = [];
-                for (let item of files) {
+                const treeItems = [];
+                for (const item of files) {
                     dict.state = `创建blob:${item.folder.replace(/^.*\/([^/]*)$/, '$1')}`;
-                    let res = await this.repos.git.blobs.create({
+                    const res = await this.repos.git.blobs.create({
                         content: stringToB64(item.content),
                         encoding: 'base64'
                     });
@@ -97,14 +97,14 @@ export class GithubUtils {
                     });
                 }
                 dict.state = '创建tree';
-                let tree = await this.repos.git.trees.create({
+                const tree = await this.repos.git.trees.create({
                     tree: treeItems,
                     base_tree: main.object.sha
                 });
 
                 // commit
                 dict.state = 'commit...';
-                let commit = await this.repos.git.commits.create({
+                const commit = await this.repos.git.commits.create({
                     message: message,
                     tree: tree.sha,
                     parents: [main.object.sha]
@@ -121,7 +121,7 @@ export class GithubUtils {
     async removeSome(folders, dic, what) {
         return new Promise(async resolve => {
             try {
-                let repo = this.repos;
+                const repo = this.repos;
                 dic.state = '获取 commit sha';
                 // 先获取master的commit sha
                 let res = await repo.git.refs('heads/master').fetch();
@@ -135,7 +135,7 @@ export class GithubUtils {
                     if (mdPath.length) {
                         dic.state = `获取 ${mdPath[0]} sha`;
                         res = await repo.git.trees(treeSha).fetch();
-                        for (let t of res.tree) {
+                        for (const t of res.tree) {
                             if (t.type === 'tree' && t.path === mdPath[0]) {
                                 mdPath.splice(0, 1);
                                 return await getMdSha(t.sha)
@@ -148,7 +148,7 @@ export class GithubUtils {
                 }
 
                 res = await getMdSha(res.tree.sha);
-                for (let i of res.tree) {
+                for (const i of res.tree) {
                     if (folders.indexOf(i.path.replace('.txt', '').replace('.md', '')) !== -1) {
                         dic.state = `删除 ${i.path}`;
                         await repo.contents(`${dynamicFolder}/${what}/${i.path}`).remove({
@@ -169,7 +169,7 @@ export class GithubUtils {
             // 获取master的commit sha
             try {
                 let res = await this.repos.git.refs('heads/master').fetch();
-                let last = res.object.sha;
+                const last = res.object.sha;
                 res = await this.repos.git.refs.tags('').fetch();
                 res.items.forEach(v => v.last = v.object.sha === last)
                 resolve([true, res.items])

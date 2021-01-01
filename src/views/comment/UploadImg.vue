@@ -14,7 +14,7 @@ export default {
   },
   methods: {
     inputImage() {
-      let files = this.$refs.input.files;
+      const files = this.$refs.input.files;
       for (let file = files[0]; file.size / 1024 ** 2 < 5;) {
 
       }

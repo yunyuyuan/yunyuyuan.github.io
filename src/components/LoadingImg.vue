@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     calcStyle() {
-      let s = {};
+      const s = {};
       if (this.size[0] > 0) {
         s.width = `${this.size[0]}rem`
       }

@@ -77,18 +77,18 @@ export default {
   },
   computed: {
     pagedList() {
-      let start = (this.pageNow - 1) * this.perCount;
+      const start = (this.pageNow - 1) * this.perCount;
       return this.resultList.slice(start, start + this.perCount)
     },
     resultList() {
       if (!this.search && !this.searchTags.length) return this.md;
-      let lis = [],
-          vue_ = this;
+      const lis = [],
+          vm = this;
       this.md.forEach(e => {
-        if (!vue_.search || e.name.indexOf(vue_.search) !== -1) {
+        if (!vm.search || e.name.indexOf(vm.search) !== -1) {
           let tagMatched = true;
-          for (let idx = 0; idx < vue_.searchTags.length; idx++) {
-            if (e.tags.indexOf(vue_.searchTags[idx]) === -1) {
+          for (let idx = 0; idx < vm.searchTags.length; idx++) {
+            if (e.tags.indexOf(vm.searchTags[idx]) === -1) {
               tagMatched = false
             }
           }
@@ -116,7 +116,7 @@ export default {
   },
   async mounted() {
     loadFinish();
-    let res = await getText(`${originPrefix}/json/md.json`);
+    const res = await getText(`${originPrefix}/json/md.json`);
     if (res[0]) {
       this.md = JSON.parse(res[1]);
       let tag = queryMap()['search-tag'];

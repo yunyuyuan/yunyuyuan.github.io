@@ -204,7 +204,7 @@ export default {
         document.title = '后台-文章-新建';
       }else {
         document.title = '后台-文章-' + this.id;
-        let res = await getText(`${originPrefix}/md/${this.id}.md`);
+        const res = await getText(`${originPrefix}/md/${this.id}.md`);
         if (res[0]) {
           mdText = res[1];
         } else {
@@ -242,15 +242,14 @@ export default {
       document.addEventListener('click', this.handleStickerDiv)
     },
     handleStickerDiv(e) {
-      let vue_ = this,
-          stickerDiv = this.$refs.sticker;
+      const stickerDiv = this.$refs.sticker;
       let target = e.target;
       while (true) {
         if (target !== stickerDiv) {
           target = target.parentElement;
           if (!target) {
             document.removeEventListener('click', this.handleStickerDiv);
-            vue_.showSticker = false;
+            this.showSticker = false;
             break;
           }
         } else {
@@ -298,17 +297,17 @@ export default {
       this.info.tags.splice(idx, 1)
     },
     clickEdit(e) {
-      let span = e.currentTarget;
+      const span = e.currentTarget;
       this.tagEditIndex = parseInt(span.getAttribute('data-idx'));
       this.$nextTick(() => {
         span.parentElement.previousElementSibling.focus()
       })
     },
     editTag(e) {
-      let info = this.info,
+      const info = this.info,
           input = e.target;
       this.tagEditIndex = -1;
-      for (let i of info.tags) {
+      for (const i of info.tags) {
         if (i !== input.getAttribute('data-old') && i === input.value) {
           return this.$message.warning('标签不能重复!');
         }
@@ -325,8 +324,8 @@ export default {
       };
     },
     doResize (delta){
-      let parentWidth = this.$refs.text.scrollWidth;
-      let newSize = this.resizeStart.size + (delta-this.resizeStart.pos);
+      const parentWidth = this.$refs.text.scrollWidth;
+      const newSize = this.resizeStart.size + (delta-this.resizeStart.pos);
       if (newSize > parentWidth/5 && newSize < parentWidth*4/5){
         this.mdWidth = `${newSize}px`;
       }
@@ -334,8 +333,8 @@ export default {
     async save() {
       if (this.saving.b) return;
       if (this.gitUtil) {
-        let err = null,
-            info = this.info;
+        let err = null;
+        const info = this.info;
         if (!info.name || !info.summary || !info.tags.length || !info.cover) {
           return this.$message.warning('标题,简介,标签和封面均不能为空!')
         }
@@ -357,7 +356,7 @@ export default {
         }
         // 执行更新
         // 更新本地md
-        for (let i in this.md) {
+        for (const i in this.md) {
           if (this.md[i].file === this.id) {
             this.md[i] = info;
             break
@@ -365,17 +364,17 @@ export default {
         }
         this.saving.state = '更新:md.json';
         sortByTime(this.md);
-        let res = await this.gitUtil.updateJsonFile('md.json', this.md);
+        const res = await this.gitUtil.updateJsonFile('md.json', this.md);
         if (res[0]) {
           // 更新 md 和 html文件
-          let res = await this.gitUtil.updateMd({
+          const res = await this.gitUtil.updateMd({
             file: fileId,
             md: this.mdText
           }, this.saving);
           if (res[0]) {
             // 更新rss
             this.saving.state = '更新 RSS';
-            let res = await this.gitUtil.updateSingleFile('dynamic/rss.xml', genRss(this.md));
+            const res = await this.gitUtil.updateSingleFile('dynamic/rss.xml', genRss(this.md));
             if (res[1]){
               this.$message.success('上传成功!');
               window.location.reload()

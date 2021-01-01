@@ -66,7 +66,9 @@ export default {
     background: transparent !important;
     &:focus, &.inputed {
       ~ label {
-        color: #9d9d9d;
+        color: #333;
+        background: #ffdcb1;
+        padding: 0 .6rem;
         transform: translate(-12%, -70%) scale(0.75);
       }
     }
@@ -99,6 +101,8 @@ export default {
     font-size: 1.4rem;
     line-height: 2rem;
     transition: all .2s ease;
+    word-break: keep-all;
+    border-radius: .3rem;
   }
 
   .bar {

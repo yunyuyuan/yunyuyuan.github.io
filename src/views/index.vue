@@ -5,10 +5,7 @@
     <img class="bg" v-else-if="isBgImg" :src="images[routeNow]" alt="bg"/>
     <div class="bg" v-else>
       <div id="particles-bg"></div>
-      <div id="comet-bg">
-        <div class="comet" v-for="i in randLen"
-             :style="{left: `${50-Math.random()*100}px`,top: `${10+Math.random()*80}%`,animationDelay: `${Math.random()*5}s`,animationDuration: `${3+Math.random()*4}s`}"></div>
-      </div>
+      <div id="comet-bg"></div>
     </div>
     <the-head :class="{'show-bg': showBg}" v-if="showHead" @toggle="toggleShowBg"/>
     <section :class="{body: true, 'show-head': showHead, 'show-bg': showBg, 'mask-bg': config.backgroundImg}" flex>
@@ -93,9 +90,6 @@ export default {
     },
     computeConfig() {
       return this.config
-    },
-    randLen() {
-      return 3 + Math.floor(Math.random() * 4)
     }
   },
   async created() {
@@ -162,6 +156,19 @@ export default {
           retina_detect: true
         });
       })
+      // comet
+      const container = document.getElementById('comet-bg');
+      for (let i=0;i<3 + Math.floor(Math.random() * 4);i++){
+        const div = document.createElement('div');
+        div.className = 'comet';
+        div.setAttribute('style', `
+          left: ${50 - Math.random() * 100}px;
+          top: ${10 + Math.random() * 80}%;
+          animation-delay: ${Math.random() * 5}s;
+          animation-duration: ${3 + Math.random() * 4}s
+        `)
+        container.appendChild(div);
+      }
     }
   },
   methods: {
@@ -173,7 +180,7 @@ export default {
         this.config = config
       } else {
         // 获取config
-        let res = await getText(`${originPrefix}/json/config.json`);
+        const res = await getText(`${originPrefix}/json/config.json`);
         if (res[0]) {
           this.config = JSON.parse(res[1])
         } else {
@@ -214,7 +221,7 @@ export default {
       display: block;
       transform: rotateZ(45deg);
       transform-origin: center center;
-      > .comet {
+      ::v-deep > .comet {
         position: absolute;
         height: 2px;
         background: linear-gradient(-45deg, rgba(95, 145, 255, 1), rgba(0, 0, 255, 0));

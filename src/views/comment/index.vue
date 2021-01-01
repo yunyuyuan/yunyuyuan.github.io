@@ -72,14 +72,14 @@ export default {
     async doLogin(remind) {
       if (this.loging || !this.token) return;
       this.loging = true;
-      let res = await getLoginInfo(this.token);
+      const res = await getLoginInfo(this.token);
       if (res[0]) {
         localStorage.setItem(tokenKey, this.token);
         if (remind) {
           this.$message.success('登录成功!');
         }
         this.logined = true;
-        let data = res[1].data.data.viewer;
+        const data = res[1].data.data.viewer;
         this.loginInfo = {
           avatar: data.avatarUrl,
           url: data.url,
@@ -100,7 +100,7 @@ export default {
     },
     async submit(payload) {
       this.submitting = true;
-      let res = await createComment({
+      const res = await createComment({
         title: this.title,
         body: payload.text
       });

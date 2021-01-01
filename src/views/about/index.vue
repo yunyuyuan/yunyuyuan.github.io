@@ -4,7 +4,7 @@
       <component :is="randomComp" :text="text"/>
     </div>
     <div class="content">
-        <p>我是一个无聊的人</p>
+        <p v-html="config.aboutme"></p>
         <div class="friends">
           <p flex>
             <svg-icon :name="'friends'"/>
@@ -94,12 +94,13 @@ export default {
     margin: 1rem 0;
     padding: 2rem;
     >p{
-      margin-bottom: 1.5rem;
+      margin-bottom: .8rem;
       font-size: 1.05rem;
-      text-decoration: line-through;
     }
     >.friends{
       flex-direction: column;
+      border-top: 1px dashed #9c9c9c;
+      padding-top: .8rem;
       >p{
         font-size: 1.1rem;
         margin-bottom: 1.5rem;

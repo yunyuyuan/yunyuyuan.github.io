@@ -39,7 +39,7 @@ export default {
     async info() {
       if (!this.info.file) return;
       this.loading = true;
-      let res = await getText(`${originPrefix}/record/${this.info.file}.txt`);
+      const res = await getText(`${originPrefix}/record/${this.info.file}.txt`);
       if (res[0]) {
         this.text = res[1]
       } else {

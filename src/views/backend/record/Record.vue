@@ -20,7 +20,7 @@ export default {
   methods: {
     async getRecord() {
       this.inited = false;
-      let res = await getText(`${originPrefix}/json/record.json`);
+      const res = await getText(`${originPrefix}/json/record.json`);
       if (res[0]) {
         this.record = JSON.parse(res[1]);
       }

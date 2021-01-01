@@ -15,7 +15,7 @@ export async function getText(path) {
 
 export function parseAjaxError(err) {
     if (err.response) {
-        let status = err.response.status;
+        const status = err.response.status;
         switch (status) {
             case 401:
                 return "错误: 未授权,请检查token是否正确";

@@ -108,7 +108,7 @@ export default {
   computed: {
     searchResult() {
       if (this.search === '') return this.md;
-      let lis = [];
+      const lis = [];
       this.md.forEach(e => {
         if (e.name.search(this.search) !== -1) {
           lis.push(e)
@@ -136,7 +136,7 @@ export default {
       }
     },
     toggleSelect(item) {
-      let idx = this.selectList.indexOf(item.file);
+      const idx = this.selectList.indexOf(item.file);
       if (idx === -1) {
         this.selectList.push(item.file)
       } else {
@@ -159,21 +159,21 @@ export default {
           b: true,
           state: '导出中...'
         }
-        let zip = new jszip(),
+        const zip = new jszip(),
             ranTime = new Date().getTime();
         try {
           this.deleting.state = '下载:md.json';
           let res = await fetch(`${originPrefix}/json/md.json?ran=${ranTime}`);
           let txt = await res.text();
           zip.file('md.json', txt);
-          for (let file of this.selectList) {
+          for (const file of this.selectList) {
             this.deleting.state = `下载:${file}.md`;
             res = await fetch(`${originPrefix}/md/${file}.md?ran=${ranTime}`);
             txt = await res.text();
             zip.file(`${file}.md`, txt);
           }
           this.deleting.state = `正在压缩...`;
-          let content = await zip.generateAsync({type: "blob"});
+          const content = await zip.generateAsync({type: "blob"});
           fileSaver.saveAs(content, "md-export.zip");
         } catch (err) {
           this.$message.error(parseAjaxError(err));
@@ -196,7 +196,7 @@ export default {
             state: '更新md.json'
           };
           // 更新md
-          let newMdList = [];
+          const newMdList = [];
           for (let i = 0; i < this.md.length; i++) {
             if (files.indexOf(this.md[i].file) === -1) {
               newMdList.push(this.md[i]);
@@ -211,7 +211,7 @@ export default {
             if (res[0]) {
               // 更新rss
               this.deleting.state = '更新 RSS';
-              let res = await this.gitUtil.updateSingleFile('dynamic/rss.xml', genRss(newMdList));
+              const res = await this.gitUtil.updateSingleFile('dynamic/rss.xml', genRss(newMdList));
               if (res[1]){
                 this.$message.success('删除成功!');
                 this.$emit('refresh')

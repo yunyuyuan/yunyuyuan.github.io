@@ -19,12 +19,12 @@ export default {
   methods: {
     startResize (e){
       this.$emit('start', this.isH?(e.screenX||e.touches[0].screenX):(e.screenY||e.touches[0].screenY));
-      let vue_ = this;
+      const vm = this;
       document.body.setAttribute('unselectable', '');
       function resize(e) {
         e.stopPropagation();
         e.preventDefault();
-        vue_.$emit('resize', vue_.isH?(e.screenX||e.touches[0].screenX):(e.screenY||e.touches[0].screenY))
+        vm.$emit('resize', vm.isH?(e.screenX||e.touches[0].screenX):(e.screenY||e.touches[0].screenY))
       }
 
       function release() {
@@ -33,7 +33,7 @@ export default {
         document.removeEventListener('mouseup', release);
         document.removeEventListener('touchend', release);
         document.body.removeAttribute('unselectable');
-        vue_.resizing = false;
+        vm.resizing = false;
       }
 
       this.resizing = true;

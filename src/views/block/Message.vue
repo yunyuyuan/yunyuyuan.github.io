@@ -34,7 +34,7 @@ export default {
       if (this.list.length > 4) {
         this.list = [];
       }
-      let obj = {
+      const obj = {
         type: type,
         text: text,
         display: true,

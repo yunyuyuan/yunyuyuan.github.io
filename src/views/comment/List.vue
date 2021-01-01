@@ -135,18 +135,18 @@ export default {
   methods: {
     async updatePage(cursor) {
       this.loading = true;
-      let res = await getPageComment({
+      const res = await getPageComment({
         count: this.onePageItemsCount,
         title: this.title,
         cursor
       });
       if (res[0]) {
-        let data = res[1].data.data.search;
+        const data = res[1].data.data.search;
         this.itemCount = data.issueCount;
         this.items = [];
         for (const e of data.nodes) {
           // 子评论
-          let children = [];
+          const children = [];
           e.comments.nodes.forEach(c => {
             children.push({
               id: c.id,
@@ -187,7 +187,7 @@ export default {
       let reply = '';
       if (isReply) {
         html = parseMarkdown(text.replace(/^@\w+ ([\s\S]*)$/, '$1'));
-        let matcher = text.match(/^@(\w+) /);
+        const matcher = text.match(/^@(\w+) /);
         if (matcher) {
           reply = `<span class="reply">回复<a class="nick-name" target="_blank" href="https://gtihub.com/${matcher[1]}">@${matcher[1]}</a>:</span>`;
         }
@@ -220,13 +220,13 @@ export default {
       if (this.updating) return;
       this.updating = true;
       item.loading = true;
-      let res = await getCommentChildren({
+      const res = await getCommentChildren({
         id: item.id,
         count: this.onePageItemsCount/2,
         cursor: cursor
       });
       if (res[0]) {
-        let data = res[1].data.data.node.comments;
+        const data = res[1].data.data.node.comments;
         item.page = data.pageInfo;
         item.children = [];
         data.nodes.forEach(c => {
@@ -253,7 +253,7 @@ export default {
     },
     async replayComment(payload) {
       this.submitting = true;
-      let res = await createReply({
+      const res = await createReply({
         id: this.replayItem.id,
         body: (this.replyChild ? `@${this.replyChild.nick} ` : '') + payload.text
       });
@@ -266,7 +266,7 @@ export default {
     },
     async closeComment(id) {
       if (!confirm('确认删除?')) return;
-      let res = await closeOrDeleteComment('close', id);
+      const res = await closeOrDeleteComment('close', id);
       if (logError.call(this, res, '删除成功!', '删除失败')) {
         setTimeout(async () => {
           await this.updatePage()
@@ -275,7 +275,7 @@ export default {
     },
     async deleteReply(id, item) {
       if (!confirm('确认删除?')) return;
-      let res = await deleteReply(id);
+      const res = await deleteReply(id);
       if (logError.call(this, res, '删除成功!', '删除失败')) {
           await this.toReply(false, item)
       }
@@ -288,7 +288,7 @@ export default {
         has: !has,
         count: item.reactions[emoji].count + (has ? -1 : 1)
       };
-      let res = await doReaction({
+      const res = await doReaction({
         content: `THUMBS_${emoji === '-1' ? 'DOWN' : 'UP'}`,
         id: item.id,
         has: has

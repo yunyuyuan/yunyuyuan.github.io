@@ -38,12 +38,12 @@ export default {
   },
   computed: {
     pagedList() {
-      let start = (this.pageNow - 1) * this.perCount;
+      const start = (this.pageNow - 1) * this.perCount;
       return this.record.slice(start, start + this.perCount)
     }
   },
   async created (){
-    let res = await getText(`${originPrefix}/json/record.json`);
+    const res = await getText(`${originPrefix}/json/record.json`);
     if (res[0]){
       this.record = JSON.parse(res[1])
     }

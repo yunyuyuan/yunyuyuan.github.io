@@ -93,7 +93,7 @@ export function processMdHtml(el, isComment) {
     })
     // task
     el.querySelectorAll('input[type=checkbox]').forEach(el => {
-        let span = document.createElement('img');
+        const span = document.createElement('img');
         span.src = el.checked ? checkImg : uncheckImg;
         el.parentElement.insertBefore(span, el);
         el.remove();

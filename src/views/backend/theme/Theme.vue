@@ -93,7 +93,7 @@ export default {
         this.init()
       } else {
         // 删除fake style
-        let style = document.head.querySelector('#fake-markdown-style');
+        const style = document.head.querySelector('#fake-markdown-style');
         if (style) {
           style.remove()
         }
@@ -149,8 +149,8 @@ export default {
       };
     },
     doResize(delta) {
-      let parentWidth = this.$refs.text.scrollWidth;
-      let newSize = this.resizeStart.size + (delta - this.resizeStart.pos);
+      const parentWidth = this.$refs.text.scrollWidth;
+      const newSize = this.resizeStart.size + (delta - this.resizeStart.pos);
       if (newSize > parentWidth / 5 && newSize < parentWidth * 4 / 5) {
         this.mdWidth = `${newSize}px`;
       }
@@ -165,7 +165,7 @@ export default {
           b: true,
           state: '更新中...'
         };
-        let res = await this.gitUtil.updateTheme(this.scss, this.saving);
+        const res = await this.gitUtil.updateTheme(this.scss, this.saving);
         if (res[0]) {
           this.$message.success('保存成功!');
         } else {

@@ -150,7 +150,7 @@ export default {
     async save() {
       if (this.saving.b) return;
       if (this.gitUtil) {
-        let info = this.info;
+        const info = this.info;
         if (!info.images.length) {
           return this.$message.warning('封面不能为空!')
         }
@@ -174,7 +174,7 @@ export default {
         }
         // 执行更新
         // 更新本地record
-        for (let i in this.record) {
+        for (const i in this.record) {
           if (this.record[i].file === this.id) {
             this.record[i] = info;
             break
@@ -182,10 +182,10 @@ export default {
         }
         this.saving.state = '更新:record.json'
         sortByTime(this.record)
-        let res = await this.gitUtil.updateJsonFile('record.json', this.record);
+        const res = await this.gitUtil.updateJsonFile('record.json', this.record);
         if (res[0]) {
           // 更新 txt 文件
-          let res = await this.gitUtil.updateRecord({
+          const res = await this.gitUtil.updateRecord({
             file: file,
             txt: this.text
           }, this.saving);

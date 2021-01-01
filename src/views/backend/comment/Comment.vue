@@ -97,7 +97,7 @@ export default {
         cursor
       });
       if (res[0]) {
-        let data = res[1].data.data.search;
+        const data = res[1].data.data.search;
         this.count = data.issueCount;
         this.list = [];
         for (const e of data.nodes) {

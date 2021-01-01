@@ -20,7 +20,7 @@ export default {
   methods: {
     async getMd() {
       this.inited = false;
-      let res = await getText(`${originPrefix}/json/md.json`);
+      const res = await getText(`${originPrefix}/json/md.json`);
       if (res[0]) {
         this.md = JSON.parse(res[1])
       }

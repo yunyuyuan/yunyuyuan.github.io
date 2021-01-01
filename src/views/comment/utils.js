@@ -4,15 +4,16 @@ import {parseAjaxError} from "@/utils/utils";
 const siteConfig = require('@/site-config');
 export const tokenKey = 'comment-token';
 
-let owner = siteConfig.owner,
+let headers = {
+        Authorization: 'token'
+    },
+    repoId = '';
+
+const owner = siteConfig.owner,
     repo = siteConfig.repo,
-    repoId = '',
     // this token just can read public information
     publicHeaders = {
         Authorization: 'token ' + (['5', '66b4e73893d07b79dbcc3e36f86acc309e78b2d'].join(''))
-    },
-    headers = {
-        Authorization: 'token'
     },
     http = function (data, usePublic, manualToken) {
         return new Promise(resolve => {
@@ -69,7 +70,7 @@ export const getReactions = (item)=>{
 // ======================== methods ============================
 
 export async function getRepoId() {
-    let res = await http({
+    const res = await http({
             query:
                 `query {
   repository(name: "${repo}", owner: "${owner}") {
@@ -85,7 +86,7 @@ export async function getRepoId() {
 
 export async function getLoginInfo(token) {
     headers.Authorization = `token ${token}`;
-    let res = await http({
+    const res = await http({
             query:
                 `query {
     viewer {

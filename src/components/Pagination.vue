@@ -35,7 +35,7 @@ export default {
           pageCount = Math.ceil(this.itemCount / this.perCount);
       while (true) {
         if (list.length < this.pagerCount && list.length < pageCount) {
-          let next = this.pageNow + i;
+          const next = this.pageNow + i;
           if (next > 0 && next <= pageCount) {
             list.push(next)
           }

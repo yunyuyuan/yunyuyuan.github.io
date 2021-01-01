@@ -181,7 +181,7 @@ export default {
     async loginFinish(withUpdate) {
       this.showLogin = false;
       if (withUpdate) {
-        let res = await getText(`${originPrefix}/json/config.json`);
+        const res = await getText(`${originPrefix}/json/config.json`);
         if (res[0]) {
           this.$emit('updateConfig', JSON.parse(res[1]))
           this.$message.success('从服务器获取配置成功!')

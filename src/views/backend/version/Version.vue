@@ -91,7 +91,7 @@ export default {
       this.tags = [];
       this.inited = false;
       if (this.gitUtil) {
-        let res = await this.gitUtil.getTag();
+        const res = await this.gitUtil.getTag();
         if (res[0]){
           res[1].map(v=>{
             v.selected = false;
@@ -113,7 +113,7 @@ export default {
           b: true,
           state: '正在创建release'
         }
-        let res = await this.gitUtil.createRelease(this.newTag, this.creating);
+        const res = await this.gitUtil.createRelease(this.newTag, this.creating);
         if (res[0]) {
           this.$message.success('创建成功!');
           this.getTag();
@@ -130,7 +130,7 @@ export default {
       }
     },
     changeSelectAll (){
-      let b = !this.allSelected;
+      const b = !this.allSelected;
       this.tags.map(v=>{
         v.selected = b;
       })
@@ -145,13 +145,13 @@ export default {
           b: true,
           state: '正在删除...'
         }
-        let delList = [];
+        const delList = [];
         this.tags.forEach(v=>{
           if (v.selected){
             delList.push(v.ref)
           }
         })
-        let res = await this.gitUtil.deleteTag(delList, this.deletingTag);
+        const res = await this.gitUtil.deleteTag(delList, this.deletingTag);
         if (res[0]){
           this.$message.success('删除成功');
           this.getTag();

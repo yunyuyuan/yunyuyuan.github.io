@@ -186,7 +186,7 @@ export default {
       }
     },
     handleStickerDiv(e) {
-      let vue_ = this,
+      const vm = this,
           stickerDiv = this.$refs.sticker;
       let target = e.target;
       while (true) {
@@ -195,7 +195,7 @@ export default {
           if (!target) {
             document.removeEventListener('click', this.handleStickerDiv);
             document.querySelector('section.body').removeEventListener('scroll', this.listenScroll);
-            vue_.showSticker = false;
+            vm.showSticker = false;
             break;
           }
         } else {
@@ -238,7 +238,7 @@ export default {
       };
     },
     doResize(delta) {
-      let newSize = this.resizeStart.size + (delta - this.resizeStart.pos);
+      const newSize = this.resizeStart.size + (delta - this.resizeStart.pos);
       if (newSize > 100 && newSize < 1000) {
         this.textareaHeight = `${newSize}px`;
       }

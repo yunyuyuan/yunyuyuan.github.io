@@ -87,7 +87,7 @@ export default {
   computed: {
     searchResult() {
       if (this.search === '') return this.record;
-      let lis = [];
+      const lis = [];
       this.record.forEach(e => {
         if (e.summary.search(this.search) !== -1) {
           lis.push(e)
@@ -115,7 +115,7 @@ export default {
       }
     },
     toggleSelect(item) {
-      let idx = this.selectList.indexOf(item);
+      const idx = this.selectList.indexOf(item);
       if (idx === -1) {
         this.selectList.push(item)
       } else {
@@ -133,21 +133,21 @@ export default {
           b: true,
           state: '导出中...'
         }
-        let zip = new jszip(),
+        const zip = new jszip(),
             ranTime = new Date().getTime();
         try {
           this.deleting.state = '下载:record.json';
           let res = await fetch(`${originPrefix}/json/record.json?ran=${ranTime}`);
           let txt = await res.text();
           zip.file('record.json', txt);
-          for (let item of this.selectList) {
+          for (const item of this.selectList) {
             this.deleting.state = `下载:${item}.txt`;
             res = await fetch(`${originPrefix}/record/${item}.txt?ran=${ranTime}`);
             txt = await res.text();
             zip.file(`${item}.txt`, txt);
           }
           this.deleting.state = `正在压缩...`;
-          let content = await zip.generateAsync({type: "blob"});
+          const content = await zip.generateAsync({type: "blob"});
           fileSaver.saveAs(content, "record-export.zip");
         } catch (err) {
           this.$message.error(parseAjaxError(err));
@@ -175,7 +175,7 @@ export default {
             state: '更新record.json'
           };
           // 更新record
-          let newRecordList = [];
+          const newRecordList = [];
           for (let i = 0; i < this.record.length; i++) {
             if (files.indexOf(this.record[i].file) === -1) {
               newRecordList.push(this.record[i]);

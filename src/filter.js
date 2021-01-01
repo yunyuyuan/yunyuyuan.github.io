@@ -17,7 +17,7 @@ const colorList = [
 ]
 
 Vue.filter('color', function (value) {
-    let v = md5(value).charAt(0);
+    const v = md5(value).charAt(0);
     if (isNaN(parseInt(v))) {
         return colorList[Math.floor('abcdefghijklmnopqrstuvwxyz'.indexOf(v) / 2.6)]
     }

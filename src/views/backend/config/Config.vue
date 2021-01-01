@@ -5,7 +5,7 @@
       <b>修改配置信息</b>
     </div>
     <div class="list" flex>
-      <float-input v-for="k in keys" :name="k" :value="info[k]||''" :id="k" :size="1" :isArea="k==='describe'" @input="input"/>
+      <float-input v-for="k in keys" :name="k" :value="info[k]||''" :id="k" :size="1" :isArea="['describe', 'aboutme'].indexOf(k)!==-1" @input="input"/>
       <label flex>
         <span :class="{active: info.backgroundImg==='img'}" @click="changeBg('img')">图片背景</span>
         <span :class="{active: info.backgroundImg==='color'}" @click="changeBg('color')">彩色背景</span>
@@ -14,7 +14,7 @@
       <div class="friends" flex>
         <div v-for="item in info.friends" :key="item.id" class="item" flex>
           <float-input :name="'简介'" :value="item.summary" :id="item.id" :size="0.85" @input="friendsSummary"/>
-          <float-input :name="'github名字'" :value="item.github" :id="item.id" :size="0.85" @input="friendsGithub"/>
+          <float-input :name="'github'" :value="item.github" :id="item.id" :size="0.85" @input="friendsGithub"/>
           <float-input :name="'网站'" :value="item.site" :id="item.id" :size="0.85" @input="friendsSite"/>
           <single-button class="del-btn" :text="'删除'" @click.native="friendsDel(item)"/>
         </div>
@@ -38,7 +38,7 @@ export default {
     return {
       updating: false,
       info: {},
-      keys: ["name", "describe", "copyright", "github", "email"],
+      keys: ["name", "describe", "aboutme", "copyright", "github", "email"],
     }
   },
   computed: {
@@ -106,7 +106,7 @@ export default {
           }
           return item
         });
-        let res = await this.gitUtil.updateJsonFile(`config.json`, this.config);
+        const res = await this.gitUtil.updateJsonFile(`config.json`, this.config);
         this.updating = false;
         if (res[0]) {
           this.$message.success('更新成功!')
