@@ -14,7 +14,7 @@
             </div>
             <div class="tail" flex>
               <div class="share" flex title="二维码">
-                <div class="qr">
+                <div class="qr" tabindex="1" onfocus="this.classList.add('click')" onblur="this.classList.remove('click')">
                   <span flex>
                     <svg-icon :name="'qr'"/>
                   </span>
@@ -380,7 +380,8 @@ export default {
               margin-bottom: 1rem;
               > .qr{
                 position: relative;
-                &:hover{
+                outline: none;
+                &.click{
                   > div{
                     height: 10rem;
                     width: 10rem;
