@@ -82,6 +82,8 @@ export default {
       cursor: pointer;
       font-size: 0.95rem;
       font-family: "Source Code Pro", serif;
+      word-break: keep-all;
+      white-space: nowrap;
     }
   }
   @include media{

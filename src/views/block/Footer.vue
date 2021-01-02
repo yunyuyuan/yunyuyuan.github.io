@@ -4,7 +4,7 @@
       <img :src="`${originPrefix}/${siteConfig.avatar}?stamp=${siteConfig.timeStamp}`"/>
     </a>
     <div class="link" flex>
-      <a v-for="k in links" :key="k" target="_blank" :href="config[k]" :title="k" flex>
+      <a v-for="k in Object.keys(links)" :key="k" target="_blank" :href="config[k]" :title="links[k]" flex>
         <svg-icon :name="k"/>
       </a>
     </div>
@@ -41,7 +41,11 @@ export default {
       siteConfig,
       isDev: process.env.NODE_ENV==='development',
       selfImage,
-      links: ['github', 'email'],
+      links: {
+        aboutthis: '本站介绍',
+        github: 'github',
+        email: '邮箱'
+      },
       fontSize: 0
     }
   },

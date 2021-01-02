@@ -177,8 +177,19 @@ export default {
 <style lang="scss">
 header.the-head{
   background: transparent !important;
-  .favicon{
-    display: none !important;
+  width: unset !important;
+  left: unset !important;
+  right: 0 !important;
+  >.body{
+    width: unset !important;
+    right: 0 !important;
+    left: unset !important;
+    .favicon{
+      display: none !important;
+    }
   }
+}
+#index section.body.show-bg{
+  opacity: 1 !important;
 }
 </style>

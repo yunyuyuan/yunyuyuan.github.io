@@ -35,7 +35,10 @@
                 <svg-icon :name="'tag'"/>
                 <a v-for="tag in info.tags||[]" :style="{background: $options.filters.color(tag)}" :href="`/article?search-tag=${tag}`" :title="`查看标签${tag}`">{{tag}}</a>
               </div>
-              <b>最后修改<time>{{info.modifyTime|time(false)}}</time></b>
+              <div class="time" flex>
+                <span>最后修改</span>
+                <time>{{info.modifyTime|time(false)}}</time>
+              </div>
             </div>
           </div>
           <span class="toggle-aside" :class="{active: asideActive}" @click="asideActive = !asideActive" flex
@@ -316,7 +319,7 @@ export default {
             flex-shrink: 1;
             > span{
               margin: 0.3rem 0;
-              padding: 0.2rem 0 0.2rem 0.2rem;
+              padding: 0.2rem 0 0.2rem 0.5rem;
               font-size: 0.9rem;
               transition: all .15s linear;
               cursor: pointer;
@@ -461,11 +464,13 @@ export default {
                 }
               }
             }
-            >b{
+            >.time{
               font-size: 0.75rem;
               margin: 1rem 0.5rem;
-              display: block;
-              font-weight: normal;
+              flex-direction: column;
+              >span{
+                word-break: keep-all;
+              }
               >time{
                 font-size: 0.8rem;
                 font-weight: normal;
