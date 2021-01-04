@@ -10,9 +10,9 @@
     </div>
     <div class="adjust">
       <div class="font-size" flex>
-        <single-button :text="'A-'" :disabled="fontSize<=5" :size="0.9" @click.native="changeFont(fontSize<=5, -1)"/>
+        <single-button :text="'A-'" title="字体减小" :disabled="fontSize<=5" :size="0.9" @click.native="changeFont(fontSize<=5, -1)"/>
         <span>{{fontSize}}</span>
-        <single-button :text="'A+'" :disabled="fontSize>=25" :size="0.9" @click.native="changeFont(fontSize>=25, 1)"/>
+        <single-button :text="'A+'" title="字体增大" :disabled="fontSize>=25" :size="0.9" @click.native="changeFont(fontSize>=25, 1)"/>
       </div>
     </div>
     <div class="copyright" flex>
@@ -44,7 +44,7 @@ export default {
       links: {
         aboutthis: '本站介绍',
         github: 'github',
-        email: '邮箱'
+        email: '联系邮箱'
       },
       fontSize: 0
     }

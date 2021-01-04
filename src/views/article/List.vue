@@ -22,14 +22,18 @@
       <div class="blog" v-else>
         <div v-for="(item, idx) in this.pagedList" :key="item.file" class="item"
              flex>
-          <div class="time">
+          <div class="time" :class="{active: activeItem===item.file}" flex>
             <span>{{ item.time | time(true) }}</span>
+            <div flex>
+              <span>最后修改</span>
+              <time>{{ item.modifyTime | time(true) }}</time>
+            </div>
           </div>
-          <div class="mid" flex>
+          <div class="mid" :class="{active: activeItem===item.file}" flex>
             <span class="line"></span>
             <span class="circle"></span>
           </div>
-          <a class="info" :href="`/article/${item.file}`" flex>
+          <a class="info" :href="`/article/${item.file}`" flex @mouseenter="activeItem=item.file" @mouseleave="activeItem=null">
             <loading-img :src="item.cover" :size="[12, -1]"/>
             <div flex>
               <b>{{ item.name }}</b>
@@ -40,7 +44,7 @@
                       :title="`搜索-${tag}`">{{ tag }}</span>
                 <span class="comment" flex>
                   <svg-icon :name="'comments'"/>
-                  {{commentNumList[idx]}}
+                  {{commentNumDict[item.file]}}
                 </span>
               </div>
             </div>
@@ -70,9 +74,10 @@ export default {
       search: '',
       searchFocus: false,
       searchTags: [],
+      activeItem: null,
       pageNow: 1,
       perCount: 8,
-      commentNumList: []
+      commentNumDict: {}
     }
   },
   computed: {
@@ -107,9 +112,10 @@ export default {
     },
     pagedList (){
       // 评论数
+      this.commentNumDict = {};
       this.pagedList.forEach((e, idx)=>{
         getCommentNum(e.file).then(res=>{
-          this.commentNumList.splice(idx, 0, res[0]?res[1].data.data.search.issueCount:0)
+          this.$set(this.commentNumDict, e.file, res[0]?res[1].data.data.search.issueCount:0)
         })
       })
     }
@@ -236,6 +242,7 @@ export default {
 
           > svg {
             width: 1.4rem;
+            height: 100%;
           }
         }
 
@@ -270,38 +277,85 @@ export default {
         margin: 0 auto;
 
         > .time {
+          flex-direction: column;
+
+          &.active{
+            >span{
+              background: rgba(0, 0, 0, .8);
+            }
+            >div {
+              height: 3rem;
+              opacity: 1;
+              margin-top: .4rem;
+              padding: 0.2rem 0.4rem;
+            }
+          }
           > span {
-            background: rgba(0, 0, 0, 0.4);
+            transition: background .15s linear;
+            background: rgba(0, 0, 0, .5);
             color: white;
             padding: 0.4rem 0.8rem;
             border-radius: 0.4rem;
             font-size: 0.9rem;
             word-break: keep-all;
             white-space: nowrap;
+            flex-shrink: 0;
+          }
+          >div{
+            flex-direction: column;
+            justify-content: space-around;
+            height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all .15s linear;
+            font-size: .85rem;
+            background: rgba(0, 0, 0, .8);
+
+            >span{
+              font-size: .9em;
+              color: white;
+            }
+            >time{
+              color: #00ffcc;
+            }
           }
         }
 
         > .mid {
           justify-content: center;
+          width: 2rem;
           height: calc(100% + 2rem);
           padding: 0 1rem;
           margin: 0 0.3rem;
           position: relative;
+          transition: all .15s linear;
+          overflow: hidden;
+          opacity: 1;
+
+          &.active{
+            opacity: 0;
+            padding: 0 0;
+            margin: 0 0;
+            width: 0;
+          }
 
           > .line {
             width: 100%;
-            height: 0.1rem;
-            background: black;
+            height: 0.2rem;
+            background: #fff;
             position: absolute;
+            border: 1px solid black;
           }
 
           > .circle {
             width: 1rem;
             height: 1rem;
             border-radius: 50%;
-            border: 0.16rem solid black;
+            border: 2px solid black;
             background: #00f3ff;
+            transition: background .1s linear;
             z-index: 1;
+            flex-shrink: 0;
           }
         }
 
@@ -312,13 +366,7 @@ export default {
           text-decoration: none;
           color: black;
           border-radius: 0 0.5rem 0.5rem 0;
-          background: linear-gradient(45deg, white, rgb(255, 255, 255, 0.9));
-          transition: box-shadow .15s ease-out;
-
-          &:hover {
-            background: white;
-            box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.8);
-          }
+          background: white;
 
           ::v-deep .loading-img {
             display: flex;
@@ -336,7 +384,6 @@ export default {
             width: 100%;
             border-radius: 0 0.5rem 0.5rem 0;
             flex-direction: column;
-            box-shadow: 0 0 0.4rem rgba(128, 128, 128, 0.59) inset;
 
             > b {
               font-size: 1.2rem;
