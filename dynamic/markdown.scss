@@ -204,10 +204,12 @@
   code{
     font-family: "Source Code Pro", serif;
     &:not(.hljs){
-      background: rgb(210, 210, 210);
-      padding: 0.15rem 0.25rem;
-      border-radius: 0.25rem;
+      background: rgb(230, 230, 230);
+      padding: 0.15rem 0.4rem;
+    	color: rgb(10, 10, 10);
+      border-radius: 0.1rem;
       margin: 0 0.2rem;
+    	font-size: 1em;
     }
   }
   pre{
@@ -248,7 +250,7 @@
       font-size: 0.8rem;
       line-height: 1.3rem;
       &, .hljs-subst{
-        color: rgb(222, 222, 222)
+        color: rgb(245, 245, 245)
       }
       .hljs-comment{
         color: rgb(136, 136, 136)
