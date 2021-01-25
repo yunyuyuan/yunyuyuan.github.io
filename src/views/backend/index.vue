@@ -294,7 +294,7 @@ export default {
       border-left: 0.2rem solid transparent;
 
       &.active {
-        background: rgb(31, 31, 31, 0.87);
+        background: rgba(76, 76, 76, 0.87);
         border-color: #5fff88;
       }
 
