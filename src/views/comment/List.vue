@@ -372,6 +372,7 @@ export default {
             border-radius: 50%;
             object-fit: cover;
             transition: all .1s linear;
+            box-shadow: 0 .3rem .6rem rgba(0, 0, 0, .4);
 
             &:hover {
               transform: scale(1.1);
@@ -444,6 +445,8 @@ export default {
                     border-radius: 50%;
                     object-fit: cover;
                     transition: all .1s linear;
+                    box-shadow: 0 .3rem .6rem rgba(0, 0, 0, .4);
+
                     &:hover{
                       transform: scale(1.1);
                     }
@@ -554,7 +557,7 @@ export default {
       width: 96%;
       >.list-item{
         position: relative;
-        >a.avatar{
+        >.left{
           position: absolute;
         }
         >.right{

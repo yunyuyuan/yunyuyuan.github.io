@@ -241,12 +241,14 @@ export default {
           width: 1.2rem;
           height: 1.2rem;
           margin-left: .5rem;
+          flex-shrink: 0;
         }
         >b{
           margin: 0 .8rem 0 .4rem;
           font-size: .9rem;
           width: 3.6rem;
           text-align: center;
+          word-break: keep-all;
         }
 
         > span {
