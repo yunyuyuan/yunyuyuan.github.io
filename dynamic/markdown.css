@@ -1,0 +1,415 @@
+.--markdown {
+  width: 100%;
+  display: block;
+  word-break: break-word;
+  line-height: 1.8rem;
+  font-size: 0.88rem;
+}
+.--markdown h1 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  min-height: 2rem;
+  margin: 0.8rem 0;
+  color: #ff5218;
+  font-size: 1.6rem;
+  position: relative;
+}
+.--markdown h1:hover {
+  text-decoration: underline;
+}
+.--markdown h1 > img {
+  display: block;
+  width: 1.8rem;
+  height: 1.8rem;
+  flex-shrink: 0;
+  position: absolute;
+  transform: translateX(calc(-100% - 0.4rem));
+}
+@media screen and (max-width: 768px) {
+  .--markdown h1 > img {
+    position: relative;
+    transform: translateX(-0.4rem);
+  }
+}
+.--markdown h2 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  min-height: 2rem;
+  margin: 0.8rem 0;
+  color: #ff5218;
+  font-size: 1.2rem;
+  position: relative;
+}
+.--markdown h2:hover {
+  text-decoration: underline;
+}
+.--markdown h2 > img {
+  display: block;
+  width: 1.8rem;
+  height: 1.8rem;
+  flex-shrink: 0;
+  position: absolute;
+  transform: translateX(calc(-100% - 0.4rem));
+}
+@media screen and (max-width: 768px) {
+  .--markdown h2 > img {
+    position: relative;
+    transform: translateX(-0.4rem);
+  }
+}
+.--markdown h3 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  min-height: 2rem;
+  margin: 0.8rem 0;
+  color: #ff5218;
+  font-size: 1.0666666667rem;
+  position: relative;
+}
+.--markdown h3:hover {
+  text-decoration: underline;
+}
+.--markdown h3 > img {
+  display: block;
+  width: 1.8rem;
+  height: 1.8rem;
+  flex-shrink: 0;
+  position: absolute;
+  transform: translateX(calc(-100% - 0.4rem));
+}
+@media screen and (max-width: 768px) {
+  .--markdown h3 > img {
+    position: relative;
+    transform: translateX(-0.4rem);
+  }
+}
+.--markdown h4 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  min-height: 2rem;
+  margin: 0.8rem 0;
+  color: #ff5218;
+  font-size: 1rem;
+  position: relative;
+}
+.--markdown h4:hover {
+  text-decoration: underline;
+}
+.--markdown h4 > img {
+  display: block;
+  width: 1.8rem;
+  height: 1.8rem;
+  flex-shrink: 0;
+  position: absolute;
+  transform: translateX(calc(-100% - 0.4rem));
+}
+@media screen and (max-width: 768px) {
+  .--markdown h4 > img {
+    position: relative;
+    transform: translateX(-0.4rem);
+  }
+}
+.--markdown h5 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  min-height: 2rem;
+  margin: 0.8rem 0;
+  color: #ff5218;
+  font-size: 0.96rem;
+  position: relative;
+}
+.--markdown h5:hover {
+  text-decoration: underline;
+}
+.--markdown h5 > img {
+  display: block;
+  width: 1.8rem;
+  height: 1.8rem;
+  flex-shrink: 0;
+  position: absolute;
+  transform: translateX(calc(-100% - 0.4rem));
+}
+@media screen and (max-width: 768px) {
+  .--markdown h5 > img {
+    position: relative;
+    transform: translateX(-0.4rem);
+  }
+}
+.--markdown h6 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  min-height: 2rem;
+  margin: 0.8rem 0;
+  color: #ff5218;
+  font-size: 0.9333333333rem;
+  position: relative;
+}
+.--markdown h6:hover {
+  text-decoration: underline;
+}
+.--markdown h6 > img {
+  display: block;
+  width: 1.8rem;
+  height: 1.8rem;
+  flex-shrink: 0;
+  position: absolute;
+  transform: translateX(calc(-100% - 0.4rem));
+}
+@media screen and (max-width: 768px) {
+  .--markdown h6 > img {
+    position: relative;
+    transform: translateX(-0.4rem);
+  }
+}
+.--markdown hr {
+  width: 100%;
+  background: black;
+  margin: 1rem 0;
+}
+.--markdown p {
+  white-space: pre-line;
+}
+.--markdown a[href] {
+  display: inline-block;
+  color: #0014ff;
+  position: relative;
+  word-break: break-all;
+  background: #f0fffd;
+  transition: all 0.1s linear;
+  padding: 0 0.5rem;
+  border-radius: 0.15rem;
+}
+.--markdown a[href]:hover {
+  background: #9dfffa;
+}
+.--markdown img[alt] {
+  display: block;
+  width: 80%;
+  margin: 1rem auto;
+  object-fit: contain;
+}
+.--markdown img[alt]:not([alt=sticker]) {
+  box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.5);
+}
+.--markdown img[alt][alt=sticker] {
+  display: inline-block;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin: 0 0.2rem -0.2rem 0.2rem;
+}
+.--markdown img[alt][center] {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.--markdown a[href], .--markdown strong, .--markdown em {
+  margin: 0 0.15rem;
+}
+.--markdown del {
+  text-decoration-color: red;
+}
+.--markdown blockquote {
+  line-height: 1.8rem;
+  position: relative;
+  border-left: 0.3rem solid #aa40ff;
+  padding: 0.5rem 0.8rem;
+  margin: 1rem 0;
+  background: #efefef;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+.--markdown fieldset {
+  width: calc(96% - 2rem);
+  margin: 2rem 2% 0.5rem 2%;
+  padding: 1.2rem 1rem 0.6rem 1rem;
+  position: relative;
+  transition: all 0.15s ease-out;
+}
+.--markdown fieldset:before {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  z-index: 1;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  content: "";
+  display: block;
+  background: linear-gradient(to right bottom, red, blue);
+}
+.--markdown fieldset:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  content: "";
+  display: block;
+  background: white;
+}
+.--markdown fieldset * {
+  z-index: 3;
+  position: relative;
+}
+.--markdown fieldset > legend {
+  position: absolute;
+  font-size: 0.9rem;
+  line-height: 1rem;
+  top: -0.8rem;
+  left: 1rem;
+  display: block;
+  background: #826aff;
+  border-radius: 0.2rem;
+  box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.4);
+  color: white;
+  padding: 0.2rem 0.8rem;
+}
+.--markdown table {
+  width: 90%;
+  margin: 1rem auto;
+}
+.--markdown table tbody td {
+  text-align: center;
+}
+.--markdown ul > li:not(.task-list-item) > img:first-child:not(alt), .--markdown ul > li:not(.task-list-item) > p > img:first-child:not(alt) {
+  width: 1.4rem;
+  height: 1.4rem;
+  position: absolute;
+  top: 0.2rem;
+  left: -1.8rem;
+}
+.--markdown ol > li:before {
+  content: attr(data-count) ".";
+  color: #1b00ff;
+  position: absolute;
+  left: -1.2rem;
+  top: 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+  line-height: 1.8rem;
+}
+.--markdown ul, .--markdown ol {
+  padding: 0 0 0 1.8rem;
+  list-style: none;
+}
+.--markdown ul > li, .--markdown ol > li {
+  position: relative;
+  margin: 0.4rem 0 0.4rem 0.2rem;
+}
+.--markdown ul > li.task-list-item, .--markdown ol > li.task-list-item {
+  position: relative;
+}
+.--markdown ul > li.task-list-item > img, .--markdown ol > li.task-list-item > img {
+  position: absolute;
+  top: 0.2rem;
+  left: 0;
+  transform: translateX(calc(-100% - 0.4rem));
+  width: 1.4rem;
+  height: 1.4rem;
+  flex-shrink: 0;
+}
+.--markdown code {
+  font-family: "Source Code Pro", serif;
+}
+.--markdown code:not(.hljs) {
+  background: #f3f3f3;
+  border: 1px solid #d4d4d4;
+  padding: 0.15rem 0.25rem;
+  color: #ca0000;
+  border-radius: 0.25rem;
+  margin: 0 0.2rem;
+  font-size: 0.9em;
+}
+.--markdown pre {
+  margin: 0.5rem 0;
+  border-radius: 0.3rem;
+  background: rgba(43, 43, 43, 0.95);
+  display: flex;
+  flex-direction: column;
+}
+.--markdown pre:hover > span {
+  background: #ff5500;
+  color: white;
+}
+.--markdown pre > span {
+  display: inline-flex;
+  align-items: center;
+  text-align: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.7rem;
+  border-radius: 0.16rem;
+  padding: 0.2rem 0.4rem;
+  color: #b5b5b5;
+  height: 1rem;
+  margin-left: auto;
+  font-family: "Source Code Pro", serif;
+}
+.--markdown pre > code.hljs {
+  display: block;
+  overflow: visible;
+  overflow-x: auto;
+  padding: 0 0.8rem 0.5rem 0.8rem;
+  border-radius: 0 0 0.3rem 0.3rem;
+  background: transparent;
+  max-height: 100vh;
+  font-size: 0.8rem;
+  line-height: 1.3rem;
+}
+.--markdown pre > code.hljs, .--markdown pre > code.hljs .hljs-subst {
+  color: whitesmoke;
+}
+.--markdown pre > code.hljs .hljs-comment {
+  color: #888888;
+}
+.--markdown pre > code.hljs .hljs-keyword, .--markdown pre > code.hljs .hljs-attribute, .--markdown pre > code.hljs .hljs-selector-tag, .--markdown pre > code.hljs .hljs-meta-keyword, .--markdown pre > code.hljs .hljs-doctag, .--markdown pre > code.hljs .hljs-name {
+  font-weight: bold;
+  color: #ff7b3c;
+}
+.--markdown pre > code.hljs .hljs-type, .--markdown pre > code.hljs .hljs-string, .--markdown pre > code.hljs .hljs-selector-id, .--markdown pre > code.hljs .hljs-selector-class, .--markdown pre > code.hljs .hljs-quote, .--markdown pre > code.hljs .hljs-template-tag, .--markdown pre > code.hljs .hljs-deletion {
+  color: #7ec555;
+}
+.--markdown pre > code.hljs .hljs-number {
+  color: #5aa1ff;
+}
+.--markdown pre > code.hljs .hljs-title, .--markdown pre > code.hljs .hljs-section {
+  color: #ffc66d;
+  font-weight: bold;
+}
+.--markdown pre > code.hljs .hljs-regexp, .--markdown pre > code.hljs .hljs-symbol, .--markdown pre > code.hljs .hljs-variable, .--markdown pre > code.hljs .hljs-template-variable, .--markdown pre > code.hljs .hljs-link, .--markdown pre > code.hljs .hljs-selector-attr, .--markdown pre > code.hljs .hljs-selector-pseudo {
+  color: #ffe13e;
+}
+.--markdown pre > code.hljs .hljs-literal {
+  color: #78a960;
+}
+.--markdown pre > code.hljs .hljs-built_in, .--markdown pre > code.hljs .hljs-bullet, .--markdown pre > code.hljs .hljs-code, .--markdown pre > code.hljs .hljs-addition {
+  color: #e786ff;
+}
+.--markdown pre > code.hljs .hljs-meta {
+  color: #f1eb33;
+}
+.--markdown pre > code.hljs .hljs-meta-string {
+  color: #4d99bf;
+}
+.--markdown pre > code.hljs .hljs-emphasis {
+  font-style: italic;
+}
+.--markdown pre > code.hljs .hljs-strong {
+  font-weight: bold;
+}
+@media screen and (max-width: 768px) {
+  .--markdown pre > span {
+    display: none !important;
+  }
+  .--markdown pre > code.hljs {
+    padding: 0.5rem 0.8rem;
+  }
+}
+
+/*# sourceMappingURL=markdown.css.map */
