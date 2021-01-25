@@ -308,3 +308,26 @@ export async function doReaction({content, id, has}) {
 `
     }, false)
 }
+
+export async function getUserCard(name) {
+    return await http({
+        query:
+            `{
+  user(login: "${name}") {
+    followers {
+      totalCount
+    }
+    location
+    name
+    bio
+    url
+    websiteUrl
+    repositories {
+      totalCount
+      totalDiskUsage
+    }
+    avatarUrl(size: 128)
+  }
+}
+`}, true)
+}

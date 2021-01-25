@@ -8,10 +8,13 @@
         <svg-icon :name="'loading'"/>
       </div>
       <div v-else class="list-item" v-for="item in items" :key="item.id" flex>
-        <a class="avatar" target="_blank" :href="item.site">
-          <img :src="item.avatar" @error="errAvatar" alt="avatar"/>
-        </a>
-        <div flex>
+        <div class="left"  @mouseleave="activeCardId=''">
+          <UserCard v-if="activeCardId===item.id" :login="item.nick"/>
+          <a class="avatar" target="_blank" :href="item.site" @mouseenter="activeCardId=item.id">
+            <img :src="item.avatar" @error="errAvatar" alt="avatar"/>
+          </a>
+        </div>
+        <div class="right" flex>
           <div class="body" flex>
             <div class="head" flex>
               <span class="nick-name" :class="{owner: item.nick===siteConfig.owner,self: item.nick===login}" flex>
@@ -43,10 +46,13 @@
           <div v-else-if="item.children.length" class="children">
             <div v-for="child in item.children" :key="child.id" class="child">
               <div class="content" flex>
-                <a :href="child.site" class="avatar" target="_blank">
-                  <img :src="child.avatar" @error="errAvatar" alt="avatar"/>
-                </a>
-                <div flex>
+                <div class="left" @mouseleave="activeCardId=''">
+                  <UserCard v-if="activeCardId===child.id" :login="child.nick"/>
+                  <a class="avatar" target="_blank" :href="item.site" @mouseenter="activeCardId=child.id">
+                    <img :src="child.avatar" @error="errAvatar" alt="avatar"/>
+                  </a>
+                </div>
+                <div class="right" flex>
                   <div class="text">
                     <span class="nick-name" :class="{owner: child.nick===siteConfig.owner,self: child.nick===login}" flex>
                       <a :href="item.site" target="_blank">{{ child.nick }}</a>
@@ -101,12 +107,13 @@ import Pagination from "@/components/Pagination";
 import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
 import {hljsAndInsertCopyBtn} from "@/utils/highlight";
 import errImg from '@/image/error.jpg'
+import UserCard from "@/views/comment/userCard";
 
 let doingReact = false;
 
 export default {
   name: "ListComment",
-  components: {Pagination, WriteComment},
+  components: {UserCard, Pagination, WriteComment},
   props: {
     title: {
       type: String,
@@ -129,6 +136,8 @@ export default {
       submitting: false,
       updating: false,
       loading: false,
+
+      activeCardId: ''
     }
   },
   async mounted() {
@@ -352,22 +361,26 @@ export default {
       padding-bottom: 0.5rem;
       align-items: flex-start;
 
-      > .avatar {
-        margin: 0.3rem 1rem 0 0;
+      >.left {
+        position: relative;
+        > .avatar {
+          margin: 0.3rem 1rem 0 0;
 
-        > img {
-          width: 2.4rem;
-          height: 2.4rem;
-          border-radius: 50%;
-          object-fit: cover;
-          transition: all .1s linear;
-          &:hover{
-            transform: scale(1.1);
+          > img {
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 50%;
+            object-fit: cover;
+            transition: all .1s linear;
+
+            &:hover {
+              transform: scale(1.1);
+            }
           }
         }
       }
 
-      > div {
+      > .right {
         width: calc(100% - 3.4rem);
         flex-direction: column;
 
@@ -421,21 +434,24 @@ export default {
             > .content {
               align-items: flex-start;
 
-              > a {
-                margin-right: 0.5rem;
-
-                > img {
-                  width: 1.8rem;
-                  height: 1.8rem;
-                  border-radius: 50%;
-                  object-fit: cover;
-                  transition: all .1s linear;
-                  &:hover{
-                    transform: scale(1.1);
+              >.left {
+                position: relative;
+                > .avatar {
+                  margin-right: 0.5rem;
+                  > img {
+                    width: 1.8rem;
+                    height: 1.8rem;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    transition: all .1s linear;
+                    &:hover{
+                      transform: scale(1.1);
+                    }
                   }
                 }
               }
-              >div {
+
+              > .right {
                 flex-direction: column;
                 width: 100%;
                 overflow: hidden;
@@ -541,7 +557,7 @@ export default {
         >a.avatar{
           position: absolute;
         }
-        >div{
+        >.right{
           width: 100%;
           >.body{
             >.head{
