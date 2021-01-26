@@ -10,9 +10,7 @@
       <div v-else class="list-item" v-for="item in items" :key="item.id" flex>
         <div class="left"  @mouseleave="activeCardId=''">
           <UserCard v-if="activeCardId===item.id" :login="item.nick"/>
-          <a class="avatar" target="_blank" :href="item.site" @mouseenter="activeCardId=item.id">
-            <img :src="item.avatar" @error="errAvatar" alt="avatar"/>
-          </a>
+          <err-avatar :url="item.site" :avatar="item.avatar" @mouseenter="activeCardId=item.id"/>
         </div>
         <div class="right" flex>
           <div class="body" flex>
@@ -48,9 +46,7 @@
               <div class="content" flex>
                 <div class="left" @mouseleave="activeCardId=''">
                   <UserCard v-if="activeCardId===child.id" :login="child.nick"/>
-                  <a class="avatar" target="_blank" :href="item.site" @mouseenter="activeCardId=child.id">
-                    <img :src="child.avatar" @error="errAvatar" alt="avatar"/>
-                  </a>
+                  <err-avatar :url="child.site" :avatar="child.avatar" @mouseenter="activeCardId=child.id"/>
                 </div>
                 <div class="right" flex>
                   <div class="text">
@@ -108,12 +104,13 @@ import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
 import {hljsAndInsertCopyBtn} from "@/utils/highlight";
 import errImg from '@/image/error.jpg'
 import UserCard from "@/views/comment/userCard";
+import ErrAvatar from "@/views/comment/errAvatar";
 
 let doingReact = false;
 
 export default {
   name: "ListComment",
-  components: {UserCard, Pagination, WriteComment},
+  components: {ErrAvatar, UserCard, Pagination, WriteComment},
   props: {
     title: {
       type: String,
@@ -363,21 +360,13 @@ export default {
 
       >.left {
         position: relative;
-        > .avatar {
+        &:hover ::v-deep > .avatar{
+          transform: scale(1.1);
+        }
+        ::v-deep > .avatar {
+          width: 2.4rem;
+          height: 2.4rem;
           margin: 0.3rem 1rem 0 0;
-
-          > img {
-            width: 2.4rem;
-            height: 2.4rem;
-            border-radius: 50%;
-            object-fit: cover;
-            transition: all .1s linear;
-            box-shadow: 0 .3rem .6rem rgba(0, 0, 0, .4);
-
-            &:hover {
-              transform: scale(1.1);
-            }
-          }
         }
       }
 
@@ -437,20 +426,13 @@ export default {
 
               >.left {
                 position: relative;
-                > .avatar {
+                &:hover ::v-deep > .avatar{
+                  transform: scale(1.1);
+                }
+                ::v-deep > .avatar {
                   margin-right: 0.5rem;
-                  > img {
-                    width: 1.8rem;
-                    height: 1.8rem;
-                    border-radius: 50%;
-                    object-fit: cover;
-                    transition: all .1s linear;
-                    box-shadow: 0 .3rem .6rem rgba(0, 0, 0, .4);
-
-                    &:hover{
-                      transform: scale(1.1);
-                    }
-                  }
+                  width: 1.8rem;
+                  height: 1.8rem;
                 }
               }
 

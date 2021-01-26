@@ -27,8 +27,8 @@ module.exports = {
             });
         config.plugin('html')
             .tap(args => {
-                args[0].owner = siteConfig.owner
-                args[0].stamp = siteConfig.timeStamp
+                args[0].owner = siteConfig.owner;
+                args[0].stamp = isDev?'':siteConfig.timeStamp;
                 return args
             })
         // 开发模式 server静态目录

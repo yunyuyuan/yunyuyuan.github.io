@@ -6,7 +6,7 @@
     </div>
     <div v-else class="wrap">
       <div class="info" flex>
-        <a :href="cardInfo.ghUrl" target="_blank"><img :src="cardInfo.avatar" @error="errAvatar" alt="avatar"/></a>
+        <err-avatar :url="cardInfo.ghUrl" :avatar="cardInfo.avatar"/>
         <div flex>
           <a :href="cardInfo.ghUrl" target="_blank">{{ $props.login }}<span>({{ cardInfo.name||defaultCardInfo.name }})</span></a>
           <span>{{ cardInfo.bio || defaultCardInfo.bio }}</span>
@@ -48,8 +48,10 @@
 <script>
 import {getUserCard} from "@/views/comment/utils";
 import errImg from '@/image/error.jpg'
+import ErrAvatar from "@/views/comment/errAvatar";
 
 export default {
+  components: {ErrAvatar},
   props: ['login'],
   name: "userCard",
   data() {
@@ -183,19 +185,9 @@ export default {
     > .info {
       align-items: flex-start;
 
-      >a {
-        > img {
-          width: 5rem;
-          height: 5rem;
-          border-radius: 50%;
-          margin-right: .8rem;
-          transition: all .15s linear;
-          cursor: pointer;
-
-          &:hover {
-            transform: scale(1.1);
-          }
-        }
+      ::v-deep >.avatar {
+        width: 5rem;
+        height: 5rem;
       }
 
       > div {

@@ -83,6 +83,8 @@ export default {
   },
   computed: {
     isBgImg() {
+      // 首页肯定是图片
+      if (this.routeNow === 'home') return true;
       return this.config.backgroundImg === 'img' || (this.config.backgroundImg === 'random' && this.rand)
     },
     rand() {
