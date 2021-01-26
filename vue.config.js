@@ -1,5 +1,7 @@
 const path = require('path');
 const isDev = process.env.NODE_ENV === 'development';
+
+const genTimeStamp = require("./src/utils/before_build");
 const siteConfig = require('./src/site-config');
 
 module.exports = {
@@ -26,6 +28,7 @@ module.exports = {
         config.plugin('html')
             .tap(args => {
                 args[0].owner = siteConfig.owner
+                args[0].stamp = siteConfig.timeStamp
                 return args
             })
         // 开发模式 server静态目录
@@ -39,7 +42,9 @@ module.exports = {
         }
     },
     configureWebpack: {
-        // devtool: 'source-map'
+        plugins: [
+            new genTimeStamp()
+        ]
     },
     devServer: {
         historyApiFallback: true

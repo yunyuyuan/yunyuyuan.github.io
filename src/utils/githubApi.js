@@ -187,7 +187,20 @@ export class GithubUtils {
                 if (!res[0]){
                     return resolve([false, res[1]])
                 }
-                const temp = res[1];
+                const matcher = res[1].match(/^(\d+)([\s\S]*?)$/);
+                if (!matcher){
+                    return resolve([false, '404-temp.html格式错误!'])
+                }
+                const timeStamp = matcher[1];
+                const temp = matcher[2];
+                dict.state = '检查time.stamp是否一致';
+                res = await getText('dist/time.stamp');
+                if (!res[0]){
+                    return resolve([false, res[1]])
+                }
+                if (res[1] !== timeStamp){
+                    return resolve([false, 'time.stamp不一致!请重新build'])
+                }
                 dict.state = '获取404.html';
                 res = await getText('404.html');
                 if (!res[0]){
