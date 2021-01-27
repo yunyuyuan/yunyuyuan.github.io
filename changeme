@@ -1,0 +1,12 @@
+CNAME
+
+src/site-config.js --> name
+src/site-config.js --> repo
+src/site-config.js --> email
+src/site-config.js --> corner
+src/site-config.js --> homeTitle
+
+src/views/backend/utils.js --> pwd
+
+dynamic/favicon.svg
+src/image/*

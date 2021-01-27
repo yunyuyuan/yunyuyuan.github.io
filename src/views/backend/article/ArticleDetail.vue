@@ -108,6 +108,7 @@ import '@/assets/style/code-mirror/dracula-markdown.scss';
 import Resizer from "@/components/Resizer";
 import MarkdownHelp from "@/views/block/MarkdownHelp";
 import LoadingImg from "@/components/LoadingImg";
+import iImg from "@/image/i.png";
 import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
 import siteConfig from "@/site-config";
 import {delCache, genRss, getCache, setCache} from "@/views/backend/utils/utils";
@@ -152,7 +153,7 @@ export default {
       newInfo: {
         name: "编辑标题",
         file: "",
-        cover: "",
+        cover: iImg,
         time: "",
         modifyTime: "",
         summary: "编辑简介",
@@ -212,25 +213,27 @@ export default {
           this.$message.error(parseAjaxError(res[1]))
         }
       }
-      if (!this.codeMirror) {
-        this.codeMirror = new CodeMirror(this.$refs.textarea, {
-          indentUnit: 2,
-          tabSize: 2,
-          theme: 'light',
-          lineNumbers: true,
-          line: true,
-          mode: 'markdown',
-          matchTags: {bothTags: true},
-          matchBrackets: true,
-        });
-        this.codeMirror.on('change', () => {
-          this.mdText = this.codeMirror.getValue()
-        });
-        this.codeMirror.on('blur', () => {
-          this.focusAt = this.codeMirror.getCursor();
-        });
-      }
-      this.codeMirror.setValue(this.codeMirrorCache||mdText);
+      this.$nextTick(()=>{
+        if (this.codeMirror === null) {
+          this.codeMirror = new CodeMirror(this.$refs.textarea, {
+            indentUnit: 2,
+            tabSize: 2,
+            theme: 'light',
+            lineNumbers: true,
+            line: true,
+            mode: 'markdown',
+            matchTags: {bothTags: true},
+            matchBrackets: true,
+          });
+          this.codeMirror.on('change', () => {
+            this.mdText = this.codeMirror.getValue()
+          });
+          this.codeMirror.on('blur', () => {
+            this.focusAt = this.codeMirror.getCursor();
+          });
+        }
+        this.codeMirror.setValue(this.codeMirrorCache||mdText);
+      })
     },
     enableSticker(e) {
       if (this.showSticker) {
@@ -338,7 +341,7 @@ export default {
     },
     async save() {
       if (this.saving.b) return;
-      if (this.gitUtil) {
+      if (this.gitUtil||true) {
         let err = null;
         const info = this.info;
         if (!info.name || !info.summary || !info.tags.length || !info.cover) {
@@ -380,7 +383,14 @@ export default {
           if (res[0]) {
             // 更新rss
             this.saving.state = '更新 RSS';
-            const res = await this.gitUtil.updateSingleFile('dynamic/rss.xml', genRss(this.md));
+            let rss = '';
+            try {
+              rss = genRss(this.md);
+            }catch (e){
+              this.$message.error('你的浏览器处理rss貌似出了问题：'+e);
+              return
+            }
+            const res = await this.gitUtil.updateSingleFile('dynamic/rss.xml', rss);
             if (res[1]){
               this.$message.success('上传成功!');
               window.location.reload()

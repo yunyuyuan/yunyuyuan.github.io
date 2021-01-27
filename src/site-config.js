@@ -15,7 +15,8 @@ module.exports = {
         description: `${name}的博文Rss`,
         categories: 'Blog/Web development',
         ttl: 3600,
-        count: 20,
+        // 最新的10个文章
+        count: 10,
         /** Time By
          @create: 创建
          @update: 更新

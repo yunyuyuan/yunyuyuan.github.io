@@ -14,13 +14,15 @@
             </svg>
           </span>
         </div>
-        <router-link v-for="item in menu" :key="item.name" :to="{path: item.pathName}"
-                     :class="{active: $route.path.indexOf(item.pathName)===0}" class="list-item" flex>
-          <span class="icon">
-            <svg-icon :name="item.icon"/>
-          </span>
-          <span class="name">{{ item.name }}</span>
-        </router-link>
+        <div class="link-list" flex>
+          <router-link v-for="item in menu" :key="item.name" :to="{path: item.pathName}"
+                       :class="{active: $route.path.indexOf(item.pathName)===0}" class="list-item" flex>
+            <span class="icon">
+              <svg-icon :name="item.icon"/>
+            </span>
+            <span class="name">{{ item.name }}</span>
+          </router-link>
+        </div>
         <a class="home" href="/" flex="" title="回到主页">
           <img :src="selfImage" alt="favicon"/>
         </a>
@@ -284,38 +286,43 @@ export default {
       }
     }
 
-    > .list-item {
-      font-size: 1rem;
-      color: black;
-      text-decoration: none;
-      justify-content: center;
-      padding: 1rem 0;
-      width: calc(100% - 0.2rem);
-      border-left: 0.2rem solid transparent;
+    >.link-list {
+      overflow-y: auto;
+      flex-direction: column;
+      width: 100%;
+      > .list-item {
+        font-size: 1rem;
+        color: black;
+        text-decoration: none;
+        justify-content: center;
+        padding: 1rem 0;
+        width: calc(100% - 0.2rem);
+        border-left: 0.2rem solid transparent;
 
-      &.active {
-        background: rgba(76, 76, 76, 0.87);
-        border-color: #5fff88;
-      }
-
-      &:not(.active):hover {
-        background: rgba(255, 255, 255, 0.15);
-      }
-
-      > .icon {
-        width: 2.2rem;
-        height: 2.2rem;
-        display: flex;
-
-        > svg {
-          width: 100%;
-          height: 100%;
+        &.active {
+          background: rgba(76, 76, 76, 0.87);
+          border-color: #5fff88;
         }
-      }
 
-      > .name {
-        margin-left: 1rem;
-        color: white;
+        &:not(.active):hover {
+          background: rgba(255, 255, 255, 0.15);
+        }
+
+        > .icon {
+          width: 2.2rem;
+          height: 2.2rem;
+          display: flex;
+
+          > svg {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        > .name {
+          margin-left: 1rem;
+          color: white;
+        }
       }
     }
 

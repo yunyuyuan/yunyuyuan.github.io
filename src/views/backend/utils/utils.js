@@ -16,6 +16,15 @@ export function delCache (key){
 
 const siteConfig = require( '@/site-config')
 
+function escapeXml (s){
+    return s
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+}
+
 export function genRss (items){
     if (siteConfig.rss.timeBy==='update'){
         const temp = items.slice();
@@ -26,13 +35,6 @@ export function genRss (items){
     }
     items = items.slice(0, siteConfig.rss.count)
     const origin = location.origin;
-    function escapeXml (s){
-        return s.replace(/&/g, '&amp;')
-               .replace(/</g, '&lt;')
-               .replace(/>/g, '&gt;')
-               .replace(/"/g, '&quot;')
-               .replace(/'/g, '&apos;');
-    }
     function createEl (tag, html, notEscape){
         const el = xml.createElement(tag);
         if (html) {
