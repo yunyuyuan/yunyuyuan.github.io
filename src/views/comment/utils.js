@@ -103,6 +103,7 @@ export async function getLoginInfo(token) {
 }
 
 export function removeToken() {
+    localStorage.removeItem(tokenKey);
     headers.Authorization = '';
 }
 

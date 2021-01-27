@@ -7,12 +7,9 @@
         <single-button :size="0.9" :text="'退出'" @click.native="logout"/>
       </div>
       <div v-else class="login" flex>
-        <float-input :name="'token'" :size="0.9" :value="token||''" @input="inputToken" @submit="genToken"/>
-        <single-button :size="0.9" :text="'生成token'" @click.native="genToken"/>
-        <loading-button :icon="'account'" :loading="loging" :size="0.9" :class="{disabled: token===''}" :text="'登录'" @click.native="doLogin(true)"/>
-        <a ref="a"
-           :href="`https://github.com/settings/tokens/new?description=comment to ${name}&scopes=public_repo%2Cwrite:discussion`"
-           target="_blank"></a>
+        <a ref="a" :href="oauthUrl" target="_blank" @click="clickLogin">
+          <loading-button :icon="'github'" :loading="loging" :size="0.9" :class="{disabled: loging}" :text="'登录'"/>
+        </a>
       </div>
     </div>
     <write-comment @submit="submit" :loading="submitting"/>
@@ -28,6 +25,7 @@ import {parseAjaxError} from "@/utils/utils";
 import FloatInput from "@/components/FloatInput";
 import SingleButton from "@/components/Button";
 import LoadingButton from "@/components/LoadingButton";
+import siteConfig from "@/site-config";
 
 export default {
   name: "TheComment",
@@ -45,7 +43,7 @@ export default {
       loging: false,
       logined: false,
       loginInfo: {},
-      submitting: false
+      submitting: false,
     }
   },
   computed: {
@@ -54,6 +52,12 @@ export default {
     },
     config (){
       return this._config()
+    },
+    oauthUrl (){
+      return `https://github.com/login/oauth/authorize?`+
+              `client_id=${siteConfig.oauth.client_id}&`+
+              `redirect_uri=${siteConfig.oauth.redirect_uri}&`+
+              `scope=public_repo%2Cwrite:discussion`
     }
   },
   async created() {
@@ -63,16 +67,26 @@ export default {
     }
   },
   methods: {
-    inputToken(payload) {
-      this.token = payload[1]
-    },
-    genToken() {
-      this.$refs.a.click()
+    clickLogin (e){
+      if (this.loging) {
+        e.preventDefault();
+      }else{
+        removeToken();
+        const handle = setInterval(()=>{
+          const token = localStorage.getItem(tokenKey);
+          if (token){
+            this.token = token;
+            this.doLogin(true);
+            clearInterval(handle);
+          }
+        }, 500)
+      }
     },
     async doLogin(remind) {
       if (this.loging || !this.token) return;
       this.loging = true;
       const res = await getLoginInfo(this.token);
+      // 尝试使用localStorage的token登录
       if (res[0]) {
         localStorage.setItem(tokenKey, this.token);
         if (remind) {
@@ -132,16 +146,13 @@ export default {
     }
 
     > .login {
-      > .float-input {
-        width: 15rem;
-      }
-
-      > ::v-deep.single-button {
-        background: #ff7b19;
-        margin: 0 1rem;
-
-        &:hover {
-          background: #ff852c;
+      >a {
+        text-decoration: none;
+        ::v-deep .loading-button{
+          background: linear-gradient(90deg, #0058ff, #169eff);
+          >svg{
+            fill: white;
+          }
         }
       }
     }

@@ -111,7 +111,7 @@ import LoadingImg from "@/components/LoadingImg";
 import iImg from "@/image/i.png";
 import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
 import siteConfig from "@/site-config";
-import {delCache, genRss, getCache, setCache} from "@/views/backend/utils/utils";
+import {delCache, genRss, getCache, setCache} from "@/views/backend/utils";
 import SingleButton from "@/components/Button";
 
 export default {

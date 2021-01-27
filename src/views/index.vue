@@ -2,6 +2,7 @@
   <div id="index">
     <loading/>
     <NotFound v-if="routeNow===null"/>
+    <template v-else-if="noBg"></template>
     <img class="bg" v-else-if="isBgImg" :src="images[routeNow]" alt="bg"/>
     <div class="bg" v-else>
       <div id="particles-bg"></div>
@@ -35,6 +36,7 @@ import Vue from 'vue';
 import {routeInfo} from "@/route";
 import {getText, parseAjaxError} from "@/utils/utils";
 import {originPrefix} from "@/need";
+import siteConfig from "@/site-config";
 
 Vue.use(Viewer)
 
@@ -82,6 +84,9 @@ export default {
     }
   },
   computed: {
+    noBg (){
+      return this.routeNow === 'oauth'
+    },
     isBgImg() {
       // 首页肯定是图片
       if (this.routeNow === 'home') return true;
@@ -114,14 +119,14 @@ export default {
     }
   },
   async mounted() {
-    console.log("代码改变世界=.=")
+    console.log('%c'+siteConfig.tip, 'text-shadow: 0 1px 0 #ccc,0 2px 0 #c9c9c9,0 3px 0 #bbb,0 4px 0 #b9b9b9,0 1px 3px rgba(0,0,0,.3),0 3px 5px rgba(0,0,0,.2),0 5px 10px rgba(0,0,0,.25),0 10px 10px rgba(0,0,0,.2),0 20px 20px rgba(0,0,0,.15);font-size: 20px;')
     const fontSize = localStorage.getItem('font-size');
     if (fontSize) {
       document.documentElement.style.fontSize = fontSize + 'px';
     }
     Vue.prototype.$message = this.$refs.message;
     await this.updateConfig();
-    if (!this.isBgImg) {
+    if (!this.isBgImg && !this.noBg) {
       //particle
       const tsparticles = () => import('tsparticles');
       tsparticles().then(({particlesJS}) => {

@@ -78,7 +78,7 @@ import jszip from "jszip";
 import {originPrefix} from "@/need";
 import * as fileSaver from "file-saver";
 import LoadingImg from "@/components/LoadingImg";
-import {genRss} from "@/views/backend/utils/utils";
+import {genRss} from "@/views/backend/utils";
 
 export default {
   name: "ArticleList",

@@ -109,6 +109,14 @@ const routes = [
         keywords: `静态博客 ${siteConfig.owner}的个人博客 关于`,
         description: `${siteConfig.owner}的个人博客-关于`
     },
+    {
+        path: '/oauth',
+        name: 'oauth',
+        title: 'oauth验证',
+        comp: ()=>import('@/views/comment/oauth'),
+        keywords: `静态博客 ${siteConfig.owner}的个人博客 oauth`,
+        description: `${siteConfig.owner}的个人博客-oauth`
+    },
 ]
 
 module.exports = {

@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import Login from "./utils/Login";
+import Login from "./Login";
 import {getText, loadFinish, parseAjaxError} from "@/utils/utils";
 import LoadingButton from "@/components/LoadingButton";
 import {originPrefix} from "@/need";

@@ -232,7 +232,6 @@ export default {
         > svg {
           width: 1.2rem;
           height: 1.2rem;
-          margin-left: .5rem;
           flex-shrink: 0;
         }
         >b{

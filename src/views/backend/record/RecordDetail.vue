@@ -46,7 +46,7 @@ import LoadingImg from "@/components/LoadingImg";
 import SingleButton from "@/components/Button";
 import {getText, parseAjaxError, sortByTime} from "@/utils/utils";
 import {originPrefix} from "@/need";
-import {delCache, getCache, setCache} from "@/views/backend/utils/utils";
+import {delCache, getCache, setCache} from "@/views/backend/utils";
 
 export default {
   name: "RecordDetail",
