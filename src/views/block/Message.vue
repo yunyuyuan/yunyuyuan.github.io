@@ -1,6 +1,6 @@
 <template>
   <div class="message" flex>
-    <div v-for="(item,idx) in list" v-if="item.display" :class="[item.type, 'item']" flex
+    <div v-for="(item,idx) in list" v-if="item.display" :class="[item.type, 'item', item.downed?'downed':'']" flex
          :key="item.id">
       <svg-icon :name="item.type" class="type"/>
       <svg-icon :name="'trash'" class="close" @click.native="removeItem(idx)" title="关闭"/>
@@ -38,16 +38,20 @@ export default {
         type: type,
         text: text,
         display: true,
-        id: this.msgId
+        id: this.msgId,
+        downed: false
       };
       this.msgId += 1;
       this.list.push(obj);
       this.$nextTick(() => {
-        this.$el.querySelectorAll('.list-item').forEach(el => {
+        this.$el.querySelectorAll('.line').forEach(el => {
           if (el.hasAttribute('listened')) return;
           el.setAttribute('listened', '');
+          el.addEventListener('animationstart', () => {
+            obj.downed = true;
+          })
           el.addEventListener('animationend', () => {
-            obj.display = false
+            obj.display = false;
           })
         })
       })
@@ -82,7 +86,7 @@ export default {
   }
 }
 @keyframes msg-line-out{
-  5%{
+  0%{
     transform: translateX(0);
     background: #ff0000;
   }
@@ -100,7 +104,7 @@ export default {
   height: 0;
   margin: 0 auto;
   flex-direction: column;
-  > div{
+  > .item{
     width: 40%;
     max-width: 50rem;
     border-radius: 0.6rem;
@@ -119,7 +123,7 @@ export default {
         display: unset !important;
       }
     }
-    &:hover{
+    &.downed:hover{
       animation-play-state: paused;
       > .close{
         display: unset;
@@ -162,7 +166,8 @@ export default {
       position: absolute;
       bottom: 0;
       left: 0;
-      animation: msg-line-out 5s linear forwards;
+      animation: msg-line-out 4.75s linear forwards;
+      animation-delay: 0.25s;
     }
   }
 }
