@@ -84,9 +84,12 @@ export default {
   computed: {
     token (){
       return this._token()
+    },
+    getMdList (){
+      return this._needMdToRef()
     }
   },
-  inject: ['_token'],
+  inject: ['_token', '_needMdToRef'],
   methods: {
     async doSearch(cursor) {
       this.searching = true;
@@ -124,7 +127,9 @@ export default {
             el.innerText = el.innerText.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
             hljsAndInsertCopyBtn(el);
           })
-          processMdHtml(el, true)
+          this.getMdList.then(res=>{
+            processMdHtml(el, true, res)
+          })
         })
       })
     },
@@ -143,7 +148,7 @@ export default {
     calcMdToHtml (text){
       return parseMarkdown(text
           .replace(/</g, '&lt;')
-          .replace(/(^|\s*)>/g, '$1&gt;'))
+          .replace(/(^|\s*)>/g, '$1&gt;'), true)
     },
     async reopenIssue(id) {
       this.processing.state = '正在恢复...'

@@ -174,15 +174,20 @@ export default {
     config (){
       return this._config()
     },
+    getMdList() {
+      return this._needMdToRef()
+    },
   },
-  inject: ['_config', '_gitUtil'],
+  inject: ['_config', '_gitUtil', '_needMdToRef'],
   watch: {
     '$props.inited' (){
       this.init()
     },
     htmlText (){
-      this.$nextTick(()=>{
-        processMdHtml(this.$refs.html)
+      this.$nextTick(async () => {
+        this.getMdList.then(res=>{
+          processMdHtml(this.$refs.html, false, res)
+        });
       })
     }
   },

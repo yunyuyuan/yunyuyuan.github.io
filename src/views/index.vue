@@ -37,6 +37,7 @@ import {routeInfo} from "@/route";
 import {getText, parseAjaxError} from "@/utils/utils";
 import {originPrefix} from "@/need";
 import siteConfig from "@/site-config";
+import dayjs from "dayjs";
 
 Vue.use(Viewer)
 
@@ -52,20 +53,17 @@ export default {
   data() {
     return {
       config: {
-        name: "",
-        describe: "",
-        copyright: "",
+        name: "Unknown",
+        describe: "Unset",
+        copyright: dayjs(new Date()).format('YYYY'),
         github: "",
         email: "",
-        sticker: [],
         backgroundImg: "random",
-        friends: []
       },
       comp: null,
 
       showHead: true,
       showBg: false,
-      bgColor: '',
       images: {
         home: HomeImage,
         article: ArticleImage,
@@ -76,11 +74,15 @@ export default {
         about: aboutImage,
       },
       routeNow: 'home',
+      mdList: null,
     }
   },
   provide() {
     return {
       _config: () => this.computeConfig,
+      _needMdToRef: (force) => {
+        return force?this.forceUpdateMdList:this.computeMdList
+      },
     }
   },
   computed: {
@@ -97,6 +99,16 @@ export default {
     },
     computeConfig() {
       return this.config
+    },
+    async computeMdList() {
+      if (this.mdList != null) return this.mdList;
+      const res = await getText(`${originPrefix}/json/md.json`);
+      if (res[0]) {
+        this.mdList = JSON.parse(res[1]);
+      }else{
+        this.mdList = [];
+      }
+      return this.mdList;
     }
   },
   async created() {

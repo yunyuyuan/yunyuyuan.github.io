@@ -1,11 +1,8 @@
 <template>
-  <router-view :md="md" :inited="inited" @refresh="getMd"></router-view>
+  <router-view :md="md" :inited="inited" @refresh="refreshMd"></router-view>
 </template>
 
 <script>
-import {getText} from "@/utils/utils";
-import {originPrefix} from "@/need";
-
 export default {
   name: "Article",
   data (){
@@ -14,16 +11,24 @@ export default {
       md: []
     }
   },
+  computed: {
+    getMdList (){
+      return this._needMdToRef()
+    }
+  },
+  inject: ['_needMdToRef'],
   async created() {
-    await this.getMd()
+    this.getMdList.then(res=>{
+      this.md = res
+    })
+    this.inited = true
   },
   methods: {
-    async getMd() {
+    async refreshMd() {
       this.inited = false;
-      const res = await getText(`${originPrefix}/json/md.json`);
-      if (res[0]) {
-        this.md = JSON.parse(res[1])
-      }
+      this._needMdToRef(true).then(res=>{
+        this.md = res;
+      })
       this.inited = true
     }
   }

@@ -1,13 +1,13 @@
 // 别删除 .--markdown，修改它包裹的内容
-.--markdown{
+.--markdown {
   $line-height: 1.8rem;
   width: 100%;
   display: block;
   word-break: break-word;
   line-height: $line-height;
   font-size: 0.88rem;
-  @each $size in 1, 2, 3, 4, 5, 6{
-    h#{$size}{
+  @each $size in 1, 2, 3, 4, 5, 6 {
+    h#{$size} {
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -16,10 +16,12 @@
       color: rgb(255, 82, 24);
       font-size: 0.8rem/$size + 0.8rem;
       position: relative;
-      &:hover{
+
+      &:hover {
         text-decoration: underline;
       }
-      > img{
+
+      > img {
         display: block;
         width: 1.8rem;
         height: 1.8rem;
@@ -27,35 +29,120 @@
         position: absolute;
         transform: translateX(calc(-100% - 0.4rem));
       }
-      @media screen and (max-width: 768px){
-        > img{
+
+      @media screen and (max-width: 768px) {
+        > img {
           position: relative;
           transform: translateX(-0.4rem);
         }
       }
     }
   }
-  hr{
+
+  hr {
     width: 100%;
     background: black;
     margin: 1rem 0;
   }
-  p{
+
+  p {
     white-space: pre-line;
   }
-  a[href]{
-    display: inline-block;
-    color: #0014ff;
-    position: relative;
-    word-break: break-all;
-    background: #f0fffd;
-    transition: all .1s linear;
-    padding: 0 0.5rem;
-    border-radius: 0.15rem;
-    &:hover{
-      background: #9dfffa;
+
+  a {
+    &[href]:not([data-self-site]) {
+      margin: 0 0.15rem;
+      display: inline-block;
+      color: #0014ff;
+      position: relative;
+      word-break: break-all;
+      background: #f0fffd;
+      transition: all .1s linear;
+      padding: 0 0.5rem;
+      border-radius: 0.15rem;
+
+      &:hover {
+        background: #9dfffa;
+      }
+    }
+    &[data-self-site]{
+      width: 80%;
+      margin: 1rem auto;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: .4rem 1.4rem;
+      border-radius: .4rem;
+      box-shadow: 0 0 .8rem rgba(0, 0, 0, .4);
+      cursor: pointer;
+      transition: all .2s linear;
+      &:hover{
+        box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.6);
+        >span > strong{
+          text-decoration: underline;
+          color: blue;
+        }
+      }
+      >img{
+        width: 6rem;
+        height: 6rem;
+        border-radius: .4rem;
+        box-shadow: none !important;
+        border: 1px solid #d2d2d2;
+        flex-shrink: 0;
+        margin-right: .5rem;
+      }
+      >span{
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        >strong, >span{
+          text-overflow: ellipsis;
+          overflow: hidden;
+          -webkit-box-orient: vertical;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          word-break: break-all;
+          white-space: pre-wrap;
+        }
+        >strong{
+          font-size: 1.1rem;
+          color: black;
+        }
+        >span{
+          -webkit-line-clamp: 5;
+          margin-top: .8rem;
+          font-size: .9rem;
+          color: gray;
+        }
+      }
     }
   }
+
+  span.anchor-id{
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  a[data-anchor-id].anchor-id-ref{
+    cursor: pointer;
+    color: rgb(255, 82, 24);
+    display: inline-flex;
+    align-items: center;
+    margin: 0 .2rem;
+    &:hover{
+      text-decoration: underline;
+    }
+    &:before{
+      content: '#';
+      font-size: 1.4em;
+      margin-right: .3rem;
+    }
+  }
+
   img[alt]{
     display: block;
     width: 80%;
@@ -76,7 +163,7 @@
       margin-right: auto;
     }
   }
-  a[href], strong, em{
+  strong, em{
     margin: 0 0.15rem;
   }
   strong{}
@@ -289,6 +376,48 @@
       .hljs-strong{
         font-weight: bold
       }
+    }
+  }
+  div.hidable{
+    width: 95%;
+    margin: .5rem auto;
+    border-radius: .3rem;
+    background: rgb(245, 245, 245);
+    &[data-hidden]{
+      >p{
+        border-radius: .3rem .3rem 0 0;
+        >img{
+          transform: rotate(0);
+        }
+      }
+      >span{
+        padding: 0 .5rem;
+        height: 0;
+      }
+    }
+    >p{
+      width: 100%;
+      padding: .5rem 0;
+      background: #cacaca;
+      border-radius: inherit;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      >img{
+        width: 1.3rem;
+        height: 1.3rem;
+        margin: 0 .5rem;
+        transform: rotate(90deg);
+        flex-shrink: 0;
+      }
+    }
+    >span{
+      display: block;
+      width: calc(100% - 1rem);
+      padding: .5rem;
+      overflow: hidden;
+      border-radius: 0 0 .3rem .3rem;
     }
   }
   @media screen and (max-width: 768px) {

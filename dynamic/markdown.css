@@ -175,7 +175,8 @@
 .--markdown p {
   white-space: pre-line;
 }
-.--markdown a[href] {
+.--markdown a[href]:not([data-self-site]) {
+  margin: 0 0.15rem;
   display: inline-block;
   color: #0014ff;
   position: relative;
@@ -185,8 +186,82 @@
   padding: 0 0.5rem;
   border-radius: 0.15rem;
 }
-.--markdown a[href]:hover {
+.--markdown a[href]:not([data-self-site]):hover {
   background: #9dfffa;
+}
+.--markdown a[data-self-site] {
+  width: 80%;
+  margin: 1rem auto;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 1.4rem;
+  border-radius: 0.4rem;
+  box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: all 0.2s linear;
+}
+.--markdown a[data-self-site]:hover {
+  box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.6);
+}
+.--markdown a[data-self-site]:hover > span > strong {
+  text-decoration: underline;
+  color: blue;
+}
+.--markdown a[data-self-site] > img {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 0.4rem;
+  box-shadow: none !important;
+  border: 1px solid #d2d2d2;
+  flex-shrink: 0;
+  margin-right: 0.5rem;
+}
+.--markdown a[data-self-site] > span {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.--markdown a[data-self-site] > span > strong, .--markdown a[data-self-site] > span > span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+.--markdown a[data-self-site] > span > strong {
+  font-size: 1.1rem;
+  color: black;
+}
+.--markdown a[data-self-site] > span > span {
+  -webkit-line-clamp: 5;
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+  color: gray;
+}
+.--markdown span.anchor-id {
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.--markdown a[data-anchor-id].anchor-id-ref {
+  cursor: pointer;
+  color: #ff5218;
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0.2rem;
+}
+.--markdown a[data-anchor-id].anchor-id-ref:hover {
+  text-decoration: underline;
+}
+.--markdown a[data-anchor-id].anchor-id-ref:before {
+  content: "#";
+  font-size: 1.4em;
+  margin-right: 0.3rem;
 }
 .--markdown img[alt] {
   display: block;
@@ -208,7 +283,7 @@
   margin-left: auto;
   margin-right: auto;
 }
-.--markdown a[href], .--markdown strong, .--markdown em {
+.--markdown strong, .--markdown em {
   margin: 0 0.15rem;
 }
 .--markdown del {
@@ -402,6 +477,46 @@
 }
 .--markdown pre > code.hljs .hljs-strong {
   font-weight: bold;
+}
+.--markdown div.hidable {
+  width: 95%;
+  margin: 0.5rem auto;
+  border-radius: 0.3rem;
+  background: whitesmoke;
+}
+.--markdown div.hidable[data-hidden] > p {
+  border-radius: 0.3rem 0.3rem 0 0;
+}
+.--markdown div.hidable[data-hidden] > p > img {
+  transform: rotate(0);
+}
+.--markdown div.hidable[data-hidden] > span {
+  padding: 0 0.5rem;
+  height: 0;
+}
+.--markdown div.hidable > p {
+  width: 100%;
+  padding: 0.5rem 0;
+  background: #cacaca;
+  border-radius: inherit;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+}
+.--markdown div.hidable > p > img {
+  width: 1.3rem;
+  height: 1.3rem;
+  margin: 0 0.5rem;
+  transform: rotate(90deg);
+  flex-shrink: 0;
+}
+.--markdown div.hidable > span {
+  display: block;
+  width: calc(100% - 1rem);
+  padding: 0.5rem;
+  overflow: hidden;
+  border-radius: 0 0 0.3rem 0.3rem;
 }
 @media screen and (max-width: 768px) {
   .--markdown pre > span {

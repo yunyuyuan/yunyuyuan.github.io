@@ -26,7 +26,13 @@ export default {
         ['#[google](https://google.com)', 'target=_blank的链接'],
         ['![30% x *](imgurl)', '宽为30%未设高度的img'],
         ['-(red: 文字)', '颜色为red的"文字"'],
+        ['-(write-1.3: 文字)-', '字体为write-font，大小为1.3rem的文字'],
+        ['[#锚点#]', '仅博文可用。自定义一个锚点'],
+        ['[#文字#锚点#]', '一段文字，点击跳到锚点'],
+        ['[html]文字[/html]', '仅博文可用。直接插入html'],
+        ['#{self}(articleId)', '指向本站id是articleId的链接，#代表外链'],
         ['--title--\ncontent\n-- --', 'field'],
+        ['~~title~~\ncontent\n~~ ~~', '标题为title的可隐藏的内容'],
       ]
     }
   }

@@ -137,6 +137,12 @@ export default {
       activeCardId: ''
     }
   },
+  computed: {
+    getMdList() {
+      return this._needMdToRef()
+    },
+  },
+  inject: ['_needMdToRef'],
   async mounted() {
     await this.updatePage();
   },
@@ -203,7 +209,7 @@ export default {
           reply = `<span class="reply">回复<a class="nick-name" target="_blank" href="https://gtihub.com/${matcher[1]}">@${matcher[1]}</a>:</span>`;
         }
       }else{
-        html = parseMarkdown(text)
+        html = parseMarkdown(text, true)
       }
       return reply+html
     },
@@ -215,7 +221,9 @@ export default {
             el.innerText = el.innerText.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
             hljsAndInsertCopyBtn(el);
           })
-          processMdHtml(el, true)
+          this.getMdList.then(res=>{
+            processMdHtml(el, true, res)
+          });
         })
       })
     },

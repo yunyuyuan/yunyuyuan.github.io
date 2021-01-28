@@ -128,17 +128,22 @@ export default {
       },
     }
   },
-  inject: ['_config'],
+  inject: ['_config', '_needMdToRef'],
   computed: {
     html() {
       this.$nextTick(() => {
-        processMdHtml(this.$refs.markdown, true)
+        this.getMdList.then(res=>{
+          processMdHtml(this.$refs.markdown, true, res)
+        });
       })
-      return parseMarkdown(this.comment);
+      return parseMarkdown(this.comment, true);
     },
     config() {
       return this._config()
-    }
+    },
+    getMdList() {
+      return this._needMdToRef()
+    },
   },
   created() {
     this.textareaHeight = this.$props.initHeight;

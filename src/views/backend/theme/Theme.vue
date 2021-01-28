@@ -78,13 +78,18 @@ export default {
   computed: {
     gitUtil (){
       return this._gitUtil()
-    }
+    },
+    getMdList() {
+      return this._needMdToRef()
+    },
   },
-  inject: ['_gitUtil'],
+  inject: ['_gitUtil', '_needMdToRef'],
   mounted() {
     this.init()
     this.$nextTick(()=>{
-      processMdHtml(this.$refs.html)
+      this.getMdList.then(res=>{
+        processMdHtml(this.$refs.html, true, res)
+      })
     })
   },
   watch: {

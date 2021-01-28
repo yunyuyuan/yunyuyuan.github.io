@@ -8,7 +8,7 @@ const
 
 
 module.exports = {
-    // --------- change this ↓ ---------
+// --------- change this ↓ ---------
 
     email: '326178275@qq.com',
     avatar: 'favicon.svg',
@@ -21,7 +21,7 @@ module.exports = {
     },
     tip: "代码改变世界(๑ˉ∀ˉ๑)",
 
-    // --------- change this ↑ ---------
+// --------- change this ↑ ---------
 
     owner: name,
     repo: repo,

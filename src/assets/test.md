@@ -15,7 +15,9 @@ __strong 强调__
 _em 斜体_
 
 -(blue: 蓝色字体)-
+-(write-1.5: write-font字体)-
 ~~删除~~
+[#不存在的锚点#nothing#]
 
 > blockquote
 > > 嵌套
@@ -67,3 +69,14 @@ body{
 }
 ```
 -- --
+
+~~可以隐藏的内容~~
+哈哈`可以插块级元素`
+```css
+body{
+    width: unset;
+}
+```
+-- --
+
+#{self}(1)

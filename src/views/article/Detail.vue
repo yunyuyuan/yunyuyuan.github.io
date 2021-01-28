@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import {getText, loadFinish} from "@/utils/utils";
+import {getText, goMarkdownAnchor, loadFinish} from "@/utils/utils";
 import {originPrefix} from "@/need";
 import TheComment from "@/views/comment/index";
 
@@ -84,7 +84,6 @@ export default {
       asideTop: 0,
       animationHandle: undefined,
       qrcode: '',
-      showQr: ''
     }
   },
   computed: {
@@ -107,6 +106,9 @@ export default {
     },
     url() {
       return encodeURI(location.hash.replace(/^#/, ''))
+    },
+    getMdList (){
+      return this._needMdToRef()
     }
   },
   watch: {
@@ -114,14 +116,14 @@ export default {
       this.goAnchor()
     }
   },
+  inject: ['_needMdToRef'],
   async created() {
     qrcode.toDataURL(location.href, (err, url) => {
       this.qrcode = url
     })
-    const res = await getText(`${originPrefix}/json/md.json`);
-    if (res[0]) {
-      this.md = JSON.parse(res[1]);
-    }
+    this.getMdList.then(res=>{
+      this.md = res
+    })
   },
   async mounted() {
     loadFinish();
@@ -135,7 +137,9 @@ export default {
     this.loading = false;
     this.$nextTick(() => {
       const el = this.$refs.markdown;
-      processMdHtml(el);
+      this.getMdList.then(res=>{
+        processMdHtml(el, false, res)
+      });
       // 取出anchor为侧栏
       this.anchors = [];
       const headList = el.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
@@ -167,6 +171,19 @@ export default {
       if (this.$route.path) {
         this.goAnchor()
       }
+      // 自定义锚点
+      el.querySelectorAll('a[data-anchor-id].anchor-id-ref').forEach(a=>{
+        const trueId = a.getAttribute('data-anchor-id');
+        if (el.querySelector('#'+trueId)){
+          a.addEventListener('click', e=>{
+            if (this.$route.path.substr(1) !== trueId) {
+              this.$router.replace(trueId);
+            }else{
+              this.goAnchor()
+            }
+          })
+        }
+      })
     })
   },
   beforeDestroy() {
@@ -181,7 +198,11 @@ export default {
       }
     },
     toAnchor(el) {
-      this.$router.replace(el.id);
+      if (this.$route.path.substr(1) !== el.id) {
+        this.$router.replace(el.id);
+      }else{
+        this.goAnchor()
+      }
     },
     goAnchor (){
       const el = document.getElementById(this.$route.path.substr(1));

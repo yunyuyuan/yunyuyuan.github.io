@@ -149,7 +149,11 @@ export default {
       }
       return lis
     },
+    getMdList (){
+      return this._needMdToRef()
+    }
   },
+  inject: ['_needMdToRef'],
   watch: {
     resultList() {
       // 重置pageNow
@@ -167,9 +171,8 @@ export default {
   },
   async mounted() {
     loadFinish();
-    const res = await getText(`${originPrefix}/json/md.json`);
-    if (res[0]) {
-      this.md = JSON.parse(res[1]);
+    this.getMdList.then(res=>{
+      this.md = res;
       let tag = queryMap()['search-tag'];
       if (tag) {
         tag = decodeURIComponent(tag);
@@ -177,7 +180,7 @@ export default {
           this.searchTags = [tag]
         }
       }
-    }
+    })
     this.loading = false;
   },
   methods: {

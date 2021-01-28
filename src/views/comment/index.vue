@@ -2,8 +2,8 @@
   <div class="comment" flex>
     <div class="token" flex>
       <div v-if="logined" class="logined" flex>
-        <img :src="loginInfo.avatar"/>
-        <a :href="loginInfo.url" target="_blank">{{ loginInfo.nick }}</a>
+        <err-avatar :avatar="loginInfo.avatar" :url="loginInfo.url"/>
+        <a class="nick" :href="loginInfo.url" target="_blank">{{ loginInfo.nick }}</a>
         <single-button :size="0.9" :text="'退出'" @click.native="logout"/>
       </div>
       <div v-else class="login" flex>
@@ -26,10 +26,11 @@ import FloatInput from "@/components/FloatInput";
 import SingleButton from "@/components/Button";
 import LoadingButton from "@/components/LoadingButton";
 import siteConfig from "@/site-config";
+import ErrAvatar from "@/views/comment/errAvatar";
 
 export default {
   name: "TheComment",
-  components: {LoadingButton, SingleButton, FloatInput, ListComment, WriteComment},
+  components: {ErrAvatar, LoadingButton, SingleButton, FloatInput, ListComment, WriteComment},
   props: {
     title: {
       type: String,
@@ -158,14 +159,15 @@ export default {
     }
 
     > .logined {
-      > img {
-        border-radius: 50%;
+      ::v-deep .avatar {
         width: 2.8rem;
         height: 2.8rem;
-        object-fit: cover;
+        &:hover{
+          transform: scale(1.1);
+        }
       }
 
-      > a {
+      > .nick {
         margin: 0 1rem;
         color: #000000;
         text-decoration: none;
