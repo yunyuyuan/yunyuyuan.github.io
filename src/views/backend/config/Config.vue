@@ -55,9 +55,11 @@ export default {
       deep: true,
       handler (){
         this.info = JSON.parse(JSON.stringify(this.config));
-        this.info.friends.forEach((v,idx)=>{
-          v.id = idx
-        })
+        if (this.info.friends) {
+          this.info.friends.forEach((v, idx) => {
+            v.id = idx
+          })
+        }
       }
     }
   },
