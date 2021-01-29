@@ -191,7 +191,8 @@
 }
 .--markdown a[data-self-site] {
   width: 80%;
-  margin: 1rem auto;
+  margin-left: auto;
+  margin-right: auto;
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -298,52 +299,6 @@
   background: #efefef;
   border-radius: 0 0.5rem 0.5rem 0;
 }
-.--markdown fieldset {
-  width: calc(96% - 2rem);
-  margin: 2rem 2% 0.5rem 2%;
-  padding: 1.2rem 1rem 0.6rem 1rem;
-  position: relative;
-  transition: all 0.15s ease-out;
-}
-.--markdown fieldset:before {
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  z-index: 1;
-  width: calc(100% + 2px);
-  height: calc(100% + 2px);
-  content: "";
-  display: block;
-  background: linear-gradient(to right bottom, red, blue);
-}
-.--markdown fieldset:after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  content: "";
-  display: block;
-  background: white;
-}
-.--markdown fieldset * {
-  z-index: 3;
-  position: relative;
-}
-.--markdown fieldset > legend {
-  position: absolute;
-  font-size: 0.9rem;
-  line-height: 1rem;
-  top: -0.8rem;
-  left: 1rem;
-  display: block;
-  background: #826aff;
-  border-radius: 0.2rem;
-  box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.4);
-  color: white;
-  padding: 0.2rem 0.8rem;
-}
 .--markdown table {
   width: 90%;
   margin: 1rem auto;
@@ -352,19 +307,19 @@
   text-align: center;
 }
 .--markdown ul > li:not(.task-list-item) > img:first-child:not(alt), .--markdown ul > li:not(.task-list-item) > p > img:first-child:not(alt) {
-  width: 1.4rem;
-  height: 1.4rem;
+  width: 1.2rem;
+  height: 1.2rem;
   position: absolute;
-  top: 0.2rem;
+  top: 0.3rem;
   left: -1.8rem;
 }
 .--markdown ol > li:before {
   content: attr(data-count) ".";
-  color: #1b00ff;
+  color: black;
   position: absolute;
   left: -1.2rem;
   top: 0;
-  font-size: 1.1rem;
+  font-size: 0.92rem;
   font-weight: bold;
   line-height: 1.8rem;
 }
@@ -381,11 +336,11 @@
 }
 .--markdown ul > li.task-list-item > img, .--markdown ol > li.task-list-item > img {
   position: absolute;
-  top: 0.2rem;
+  top: 0.3rem;
   left: 0;
   transform: translateX(calc(-100% - 0.4rem));
-  width: 1.4rem;
-  height: 1.4rem;
+  width: 1.2rem;
+  height: 1.2rem;
   flex-shrink: 0;
 }
 .--markdown code {
@@ -478,17 +433,52 @@
 .--markdown pre > code.hljs .hljs-strong {
   font-weight: bold;
 }
+.--markdown div.hidable, .--markdown fieldset, .--markdown a[data-self-site] {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.--markdown fieldset {
+  width: calc(96% - 2rem);
+  margin-left: 2%;
+  margin-right: 2%;
+  padding: 1.2rem 1rem 0.6rem 1rem;
+  position: relative;
+  transition: all 0.15s ease-out;
+  border-radius: 0.2rem;
+  border: 1px solid gray;
+}
+.--markdown fieldset * {
+  position: relative;
+}
+.--markdown fieldset > legend {
+  position: absolute;
+  font-size: 0.9rem;
+  line-height: 1rem;
+  top: -0.8rem;
+  left: 1rem;
+  display: block;
+  background: #826aff;
+  border-radius: 0.2rem;
+  box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.4);
+  color: white;
+  padding: 0.2rem 0.8rem;
+}
 .--markdown div.hidable {
   width: 95%;
-  margin: 0.5rem auto;
+  margin-left: auto;
+  margin-right: auto;
   border-radius: 0.3rem;
   background: whitesmoke;
+  border: 1px solid #a0a0a0;
+}
+.--markdown div.hidable[data-hidden] {
+  border-color: transparent;
 }
 .--markdown div.hidable[data-hidden] > p {
-  border-radius: 0.3rem 0.3rem 0 0;
+  border-radius: inherit;
 }
 .--markdown div.hidable[data-hidden] > p > img {
-  transform: rotate(0);
+  transform: rotate(-90deg);
 }
 .--markdown div.hidable[data-hidden] > span {
   padding: 0 0.5rem;
@@ -497,18 +487,23 @@
 .--markdown div.hidable > p {
   width: 100%;
   padding: 0.5rem 0;
-  background: #cacaca;
-  border-radius: inherit;
+  background: #e7e7e7;
+  border-radius: 0.3rem 0.3rem 0 0;
   font-size: 1rem;
   line-height: 1.5rem;
   display: inline-flex;
   align-items: center;
+  cursor: pointer;
+  transition: background 0.15s ease-out;
+}
+.--markdown div.hidable > p:hover {
+  background: #d0d0d0;
 }
 .--markdown div.hidable > p > img {
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 1.4rem;
+  height: 1.4rem;
   margin: 0 0.5rem;
-  transform: rotate(90deg);
+  transform: rotate(0deg);
   flex-shrink: 0;
 }
 .--markdown div.hidable > span {

@@ -32,7 +32,7 @@ export default {
         ['[html]文字[/html]', '仅博文可用。直接插入html'],
         ['#{self}(articleId)', '指向本站id是articleId的链接，#代表外链'],
         ['--title--\ncontent\n-- --', 'field'],
-        ['~~title~~\ncontent\n~~ ~~', '标题为title的可隐藏的内容'],
+        ['==title==\ncontent\n== ==', '标题为title的可隐藏的内容'],
       ]
     }
   }

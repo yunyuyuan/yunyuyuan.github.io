@@ -76,7 +76,7 @@ const
     hidableExtension = {
         type: 'lang',
         filter(text, converter) {
-            return text.replace(/(^|\n)~~(.*?)~~\n([\s\S]+)\n~~ ~~/g, (a, b, c, d) => {
+            return text.replace(/(^|\n)==(.*?)==\n([\s\S]+)\n== ==/g, (a, b, c, d) => {
                 return `${b}<div class="hidable" data-hidden>
                                 <p onclick="this.parentElement.toggleAttribute('data-hidden')"><img src="${toggleArrow}"/>${c}</p>
                                 <span>${converter.makeHtml(d)}</span>
