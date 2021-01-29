@@ -1,7 +1,7 @@
 <template>
   <div id="index">
     <loading/>
-    <NotFound v-if="routeNow===null"/>
+    <NotFound v-if="routeNow===null||notfound"/>
     <template v-else-if="noBg"></template>
     <img class="bg" v-else-if="isBgImg" :src="images[routeNow]" alt="bg"/>
     <div class="bg" v-else>
@@ -60,6 +60,7 @@ export default {
         email: "",
         backgroundImg: "random",
       },
+      notfound: false,
       comp: null,
 
       showHead: true,
@@ -83,6 +84,10 @@ export default {
       _needMdToRef: (force) => {
         return force?this.forceUpdateMdList:this.computeMdList
       },
+      notFound: () => {
+        this.notfound = true;
+        this.comp = NotFound;
+      }
     }
   },
   computed: {
@@ -119,7 +124,7 @@ export default {
 
     this.showHead = route.name !== 'backend';
     this.routeNow = route.name;
-    this.comp = route.comp || (() => import('@/views/404/index'));
+    this.comp = route.comp || NotFound;
 
     if (['articleDetail', 'msgBoard', 'backend'].indexOf(route.name) !== -1) {
       // 加载markdown.css

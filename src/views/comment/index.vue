@@ -58,7 +58,7 @@ export default {
       return `https://github.com/login/oauth/authorize?`+
               `client_id=${siteConfig.oauth.client_id}&`+
               `redirect_uri=${siteConfig.oauth.redirect_uri}&`+
-              `scope=public_repo%2Cwrite:discussion`
+              `scope=public_repo`
     }
   },
   async created() {

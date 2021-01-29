@@ -2,7 +2,7 @@
 const
     name = 'yunyuyuan',
     repo = 'yunyuyuan.github.io',
-    oauthDomain = 'https://blog.halberd.cn'
+    domain = 'https://blog.halberd.cn'
     // oauthDomain = 'http://localhost:8080'
 // --------- change this ↑ ---------
 
@@ -17,7 +17,7 @@ module.exports = {
     oauth: {
         client_id: '81ee614d8099242a1bce',
         client_secret: 'b05e85014297d9a3c34f8763f27dfeb6d19b392a',
-        redirect_uri: oauthDomain + '/oauth'
+        redirect_uri: domain + '/oauth'
     },
     tip: "代码改变世界(๑ˉ∀ˉ๑)",
 

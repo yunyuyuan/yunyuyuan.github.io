@@ -88,7 +88,7 @@ export default {
   },
   computed: {
     id() {
-      return routeInfo().params.id
+      return routeInfo().params.id||-1
     },
     info() {
       if (!this.id) return {};
@@ -116,16 +116,17 @@ export default {
       this.goAnchor()
     }
   },
-  inject: ['_needMdToRef'],
-  async created() {
+  inject: ['_needMdToRef', 'notFound'],
+  async mounted() {
+    this.md = await this.getMdList;
+    // 检查404
+    if (!this.md.find(e=>e.file===this.id)){
+      this.notFound();
+      return;
+    }
     qrcode.toDataURL(location.href, (err, url) => {
       this.qrcode = url
     })
-    this.getMdList.then(res=>{
-      this.md = res
-    })
-  },
-  async mounted() {
     loadFinish();
     const res = await getText(`${originPrefix}/md/${this.id}.md`);
     if (res[0]) {
