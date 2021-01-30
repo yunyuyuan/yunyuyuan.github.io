@@ -124,7 +124,7 @@ export default {
       this.goAnchor()
     }
   },
-  inject: ['_needMdToRef', 'notFound'],
+  inject: ['_needMdToRef'],
   async mounted() {
     this.md = await this.getMdList;
     loadFinish();
@@ -586,7 +586,12 @@ export default {
       box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
       padding: 1rem 0;
     }
-    @include media{
+  }
+  @include media{
+    >.not-found{
+      width: 90%;
+    }
+    > .detail{
       > .content{
         min-width: 100%;
         max-width: 100%;

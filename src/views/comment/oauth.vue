@@ -37,9 +37,9 @@ export default {
         if (mather){
           this.state = '登录成功!正在跳转...';
           this.status = 'success';
-          window.localStorage.setItem(tokenKey, mather[1]);
+          localStorage.setItem(tokenKey, mather[1]);
           setTimeout(()=>{
-            window.close();
+            // window.close();
           }, 500)
         }else{
           this.state = '参数错误!';
