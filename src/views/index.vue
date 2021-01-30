@@ -1,7 +1,7 @@
 <template>
   <div id="index">
     <loading/>
-    <NotFound v-if="routeNow===null||notfound"/>
+    <NotFound v-if="routeNow===null"/>
     <template v-else-if="noBg"></template>
     <img class="bg" v-else-if="isBgImg" :src="images[routeNow]" alt="bg"/>
     <div class="bg" v-else>
@@ -60,7 +60,6 @@ export default {
         email: "",
         backgroundImg: "random",
       },
-      notfound: false,
       comp: null,
 
       showHead: true,
@@ -83,10 +82,6 @@ export default {
       _config: () => this.computeConfig,
       _needMdToRef: (force) => {
         return force?this.forceUpdateMdList:this.computeMdList
-      },
-      notFound: () => {
-        this.notfound = true;
-        this.comp = NotFound;
       }
     }
   },
@@ -107,10 +102,13 @@ export default {
     },
     async computeMdList() {
       if (this.mdList != null) return this.mdList;
+      return this.forceUpdateMdList;
+    },
+    async forceUpdateMdList() {
       const res = await getText(`${originPrefix}/json/md.json`);
       if (res[0]) {
         this.mdList = JSON.parse(res[1]);
-      }else{
+      } else {
         this.mdList = [];
       }
       return this.mdList;
