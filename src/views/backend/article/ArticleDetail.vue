@@ -276,12 +276,14 @@ export default {
       this.showSticker = false;
     },
     delCache (){
+      if (!this.hasCache) return ;
       delCache(`article-${this.id}`);
       delCache(`article-${this.id}-text`);
       this.$message.success('草稿已删除');
       this.hasCache = false;
     },
     useCache (){
+      if (!this.hasCache) return ;
       this.info = JSON.parse(getCache(`article-${this.id}`));
       const textCache = getCache(`article-${this.id}-text`)
       if (this.codeMirror) {

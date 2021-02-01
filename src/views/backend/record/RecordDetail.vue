@@ -121,12 +121,14 @@ export default {
       }
     },
     delCache (){
+      if (!this.hasCache) return ;
       delCache(`record-${this.id}`);
       delCache(`record-${this.id}-text`);
       this.$message.success('草稿已删除');
       this.hasCache = false;
     },
     useCache (){
+      if (!this.hasCache) return ;
       this.info = JSON.parse(getCache(`record-${this.id}`));
       this.text = getCache(`record-${this.id}-text`);
       this.$message.success('草稿已加载');
