@@ -82,7 +82,7 @@ export default {
       _config: () => this.computeConfig,
       _needMdToRef: (force) => {
         return force?this.forceUpdateMdList:this.computeMdList
-      },
+      }
     }
   },
   computed: {
@@ -102,10 +102,13 @@ export default {
     },
     async computeMdList() {
       if (this.mdList != null) return this.mdList;
+      return this.forceUpdateMdList;
+    },
+    async forceUpdateMdList() {
       const res = await getText(`${originPrefix}/json/md.json`);
       if (res[0]) {
         this.mdList = JSON.parse(res[1]);
-      }else{
+      } else {
         this.mdList = [];
       }
       return this.mdList;
@@ -119,7 +122,7 @@ export default {
 
     this.showHead = route.name !== 'backend';
     this.routeNow = route.name;
-    this.comp = route.comp || (() => import('@/views/404/index'));
+    this.comp = route.comp || NotFound;
 
     if (['articleDetail', 'msgBoard', 'backend'].indexOf(route.name) !== -1) {
       // 加载markdown.css

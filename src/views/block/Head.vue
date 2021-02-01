@@ -1,10 +1,11 @@
 <template>
   <header class="the-head">
-    <div class="body" @mouseenter="toggle(true)" @mouseleave="toggle(false)" flex>
+    <div class="body" flex>
       <a class="favicon" href="/">
-        <img :src="selfImage"/>
+        <img :src="selfImage" alt="favicon"/>
       </a>
       <a class="txt" href="/simple-code-simple-life" flex title="简单代码，简单生活">{{text}}</a>
+      <span @mouseenter="toggle(true)" @mouseleave="toggle(false)"></span>
     </div>
   </header>
 </template>
@@ -85,6 +86,19 @@ export default {
       font-family: "Source Code Pro", serif;
       word-break: keep-all;
       white-space: nowrap;
+    }
+    >a{
+      position: relative;
+      z-index: 2;
+    }
+    > span{
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
     }
   }
   @include media{

@@ -1,6 +1,13 @@
 <template>
   <div class="article">
-    <div class="detail">
+    <div v-if="notfound" class="not-found" flex>
+      <div flex>
+        <svg-icon :name="'grass'"/>
+        <strong write-font>查无此文</strong>
+      </div>
+      <a href="/article">返回列表</a>
+    </div>
+    <div v-else class="detail">
       <div class="head" flex>
         <h1>{{info.name}}
         <time>{{info.time|time(false)}}</time></h1>
@@ -57,7 +64,7 @@
 </template>
 
 <script>
-import {getText, goMarkdownAnchor, loadFinish} from "@/utils/utils";
+import {getText, loadFinish} from "@/utils/utils";
 import {originPrefix} from "@/need";
 import TheComment from "@/views/comment/index";
 
@@ -84,11 +91,12 @@ export default {
       asideTop: 0,
       animationHandle: undefined,
       qrcode: '',
+      notfound: false
     }
   },
   computed: {
     id() {
-      return routeInfo().params.id
+      return routeInfo().params.id||-1
     },
     info() {
       if (!this.id) return {};
@@ -117,16 +125,17 @@ export default {
     }
   },
   inject: ['_needMdToRef'],
-  async created() {
+  async mounted() {
+    this.md = await this.getMdList;
+    loadFinish();
+    // 检查404
+    if (!this.md.find(e=>e.file===this.id)){
+      this.notfound = true
+      return;
+    }
     qrcode.toDataURL(location.href, (err, url) => {
       this.qrcode = url
     })
-    this.getMdList.then(res=>{
-      this.md = res
-    })
-  },
-  async mounted() {
-    loadFinish();
     const res = await getText(`${originPrefix}/md/${this.id}.md`);
     if (res[0]) {
       this.html = parseMarkdown(res[1]);
@@ -239,6 +248,30 @@ export default {
   min-height: 100%;
   position: relative;
   flex-shrink: 0;
+  >.not-found{
+    width: 50%;
+    height: 50%;
+    margin: 1rem auto;
+    background: whitesmoke;
+    border-radius: .5rem;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, .3);
+    justify-content: center;
+    flex-direction: column;
+    >div{
+      margin-bottom: 1rem;
+      >svg{
+        width: 3rem;
+        height: 3rem;
+        margin-right: 1rem;
+      }
+      >strong{
+        font-size: 1.3rem;
+      }
+    }
+    >a{
+      font-size: .9rem;
+    }
+  }
   >.detail{
     width: 100%;
     min-height: 100%;
@@ -553,7 +586,12 @@ export default {
       box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
       padding: 1rem 0;
     }
-    @include media{
+  }
+  @include media{
+    >.not-found{
+      width: 90%;
+    }
+    > .detail{
       > .content{
         min-width: 100%;
         max-width: 100%;
