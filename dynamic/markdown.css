@@ -261,7 +261,7 @@
 }
 .--markdown a[data-anchor-id].anchor-id-ref:before {
   content: "#";
-  font-size: 1.4em;
+  font-size: 1.2em;
   margin-right: 0.3rem;
 }
 .--markdown img[alt=sticker] {
