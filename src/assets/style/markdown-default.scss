@@ -144,24 +144,29 @@
     }
   }
 
-  img[alt]{
-    display: block;
-    width: 80%;
-    margin: 1rem auto;
+  img[alt=sticker]{
+    display: inline-block;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin: 0 0.2rem -0.2rem 0.2rem;
     object-fit: contain;
-    &:not([alt=sticker]){
+  }
+
+  span.image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem auto;
+    width: 80%;
+    >img {
+      width: 100%;
+      object-fit: contain;
       box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.5);
     }
-    &[alt=sticker]{
-      display: inline-block;
-      width: 1.6rem;
-      height: 1.6rem;
-      margin: 0 0.2rem -0.2rem 0.2rem;
-    }
-    &[center]{
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+    >small{
+      color: gray;
+      font-size: .65rem;
+      margin-top: .4rem;
     }
   }
   strong, em{

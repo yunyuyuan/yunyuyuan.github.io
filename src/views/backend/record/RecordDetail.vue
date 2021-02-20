@@ -106,7 +106,6 @@ export default {
   },
   methods: {
     init() {
-      console.log('init')
       this.info = JSON.parse(JSON.stringify(this.id === 'new' ? this.newInfo : this.record.find(v => v.file === this.id) || this.newInfo));
       if (this.id !== 'new') {
         getText(`${originPrefix}/record/${this.id}.txt`).then(res=>{

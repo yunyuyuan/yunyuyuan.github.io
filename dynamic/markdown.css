@@ -264,25 +264,29 @@
   font-size: 1.4em;
   margin-right: 0.3rem;
 }
-.--markdown img[alt] {
-  display: block;
-  width: 80%;
-  margin: 1rem auto;
-  object-fit: contain;
-}
-.--markdown img[alt]:not([alt=sticker]) {
-  box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.5);
-}
-.--markdown img[alt][alt=sticker] {
+.--markdown img[alt=sticker] {
   display: inline-block;
   width: 1.6rem;
   height: 1.6rem;
   margin: 0 0.2rem -0.2rem 0.2rem;
+  object-fit: contain;
 }
-.--markdown img[alt][center] {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+.--markdown span.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem auto;
+  width: 80%;
+}
+.--markdown span.image-container > img {
+  width: 100%;
+  object-fit: contain;
+  box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.5);
+}
+.--markdown span.image-container > small {
+  color: gray;
+  font-size: 0.65rem;
+  margin-top: 0.4rem;
 }
 .--markdown strong, .--markdown em {
   margin: 0 0.15rem;

@@ -10,7 +10,7 @@
           </li>
           <li v-for="item in guide">
             <b>{{ item[0] }}:</b>
-            <span>{{ item[1] }}</span>
+            <span v-html="item[1]"></span>
           </li>
         </ul>
       </div>
@@ -23,16 +23,17 @@ export default {
   data (){
     return {
       guide: [
+        ['![sticker](aru/12)', '阿鲁表情包的第12个表情'],
         ['#[google](https://google.com)', 'target=_blank的链接'],
-        ['![30% x *](imgurl)', '宽为30%未设高度的img'],
-        ['-(red: 文字)', '颜色为red的"文字"'],
+        ['![描述[30% x ]](imgurl)', 'alt为描述文字，宽为30%未设高度的img'],
+        ['-(red: 文字)', '颜色为red的文字'],
         ['-(write-1.3: 文字)-', '字体为write-font，大小为1.3rem的文字'],
-        ['[#锚点#]', '仅博文可用。自定义一个锚点'],
+        ['[#锚点#]', '<b>仅博主可用</b>。自定义一个锚点'],
         ['[#文字#锚点#]', '一段文字，点击跳到锚点'],
-        ['[html]文字[/html]', '仅博文可用。直接插入html'],
+        ['[html]文字[/html]', '<b>仅博主可用</b>。直接插入html'],
         ['#{self}(articleId)', '指向本站id是articleId的链接，#代表外链'],
-        ['--title--\ncontent\n-- --', 'field'],
-        ['==title==\ncontent\n== ==', '标题为title的可隐藏的内容'],
+        ['--标题--\n文字\n-- --', '一个field'],
+        ['==标题==\n文字\n== ==', '可隐藏内容'],
       ]
     }
   }

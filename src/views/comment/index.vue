@@ -75,7 +75,6 @@ export default {
         removeToken();
         const handle = setInterval(()=>{
           const token = localStorage.getItem(tokenKey);
-          console.log(token)
           if (token){
             this.token = token;
             this.doLogin(true);

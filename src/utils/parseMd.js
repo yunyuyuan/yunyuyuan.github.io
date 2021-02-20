@@ -25,11 +25,19 @@ const
         regex: /(^|[^\\])#\[(.*?)]\((.*?)\)/g,
         replace: '$1<a target="_blank" href="$3">$2</a>'
     },
-    dimensionExtension = {
+    commonImgExtension = {
         type: 'lang',
-        regex: /(^|[^\\])!\[(.*?) x (.*?)]\((.*?)\)/g,
-        replace: (a, b, c, d, e) => {
-            return `${b}<img alt="dimension img" style="${c !== '*' ? `width: ${c} !important;` : ''}${d !== '*' ? `height: ${d} !important;` : ''}margin: 1rem;display: inline-block" src="${e}"/>`
+        regex: /(^|[^\\])!\[(.*?)]\((.*?)\)/g,
+        replace: (a, b, c, d) => {
+            // sticker
+            if (c === 'sticker') return a;
+            const mather = c.match(/^(.*?)\[(.*?) x (.*?)]$/);
+            if (!mather) {
+                return `${b}<span class="image-container"><img alt="${c}" src="${d}"/><small>${c}</small></span>`
+            }
+            // with dimension
+            const [_, alt, w, h] = mather;
+            return `${b}<span class="image-container"><img alt="${alt}" style="${w ? `width: ${w} !important;` : ''}${h ? `height: ${h} !important;` : ''}" src="${d}"/><small>${alt}</small></span>`
         }
     },
     colorTextExtension = {
@@ -96,12 +104,12 @@ const options = {
 }
 const converter = new showdown.Converter({
     ...options,
-    extensions: [anchorIdExtension, anchorRefExtension, linkExtension, dimensionExtension, colorTextExtension, writeFontExtension,
+    extensions: [anchorIdExtension, anchorRefExtension, linkExtension, commonImgExtension, colorTextExtension, writeFontExtension,
         htmlExtension, fieldExtension, selfSiteUrlExtension, hidableExtension]
 });
 const commentConverter = new showdown.Converter({
     ...options,
-    extensions: [anchorRefExtension, linkExtension, dimensionExtension, colorTextExtension, writeFontExtension,
+    extensions: [anchorRefExtension, linkExtension, commonImgExtension, colorTextExtension, writeFontExtension,
         fieldExtension, selfSiteUrlExtension, hidableExtension]
 });
 
