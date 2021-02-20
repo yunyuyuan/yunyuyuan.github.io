@@ -449,18 +449,17 @@
   position: relative;
   transition: all 0.15s ease-out;
   border-radius: 0.2rem;
-  border: 1px solid #ccb798;
-  box-shadow: 0 0 0.6rem #ead0cd;
+  border: 1px solid #aaa;
 }
 .--markdown fieldset:hover {
-  border-color: gray;
+  border-color: #666;
 }
 .--markdown fieldset * {
   position: relative;
 }
 .--markdown fieldset > legend {
   position: absolute;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   line-height: 1rem;
   top: -0.8rem;
   left: 1rem;
