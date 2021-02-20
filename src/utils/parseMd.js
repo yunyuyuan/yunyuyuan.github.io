@@ -10,6 +10,11 @@ import {cdnDynamicUrl} from "@/need";
 import pangu from 'pangu'
 
 const
+    paragraphTabExtension = {
+        type: 'lang',
+        regex: /(^|[^\\])<<>>/g,
+        replace: '$1&emsp;&emsp;'
+    },
     anchorIdExtension = {
         type: 'lang',
         regex: /(^|[^\\])\[#([^#]*?)#]/g,
@@ -104,12 +109,12 @@ const options = {
 }
 const converter = new showdown.Converter({
     ...options,
-    extensions: [anchorIdExtension, anchorRefExtension, linkExtension, commonImgExtension, colorTextExtension, writeFontExtension,
+    extensions: [paragraphTabExtension, anchorIdExtension, anchorRefExtension, linkExtension, commonImgExtension, colorTextExtension, writeFontExtension,
         htmlExtension, fieldExtension, selfSiteUrlExtension, hidableExtension]
 });
 const commentConverter = new showdown.Converter({
     ...options,
-    extensions: [anchorRefExtension, linkExtension, commonImgExtension, colorTextExtension, writeFontExtension,
+    extensions: [paragraphTabExtension, anchorRefExtension, linkExtension, commonImgExtension, colorTextExtension, writeFontExtension,
         fieldExtension, selfSiteUrlExtension, hidableExtension]
 });
 

@@ -23,6 +23,7 @@ export default {
   data (){
     return {
       guide: [
+        ['<<>>', '段落开头缩进'],
         ['![sticker](aru/12)', '阿鲁表情包的第12个表情'],
         ['#[google](https://google.com)', 'target=_blank的链接'],
         ['![描述[30% x ]](imgurl)', 'alt为描述文字，宽为30%未设高度的img'],
@@ -48,7 +49,7 @@ export default {
     padding: 1rem 3rem;
 
     > p {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: bold;
     }
 
@@ -57,7 +58,7 @@ export default {
         margin: 1.5rem 0;
 
         > a, > b {
-          font-size: 1rem;
+          font-size: 85rem;
           color: #0066d8;
           white-space: pre;
         }
@@ -67,7 +68,7 @@ export default {
         }
 
         > span {
-          font-size: 0.9rem;
+          font-size: 0.75rem;
         }
       }
     }
