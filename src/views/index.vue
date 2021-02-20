@@ -389,6 +389,8 @@ html, body {
   }
 
   > .inner {
+    max-height: 90%;
+    overflow-y: auto;
     background: white;
     border-radius: 1rem;
     flex-direction: column;

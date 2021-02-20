@@ -449,7 +449,11 @@
   position: relative;
   transition: all 0.15s ease-out;
   border-radius: 0.2rem;
-  border: 1px solid gray;
+  border: 1px solid #ccb798;
+  box-shadow: 0 0 0.6rem #ead0cd;
+}
+.--markdown fieldset:hover {
+  border-color: gray;
 }
 .--markdown fieldset * {
   position: relative;
@@ -463,7 +467,7 @@
   display: block;
   background: #826aff;
   border-radius: 0.2rem;
-  box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0.1rem 0.2rem rgba(93, 10, 255, 0.72);
   color: white;
   padding: 0.2rem 0.8rem;
 }
