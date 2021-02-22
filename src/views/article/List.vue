@@ -614,8 +614,20 @@ export default {
             display: none;
           }
           >.info {
+            position: relative;
+            border-radius: 0.5rem;
+            ::v-deep > .loading-img, >.detail{
+              width: 100%;
+              height: 100%;
+              position: absolute;
+              border-radius: inherit;
+            }
+            ::v-deep > .loading-img{
+              z-index: 1;
+            }
             > .detail {
-              width: 80%;
+              background: rgba(255, 255, 255, .9);
+              z-index: 2;
             }
           }
         }

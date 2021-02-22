@@ -288,7 +288,7 @@ export default {
         position: relative;
         min-width: 60%;
         text-align: center;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         >time{
           content: attr(data-time);
           position: absolute;
@@ -318,9 +318,10 @@ export default {
         max-height: calc(100vh - #{$head-height});
         > div{
           max-height: calc(100vh - #{$head-height});
+          $animation-duration: .2s;
           flex-direction: column;
           width: 0;
-          transition: all .15s ease-out;
+          transition: all $animation-duration ease-out;
           opacity: 0;
           height: 0;
           @keyframes to-hide{
@@ -354,7 +355,7 @@ export default {
           }
           &.deactive{
             >*{
-              animation: to-hide .15s ease-out forwards;
+              animation: to-hide $animation-duration ease-out forwards;
             }
           }
           > *{
@@ -363,7 +364,7 @@ export default {
             background: white;
             border-radius: 0.4rem;
             box-shadow: 0 0 0.6rem rgba(0, 0, 0, 0.4);
-            transition: all .15s ease-out;
+            transition: all $animation-duration ease-out;
             overflow: hidden;
             flex-shrink: 0;
           }
@@ -375,14 +376,16 @@ export default {
               margin: 0.3rem 0;
               padding: 0.2rem 0 0.2rem 0.5rem;
               font-size: 0.9rem;
-              transition: all .15s linear;
               cursor: pointer;
               position: relative;
               width: calc(100% - 0.2rem);
               flex-shrink: 0;
               color: black;
+              &, &>span{
+                transition: all .15s linear;
+              }
               &.small{
-                color: rgba(20, 20, 20);
+                color: #525252;
                 font-size: .75rem;
                 margin: 0.2rem 0;
                 >span {
@@ -423,6 +426,10 @@ export default {
               &.active{
                 font-size: 1rem;
                 font-weight: bold;
+                color: black;
+                >span{
+                  border-color: black;
+                }
                 &.small{
                   font-size: .85rem;
                 }
@@ -513,6 +520,7 @@ export default {
                 border-radius: .15rem;
                 box-shadow: 0 0 .1rem rgba(0, 0, 0, 0.5);
                 transition: all .15s linear;
+                word-break: keep-all;
                 &:hover{
                   box-shadow: 0 .2rem .4rem rgba(0, 0, 0, 0.5);
                 }
