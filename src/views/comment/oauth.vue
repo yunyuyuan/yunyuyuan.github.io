@@ -1,7 +1,7 @@
 <template>
   <div class="login" flex>
     <svg-icon :name="status"/>
-    <strong>{{ state }}</strong>
+    <strong v-html="state"></strong>
   </div>
 </template>
 
@@ -35,7 +35,7 @@ export default {
       }).then(res => {
         const mather = res.data.match(/^access_token=([^&]+)&.*?$/);
         if (mather){
-          this.state = '登录成功!正在跳转...';
+          this.state = '登录成功!正在跳转...<br/>若此页面未自动关闭，请手动关闭本页';
           this.status = 'success';
           localStorage.setItem(tokenKey, mather[1]);
           setTimeout(()=>{
