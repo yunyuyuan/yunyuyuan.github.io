@@ -58,7 +58,7 @@ export default {
         margin: 1.5rem 0;
 
         > a, > b {
-          font-size: 0.85rem;
+          font-size: 85rem;
           color: #0066d8;
           white-space: pre;
         }

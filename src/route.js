@@ -102,9 +102,9 @@ const routes = [
         description: `${siteConfig.owner}的个人博客-留言板`
     },
     {
-        path: '/simple-code-simple-life',
+        path: siteConfig.aboutUrl,
         name: 'about',
-        title: '简单代码-简单生活',
+        title: siteConfig.corner,
         comp: ()=>import('@/views/about/index'),
         keywords: `静态博客 ${siteConfig.owner}的个人博客 关于`,
         description: `${siteConfig.owner}的个人博客-关于`
@@ -116,6 +116,14 @@ const routes = [
         comp: ()=>import('@/views/comment/oauth'),
         keywords: `静态博客 ${siteConfig.owner}的个人博客 oauth`,
         description: `${siteConfig.owner}的个人博客-oauth`
+    },
+    {
+        path: '/about',
+        name: 'realAbout',
+        title: 'WOW',
+        comp: ()=>import('@/views/about/realAbout'),
+        keywords: `静态博客 ${siteConfig.owner}的个人博客 about`,
+        description: `${siteConfig.owner}的个人博客-about`
     },
 ]
 

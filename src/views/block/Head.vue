@@ -4,7 +4,7 @@
       <a class="favicon" href="/">
         <img :src="selfImage" alt="favicon"/>
       </a>
-      <a class="txt" href="/simple-code-simple-life" flex title="简单代码，简单生活">{{text}}</a>
+      <a class="txt" :href="siteConfig.aboutUrl" flex :title="siteConfig.corner">{{siteConfig.corner}}</a>
       <span @mouseenter="toggle(true)" @mouseleave="toggle(false)"></span>
     </div>
   </header>
@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       selfImage,
-      text: siteConfig.corner
+      siteConfig
     }
   },
   mounted() {

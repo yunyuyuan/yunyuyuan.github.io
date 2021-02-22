@@ -13,6 +13,7 @@ module.exports = {
     email: '326178275@qq.com',
     avatar: 'favicon.svg',
     corner: 'Simple code,Simple life',
+    aboutUrl: '/simple-code-simple-life',
     homeTitle: '清予生 淡予时',
     oauth: {
         client_id: '81ee614d8099242a1bce',

@@ -72,6 +72,7 @@ export default {
         backend: HomeImage,
         record: recordImage,
         about: aboutImage,
+        realAbout: aboutImage,
       },
       routeNow: 'home',
       mdList: null,
