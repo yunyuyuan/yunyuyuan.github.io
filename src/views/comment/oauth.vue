@@ -25,7 +25,7 @@ export default {
     if (query.code) {
       // 获取token
       axios({
-        url: 'https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token',
+        url: siteConfig.corsServer+'https://github.com/login/oauth/access_token',
         method: 'post',
         data: {
           client_id: siteConfig.oauth.client_id,

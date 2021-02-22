@@ -27,6 +27,7 @@ module.exports = {
     owner: name,
     repo: repo,
     cdn: `https://cdn.jsdelivr.net/gh/${name}/${repo}@latest`,
+    corsServer: 'https://cors.bridged.cc/',
     timeStamp: new Date().getTime(),
     rss: {
         title: `${name}的博客`,
