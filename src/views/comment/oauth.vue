@@ -39,7 +39,7 @@ export default {
           this.status = 'success';
           localStorage.setItem(tokenKey, mather[1]);
           setTimeout(()=>{
-            // window.close();
+            window.close();
           }, 500)
         }else{
           this.state = '参数错误!';
