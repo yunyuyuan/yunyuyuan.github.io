@@ -142,7 +142,8 @@ export default {
     }
     Vue.prototype.$message = this.$refs.message;
     await this.updateConfig();
-    if (!this.isBgImg && !this.noBg) {
+    const container = document.getElementById('comet-bg');
+    if (!this.isBgImg && !this.noBg && container) {
       //particle
       const tsparticles = () => import('tsparticles');
       tsparticles().then(({particlesJS}) => {
@@ -180,7 +181,6 @@ export default {
         });
       })
       // comet
-      const container = document.getElementById('comet-bg');
       for (let i=0;i<3 + Math.floor(Math.random() * 4);i++){
         const div = document.createElement('div');
         div.className = 'comet';
