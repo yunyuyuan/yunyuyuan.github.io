@@ -1,9 +1,9 @@
 // --------- change this ↓ ---------
 const
-    name = 'yunyuyuan',
+    name = '云与原',
+    githubName = 'yunyuyuan',
     repo = 'yunyuyuan.github.io',
     domain = 'https://blog.halberd.cn'
-    // oauthDomain = 'http://localhost:8080'
 // --------- change this ↑ ---------
 
 
@@ -24,9 +24,9 @@ module.exports = {
 
 // --------- change this ↑ ---------
 
-    owner: name,
+    owner: githubName,
     repo: repo,
-    cdn: `https://cdn.jsdelivr.net/gh/${name}/${repo}@latest`,
+    cdn: `https://cdn.jsdelivr.net/gh/${githubName}/${repo}@latest`,
     corsServer: 'https://cors.bridged.cc/',
     timeStamp: new Date().getTime(),
     rss: {
