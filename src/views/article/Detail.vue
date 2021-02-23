@@ -380,7 +380,7 @@ export default {
               position: relative;
               width: calc(100% - 0.2rem);
               flex-shrink: 0;
-              color: black;
+              color: #6b6b6b;
               &, &>span{
                 transition: all .15s linear;
               }
@@ -396,8 +396,8 @@ export default {
               >span{
                 width: .45rem;
                 height: .45rem;
-                border: 2px solid gray;
-                background: gray;
+                border: 2px solid #6b6b6b;
+                background: #6b6b6b;
                 border-radius: 50%;
                 flex-shrink: 0;
                 margin-right: .3rem;
@@ -428,7 +428,8 @@ export default {
                 font-weight: bold;
                 color: black;
                 >span{
-                  border-color: black;
+                  border-color: #6b6b6b;
+                  background: #6b6b6b;
                 }
                 &.small{
                   font-size: .85rem;
