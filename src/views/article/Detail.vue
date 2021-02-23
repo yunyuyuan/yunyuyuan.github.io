@@ -396,8 +396,8 @@ export default {
               >span{
                 width: .45rem;
                 height: .45rem;
-                border: 2px solid #6b6b6b;
-                background: #6b6b6b;
+                border: 2px solid #afafaf;
+                background: #afafaf;
                 border-radius: 50%;
                 flex-shrink: 0;
                 margin-right: .3rem;

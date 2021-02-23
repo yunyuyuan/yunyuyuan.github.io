@@ -46,6 +46,7 @@ export default {
   color: black;
 
   > .inner {
+    max-height: 90%;
     padding: 1rem 3rem;
 
     > p {
