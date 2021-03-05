@@ -166,7 +166,6 @@ export default {
       })
       // 监听滚动到anchor
       this.body.onscroll = throttle(() => {
-        console.log('do')
         let last = {};
         for (const el of headList) {
           if (last && el.getBoundingClientRect().top > document.querySelector('header.the-head').scrollHeight) {
