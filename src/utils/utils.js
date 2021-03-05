@@ -48,3 +48,35 @@ export function sortByTime(lis) {
 export function loadFinish (){
     document.querySelector('#loading').setAttribute('hide', '');
 }
+
+export function throttle(func, interval=100, type='timeout'){
+    if (typeof func !== 'function') return;
+    let isFirst = true;
+    if (type === 'timestamp') {
+        let startTime = new Date().getTime();
+        return function () {
+            const dataNow = new Date().getTime();
+            if (isFirst) {
+                isFirst = false;
+                func.apply(this, arguments);
+            } else if (dataNow - startTime >= interval) {
+                startTime = dataNow;
+                func.apply(this, arguments);
+            }
+        }
+    }else if (type === 'timeout'){
+        let handler = null;
+        return function (){
+            const args = arguments;
+            if (isFirst) {
+                isFirst = false;
+                func.apply(this, args);
+            } else if (!handler){
+                handler = setTimeout(()=>{
+                    func.apply(this, args);
+                    handler = null;
+                }, interval)
+            }
+        }
+    }
+}

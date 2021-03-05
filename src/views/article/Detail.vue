@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import {getText, loadFinish} from "@/utils/utils";
+import {getText, loadFinish, throttle} from "@/utils/utils";
 import {originPrefix} from "@/need";
 import TheComment from "@/views/comment/index";
 
@@ -156,6 +156,7 @@ export default {
         this.anchors.push({
           el: el,
           text: el.innerText,
+          id: el.id,
           active: false,
           small: ['h4', 'h5', 'h6'].indexOf(el.tagName.toLowerCase())!==-1
         });
@@ -164,7 +165,8 @@ export default {
         };
       })
       // 监听滚动到anchor
-      this.body.onscroll = () => {
+      this.body.onscroll = throttle(() => {
+        console.log('do')
         let last = {};
         for (const el of headList) {
           if (last && el.getBoundingClientRect().top > document.querySelector('header.the-head').scrollHeight) {
@@ -173,9 +175,9 @@ export default {
           last = el;
         }
         this.anchors.forEach(a => {
-          a.active = a.text === last.innerText;
+          a.active = a.id === last.id;
         })
-      }
+      })
       // 锚点
       if (this.$route.path) {
         this.goAnchor()
