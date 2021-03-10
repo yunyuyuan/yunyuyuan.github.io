@@ -360,29 +360,37 @@
   font-size: 0.9em;
 }
 .--markdown pre {
-  margin: 0.5rem 0;
+  margin: 1rem 0;
   border-radius: 0.3rem;
-  background: rgba(43, 43, 43, 0.95);
+  box-shadow: rgba(0, 0, 0, 0.55) 0 2px 10px;
+  background: #282c34;
   display: flex;
   flex-direction: column;
 }
-.--markdown pre:hover > span {
+.--markdown pre:hover > div > span {
   background: #ff5500;
   color: white;
 }
-.--markdown pre > span {
-  display: inline-flex;
+.--markdown pre > div {
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 0.2rem 0.5rem;
+  margin-bottom: 0.8rem;
+}
+.--markdown pre > div > img {
+  height: 1.1rem;
+  object-fit: contain;
+}
+.--markdown pre > div > span {
   text-align: center;
   background: transparent;
   border: none;
   cursor: pointer;
   font-size: 0.7rem;
   border-radius: 0.16rem;
-  padding: 0.2rem 0.4rem;
   color: #b5b5b5;
-  height: 1rem;
-  margin-left: auto;
+  padding: 0 0.3rem;
   font-family: "Source Code Pro", serif;
 }
 .--markdown pre > code.hljs {
@@ -397,10 +405,11 @@
   line-height: 1.3rem;
 }
 .--markdown pre > code.hljs, .--markdown pre > code.hljs .hljs-subst {
-  color: whitesmoke;
+  color: #d4d4d4;
 }
 .--markdown pre > code.hljs .hljs-comment {
   color: #888888;
+  font-style: italic;
 }
 .--markdown pre > code.hljs .hljs-keyword, .--markdown pre > code.hljs .hljs-attribute, .--markdown pre > code.hljs .hljs-selector-tag, .--markdown pre > code.hljs .hljs-meta-keyword, .--markdown pre > code.hljs .hljs-doctag, .--markdown pre > code.hljs .hljs-name {
   font-weight: bold;
@@ -521,9 +530,6 @@
   border-radius: 0 0 0.3rem 0.3rem;
 }
 @media screen and (max-width: 768px) {
-  .--markdown pre > span {
-    display: none !important;
-  }
   .--markdown pre > code.hljs {
     padding: 0.5rem 0.8rem;
   }
