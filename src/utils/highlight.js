@@ -1,9 +1,15 @@
 import hljs from "highlight.js";
+import codeCorner from '!!file-loader!@/image/code.png'
 
 export function hljsAndInsertCopyBtn (el){
+    const head = document.createElement('div');
+    const img = document.createElement('img');
+    img.src = codeCorner;
     const btn = document.createElement('span');
     addCopyEvent(el.parentElement, btn, el.classList[0], el.innerText);
-    el.parentElement.insertBefore(btn, el);
+    head.appendChild(img);
+    head.appendChild(btn);
+    el.parentElement.insertBefore(head, el);
     hljs.highlightBlock(el);
 }
 
