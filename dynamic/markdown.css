@@ -379,7 +379,7 @@
   margin-bottom: 0.8rem;
 }
 .--markdown pre > div > img {
-  height: 1.1rem;
+  height: 0.92rem;
   object-fit: contain;
 }
 .--markdown pre > div > span {
