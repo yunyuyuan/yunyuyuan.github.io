@@ -6,10 +6,10 @@
         <loading-img v-for="i in info.images" :src="i" :data-viewer="true"/>
       </div>
       <div class="loading" v-if="loading" flex>
-        <svg-icon :name="'loading'"/>
+        <svg-icon name="loading"/>
       </div>
       <span v-else write-font>
-        <svg-icon :name="'text'"/>
+        <svg-icon name="text"/>
         <time>{{info.time|time(false)}}</time>{{ text }}</span>
     </div>
   </div>

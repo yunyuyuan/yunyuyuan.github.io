@@ -1,7 +1,7 @@
 <template>
   <div class="msg-board" flex>
     <div class="head" flex>
-      <svg-icon :name="'comments'"/>
+      <svg-icon name="comments"/>
       <h1>留言板</h1>
     </div>
     <the-comment :title="'msg-board'"/>

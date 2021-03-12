@@ -1,7 +1,7 @@
 <template>
   <div :class="{loading: loading}" :style="{fontSize: `${size}rem`}" class="loading-button" flex>
     <svg-icon :name="loading?'loading':icon"/>
-    <span>{{ text }}</span>
+    <span><slot></slot></span>
   </div>
 </template>
 
@@ -12,10 +12,6 @@ export default {
     loading: {
       type: Boolean,
       default: false
-    },
-    text: {
-      type: String,
-      default: ''
     },
     icon: {
       type: String,

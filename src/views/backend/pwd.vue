@@ -3,9 +3,9 @@
     <div class="wrap" flex>
       <div class="input-pwd" flex>
         <float-input :name="'管理密码'" :value="input" @input="getPwd" @submit="submitPwd"/>
-        <single-button :text="'提交'" @click.native="submitPwd"/>
+        <single-button @click.native="submitPwd">提交</single-button>
       </div>
-      <loading-button @click.native="direct" :loading="false" :text="'就不输密码'" :icon="'middle-finger'"/>
+      <loading-button @click.native="direct" :loading="false" icon="middle-finger">就不输密码</loading-button>
     </div>
   </div>
 </template>

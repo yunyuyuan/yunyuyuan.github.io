@@ -3,7 +3,7 @@
     <div class="head" flex>
       <div class="search" flex>
         <input v-model="search"/>
-        <single-button :text="'搜索'" :size="0.95" @click.native="doSearch()"/>
+        <single-button :size="0.95" @click.native="doSearch()">搜索</single-button>
       </div>
       <span>{{processing.state}}</span>
       <select v-model="filter" @change="doSearch()">
@@ -13,7 +13,7 @@
       </select>
     </div>
     <div class="loading" v-if="searching" flex>
-      <svg-icon :name="'loading'"/>
+      <svg-icon name="loading"/>
     </div>
     <div class="body" v-else>
       <table>
@@ -41,9 +41,9 @@
               <span class="--markdown" v-html="calcMdToHtml(item.content)"></span>
             </td>
             <td>
-              <single-button class="off" :disabled="processing.b" v-if="item.state.toLowerCase()==='open'" :text="'关闭'" :size="0.9" @click.native="closeIssue(item.id)"/>
-              <single-button class="on" :disabled="processing.b" v-else :text="'恢复'" :size="0.9" @click.native="reopenIssue(item.id)"/>
-              <single-button class="del-btn" :disabled="processing.b" :text="'删除'" @click.native="deleteIssue(item.id)"/>
+              <single-button class="off" :disabled="processing.b" v-if="item.state.toLowerCase()==='open'" :size="0.9" @click.native="closeIssue(item.id)">关闭</single-button>
+              <single-button class="on" :disabled="processing.b" v-else :size="0.9" @click.native="reopenIssue(item.id)">恢复</single-button>
+              <single-button class="del-btn" :disabled="processing.b" @click.native="deleteIssue(item.id)">删除</single-button>
             </td>
           </tr>
         </tbody>

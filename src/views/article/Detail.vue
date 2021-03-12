@@ -2,7 +2,7 @@
   <div class="article">
     <div v-if="notfound" class="not-found" flex>
       <div flex>
-        <svg-icon :name="'grass'"/>
+        <svg-icon name="grass"/>
         <strong write-font>查无此文</strong>
       </div>
       <a href="/article">返回列表</a>
@@ -23,23 +23,23 @@
               <div class="share" flex title="二维码">
                 <div class="qr" tabindex="1" onfocus="this.classList.add('click')" onblur="this.classList.remove('click')">
                   <span flex>
-                    <svg-icon :name="'qr'"/>
+                    <svg-icon name="qr"/>
                   </span>
                   <div flex>
                     <div class="load" v-if="!qrcode">
-                      <svg-icon :name="'loading'"/>
+                      <svg-icon name="loading"/>
                     </div>
                     <img v-else :src="qrcode" alt="qr"/>
                   </div>
                 </div>
               </div>
               <a class="back" href="/article" title="返回文章列表">
-                <svg-icon :name="'back'"/>
+                <svg-icon name="back"/>
               </a>
             </div>
             <div class="info">
               <div class="tags" flex>
-                <svg-icon :name="'tag'"/>
+                <svg-icon name="tag"/>
                 <a v-for="tag in info.tags||[]" :style="{background: $options.filters.color(tag)}" :href="`/article?search-tag=${tag}`" :title="`查看标签-${tag}`">{{tag}}</a>
               </div>
               <div class="time" flex>
@@ -50,11 +50,11 @@
           </div>
           <span class="toggle-aside" :class="{active: asideActive}" @click="asideActive = !asideActive" flex
                 :title="`${asideActive?'关闭':'展开'}侧栏`">
-            <svg-icon :name="'arrow'"/>
+            <svg-icon name="arrow"/>
           </span>
         </aside>
         <div v-if="loading" class="loading" flex>
-          <svg-icon :name="'loading'"/>
+          <svg-icon name="loading"/>
         </div>
         <span v-else :class="{'show-aside': asideActive}" ref="markdown" class="--markdown" v-html="html" v-viewer></span>
       </div>

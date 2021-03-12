@@ -1,11 +1,11 @@
 <template>
   <div class="list" flex>
     <div class="empty" v-if="items.length===0">
-      <span>无人问津<svg-icon :name="'grass'"/>暂无评论</span>
+      <span>无人问津<svg-icon name="grass"/>暂无评论</span>
     </div>
     <div class="items" flex v-else>
       <div v-if="loading" class="loading" flex>
-        <svg-icon :name="'loading'"/>
+        <svg-icon name="loading"/>
       </div>
       <div v-else class="list-item" v-for="item in items" :key="item.id" flex>
         <div class="left"  @mouseleave="activeCardId=''">
@@ -17,8 +17,8 @@
             <div class="head" flex>
               <span class="nick-name" :class="{owner: item.nick===siteConfig.owner,self: item.nick===login}" flex>
                 <a :href="item.site" target="_blank">{{ item.nick }}</a>
-                <span title="大boss" v-if="item.nick===siteConfig.owner"><svg-icon :name="'cmt-owner'"/></span>
-                <span title="我自己" v-if="item.nick===login"><svg-icon :name="'cmt-self'"/></span>
+                <span title="大boss" v-if="item.nick===siteConfig.owner"><svg-icon name="cmt-owner"/></span>
+                <span title="我自己" v-if="item.nick===login"><svg-icon name="cmt-self"/></span>
               </span>
             </div>
             <div class="content">
@@ -39,7 +39,7 @@
             </div>
           </div>
           <div class="loading" v-if="item.loading" flex>
-            <svg-icon :name="'loading'"/>
+            <svg-icon name="loading"/>
           </div>
           <div v-else-if="item.children.length" class="children">
             <div v-for="child in item.children" :key="child.id" class="child">
@@ -52,8 +52,8 @@
                   <div class="text">
                     <span class="nick-name" :class="{owner: child.nick===siteConfig.owner,self: child.nick===login}" flex>
                       <a :href="item.site" target="_blank">{{ child.nick }}</a>
-                      <span title="大boss" v-if="child.nick===siteConfig.owner"><svg-icon :name="'cmt-owner'"/></span>
-                      <span title="我自己" v-if="child.nick===login"><svg-icon :name="'cmt-self'"/></span>
+                      <span title="大boss" v-if="child.nick===siteConfig.owner"><svg-icon name="cmt-owner"/></span>
+                      <span title="我自己" v-if="child.nick===login"><svg-icon name="cmt-self"/></span>
                     </span>
                     <span class="--markdown" v-html="calcMdToHtml(child.content, true)" v-viewer></span>
                   </div>

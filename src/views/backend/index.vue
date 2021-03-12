@@ -26,7 +26,9 @@
         <a class="home" href="/" flex="" title="回到主页">
           <img :src="selfImage" alt="favicon"/>
         </a>
-        <loading-button :icon="'account'" :text="'登录'" @click.native="showLogin = true"/>
+        <loading-button icon="account" :loading="loginState==='doing'" :class="loginState" @click.native="showLogin = true">
+          {{ loginStateText }}
+        </loading-button>
       </div>
       <login v-show="showLogin" @gitUtil="initGitUtil" @save="loginFinish" @hide="showLogin = false"/>
       <div class="body">
@@ -49,6 +51,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import {checkPwd, dontInput} from "@/views/backend/utils";
 import Pwd from "@/views/backend/pwd";
+import {GithubUtils} from "@/utils/githubApi";
+import * as siteConfig from "@/site-config";
 
 Vue.use(VueRouter);
 
@@ -118,6 +122,7 @@ export default {
       selfImage,
       showMenu: (localStorage.getItem('show-menu')||'true')==='true',
       showLogin: false,
+      loginState: 'none', // none | doing | ok
       updating: false,
       gitUtil: null,
       token: '',
@@ -166,6 +171,16 @@ export default {
     },
     computeToken (){
       return this.token
+    },
+    loginStateText (){
+      switch (this.loginState){
+        case "none":
+          return '未登录'
+        case "doing":
+          return '登录中'
+        case "ok":
+          return '已登录'
+      }
     }
   },
   provide() {
@@ -191,9 +206,20 @@ export default {
       this.showMenu = !this.showMenu;
       localStorage.setItem('show-menu', this.showMenu.toString());
     },
-    initGitUtil ({instance, token}){
-      this.gitUtil = instance;
-      this.token = token
+    async initGitUtil ({instance, token}){
+      // verify
+      this.loginState = 'doing';
+      const res = await instance.verifyToken();
+      if (res[0] && res[1].login === siteConfig.owner) {
+        this.gitUtil = instance;
+        this.token = token;
+        this.$message.success('登录成功!');
+        this.loginState = 'ok';
+        return
+      }
+      this.$message.error('token错误!');
+      localStorage.removeItem('login-token');
+      this.loginState = 'none';
     },
     async loginFinish(withUpdate) {
       this.showLogin = false;
@@ -206,7 +232,6 @@ export default {
           this.$message.error(parseAjaxError(res[1]))
         }
       }
-      this.$message.success('保存成功!')
     },
   }
 }
@@ -343,8 +368,17 @@ export default {
       }
     }
     ::v-deep .loading-button {
-      background: #ac60ff;
       margin: 1rem 0;
+
+      &.none{
+        background: gray;
+      }
+      &.doing{
+
+      }
+      &.ok{
+        background: #ac60ff;
+      }
 
       &:hover {
         background: #8c8e8d;

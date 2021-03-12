@@ -3,7 +3,7 @@
     <div v-for="(item,idx) in list" v-if="item.display" :class="[item.type, 'item', item.downed?'downed':'']" flex
          :key="item.id">
       <svg-icon :name="item.type" class="type"/>
-      <svg-icon :name="'trash'" class="close" @click.native="removeItem(idx)" title="关闭"/>
+      <svg-icon name="trash" class="close" @click.native="removeItem(idx)" title="关闭"/>
       <span class="text">{{ item.text }}</span>
       <span class="line"></span>
     </div>
@@ -133,13 +133,13 @@ export default {
       }
     }
     &.success{
-      background: #e0fffc;
+      background: #eefffd;
     }
     &.error{
-      background: #ffe2e9;
+      background: #fff0f4;
     }
     &.warning{
-      background: #fff9d9;
+      background: #fffbed;
     }
     > .type{
       width: 2rem;

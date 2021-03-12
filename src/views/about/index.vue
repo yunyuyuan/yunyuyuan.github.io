@@ -7,16 +7,16 @@
         <p v-html="config.aboutme"></p>
         <div class="friends">
           <p flex>
-            <svg-icon :name="'friends'"/>
+            <svg-icon name="friends"/>
             友情链接
           </p>
           <div v-for="i in config.friends" flex>
             <span>{{i.summary}}</span>
             <a target="_blank" :href="`https://github.com/${i.github}`">
-              <svg-icon :name="'github'"/>
+              <svg-icon name="github"/>
             </a>
             <a target="_blank" :href="i.site">
-              <svg-icon :name="'link'"/>
+              <svg-icon name="link"/>
             </a>
           </div>
         </div>

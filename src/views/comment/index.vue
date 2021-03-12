@@ -4,11 +4,11 @@
       <div v-if="logined" class="logined" flex>
         <err-avatar :avatar="loginInfo.avatar" :url="loginInfo.url"/>
         <a class="nick" :href="loginInfo.url" target="_blank">{{ loginInfo.nick }}</a>
-        <single-button :size="0.9" :text="'退出'" @click.native="logout"/>
+        <single-button :size="0.9" @click.native="logout">退出</single-button>
       </div>
       <div v-else class="login" flex>
         <a ref="a" :href="oauthUrl" target="_blank" @click="clickLogin">
-          <loading-button :icon="'github'" :loading="loging" :size="0.9" :class="{disabled: loging}" :text="'登录'"/>
+          <loading-button icon="github" :loading="loging" :size="0.9" :class="{disabled: loging}">登录</loading-button>
         </a>
       </div>
     </div>

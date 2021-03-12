@@ -4,7 +4,7 @@
       <div class="head" flex>
         <label onclick="this.querySelector('input').focus()" :class="{search: true, active: searchFocus}" flex>
           <input v-model="search" @focusin="toggleInputFocus(true)" @focusout="toggleInputFocus(false)"/>
-          <span flex><svg-icon :fill="searchFocus?'black':'#ddd'" :name="'search'"/></span>
+          <span flex><svg-icon :fill="searchFocus?'black':'#ddd'" name="search"/></span>
         </label>
         <div class="view">
           <a :class="{active: activeView==='list'}" @click="toggleView('list')">列表</a>
@@ -16,12 +16,12 @@
             :style="{background: $options.filters.color(tag)}" flex>
         {{ tag }}
         <span title="取消过滤">
-          <svg-icon :name="'trash'"/>
+          <svg-icon name="trash"/>
         </span>
       </span>
       </div>
       <div class="loading" v-if="loading" flex>
-        <svg-icon :name="'loading'"/>
+        <svg-icon name="loading"/>
       </div>
       <div class="blog" :class="activeView" v-else>
         <template v-if="activeView==='list'">
@@ -48,7 +48,7 @@
                         :style="{background: $options.filters.color(tag)}"
                         :title="`搜索-${tag}`">{{ tag }}</span>
                   <span class="comment" flex>
-                    <svg-icon :name="'comments'"/>
+                    <svg-icon name="comments"/>
                     {{commentNumDict[item.file]}}
                   </span>
                 </div>

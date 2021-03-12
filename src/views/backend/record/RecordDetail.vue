@@ -2,13 +2,13 @@
   <div class="record-detail" flex>
     <div class="operate" flex>
       <div class="back" @click="$router.push('/record')" flex>
-        <svg-icon :name="'back'"/>
+        <svg-icon name="back"/>
         <span>返回</span>
       </div>
-      <single-button class="del-cache" :disabled="!hasCache" :text="'删除草稿'" :size="0.9" @click.native="delCache"/>
-      <single-button class="use-cache" :disabled="!hasCache" :text="'使用草稿'" :size="0.9" @click.native="useCache"/>
-      <single-button class="save-cache" :text="'保存草稿'" :size="0.9" @click.native="saveCache"/>
-      <loading-button :loading="saving.b" :text="'上传'" :icon="'save'" @click.native="save"/>
+      <single-button class="del-cache" :disabled="!hasCache" :size="0.9" @click.native="delCache">删除草稿</single-button>
+      <single-button class="use-cache" :disabled="!hasCache" :size="0.9" @click.native="useCache">使用草稿</single-button>
+      <single-button class="save-cache" :size="0.9" @click.native="saveCache">保存草稿</single-button>
+      <loading-button :loading="saving.b" icon="save" @click.native="save">上传</loading-button>
       <span class="state" v-if="saving.state">{{ saving.state }}</span>
     </div>
     <div class="time" flex>
@@ -18,22 +18,22 @@
     <div class="edit">
       <div class="images" flex v-viewer>
         <span class="head" flex>
-          <svg-icon :name="'picture'"/>
+          <svg-icon name="picture"/>
           封面
         </span>
         <div class="list-item" v-for="(i,idx) in info.images" :key="i" flex>
           <loading-img :src="i" :size="[12, 8]" :data-viewer="true"/>
           <label class="bottom" flex>
             <input :value="i" :data-idx="idx" @focusout="editImg"/>
-            <single-button class="del-btn" @click.native="delImg(idx)" :text="'删除'"/>
+            <single-button class="del-btn" @click.native="delImg(idx)">删除</single-button>
           </label>
         </div>
         <span class="add" @click="addImg" flex>
-          <svg-icon :name="'add'"/>
+          <svg-icon name="add"/>
         </span>
       </div>
       <label class="text">
-        <p flex><svg-icon :name="'text'"/>文本:</p>
+        <p flex><svg-icon name="text"/>文本:</p>
         <textarea v-model="text"></textarea>
       </label>
     </div>

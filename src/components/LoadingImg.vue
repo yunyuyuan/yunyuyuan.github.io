@@ -2,7 +2,7 @@
   <div class="loading-img" :style="calcStyle">
     <img :data-viewer="dataViewer" :class="{failed: failed}" :src="srcNow" @load="loaded" @error="errored" @click="reload" alt="img"/>
     <span v-if="loading" flex>
-      <svg-icon :name="'loading'"/>
+      <svg-icon name="loading"/>
     </span>
   </div>
 </template>

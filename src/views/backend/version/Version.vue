@@ -1,21 +1,21 @@
 <template>
   <div class="version">
     <span @click="showHelp=true">
-      <svg-icon :name="'info'"/>
+      <svg-icon name="info"/>
     </span>
     <div class="new" flex>
-      <loading-button :class="{disabled: !inited}" :loading="creating.b" :text="'创建新版本: '+newTag" :icon="'version'" :size="1.6" @click.native="createRelease"/>
+      <loading-button :class="{disabled: !inited}" :loading="creating.b" icon="version" :size="1.6" @click.native="createRelease">{{'创建新版本: '+newTag}}</loading-button>
       <span v-if="creating.state">{{creating.state}}</span>
     </div>
     <div class="tags">
       <div class="operate" flex>
         <a>{{deletingTag.state}}</a>
-        <single-button class="del-btn" :text="'删除'" :disabled="deletingTag.b||!tags.length" @click.native="deleteTag"/>
+        <single-button class="del-btn" :disabled="deletingTag.b||!tags.length" @click.native="deleteTag">删除</single-button>
         <span class="check-box" :class="{active: allSelected}" @click="changeSelectAll"></span>
         <span class="txt">全选</span>
       </div>
       <div class="init-load" v-if="!inited" flex>
-        <svg-icon :name="'loading'"/>
+        <svg-icon name="loading"/>
       </div>
       <table v-else>
         <thead>

@@ -2,7 +2,7 @@
   <a class="avatar" target="_blank" :href="url" @mouseenter="$emit('mouseenter')" flex>
     <img v-show="!loadError" :src="avatar" alt="avatar" @load="sucLoad" @error="errLoad"/>
     <span v-if="loadError" flex>
-      <svg-icon :name="'default-avatar'"/>
+      <svg-icon name="default-avatar"/>
     </span>
   </a>
 </template>

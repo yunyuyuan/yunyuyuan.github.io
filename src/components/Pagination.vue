@@ -2,7 +2,7 @@
   <div class="pagination" flex>
       <span v-for="p in pages" :class="{active: p === pageNow,disabled: p===''}" @click="toPage(p)">
         {{ p }}
-        <svg-icon v-if="p===''" :name="'ellipsis'"/>
+        <svg-icon v-if="p===''" name="ellipsis"/>
       </span>
   </div>
 </template>

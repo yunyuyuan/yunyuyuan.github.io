@@ -2,7 +2,7 @@
   <div class="echarts-article" flex>
     <template v-if="!inited">
       <div class="loading" flex>
-        <svg-icon :name="'loading'"/>
+        <svg-icon name="loading"/>
       </div>
     </template>
     <template v-else>

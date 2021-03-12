@@ -2,7 +2,7 @@
   <div class="card" ref="card">
     <div class="arrow"></div>
     <div v-if="fetching" class="load">
-      <svg-icon :name="'loading'"/>
+      <svg-icon name="loading"/>
     </div>
     <div v-else class="wrap">
       <div class="info" flex>
@@ -14,29 +14,29 @@
       </div>
       <div class="detail" flex>
         <div>
-          <svg-icon :name="'card-website'"/>
+          <svg-icon name="card-website"/>
           <b>个人网站</b>
           <span>
             <a :href="href" target="_blank">{{ cardInfo.website }}</a>
           </span>
         </div>
         <div>
-          <svg-icon :name="'card-location'"/>
+          <svg-icon name="card-location"/>
           <b>地址</b>
           <span>{{ cardInfo.location || defaultCardInfo.location }}</span>
         </div>
         <div>
-          <svg-icon :name="'card-followers'"/>
+          <svg-icon name="card-followers"/>
           <b>粉丝数</b>
           <span>{{ cardInfo.followers || defaultCardInfo.followers }}</span>
         </div>
         <div>
-          <svg-icon :name="'card-repositories'"/>
+          <svg-icon name="card-repositories"/>
           <b>仓库数</b>
           <span>{{ cardInfo.repoCount || defaultCardInfo.repoCount }}</span>
         </div>
         <div>
-          <svg-icon :name="'card-disk'"/>
+          <svg-icon name="card-disk"/>
           <b>仓库大小</b>
           <span>{{ cardInfo.repoSize || defaultCardInfo.repoSize }}</span>
         </div>

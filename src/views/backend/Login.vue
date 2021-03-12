@@ -2,13 +2,13 @@
   <div class="login" @click.self="$emit('hide')" is-dialog>
     <div class="inner">
       <div class="head" flex>
-        <svg-icon :name="'backend'"/>
+        <svg-icon name="backend"/>
         <b>后台管理账户</b>
       </div>
       <div class="body" flex>
         <float-input :name="'token'" @input="input" :id="'token'" :size="1" :value="token"/>
         <span :class="{err: true, show: !token}" title="请填写此字段">
-                <svg-icon :name="'warning'"/>
+                <svg-icon name="warning"/>
               </span>
       </div>
       <div class="option">
@@ -22,8 +22,8 @@
         </label>
       </div>
       <div class="btn" flex>
-        <single-button class="exit" :text="'取消'" @click.native="$emit('hide')"/>
-        <single-button :class="{save: true, disabled: !token}" :text="'保存'" @click.native="save"/>
+        <single-button class="exit" @click.native="$emit('hide')">取消</single-button>
+        <single-button :class="{save: true, disabled: !token}" @click.native="save">保存</single-button>
       </div>
     </div>
   </div>
@@ -117,6 +117,7 @@ export default {
       > .err{
         margin-left: 1rem;
         overflow: hidden;
+        height: 0;
         &.show{
           height: unset;
         }

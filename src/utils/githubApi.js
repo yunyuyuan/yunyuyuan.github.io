@@ -12,7 +12,18 @@ export class GithubUtils {
             username: user,
         });
         this.repos = this.octo.repos(user, repo);
-        this.committer = committer
+        this.committer = committer;
+        this.login = user
+    }
+
+    async verifyToken() {
+        return new Promise(resolve => {
+            this.octo.user.fetch().then(res => {
+                resolve([true, res])
+            }).catch(err => {
+                resolve([false, err])
+            })
+        })
     }
 
     async updateJsonFile(path, json) {

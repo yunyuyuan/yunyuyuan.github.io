@@ -1,7 +1,7 @@
 <template>
   <div class="config" flex>
     <div class="head" flex>
-      <svg-icon :name="'config'"/>
+      <svg-icon name="config"/>
       <b>修改配置信息</b>
     </div>
     <div class="list" flex>
@@ -16,12 +16,12 @@
           <float-input :name="'简介'" :value="item.summary" :id="item.id" :size="0.85" @input="friendsSummary"/>
           <float-input :name="'github'" :value="item.github" :id="item.id" :size="0.85" @input="friendsGithub"/>
           <float-input :name="'网站'" :value="item.site" :id="item.id" :size="0.85" @input="friendsSite"/>
-          <single-button class="del-btn" :text="'删除'" @click.native="friendsDel(item)"/>
+          <single-button class="del-btn" @click.native="friendsDel(item)">删除</single-button>
         </div>
-        <loading-button :loading="false" :icon="'add'" :text="'添加'" :size="1.1" @click.native="friendsNew"/>
+        <loading-button :loading="false" icon="add" :size="1.1" @click.native="friendsNew">添加</loading-button>
       </div>
     </div>
-    <loading-button :loading="updating" :text="'上传'" :icon="'save'" @click.native="commitConfig"/>
+    <loading-button :loading="updating" icon="save" @click.native="commitConfig">上传</loading-button>
   </div>
 </template>
 

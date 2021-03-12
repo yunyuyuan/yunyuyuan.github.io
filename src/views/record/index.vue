@@ -1,7 +1,7 @@
 <template>
   <div class="record">
     <div v-if="loading" class="loading" flex>
-      <svg-icon :name="'loading'"/>
+      <svg-icon name="loading"/>
     </div>
     <div v-else class="list" flex>
       <div class="list-item" v-for="item in pagedList" :key="item.file" @click="activeInfo=item">

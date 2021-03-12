@@ -1,7 +1,7 @@
 <template>
   <div class="echarts-comment" flex>
     <div v-if="!inited" class="loading" flex>
-      <svg-icon :name="'loading'"/>
+      <svg-icon name="loading"/>
     </div>
     <div class="echarts"></div>
   </div>

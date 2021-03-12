@@ -1,18 +1,18 @@
 <template>
   <div class="theme" flex>
     <div class="head" flex>
-      <loading-button :icon="'reset'" :text="'还原默认'" @click.native="reset"/>
+      <loading-button icon="reset" @click.native="reset">还原默认</loading-button>
       <span class="state">{{ saving.state }}</span>
-      <loading-button :loading="saving.b" :icon="'save'" :text="'保存'" @click.native="save"/>
+      <loading-button :loading="saving.b" icon="save" @click.native="save">保存</loading-button>
     </div>
     <div class="body" flex>
       <div class="edit" flex ref="text">
         <div class="left" :style="{width: mdWidth}" flex>
           <span class="icon" flex>
-            <svg-icon :name="'edit'"/>
+            <svg-icon name="edit"/>
             <span>编辑sass</span>
             <a target="_blank" href="https://sass-lang.com/" title="sass是什么?" flex>
-              <svg-icon :name="'info'"/>
+              <svg-icon name="info"/>
             </a>
           </span>
           <div class="textarea" ref="textarea"></div>
@@ -20,7 +20,7 @@
         <resizer :orient="'h'" @start="startResize" @resize="doResize"/>
         <div class="right" flex>
           <span class="icon" flex>
-            <svg-icon :name="'brash'"/>
+            <svg-icon name="brash"/>
             <span>效果</span>
           </span>
           <div ref="markdown">

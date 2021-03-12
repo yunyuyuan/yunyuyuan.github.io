@@ -10,16 +10,16 @@
     </div>
     <div class="adjust">
       <div class="font-size" flex>
-        <single-button :text="'A-'" title="字体减小" :disabled="fontSize<=5" :size="0.9" @click.native="changeFont(fontSize<=5, -1)"/>
+        <single-button title="字体减小" :disabled="fontSize<=5" :size="0.9" @click.native="changeFont(fontSize<=5, -1)">A-</single-button>
         <span>{{fontSize}}</span>
-        <single-button :text="'A+'" title="字体增大" :disabled="fontSize>=25" :size="0.9" @click.native="changeFont(fontSize>=25, 1)"/>
+        <single-button title="字体增大" :disabled="fontSize>=25" :size="0.9" @click.native="changeFont(fontSize>=25, 1)">A+</single-button>
       </div>
     </div>
     <div class="copyright" flex>
       <span>Copyright (c) {{ config.copyright }} <b write-font>{{ config.name }}</b><b> | {{ domain }}</b></span>
       <span flex>All right reserved
         <a :href="`${isDev?'':'/dynamic'}/rss.xml`" target="_blank" title="rss订阅">
-          <svg-icon :name="'rss'"/>
+          <svg-icon name="rss"/>
         </a>
       </span>
     </div>

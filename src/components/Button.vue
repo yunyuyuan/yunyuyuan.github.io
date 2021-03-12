@@ -1,6 +1,6 @@
 <template>
   <div :disabled="disabled" :style="{fontSize: `${size}rem`}" class="single-button" flex>
-    <span>{{ text }}</span>
+    <span><slot></slot></span>
   </div>
 </template>
 
@@ -8,9 +8,6 @@
 export default {
   name: "SingleButton",
   props: {
-    text: {
-      type: String
-    },
     size: {
       type: Number,
       default: 1

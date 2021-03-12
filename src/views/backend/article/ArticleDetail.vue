@@ -2,18 +2,18 @@
   <div class="md-detail" flex>
     <div class="operate" flex>
       <div class="back" @click="$router.push('/article')" flex="">
-        <svg-icon :name="'back'"/>
+        <svg-icon name="back"/>
         <span>返回</span>
       </div>
-      <single-button class="del-cache" :disabled="!hasCache" :text="'删除草稿'" :size="0.9" @click.native="delCache"/>
-      <single-button class="use-cache" :disabled="!hasCache" :text="'使用草稿'" :size="0.9" @click.native="useCache"/>
-      <single-button class="save-cache" :text="'保存草稿'" :size="0.9" @click.native="saveCache"/>
-      <loading-button :loading="saving.b" :text="'上传'" :icon="'save'" @click.native="save"/>
+      <single-button class="del-cache" :disabled="!hasCache" :size="0.9" @click.native="delCache">删除草稿</single-button>
+      <single-button class="use-cache" :disabled="!hasCache" :size="0.9" @click.native="useCache">使用草稿</single-button>
+      <single-button class="save-cache" :size="0.9" @click.native="saveCache">保存草稿</single-button>
+      <loading-button :loading="saving.b" icon="save" @click.native="save">上传</loading-button>
       <span class="state">{{ saving.state }}</span>
     </div>
     <div class="head" flex>
-      <float-input @input="inputTitle" :name="'标题'" :size="1.3" :value="info.name"/>
-      <float-input class="summary" @input="inputSummary" :name="'简介'" :size="1"
+      <float-input @input="inputTitle" name="标题" :size="1.3" :value="info.name"/>
+      <float-input class="summary" @input="inputSummary" name="简介" :size="1"
                    :value="info.summary"/>
     </div>
     <div class="info" flex>
@@ -27,21 +27,21 @@
       <div class="tags-time" flex>
         <div class="tags" flex>
           <span class="tag-icon" flex>
-            <svg-icon :name="'tag'"/>
+            <svg-icon name="tag"/>
           </span>
           <div v-for="(tag, idx) in info.tags" :class="{editing: tagEditIndex===idx}" :key="tag">
             <input :disabled="tagEditIndex!==idx" @focusout="editTag" :data-old="tag" :data-idx="idx" :value="tag"/>
             <div flex="">
               <span @click="clickTrash(idx)" title="删除">
-                <svg-icon :name="'trash'"/>
+                <svg-icon name="trash"/>
               </span>
               <span @click="clickEdit" :data-idx="idx" title="编辑">
-                <svg-icon :name="'edit'"/>
+                <svg-icon name="edit"/>
               </span>
             </div>
           </div>
           <span class="add" @click="addTag" title="添加标签" flex>
-            <svg-icon :name="'add'"/>
+            <svg-icon name="add"/>
           </span>
         </div>
         <div class="time" flex>
@@ -53,10 +53,10 @@
     <div class="text" flex ref="text">
       <div class="head" flex>
         <span @click="enableSticker" title="表情" :class="{active: showSticker}" flex>
-          <svg-icon :name="'cmt-sticker'"/>
+          <svg-icon name="cmt-sticker"/>
         </span>
         <span class="markdown-guide" @click="showGuide=true" title="markdown语法指南" flex>
-          <svg-icon :name="'markdown'"/>
+          <svg-icon name="markdown"/>
         </span>
         <div class="sticker" ref="sticker" :class="{active: showSticker}" flex v-if="config.sticker">
           <div class="content">

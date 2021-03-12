@@ -2,17 +2,17 @@
   <div class="home" flex>
     <div class="btns" flex>
       <a href="/article" flex>
-        <svg-icon :name="'article'"/>
+        <svg-icon name="article"/>
         <span class="name">文章</span>
         <span write-font class="tip">"技术"文章</span>
       </a>
       <a href="/record" flex>
-        <svg-icon :name="'record'"/>
+        <svg-icon name="record"/>
         <span class="name">记录</span>
         <span write-font class="tip">一框琐事</span>
       </a>
       <a  href="/msg-board" flex>
-        <svg-icon :name="'comments'"/>
+        <svg-icon name="comments"/>
         <span class="name">留言板</span>
         <span write-font class="tip">谁的话语</span>
       </a>

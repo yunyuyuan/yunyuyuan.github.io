@@ -5,14 +5,14 @@
         <span>搜索</span>
         <input v-model="search"/>
       </label>
-      <single-button class="select-" :active="selecting" :text="selecting?'取消':'选择'"
-                     @click.native="selecting=!selecting"/>
-      <loading-button :text="selecting?'导出':'新建'" :icon="selecting?'download':'add'" class="new" :class="{white: !selecting}"
-                      @click.native="clickBtn"/>
+      <single-button class="select-" :active="selecting"
+                     @click.native="selecting=!selecting">{{selecting?'取消':'选择'}}</single-button>
+      <loading-button :icon="selecting?'download':'add'" class="new" :class="{white: !selecting}"
+                      @click.native="clickBtn">{{ selecting ? '导出' : '新建' }}</loading-button>
     </div>
     <div class="delete" v-if="selecting" flex>
       <a>{{deleting.state}}</a>
-      <single-button class="del-btn" :text="'删除'" :disabled="deleting.b" @click.native="deleteSome"/>
+      <single-button class="del-btn" :disabled="deleting.b" @click.native="deleteSome">删除</single-button>
       <span class="check-box" :class="{active: allSelected}" @click="changeSelectAll"></span>
       <span class="txt">全选</span>
     </div>
@@ -21,7 +21,7 @@
     </div>
     <div class="body">
       <div class="init-load" v-if="!inited" flex>
-        <svg-icon :name="'loading'"/>
+        <svg-icon name="loading"/>
       </div>
       <table v-else>
         <thead>
@@ -42,7 +42,7 @@
           <td>
             <span v-if="selecting" :class="{active: selectList.indexOf(item.file)!==-1}" class="check-box"
                   @click="toggleSelect(item.file)"></span>
-            <single-button class="del-btn" v-else @click.native="deleteItem([item.file])" :text="'删除'"/>
+            <single-button class="del-btn" v-else @click.native="deleteItem([item.file])">删除</single-button>
           </td>
         </tr>
         </tbody>

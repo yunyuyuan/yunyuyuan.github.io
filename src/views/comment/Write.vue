@@ -21,22 +21,22 @@
           </div>
         </div>
         <a class="md" @click="showGuide = true" title="关于markdown" flex>
-          <svg-icon :name="'markdown'"/>
+          <svg-icon name="markdown"/>
         </a>
         <span @click="enableSticker" title="表情" :class="{active: showSticker}" flex>
-          <svg-icon :name="'cmt-sticker'"/>
+          <svg-icon name="cmt-sticker"/>
         </span>
         <span @click="enableUploadImg" title="图片" :class="{active: showUploadImg}" flex>
-          <svg-icon :name="'cmt-image'"/>
+          <svg-icon name="cmt-image"/>
         </span>
         <span @click="enablePreview" title="预览" :class="{active: showPreview}" flex>
-          <svg-icon :name="'cmt-preview'"/>
+          <svg-icon name="cmt-preview"/>
         </span>
       </div>
       <resizer :orient="'v'" @start="startResize" @resize="doResize"/>
       <div class="submit" flex>
-        <single-button v-if="cancel" :size="0.8" :text="'取消'" @click.native="$emit('cancel')"/>
-        <loading-button :icon="'save'" :loading="loading" :size="0.8" :text="'提交'" @click.native="submitComment"/>
+        <single-button v-if="cancel" :size="0.8" @click.native="$emit('cancel')">取消</single-button>
+        <loading-button icon="save" :loading="loading" :size="0.8" @click.native="submitComment">提交</loading-button>
       </div>
     </div>
     <div class="preview" v-if="showPreview">
@@ -58,7 +58,7 @@
         </div>
         <div class="submit" flex>
           <float-input :name="'url'" :size="0.9" :value="imageUrl" @input="inputImgUrl" @submit="insertImg"/>
-          <single-button :disabled="!imageUrl" :size="0.9" :text="'确定'" @click.native="insertImg"/>
+          <single-button :disabled="!imageUrl" :size="0.9" @click.native="insertImg">确定</single-button>
         </div>
       </div>
     </div>
