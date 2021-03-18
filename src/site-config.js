@@ -2,6 +2,7 @@
 const
     name = '云与原',
     githubName = 'yunyuyuan',
+    githubEmail = '326178275@qq.com',
     repo = 'yunyuyuan.github.io',
     domain = 'https://blog.halberd.cn'
 // --------- change this ↑ ---------
@@ -9,8 +10,6 @@ const
 
 module.exports = {
 // --------- change this ↓ ---------
-
-    email: '326178275@qq.com',
     avatar: 'favicon.svg',
     corner: 'Simple code,Simple life',
     aboutUrl: '/simple-code-simple-life',
@@ -25,6 +24,7 @@ module.exports = {
 // --------- change this ↑ ---------
 
     owner: githubName,
+    email: githubEmail,
     repo: repo,
     cdn: `https://cdn.jsdelivr.net/gh/${githubName}/${repo}@latest`,
     corsServer: 'https://cors.bridged.cc/',
