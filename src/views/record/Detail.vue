@@ -1,28 +1,28 @@
 <template>
-  <div class="record-detail" v-if="info.hasOwnProperty('images')" is-dialog @click.self="$emit('close')">
-    <div class="inner" flex>
-      <a @click="$emit('close')">关闭</a>
-      <div class="image" flex v-viewer>
-        <loading-img v-for="i in info.images" :src="i" :data-viewer="true"/>
-      </div>
-      <div class="loading" v-if="loading" flex>
-        <svg-icon name="loading"/>
-      </div>
-      <span v-else write-font>
-        <svg-icon name="text"/>
-        <time>{{info.time|time(false)}}</time>{{ text }}</span>
+  <top-dialog class="record-detail" v-if="info.hasOwnProperty('images')" @click.native.self="$emit('close')">
+    <a @click="$emit('close')">关闭</a>
+    <div class="image" flex v-viewer>
+      <loading-img v-for="i in info.images" :src="i" :data-viewer="true"/>
     </div>
-  </div>
+    <div class="loading" v-if="loading" flex>
+      <svg-icon name="loading"/>
+    </div>
+    <span v-else write-font>
+      <svg-icon name="text"/>
+      <time>{{info.time|time(false)}}</time>{{ text }}
+    </span>
+  </top-dialog>
 </template>
 
 <script>
 import LoadingImg from "@/components/LoadingImg";
 import {getText, parseAjaxError} from "@/utils/utils";
 import {originPrefix} from "@/need";
+import TopDialog from "@/components/Dialog";
 
 export default {
   name: "Detail",
-  components: {LoadingImg},
+  components: {TopDialog, LoadingImg},
   props: {
     info: {
       type: Object,
@@ -49,9 +49,6 @@ export default {
       this.loading = false;
     }
   },
-  mounted() {
-    document.querySelector('#index').append(this.$el)
-  }
 }
 </script>
 
@@ -59,18 +56,16 @@ export default {
 @import "src/assets/style/public";
 
 .record-detail{
-  z-index: $z-index-record-detail;
-  > .inner{
+  ::v-deep > .inner{
     width: 80%;
     height: 90%;
-    overflow-y: auto;
     flex-direction: column;
     border-radius: 0;
     > .image{
       width: 100%;
       flex-wrap: wrap;
       flex-shrink: 0;
-      ::v-deep .loading-img{
+      .loading-img{
         width: calc(50% - 0.2rem) !important;
         height: unset !important;
         margin: 0.1rem;
@@ -94,7 +89,7 @@ export default {
     > span{
       width: 95%;
       border-top: 1px solid gray;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       margin: 1rem 0 5rem 0;
       white-space: pre-wrap;
       padding-top: 1.5rem;
@@ -125,7 +120,7 @@ export default {
     }
   }
   @include media{
-    >.inner{
+    ::v-deep >.inner{
       width: 100%;
       height: 100%;
       position: absolute;

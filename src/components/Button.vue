@@ -30,7 +30,7 @@ export default {
   box-shadow: 0 0 0.3em rgba(0, 0, 0, 0.3);
 
   &:not([disabled]):hover{
-  box-shadow: 0 0.15rem 0.3em rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0.15rem 0.3em rgba(0, 0, 0, 0.6);
   }
   &[disabled] {
     cursor: not-allowed;

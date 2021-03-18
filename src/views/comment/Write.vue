@@ -42,26 +42,24 @@
     <div class="preview" v-if="showPreview">
       <span ref="markdown" class="--markdown" v-html="$el?html:'waiting'" v-viewer></span>
     </div>
-    <div v-show="showUploadImg" class="upload-img" is-dialog @click.self="showUploadImg = false">
-      <div class="inner" flex>
-        <div class="help">
-          <p>关于上传图片</p>
-          <b>本站不存储评论图片，如果你想发送图片，建议使用以下方式:</b>
-          <div flex>
-            <a href="https://imgchr.com/" target="_blank">路过图床</a>
-            <loading-img :src="'https://s1.ax1x.com/2020/09/28/0VPxBQ.png'" :size="[]"/>
-          </div>
-          <div flex>
-            <a href="https://sm.ms/" target="_blank">sm.ms</a>
-            <loading-img :src="'https://s1.ax1x.com/2020/09/28/0VPvng.png'" :size="[]"/>
-          </div>
+    <top-dialog v-show="showUploadImg" class="upload-img" @click.native.self="showUploadImg = false">
+      <div class="help">
+        <p>关于上传图片</p>
+        <b>本站不存储评论图片，如果你想发送图片，建议使用以下方式:</b>
+        <div flex>
+          <a href="https://imgchr.com/" target="_blank">路过图床</a>
+          <loading-img :src="'https://s1.ax1x.com/2020/09/28/0VPxBQ.png'" :size="[]"/>
         </div>
-        <div class="submit" flex>
-          <float-input :name="'url'" :size="0.9" :value="imageUrl" @input="inputImgUrl" @submit="insertImg"/>
-          <single-button :disabled="!imageUrl" :size="0.9" @click.native="insertImg">确定</single-button>
+        <div flex>
+          <a href="https://sm.ms/" target="_blank">sm.ms</a>
+          <loading-img :src="'https://s1.ax1x.com/2020/09/28/0VPvng.png'" :size="[]"/>
         </div>
       </div>
-    </div>
+      <div class="submit" flex>
+        <float-input :name="'url'" :size="0.9" :value="imageUrl" @input="inputImgUrl" @submit="insertImg"/>
+        <single-button :disabled="!imageUrl" :size="0.9" @click.native="insertImg">确定</single-button>
+      </div>
+    </top-dialog>
     <markdown-help v-show="showGuide" @click.native.self="showGuide=false"/>
   </div>
 </template>
@@ -89,10 +87,11 @@ import '@/assets/style/code-mirror/dracula-markdown.scss';
 import LoadingImg from "@/components/LoadingImg";
 import {parseMarkdown, processMdHtml} from "@/utils/parseMd";
 import siteConfig from "@/site-config";
+import TopDialog from "@/components/Dialog";
 
 export default {
   name: "WriteComment",
-  components: {LoadingImg, SingleButton, MarkdownHelp, Resizer, LoadingButton, FloatInput},
+  components: {TopDialog, LoadingImg, SingleButton, MarkdownHelp, Resizer, LoadingButton, FloatInput},
   props: {
     loading: {
       type: Boolean,
@@ -354,11 +353,9 @@ export default {
       width: calc(100% - 1rem);
     }
   }
-  > .upload-img{
+  @at-root body > .upload-img{
     flex-direction: column;
-    > .inner{
-      width: 80%;
-      height: 80%;
+    ::v-deep > .inner{
       flex-direction: column;
       > .help{
         width: 100%;
@@ -428,7 +425,7 @@ export default {
       }
     }
     > .upload-img{
-      > .inner{
+      ::v-deep > .inner{
         width: 95%;
         height: 70%;
       }

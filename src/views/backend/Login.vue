@@ -1,32 +1,30 @@
 <template>
-  <div class="login" @click.self="$emit('hide')" is-dialog>
-    <div class="inner">
-      <div class="head" flex>
-        <svg-icon name="backend"/>
-        <b>后台管理账户</b>
-      </div>
-      <div class="body" flex>
-        <float-input :name="'token'" @input="input" :id="'token'" :size="1" :value="token"/>
-        <span :class="{err: true, show: !token}" title="请填写此字段">
-                <svg-icon name="warning"/>
-              </span>
-      </div>
-      <div class="option">
-        <label @click="remember = !remember" flex>
-          <a :class="{active: remember}" flex></a>
-          <span>在本机上记住我</span>
-        </label>
-        <label @click="withUpdate = !withUpdate" flex>
-          <a :class="{active: withUpdate}" flex></a>
-          <span>保存后立即更新配置</span>
-        </label>
-      </div>
-      <div class="btn" flex>
-        <single-button class="exit" @click.native="$emit('hide')">取消</single-button>
-        <single-button :class="{save: true, disabled: !token}" @click.native="save">保存</single-button>
-      </div>
+  <top-dialog class="login" @click.native.self="$emit('hide')">
+    <div class="head" flex>
+      <svg-icon name="backend"/>
+      <b>后台管理账户</b>
     </div>
-  </div>
+    <div class="body" flex>
+      <float-input :name="'token'" @input="input" :id="'token'" :size="1" :value="token"/>
+      <span :class="{err: true, show: !token}" title="请填写此字段">
+              <svg-icon name="warning"/>
+            </span>
+    </div>
+    <div class="option">
+      <label @click="remember = !remember" flex>
+        <a :class="{active: remember}" flex></a>
+        <span>在本机上记住我</span>
+      </label>
+      <label @click="withUpdate = !withUpdate" flex>
+        <a :class="{active: withUpdate}" flex></a>
+        <span>保存后立即更新配置</span>
+      </label>
+    </div>
+    <div class="btn" flex>
+      <single-button class="exit" @click.native="$emit('hide')">取消</single-button>
+      <single-button :class="{save: true, disabled: !token}" @click.native="save">保存</single-button>
+    </div>
+  </top-dialog>
 </template>
 
 <script>
@@ -34,10 +32,11 @@ import FloatInput from "@/components/FloatInput";
 import SingleButton from "@/components/Button";
 const siteConfig = require( '@/site-config')
 import {GithubUtils} from "@/utils/githubApi";
+import TopDialog from "@/components/Dialog";
 
 export default {
   name: "Login",
-  components: {SingleButton, FloatInput},
+  components: {TopDialog, SingleButton, FloatInput},
   data() {
     return {
       token: '',
@@ -89,7 +88,7 @@ export default {
 <style scoped lang="scss">
 @import "../../assets/style/public";
 .login{
-  > .inner{
+  ::v-deep > .inner{
     background: #efefef;
     > .head{
       background: white;
@@ -165,7 +164,7 @@ export default {
     }
     > .btn{
       margin: 1rem 0;
-      ::v-deep > .single-button{
+      >.single-button{
         background: #808080;
         margin: 0 1rem;
         &:hover{

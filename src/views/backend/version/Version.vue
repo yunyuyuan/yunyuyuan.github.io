@@ -34,11 +34,9 @@
         </tbody>
       </table>
     </div>
-    <div v-show="showHelp" class="help" @click.self="showHelp=false" is-dialog>
-      <div class="inner">
+    <top-dialog v-show="showHelp" class="help" @click.native.self="showHelp=false">
         <span v-html="help"></span>
-      </div>
-    </div>
+    </top-dialog>
   </div>
 </template>
 
@@ -46,10 +44,11 @@
 import {parseAjaxError} from "@/utils/utils";
 import LoadingButton from "@/components/LoadingButton";
 import SingleButton from "@/components/Button";
+import TopDialog from "@/components/Dialog";
 
 export default {
   name: "Version",
-  components: {SingleButton, LoadingButton},
+  components: {TopDialog, SingleButton, LoadingButton},
   data (){
     return {
       showHelp: false,
@@ -262,8 +261,8 @@ export default {
       }
     }
   }
-  >.help{
-    >.inner{
+  @at-root body >.help{
+    ::v-deep >.inner{
       max-width: 90%;
       >span{
         display: block;
