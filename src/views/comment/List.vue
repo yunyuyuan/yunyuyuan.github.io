@@ -267,6 +267,7 @@ export default {
     },
 
     clickReply(o, t) {
+      if (this.replayItem !== null) return this.replayItem = null;
       this.replayItem = o;
       this.replyChild = t;
     },

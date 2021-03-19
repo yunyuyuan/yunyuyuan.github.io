@@ -82,7 +82,7 @@ export default {
       color: white;
       text-decoration: none;
       cursor: pointer;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-family: "Source Code Pro", serif;
       word-break: keep-all;
       white-space: nowrap;
@@ -104,7 +104,7 @@ export default {
   @include media{
     >.body{
       > .txt{
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         margin-right: 0.3rem;
       }
     }

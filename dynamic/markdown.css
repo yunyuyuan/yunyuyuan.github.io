@@ -401,8 +401,8 @@
   border-radius: 0 0 0.3rem 0.3rem;
   background: transparent;
   max-height: 100vh;
-  font-size: 0.8rem;
-  line-height: 1.3rem;
+  font-size: 0.7rem;
+  line-height: 1.2rem;
 }
 .--markdown pre > code.hljs, .--markdown pre > code.hljs .hljs-subst {
   color: #d4d4d4;
