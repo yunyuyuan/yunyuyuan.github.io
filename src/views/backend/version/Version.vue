@@ -1,42 +1,47 @@
 <template>
   <div class="version">
-    <span @click="showHelp=true">
-      <svg-icon name="info"/>
-    </span>
-    <div class="new" flex>
-      <loading-button :class="{disabled: !inited}" :loading="creating.b" icon="version" :size="1.6" @click.native="createRelease">{{'创建新版本: '+newTag}}</loading-button>
-      <span v-if="creating.state">{{creating.state}}</span>
+    <div class="need-login" v-if="!gitUtil">
+      请先<b @click="$emit('login')">登录</b>
     </div>
-    <div class="tags">
-      <div class="operate" flex>
-        <a>{{deletingTag.state}}</a>
-        <single-button class="del-btn" :disabled="deletingTag.b||!tags.length" @click.native="deleteTag">删除</single-button>
-        <span class="check-box" :class="{active: allSelected}" @click="changeSelectAll"></span>
-        <span class="txt">全选</span>
+    <template v-else>
+      <span @click="showHelp=true">
+        <svg-icon name="info"/>
+      </span>
+      <div class="new" flex>
+        <loading-button :class="{disabled: !inited}" :loading="creating.b" icon="version" :size="1.6" @click.native="createRelease">{{'创建新版本: '+newTag}}</loading-button>
+        <span v-if="creating.state">{{creating.state}}</span>
       </div>
-      <div class="init-load" v-if="!inited" flex>
-        <svg-icon name="loading"/>
+      <div class="tags">
+        <div class="operate" flex>
+          <a>{{deletingTag.state}}</a>
+          <single-button class="del-btn" :disabled="deletingTag.b||!tags.length" @click.native="deleteTag">删除</single-button>
+          <span class="check-box" :class="{active: allSelected}" @click="changeSelectAll"></span>
+          <span class="txt">全选</span>
+        </div>
+        <div class="init-load" v-if="!inited" flex>
+          <svg-icon name="loading"/>
+        </div>
+        <table v-else>
+          <thead>
+            <tr>
+              <th>ref</th>
+              <th>sha</th>
+              <th>选择</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in tags" :key="item.ref" :class="{last: item.last}" :title="item.last?'最新的版本':''">
+              <th class="ref">{{item.ref.replace(/^.*?([^\/]*)$/, '$1')}}</th>
+              <th class="sha">{{item.object.sha}}</th>
+              <th class="select"><label class="check-box" :class="{active: item.selected}" @click="item.selected=!item.selected"></label></th>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <table v-else>
-        <thead>
-          <tr>
-            <th>ref</th>
-            <th>sha</th>
-            <th>选择</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in tags" :key="item.ref" :class="{last: item.last}" :title="item.last?'最新的版本':''">
-            <th class="ref">{{item.ref.replace(/^.*?([^\/]*)$/, '$1')}}</th>
-            <th class="sha">{{item.object.sha}}</th>
-            <th class="select"><label class="check-box" :class="{active: item.selected}" @click="item.selected=!item.selected"></label></th>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <top-dialog v-show="showHelp" class="help" @click.native.self="showHelp=false">
-        <span v-html="help"></span>
-    </top-dialog>
+      <top-dialog v-show="showHelp" class="help" @click.native.self="showHelp=false">
+          <span v-html="help"></span>
+      </top-dialog>
+    </template>
   </div>
 </template>
 
@@ -81,12 +86,14 @@ export default {
       return 'v'+(new Array(3-max.length).fill('0').join('')+max).split('').join('.')
     }
   },
-  created() {
-    this.getTag();
+  watch: {
+    gitUtil (){
+      this.getTag(false).then();
+    }
   },
   inject: ['_gitUtil'],
   methods: {
-    async getTag (){
+    async getTag (withError=true){
       this.tags = [];
       this.inited = false;
       if (this.gitUtil) {
@@ -100,7 +107,7 @@ export default {
           this.$message.error(parseAjaxError(res[1]))
         }
         this.inited = true;
-      } else {
+      } else if (withError){
         this.$message.warning('请先登录!');
         this.$emit('login')
       }
@@ -115,7 +122,7 @@ export default {
         const res = await this.gitUtil.createRelease(this.newTag, this.creating);
         if (res[0]) {
           this.$message.success('创建成功!');
-          this.getTag();
+          this.getTag().then();
         } else {
           this.$message.error(parseAjaxError(res[1]))
         }
@@ -153,7 +160,7 @@ export default {
         const res = await this.gitUtil.deleteTag(delList, this.deletingTag);
         if (res[0]){
           this.$message.success('删除成功');
-          this.getTag();
+          this.getTag().then();
         }else{
           this.$message.error(parseAjaxError(res[1]))
         }
@@ -174,6 +181,21 @@ export default {
 .version{
   min-height: calc(100% - 2rem);
   position: relative;
+  >.need-login{
+    font-size: 1rem;
+    margin-top: 1rem;
+    text-align: center;
+    >b{
+      font-size: 1.1em;
+      display: inline-block;
+      margin: 0 .6rem;
+      color: #0003ff;
+      cursor: pointer;
+      &:hover{
+        text-decoration: underline;
+      }
+    }
+  }
   >span{
     cursor: pointer;
     position: absolute;
