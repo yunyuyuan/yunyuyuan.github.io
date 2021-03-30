@@ -55,6 +55,10 @@
         <span @click="enableSticker" title="表情" :class="{active: showSticker}" flex>
           <svg-icon name="cmt-sticker"/>
         </span>
+        <div @click="changeFrame" class="toggle-show-frame" title="切换视图" flex>
+          <span :class="{active: showFrame===0||showFrame===-1}"></span>
+          <span :class="{active: showFrame===0||showFrame===1}"></span>
+        </div>
         <span class="markdown-guide" @click="showGuide=true" title="markdown语法指南" flex>
           <svg-icon name="markdown"/>
         </span>
@@ -75,11 +79,11 @@
         </div>
       </div>
       <div class="body" flex>
-        <div class="markdown" :style="{width: mdWidth}" flex>
+        <div v-show="showFrame!==1" class="markdown" :style="{width: showFrame===-1?'100%':mdWidth}" flex>
           <div ref="textarea" class="textarea"></div>
         </div>
-        <resizer :orient="'h'" @start="startResize" @resize="doResize"/>
-        <div class="html" flex>
+        <resizer v-show="showFrame===0" :orient="'h'" @start="startResize" @resize="doResize"/>
+        <div v-show="showFrame!==-1" class="html" flex>
           <span ref="html" class="--markdown" v-html="htmlText" v-viewer></span>
         </div>
       </div>
@@ -132,6 +136,7 @@ export default {
       stamp: siteConfig.timeStamp,
       baseUrl: cdnDynamicUrl,
       showGuide: false,
+      showFrame: 0,
       showSticker: false,
       stickerSlideNow: 0,
       focusAt: 0,
@@ -332,6 +337,16 @@ export default {
     },
     addTag() {
       this.info.tags.push('输入标签' + this.info.tags.length)
+    },
+    changeFrame (){
+      switch (this.showFrame){
+        case 0:
+          return this.showFrame = 1
+        case 1:
+          return this.showFrame = -1
+        case -1:
+          return this.showFrame = 0
+      }
     },
     startResize (startPos){
       this.resizeStart = {
@@ -693,8 +708,22 @@ export default {
           background: #d8d8d8;
         }
       }
+      >.toggle-show-frame{
+        cursor: pointer;
+        margin: 0 1rem 0 auto;
+        border: 1px solid #101010;
+        >span{
+          width: 1rem;
+          height: 1rem;
+          &:first-of-type{
+            border-right: 1px solid white;
+          }
+          &.active{
+            background: #0073ff;
+          }
+        }
+      }
       >.markdown-guide{
-        margin-left: auto;
       }
       > .sticker {
         width: 90%;

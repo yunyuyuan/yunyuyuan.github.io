@@ -37,7 +37,7 @@ export default {
     border-radius: 50%;
     z-index: 1;
     object-fit: cover;
-    box-shadow: 0 .3rem .6rem rgba(0, 0, 0, .4);
+    box-shadow: .1rem .1rem .4rem black;
   }
   >span{
     z-index: 2;
