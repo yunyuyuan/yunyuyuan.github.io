@@ -87,8 +87,11 @@ export default {
     }
   },
   watch: {
-    gitUtil (){
-      this.getTag(false).then();
+    gitUtil: {
+      immediate: true,
+      handler () {
+        this.getTag(false).then();
+      }
     }
   },
   inject: ['_gitUtil'],
