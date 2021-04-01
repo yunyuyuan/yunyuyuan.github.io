@@ -122,7 +122,7 @@ export default {
   @include media{
     ::v-deep >.inner{
       width: 100%;
-      height: 100%;
+      min-height: 100%;
       position: absolute;
       top: 0;
       border-radius: 0;
