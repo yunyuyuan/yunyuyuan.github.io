@@ -4,7 +4,7 @@ const
     githubName = 'yunyuyuan',
     githubEmail = '326178275@qq.com',
     repo = 'yunyuyuan.github.io',
-    domain = 'https://blog.halberd.cn'
+    domain = 'https://old-blog.halberd.cn'
 // --------- change this ↑ ---------
 
 
